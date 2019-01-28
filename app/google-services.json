@@ -1,0 +1,55 @@
+{
+  "project_info": {
+    "project_number": "517737139497",
+    "firebase_url": "https://techvillagetruecaller.firebaseio.com",
+    "project_id": "techvillagetruecaller",
+    "storage_bucket": "techvillagetruecaller.appspot.com"
+  },
+  "client": [
+    {
+      "client_info": {
+        "mobilesdk_app_id": "1:517737139497:android:5ed1459a6a42235c",
+        "android_client_info": {
+          "package_name": "teckvillage.developer.khaled_pc.teckvillagetrue"
+        }
+      },
+      "oauth_client": [
+        {
+          "client_id": "517737139497-dhvl3jkhgl6d02b5ekg2scg13mari8bc.apps.googleusercontent.com",
+          "client_type": 1,
+          "android_info": {
+            "package_name": "teckvillage.developer.khaled_pc.teckvillagetrue",
+            "certificate_hash": "4b67c8790b91d26a7a68d2a9c8f72ec6b18f34df"
+          }
+        },
+        {
+          "client_id": "517737139497-u0k0ctb1fmhg6catm5clcgghabvic15g.apps.googleusercontent.com",
+          "client_type": 3
+        }
+      ],
+      "api_key": [
+        {
+          "current_key": "AIzaSyDyXQrDJoiiIRNIm5Z0Ud7qj8sVMkQWhO0"
+        }
+      ],
+      "services": {
+        "analytics_service": {
+          "status": 1
+        },
+        "appinvite_service": {
+          "status": 2,
+          "other_platform_oauth_client": [
+            {
+              "client_id": "517737139497-u0k0ctb1fmhg6catm5clcgghabvic15g.apps.googleusercontent.com",
+              "client_type": 3
+            }
+          ]
+        },
+        "ads_service": {
+          "status": 2
+        }
+      }
+    }
+  ],
+  "configuration_version": "1"
+}
