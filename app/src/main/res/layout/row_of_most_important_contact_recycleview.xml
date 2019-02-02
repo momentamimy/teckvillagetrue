@@ -1,8 +1,38 @@
 <?xml version="1.0" encoding="utf-8"?>
 <RelativeLayout xmlns:android="http://schemas.android.com/apk/res/android"
-    android:layout_width="match_parent" android:layout_height="match_parent">
+    android:layout_width="wrap_content" android:layout_height="wrap_content"
+    >
 
 
+<de.hdodenhof.circleimageview.CircleImageView
+    android:id="@+id/contact_img"
+    android:layout_width="70dp"
+    android:layout_height="70dp"
+    android:src="@drawable/ic_nurse"
+    android:layout_centerHorizontal="true"
+    />
 
+<TextView
+    android:id="@+id/contact_name"
+    android:layout_below="@id/contact_img"
+    android:layout_marginTop="5dp"
+    android:textSize="16sp"
+    android:textColor="@android:color/black"
+    android:layout_width="wrap_content"
+    android:layout_height="wrap_content"
+    android:layout_centerHorizontal="true"
+    android:text="Khaled Eltarabily"/>
+
+
+<TextView
+    android:id="@+id/number_type"
+    android:layout_below="@id/contact_name"
+    android:layout_marginTop="2dp"
+    android:textSize="16sp"
+    android:layout_width="wrap_content"
+    android:layout_height="wrap_content"
+    android:layout_centerHorizontal="true"
+    android:text="Mobile"
+    />
 
 </RelativeLayout>

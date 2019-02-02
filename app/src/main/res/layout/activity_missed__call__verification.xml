@@ -1,0 +1,43 @@
+<?xml version="1.0" encoding="utf-8"?>
+<RelativeLayout xmlns:android="http://schemas.android.com/apk/res/android"
+    xmlns:app="http://schemas.android.com/apk/res-auto"
+    xmlns:tools="http://schemas.android.com/tools"
+    android:layout_width="match_parent"
+    android:layout_height="match_parent"
+    android:background="@color/colorPrimary"
+    tools:context="teckvillage.developer.khaled_pc.teckvillagetrue.View.Missed_Call_Verification">
+
+    <TextView
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content"
+        android:textColor="@android:color/white"
+        android:textSize="40sp"
+        android:text="Who Caller?"
+        android:textStyle="bold"
+        android:layout_above="@+id/centerparent"
+        android:layout_centerHorizontal="true"
+        android:layout_marginBottom="25dp"
+        />
+
+
+    <ImageView
+        android:id="@+id/centerparent"
+        android:layout_width="180dp"
+        android:layout_height="150dp"
+        android:layout_centerInParent="true"
+        android:src="@drawable/verfication"
+        />
+
+    <TextView
+        android:layout_marginTop="40dp"
+        android:layout_below="@+id/centerparent"
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content"
+        android:textSize="24sp"
+        android:layout_centerHorizontal="true"
+        android:textColor="@android:color/white"
+        android:text="Calling you for number Confirmation"
+        android:gravity="center"
+        android:lineSpacingExtra="5dp"
+        />
+</RelativeLayout>
