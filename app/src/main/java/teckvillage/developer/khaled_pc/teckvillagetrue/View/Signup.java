@@ -297,7 +297,13 @@ public class Signup extends AppCompatActivity {
                             }
 
                             URL imageURL = new URL("https://graph.facebook.com/" + id + "/picture?type=large");
-                            Picasso
+                            Picasso.with(Signup.this).load(imageURL.toString()).into(add_personal_photo);
+                            add_personal_photo.setPadding(0,0,0,0);
+
+                            //Put Data in EditText
+                            FirstName.setText(firstName);
+                            LastName.setText(lastName);
+                            Email.setText(email);
 
                             Log.i("Link",link);
                             Log.i("Login" + "ID",  id);
