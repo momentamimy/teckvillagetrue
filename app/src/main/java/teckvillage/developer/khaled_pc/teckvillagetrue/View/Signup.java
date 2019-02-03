@@ -25,13 +25,23 @@ import com.facebook.CallbackManager;
 import com.facebook.FacebookCallback;
 import com.facebook.FacebookException;
 import com.facebook.FacebookSdk;
+import com.facebook.GraphRequest;
+import com.facebook.GraphResponse;
+import com.facebook.Profile;
+import com.facebook.login.LoginManager;
 import com.facebook.login.LoginResult;
 import com.facebook.login.widget.LoginButton;
+import com.squareup.picasso.Picasso;
+
+import org.json.JSONException;
+import org.json.JSONObject;
 
 import java.io.ByteArrayOutputStream;
 import java.io.File;
 import java.io.FileOutputStream;
 import java.io.IOException;
+import java.net.MalformedURLException;
+import java.net.URL;
 import java.util.Arrays;
 import java.util.Calendar;
 
@@ -77,6 +87,7 @@ public class Signup extends AppCompatActivity {
         //FACEBOOK
         loginButton = (LoginButton) findViewById(R.id.login_button);
         loginButton.setReadPermissions(Arrays.asList(EMAIL,PROFILE_PIC,USER_FRIEND));
+        //LoginManager.getInstance().logInWithReadPermissions(this, Arrays.asList("public_profile"));
         // If you are using in a fragment, call loginButton.setFragment(this);
 
         // Callback registration
@@ -84,6 +95,7 @@ public class Signup extends AppCompatActivity {
             @Override
             public void onSuccess(LoginResult loginResult) {
                 // App code
+                setFacebookData(loginResult);
             }
 
             @Override
@@ -94,6 +106,7 @@ public class Signup extends AppCompatActivity {
             @Override
             public void onError(FacebookException exception) {
                 // App code
+                Toast.makeText(getApplicationContext(), "Error to Login Facebook"+exception.getMessage(), Toast.LENGTH_SHORT).show();
             }
         });
 
@@ -196,7 +209,7 @@ public class Signup extends AppCompatActivity {
 
     @Override
     public void onActivityResult(int requestCode, int resultCode, Intent data) {
-
+        callbackManager.onActivityResult(requestCode, resultCode, data);
         super.onActivityResult(requestCode, resultCode, data);
         if (resultCode == this.RESULT_CANCELED) {
             return;
@@ -252,4 +265,59 @@ public class Signup extends AppCompatActivity {
         }
         return "";
     }
+
+    //**********************************************************user data from login facebook***********************************************************************
+    private void setFacebookData(final LoginResult loginResult)
+    {
+        GraphRequest request = GraphRequest.newMeRequest(
+                loginResult.getAccessToken(),
+                new GraphRequest.GraphJSONObjectCallback() {
+                    @Override
+                    public void onCompleted(JSONObject object, GraphResponse response) {
+                        // Application code
+                        try {
+                            Log.i("Response",response.toString());
+
+                            String firstName = response.getJSONObject().getString("first_name");
+                            String lastName = response.getJSONObject().getString("last_name");
+                            String email="";
+                            if (response.getJSONObject().has("email")) {
+                                email =response.getJSONObject().getString("email");
+                            }
+
+                            Profile profile = Profile.getCurrentProfile();
+                            String id   = profile.getId();
+                            String link = profile.getLinkUri().toString();
+                            if (Profile.getCurrentProfile()!=null)
+                            {
+                                // imageView.setImageURI(p);
+                                Log.i("Login", "ProfilePic" + Profile.getCurrentProfile().getProfilePictureUri(200, 200));
+                                Uri l = Profile.getCurrentProfile().getProfilePictureUri(200, 200);
+                                add_personal_photo.setImageURI(l);
+                            }
+
+                            URL imageURL = new URL("https://graph.facebook.com/" + id + "/picture?type=large");
+                            Picasso
+
+                            Log.i("Link",link);
+                            Log.i("Login" + "ID",  id);
+                            Log.i("Login" + "Email",  email);
+                            Log.i("Login"+ "FirstName", firstName);
+                            Log.i("Login" + "LastName", lastName);
+
+
+
+                        } catch (JSONException e) {
+                            e.printStackTrace();
+                        } catch (MalformedURLException e) {
+                            e.printStackTrace();
+                        }
+                    }
+                });
+        Bundle parameters = new Bundle();
+        parameters.putString("fields", "id,email,first_name,last_name,gender,birthday,picture.type(large)");
+        request.setParameters(parameters);
+        request.executeAsync();
+    }
+
 }
