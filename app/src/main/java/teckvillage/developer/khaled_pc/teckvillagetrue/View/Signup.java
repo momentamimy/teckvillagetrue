@@ -20,12 +20,22 @@ import android.widget.Button;
 import android.widget.ImageView;
 import android.widget.TextView;
 import android.widget.Toast;
+
+import com.facebook.CallbackManager;
+import com.facebook.FacebookCallback;
+import com.facebook.FacebookException;
+import com.facebook.FacebookSdk;
+import com.facebook.login.LoginResult;
+import com.facebook.login.widget.LoginButton;
+
 import java.io.ByteArrayOutputStream;
 import java.io.File;
 import java.io.FileOutputStream;
 import java.io.IOException;
+import java.util.Arrays;
 import java.util.Calendar;
 
+import teckvillage.developer.khaled_pc.teckvillagetrue.MainActivity;
 import teckvillage.developer.khaled_pc.teckvillagetrue.R;
 
 import static android.media.MediaRecorder.VideoSource.CAMERA;
@@ -38,11 +48,17 @@ public class Signup extends AppCompatActivity {
     TextView  FirstName,LastName,Email;
     TextInputLayout FirstNameError,LastNameError,EmailError;
     Button continue_btn;
-
+    CallbackManager callbackManager;
+    LoginButton loginButton;
+    private static final String EMAIL = "email";
+    private static final String PROFILE_PIC = "public_profile";
+    private static final String USER_FRIEND = "user_friends";
 
     @Override
     protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
+        FacebookSdk.sdkInitialize(getApplicationContext());
+        callbackManager = CallbackManager.Factory.create();
         setContentView(R.layout.activity_signup);
 
         //init View
@@ -54,6 +70,32 @@ public class Signup extends AppCompatActivity {
         LastNameError=findViewById(R.id.input_layout_last_name);
         EmailError=findViewById(R.id.input_layout_Email);
         continue_btn=findViewById(R.id.btn_continue);
+
+
+
+
+        //FACEBOOK
+        loginButton = (LoginButton) findViewById(R.id.login_button);
+        loginButton.setReadPermissions(Arrays.asList(EMAIL,PROFILE_PIC,USER_FRIEND));
+        // If you are using in a fragment, call loginButton.setFragment(this);
+
+        // Callback registration
+        loginButton.registerCallback(callbackManager, new FacebookCallback<LoginResult>() {
+            @Override
+            public void onSuccess(LoginResult loginResult) {
+                // App code
+            }
+
+            @Override
+            public void onCancel() {
+                // App code
+            }
+
+            @Override
+            public void onError(FacebookException exception) {
+                // App code
+            }
+        });
 
 
         //On click Continue btn

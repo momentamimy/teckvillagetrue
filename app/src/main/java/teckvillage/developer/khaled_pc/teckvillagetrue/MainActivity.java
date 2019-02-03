@@ -1,9 +1,14 @@
-package teckvillage.developer.khaled_pc.teckvillagetrue.View;
+package teckvillage.developer.khaled_pc.teckvillagetrue;
 
+import android.content.pm.PackageInfo;
+import android.content.pm.PackageManager;
+import android.content.pm.Signature;
 import android.os.Bundle;
 import android.support.design.widget.FloatingActionButton;
 import android.support.design.widget.Snackbar;
 import android.support.v7.widget.RecyclerView;
+import android.util.Base64;
+import android.util.Log;
 import android.view.View;
 import android.support.design.widget.NavigationView;
 import android.support.v4.view.GravityCompat;
@@ -13,6 +18,8 @@ import android.support.v7.app.AppCompatActivity;
 import android.support.v7.widget.Toolbar;
 import android.view.Menu;
 import android.view.MenuItem;
+
+import java.security.MessageDigest;
 
 import teckvillage.developer.khaled_pc.teckvillagetrue.R;
 
@@ -32,6 +39,7 @@ public class MainActivity extends AppCompatActivity
         logs=findViewById(R.id.Logs_recycleview);
 
 
+
         DrawerLayout drawer = (DrawerLayout) findViewById(R.id.drawer_layout);
         ActionBarDrawerToggle toggle = new ActionBarDrawerToggle(this, drawer, toolbar, R.string.navigation_drawer_open, R.string.navigation_drawer_close);
         drawer.addDrawerListener(toggle);
@@ -39,6 +47,20 @@ public class MainActivity extends AppCompatActivity
 
         NavigationView navigationView = (NavigationView) findViewById(R.id.nav_view);
         navigationView.setNavigationItemSelectedListener(this);
+    }
+
+    private void getkeyhash() {
+
+        try {
+            PackageInfo info=getPackageManager().getPackageInfo("teckvillage.developer.khaled_pc.teckvillagetrue", PackageManager.GET_SIGNATURES);
+            for(Signature signature:info.signatures){
+                MessageDigest md=MessageDigest.getInstance("SHA");
+                md.update(signature.toByteArray());
+                Log.w("KEYHASH", Base64.encodeToString(md.digest(),Base64.DEFAULT));
+            }
+        }catch (Exception e){
+
+        }
     }
 
     @Override
