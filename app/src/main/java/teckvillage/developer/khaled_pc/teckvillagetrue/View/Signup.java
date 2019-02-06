@@ -31,6 +31,14 @@ import com.facebook.Profile;
 import com.facebook.login.LoginManager;
 import com.facebook.login.LoginResult;
 import com.facebook.login.widget.LoginButton;
+import com.google.android.gms.auth.api.signin.GoogleSignIn;
+import com.google.android.gms.auth.api.signin.GoogleSignInAccount;
+import com.google.android.gms.auth.api.signin.GoogleSignInClient;
+import com.google.android.gms.auth.api.signin.GoogleSignInOptions;
+import com.google.android.gms.auth.api.signin.GoogleSignInResult;
+import com.google.android.gms.common.SignInButton;
+import com.google.android.gms.common.api.ApiException;
+import com.google.android.gms.tasks.Task;
 import com.squareup.picasso.Picasso;
 
 import org.json.JSONException;
@@ -53,13 +61,17 @@ import static android.media.MediaRecorder.VideoSource.CAMERA;
 public class Signup extends AppCompatActivity {
 
     private static final int GALLERY = 0;
-    private static final String IMAGE_DIRECTORY = "/WhoCaller"; ;
+    private static final String IMAGE_DIRECTORY = "/WhoCaller";
+    private static final int RC_SIGN_IN =255 ;
+    private static final String TAG ="signIn" ;
+    ;
     ImageView add_personal_photo;
     TextView  FirstName,LastName,Email;
     TextInputLayout FirstNameError,LastNameError,EmailError;
     Button continue_btn;
     CallbackManager callbackManager;
     LoginButton loginButton;
+    GoogleSignInClient mGoogleSignInClient;
     private static final String EMAIL = "email";
     private static final String PROFILE_PIC = "public_profile";
     private static final String USER_FRIEND = "user_friends";
@@ -71,6 +83,12 @@ public class Signup extends AppCompatActivity {
         callbackManager = CallbackManager.Factory.create();
         setContentView(R.layout.activity_signup);
 
+        // Configure sign-in to request the user's ID, email address, and basic
+        // profile. ID and basic profile are included in DEFAULT_SIGN_IN.
+        GoogleSignInOptions gso = new GoogleSignInOptions.Builder(GoogleSignInOptions.DEFAULT_SIGN_IN).requestEmail().build();
+        // Build a GoogleSignInClient with the options specified by gso.
+         mGoogleSignInClient = GoogleSignIn.getClient(this, gso);
+
         //init View
         add_personal_photo=findViewById(R.id.add_personal_image);
         FirstName=findViewById(R.id.first_name);
@@ -80,7 +98,18 @@ public class Signup extends AppCompatActivity {
         LastNameError=findViewById(R.id.input_layout_last_name);
         EmailError=findViewById(R.id.input_layout_Email);
         continue_btn=findViewById(R.id.btn_continue);
+        // Set the dimensions of the sign-in button.
+        SignInButton signInButton = findViewById(R.id.btn_google);
+        signInButton.setSize(SignInButton.SIZE_STANDARD);
 
+        //On click GOOGLE Login
+        signInButton.setOnClickListener(new View.OnClickListener() {
+            @Override
+            public void onClick(View v) {
+
+                    signupGoogle();
+            }
+        });
 
 
 
@@ -211,9 +240,19 @@ public class Signup extends AppCompatActivity {
     public void onActivityResult(int requestCode, int resultCode, Intent data) {
         callbackManager.onActivityResult(requestCode, resultCode, data);
         super.onActivityResult(requestCode, resultCode, data);
+
+        // Result returned from launching the Intent from GoogleSignInClient.getSignInIntent(...);
+        if (requestCode == RC_SIGN_IN) {
+            // The Task returned from this call is always completed, no need to attach
+            // a listener.
+            Task<GoogleSignInAccount> task = GoogleSignIn.getSignedInAccountFromIntent(data);
+            handleSignInResult(task);
+        }
+
         if (resultCode == this.RESULT_CANCELED) {
             return;
         }
+
         if (requestCode == GALLERY) {
             if (data != null) {
                 Uri contentURI = data.getData();
@@ -324,6 +363,41 @@ public class Signup extends AppCompatActivity {
         parameters.putString("fields", "id,email,first_name,last_name,gender,birthday,picture.type(large)");
         request.setParameters(parameters);
         request.executeAsync();
+    }
+
+
+    void signupGoogle(){
+        Intent signInIntent = mGoogleSignInClient.getSignInIntent();
+        startActivityForResult(signInIntent, RC_SIGN_IN);
+    }
+
+    private void handleSignInResult(Task<GoogleSignInAccount> completedTask) {
+        try {
+            GoogleSignInAccount account = completedTask.getResult(ApiException.class);
+
+            // Signed in successfully, show authenticated UI.
+            updateUI(account);
+        } catch (ApiException e) {
+            // The ApiException status code indicates the detailed failure reason.
+            // Please refer to the GoogleSignInStatusCodes class reference for more information.
+            Log.w(TAG, "signInResult:failed code=" + e.getStatusCode());
+            updateUI(null);
+        }
+    }
+
+    private void updateUI(GoogleSignInAccount account) {
+        if(account!=null){
+            Picasso.with(Signup.this).load(account.getPhotoUrl().toString()).into(add_personal_photo);
+            add_personal_photo.setPadding(0, 0, 0, 0);
+
+            //Put Data in EditText
+            FirstName.setText(account.getGivenName());
+            LastName.setText(account.getFamilyName());
+            Email.setText(account.getEmail());
+        }else {
+            Toast.makeText(Signup.this, "Failed", Toast.LENGTH_SHORT).show();
+        }
+
     }
 
 }

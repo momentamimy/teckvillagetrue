@@ -162,7 +162,7 @@
             android:layout_height="wrap_content"
             android:textSize="15dp"
             android:gravity="center"
-            android:layout_marginTop="20dp"
+            android:layout_marginTop="15dp"
             android:elevation="5dp"
             android:paddingTop="10dp"
             android:paddingBottom="10dp"
@@ -172,19 +172,16 @@
             />
 
 
-        <Button
+
+        <com.google.android.gms.common.SignInButton
             android:id="@+id/btn_google"
             android:layout_width="match_parent"
-            android:layout_height="20dp"
+            android:layout_height="wrap_content"
+            android:layout_weight="1"
             android:layout_marginStart="20dp"
             android:layout_marginEnd="20dp"
             android:layout_marginBottom="10dp"
-            android:layout_marginTop="10dp"
-            android:layout_weight="1"
-            android:layout_below="@id/login_button"
-            android:background="#6b868f"
-            android:textColor="@android:color/white"
-            />
+            android:layout_marginTop="10dp"/>
 
     </LinearLayout>
 
