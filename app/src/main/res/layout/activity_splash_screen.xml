@@ -1,0 +1,106 @@
+<?xml version="1.0" encoding="utf-8"?>
+<android.support.constraint.ConstraintLayout
+    xmlns:android="http://schemas.android.com/apk/res/android"
+    xmlns:app="http://schemas.android.com/apk/res-auto"
+    xmlns:tools="http://schemas.android.com/tools"
+    android:layout_width="match_parent"
+    android:layout_height="match_parent"
+    tools:context=".View.SplashScreen"
+    android:background="#0089c0">
+
+    <ImageView
+        android:id="@+id/logo"
+        android:layout_width="@dimen/logoDimenWidth"
+        android:layout_height="@dimen/logoDimenHeight"
+        android:background="@drawable/logo"
+        app:layout_constraintBottom_toBottomOf="parent"
+        app:layout_constraintEnd_toEndOf="parent"
+        app:layout_constraintStart_toStartOf="parent"
+        app:layout_constraintTop_toTopOf="parent"
+        app:layout_constraintVertical_bias="0.2" />
+
+    <TextView
+        android:id="@+id/welcome"
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content"
+        android:layout_below="@+id/logo"
+        android:text="Welcome To"
+        android:textColor="#ffffff"
+        android:textSize="@dimen/textSizeLittleBig"
+        app:layout_constraintBottom_toBottomOf="parent"
+        app:layout_constraintEnd_toEndOf="parent"
+        app:layout_constraintStart_toStartOf="parent"
+        app:layout_constraintTop_toBottomOf="@+id/logo"
+        app:layout_constraintVertical_bias="0.1" />
+
+    <TextView
+        android:id="@+id/WhoCaller"
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content"
+        android:layout_below="@+id/welcome"
+        android:text="Who Caller?"
+        android:textColor="#ffffff"
+        android:textSize="@dimen/textSizeBig"
+        app:layout_constraintBottom_toBottomOf="parent"
+        app:layout_constraintEnd_toEndOf="parent"
+        app:layout_constraintStart_toStartOf="parent"
+        app:layout_constraintTop_toBottomOf="@+id/welcome"
+        app:layout_constraintVertical_bias="0.061" />
+
+    <TextView
+        android:id="@+id/NoMoreUnknown"
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content"
+        android:text="No more unknown numbers"
+        android:textSize="@dimen/textSize"
+        android:textColor="#ffffff"
+        app:layout_constraintBottom_toBottomOf="parent"
+        app:layout_constraintEnd_toEndOf="parent"
+        app:layout_constraintStart_toStartOf="parent"
+        app:layout_constraintTop_toBottomOf="@+id/WhoCaller"
+        app:layout_constraintVertical_bias="0.061"/>
+
+    <TextView
+        android:id="@+id/ByProceed"
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content"
+        android:text="By proceed. I accept the Who Caller?"
+        android:textSize="@dimen/textSizeSmall"
+        android:textColor="#ffffff"
+        app:layout_constraintBottom_toTopOf="@+id/proceed"
+        app:layout_constraintEnd_toEndOf="parent"
+        app:layout_constraintStart_toStartOf="parent"
+        app:layout_constraintTop_toBottomOf="@+id/NoMoreUnknown"
+        app:layout_constraintVertical_bias="0.5"/>
+
+    <TextView
+        android:id="@+id/termsOfService"
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content"
+        android:text="Terms of Service and Privacy Policy"
+        android:textSize="@dimen/textSizeSmall"
+        android:textColor="#ffffff"
+        app:layout_constraintBottom_toTopOf="@+id/proceed"
+        app:layout_constraintEnd_toEndOf="parent"
+        app:layout_constraintStart_toStartOf="parent"
+        app:layout_constraintTop_toBottomOf="@+id/ByProceed"
+        app:layout_constraintVertical_bias="0.1"
+        />
+
+    <TextView
+        android:background="#b4040a"
+        android:id="@+id/proceed"
+        android:layout_width="match_parent"
+        android:layout_height="wrap_content"
+        android:gravity="center"
+        android:text="Proceed"
+        android:textSize="@dimen/textSizeLittleBig"
+        android:textColor="#ffffff"
+        android:layout_alignParentBottom="true"
+        app:layout_constraintBottom_toBottomOf="parent"
+        app:layout_constraintEnd_toEndOf="parent"
+        app:layout_constraintStart_toStartOf="parent"
+        app:layout_constraintTop_toTopOf="parent"
+        app:layout_constraintVertical_bias="1.0"
+        />
+</android.support.constraint.ConstraintLayout>

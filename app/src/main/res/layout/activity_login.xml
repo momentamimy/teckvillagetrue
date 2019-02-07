@@ -1,0 +1,154 @@
+<?xml version="1.0" encoding="utf-8"?>
+<android.support.constraint.ConstraintLayout xmlns:android="http://schemas.android.com/apk/res/android"
+    xmlns:app="http://schemas.android.com/apk/res-auto"
+    xmlns:tools="http://schemas.android.com/tools"
+    android:layout_width="match_parent"
+    android:layout_height="match_parent"
+    tools:context=".View.LoginActivity"
+    android:background="#0089c0">
+
+    <ImageView
+        android:id="@+id/logo"
+        android:layout_width="@dimen/logoDimenWidth"
+        android:layout_height="@dimen/logoDimenHeight"
+        android:background="@drawable/logo"
+        app:layout_constraintBottom_toBottomOf="parent"
+        app:layout_constraintEnd_toEndOf="parent"
+        app:layout_constraintStart_toStartOf="parent"
+        app:layout_constraintTop_toBottomOf="@+id/WhoCaller"
+        app:layout_constraintVertical_bias="0.05" />
+
+    <TextView
+        android:id="@+id/WhoCaller"
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content"
+        android:text="Who Caller?"
+        android:textColor="#ffffff"
+        android:textSize="@dimen/textSizeBig"
+        android:textStyle="bold"
+        app:layout_constraintBottom_toBottomOf="parent"
+        app:layout_constraintEnd_toEndOf="parent"
+        app:layout_constraintStart_toStartOf="parent"
+        app:layout_constraintTop_toTopOf="parent"
+        app:layout_constraintVertical_bias="0.03" />
+
+    <TextView
+        android:id="@+id/Select"
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content"
+        android:text="Select your country and"
+        android:textColor="#ffffff"
+        android:textSize="@dimen/textSize"
+        app:layout_constraintBottom_toTopOf="@+id/continu"
+        app:layout_constraintEnd_toEndOf="parent"
+        app:layout_constraintStart_toStartOf="parent"
+        app:layout_constraintTop_toBottomOf="@+id/logo"
+        app:layout_constraintVertical_bias="0.1" />
+
+
+    <TextView
+        android:id="@+id/Enter"
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content"
+        android:text="enter your phone number"
+        android:textColor="#ffffff"
+        android:textSize="@dimen/textSize"
+        app:layout_constraintBottom_toTopOf="@+id/continu"
+        app:layout_constraintEnd_toEndOf="parent"
+        app:layout_constraintStart_toStartOf="parent"
+        app:layout_constraintTop_toBottomOf="@+id/Select"
+        app:layout_constraintVertical_bias="0.01" />
+
+    <RelativeLayout
+        android:id="@+id/layoutCountry"
+        android:padding="20dp"
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content"
+        app:layout_constraintBottom_toTopOf="@+id/layoutPhone"
+        app:layout_constraintEnd_toEndOf="parent"
+        app:layout_constraintStart_toStartOf="parent"
+        app:layout_constraintTop_toBottomOf="@+id/Enter"
+        app:layout_constraintVertical_bias="1.0">
+
+        <ImageView
+            android:id="@+id/locic"
+            android:layout_width="40dp"
+            android:layout_height="40dp"
+            android:src="@drawable/location" />
+
+<TextView
+    android:id="@+id/CodeCountry"
+android:layout_marginLeft="5dp"
+    android:textColor="#fff"
+    android:text="select country"
+    android:textSize="@dimen/textSize"
+    android:layout_width="wrap_content"
+    android:layout_height="wrap_content"
+    android:layout_toRightOf="@+id/locic"
+    android:layout_centerVertical="true"></TextView>
+        <View
+            android:background="#fff"
+            android:id="@+id/country"
+            android:layout_alignBottom="@+id/locic"
+            android:layout_width="match_parent"
+            android:layout_height="1dp"
+            android:layout_toRightOf="@+id/locic"></View>
+
+    </RelativeLayout>
+
+    <RelativeLayout
+        android:id="@+id/layoutPhone"
+        android:padding="20dp"
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content"
+        app:layout_constraintBottom_toTopOf="@+id/continu"
+        app:layout_constraintEnd_toEndOf="parent"
+        app:layout_constraintStart_toStartOf="parent"
+        app:layout_constraintTop_toBottomOf="@+id/Enter"
+        app:layout_constraintVertical_bias="0.8">
+
+        <ImageView
+            android:id="@+id/mobic"
+            android:layout_marginTop="5dp"
+            android:layout_width="40dp"
+            android:layout_height="40dp"
+            android:src="@drawable/mobile_icon" />
+
+        <android.support.design.widget.TextInputLayout
+            android:id="@+id/input_layout_case_name"
+            android:theme="@style/TextLabel"
+            android:layout_width="match_parent"
+            android:layout_height="wrap_content"
+            app:errorTextAppearance="@style/WelcomeErrorAppearance"
+            android:layout_toRightOf="@+id/mobic"
+            android:layout_marginRight="4dp">
+            <EditText
+                android:id="@+id/phone_num"
+                android:layout_width="match_parent"
+                android:layout_height="wrap_content"
+                android:inputType="number"
+                android:textColor="#fff"
+                />
+        </android.support.design.widget.TextInputLayout>
+
+
+    </RelativeLayout>
+
+    <TextView
+        android:background="#b4040a"
+        android:id="@+id/continu"
+        android:layout_width="match_parent"
+        android:layout_height="wrap_content"
+        android:gravity="center"
+        android:text="Continue"
+        android:textSize="@dimen/textSizeLittleBig"
+        android:textColor="#ffffff"
+        android:layout_alignParentBottom="true"
+        app:layout_constraintBottom_toBottomOf="parent"
+        app:layout_constraintEnd_toEndOf="parent"
+        app:layout_constraintStart_toStartOf="parent"
+        app:layout_constraintTop_toTopOf="parent"
+        app:layout_constraintVertical_bias="1.0"
+        />
+
+</android.support.constraint.ConstraintLayout>

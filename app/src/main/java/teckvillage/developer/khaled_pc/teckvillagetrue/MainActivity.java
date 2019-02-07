@@ -6,6 +6,8 @@ import android.content.pm.Signature;
 import android.os.Bundle;
 import android.support.design.widget.FloatingActionButton;
 import android.support.design.widget.Snackbar;
+import android.support.v7.widget.DefaultItemAnimator;
+import android.support.v7.widget.LinearLayoutManager;
 import android.support.v7.widget.RecyclerView;
 import android.util.Base64;
 import android.util.Log;
@@ -20,14 +22,22 @@ import android.view.Menu;
 import android.view.MenuItem;
 
 import java.security.MessageDigest;
+import java.util.ArrayList;
+import java.util.Collections;
+import java.util.List;
 
+import teckvillage.developer.khaled_pc.teckvillagetrue.Controller.ContactAdapter;
+import teckvillage.developer.khaled_pc.teckvillagetrue.Controller.LogAdapter;
 import teckvillage.developer.khaled_pc.teckvillagetrue.R;
+import teckvillage.developer.khaled_pc.teckvillagetrue.model.ContactInfo;
+import teckvillage.developer.khaled_pc.teckvillagetrue.model.LogInfo;
 
 public class MainActivity extends AppCompatActivity
         implements NavigationView.OnNavigationItemSelectedListener {
 
     RecyclerView contacts,logs;
-
+    LinearLayoutManager lLayout;
+    LinearLayoutManager lLayout1;
     @Override
     protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
@@ -38,7 +48,38 @@ public class MainActivity extends AppCompatActivity
         contacts=findViewById(R.id.contact_recycleview);
         logs=findViewById(R.id.Logs_recycleview);
 
+        lLayout = new LinearLayoutManager(this,LinearLayoutManager.HORIZONTAL, false);
+        lLayout1 = new LinearLayoutManager(this);
 
+        List<ContactInfo> contactInfos=new ArrayList<>();
+
+        contactInfos.add(new ContactInfo("http://i.imgur.com/DvpvklR.png","khaled","Mobile"));
+        contactInfos.add(new ContactInfo("https://firebasestorage.googleapis.com/v0/b/chatapp-f5386.appspot.com/o/imgs%2F3C8oCUSQjlZqV0kivIBhpwT5fca2.jpg?alt=media&token=a9e39edd-6d27-4995-969d-a76ddbfb1aab","khaled","Mobile"));
+        contactInfos.add(new ContactInfo(null,"khaled","Mobile"));
+        contactInfos.add(new ContactInfo(null,"khaled eltarabily","Mobile"));
+        contactInfos.add(new ContactInfo(null,"khaled","Mobile"));
+        contactInfos.add(new ContactInfo(null,"khaled","Mobile"));
+        contactInfos.add(new ContactInfo(null,"khaled","Mobile"));
+
+        contacts.setLayoutManager(lLayout);
+        contacts.setItemAnimator(new DefaultItemAnimator());
+        ContactAdapter adapter=new ContactAdapter(this,contactInfos);
+        contacts.setAdapter(adapter);
+
+
+
+        List<LogInfo> logInfos=new ArrayList<>();
+        logInfos.add(new LogInfo("http://i.imgur.com/DvpvklR.png","khaled","income",1235465464,"Mobile"));
+        logInfos.add(new LogInfo("https://firebasestorage.googleapis.com/v0/b/chatapp-f5386.appspot.com/o/imgs%2F3C8oCUSQjlZqV0kivIBhpwT5fca2.jpg?alt=media&token=a9e39edd-6d27-4995-969d-a76ddbfb1aab","khaled","income",1235465464,"Mobile"));
+        logInfos.add(new LogInfo(null,"khaled","income",1235465464,"Mobile"));
+        logInfos.add(new LogInfo(null,"momen","outcome",1235465464,"Mobile"));
+        logInfos.add(new LogInfo(null,"khaled","income",1235465464,"Mobile"));
+        logInfos.add(new LogInfo(null,"momen","outcome",1235465464,"Mobile"));
+
+        logs.setLayoutManager(lLayout1);
+        logs.setItemAnimator(new DefaultItemAnimator());
+        LogAdapter adapter1=new LogAdapter(this,logInfos);
+        logs.setAdapter(adapter1);
 
         DrawerLayout drawer = (DrawerLayout) findViewById(R.id.drawer_layout);
         ActionBarDrawerToggle toggle = new ActionBarDrawerToggle(this, drawer, toolbar, R.string.navigation_drawer_open, R.string.navigation_drawer_close);

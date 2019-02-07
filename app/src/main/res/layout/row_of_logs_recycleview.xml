@@ -2,10 +2,26 @@
 <RelativeLayout xmlns:android="http://schemas.android.com/apk/res/android"
     android:layout_width="match_parent" android:layout_height="wrap_content">
 
+    <ProgressBar
+        android:id="@+id/progress"
+        android:layout_width="80dp"
+        android:layout_height="80dp"
+        android:visibility="gone"
+        android:theme="@style/AppTheme.grayAccent"
+        />
+    <de.hdodenhof.circleimageview.CircleImageView
+        android:id="@+id/progress_contact_img"
+        android:layout_width="60dp"
+        android:layout_height="60dp"
+        android:layout_margin="10dp"
+        android:src="@drawable/ic_nurse"
+        android:visibility="gone"
+        />
+
     <de.hdodenhof.circleimageview.CircleImageView
         android:id="@+id/contact_img_log_recycle"
-        android:layout_width="65dp"
-        android:layout_height="65dp"
+        android:layout_width="60dp"
+        android:layout_height="60dp"
         android:layout_margin="10dp"
         android:src="@drawable/ic_nurse"
         />

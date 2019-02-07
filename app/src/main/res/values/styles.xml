@@ -12,9 +12,23 @@
         <item name="windowActionBar">false</item>
         <item name="windowNoTitle">true</item>
     </style>
-
+    <style name="AppTheme.grayAccent">
+        <item name="colorAccent">#BDBBBB</item> <!-- Whatever color you want-->
+    </style>
     <style name="AppTheme.AppBarOverlay" parent="ThemeOverlay.AppCompat.Dark.ActionBar" />
 
     <style name="AppTheme.PopupOverlay" parent="ThemeOverlay.AppCompat.Light" />
+    <style name="TextLabel" parent="Widget.Design.TextInputLayout">
+        <!-- Hint color and label color in FALSE state -->
+        <item name="android:textColorHint">#fff</item>   <!--  @color/colorAccent -->
+        <!-- Label color in TRUE state and bar color FALSE and TRUE State -->
+        <item name="colorAccent">#fff</item>
+        <item name="colorControlNormal">#fff</item>
+        <item name="colorControlActivated">#fff</item>
+    </style>
 
+    <style name="WelcomeErrorAppearance" parent="@android:style/TextAppearance">
+        <item name="android:textColor">#cc0000</item>  <!--  #cc0000 -->
+        <item name="android:textSize">11sp</item>
+    </style>
 </resources>
