@@ -284,8 +284,6 @@ public class MainActivity extends AppCompatActivity implements NavigationView.On
                         }
                         Log.i(TAG, "------------------------------------------------------------------------------------------");
 
-
-
                     } else {
                         //don't do anything with this contact because we've already found this number
                     }
