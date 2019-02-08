@@ -11,5 +11,5 @@
     <dimen name="textSizeLittleBig">30dp</dimen>
     <dimen name="textSizeBig">40dp</dimen>
     <dimen name="logoDimenWidth">180dp</dimen>
-    <dimen name="logoDimenHeight">250dp</dimen>
+    <dimen name="logoDimenHeight">200dp</dimen>
 </resources>

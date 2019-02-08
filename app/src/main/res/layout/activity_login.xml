@@ -12,11 +12,11 @@
         android:layout_width="@dimen/logoDimenWidth"
         android:layout_height="@dimen/logoDimenHeight"
         android:background="@drawable/logo"
-        app:layout_constraintBottom_toBottomOf="parent"
         app:layout_constraintEnd_toEndOf="parent"
         app:layout_constraintStart_toStartOf="parent"
         app:layout_constraintTop_toBottomOf="@+id/WhoCaller"
-        app:layout_constraintVertical_bias="0.05" />
+        app:layout_constraintBottom_toBottomOf="@+id/Select"
+        app:layout_constraintVertical_bias="0.3"/>
 
     <TextView
         android:id="@+id/WhoCaller"
@@ -26,7 +26,7 @@
         android:textColor="#ffffff"
         android:textSize="@dimen/textSizeBig"
         android:textStyle="bold"
-        app:layout_constraintBottom_toBottomOf="parent"
+        app:layout_constraintBottom_toBottomOf="@+id/logo"
         app:layout_constraintEnd_toEndOf="parent"
         app:layout_constraintStart_toStartOf="parent"
         app:layout_constraintTop_toTopOf="parent"
@@ -39,11 +39,12 @@
         android:text="Select your country and"
         android:textColor="#ffffff"
         android:textSize="@dimen/textSize"
-        app:layout_constraintBottom_toTopOf="@+id/continu"
+        android:layout_marginTop="8dp"
+        app:layout_constraintBottom_toTopOf="@+id/Enter"
         app:layout_constraintEnd_toEndOf="parent"
         app:layout_constraintStart_toStartOf="parent"
         app:layout_constraintTop_toBottomOf="@+id/logo"
-        app:layout_constraintVertical_bias="0.1" />
+        app:layout_constraintVertical_bias="0.2" />
 
 
     <TextView
@@ -53,15 +54,16 @@
         android:text="enter your phone number"
         android:textColor="#ffffff"
         android:textSize="@dimen/textSize"
-        app:layout_constraintBottom_toTopOf="@+id/continu"
+        app:layout_constraintBottom_toTopOf="@+id/layoutCountry"
         app:layout_constraintEnd_toEndOf="parent"
         app:layout_constraintStart_toStartOf="parent"
         app:layout_constraintTop_toBottomOf="@+id/Select"
-        app:layout_constraintVertical_bias="0.01" />
+        app:layout_constraintVertical_bias="0.0" />
 
     <RelativeLayout
         android:id="@+id/layoutCountry"
-        android:padding="20dp"
+        android:padding="8dp"
+        android:layout_marginTop="10dp"
         android:layout_width="wrap_content"
         android:layout_height="wrap_content"
         app:layout_constraintBottom_toTopOf="@+id/layoutPhone"
@@ -72,46 +74,51 @@
 
         <ImageView
             android:id="@+id/locic"
-            android:layout_width="40dp"
-            android:layout_height="40dp"
+            android:layout_width="33dp"
+            android:layout_height="32dp"
             android:src="@drawable/location" />
 
-<TextView
-    android:id="@+id/CodeCountry"
-android:layout_marginLeft="5dp"
-    android:textColor="#fff"
-    android:text="select country"
-    android:textSize="@dimen/textSize"
-    android:layout_width="wrap_content"
-    android:layout_height="wrap_content"
-    android:layout_toRightOf="@+id/locic"
-    android:layout_centerVertical="true"></TextView>
+
+        <TextView
+        android:id="@+id/CodeCountry"
+        android:layout_marginLeft="5dp"
+        android:textColor="#fff"
+        android:text="select country"
+        android:textSize="@dimen/textSize"
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content"
+        android:paddingBottom="8dp"
+        android:layout_toRightOf="@+id/locic"
+        android:layout_centerVertical="true"/>
+
+
         <View
             android:background="#fff"
             android:id="@+id/country"
             android:layout_alignBottom="@+id/locic"
             android:layout_width="match_parent"
             android:layout_height="1dp"
-            android:layout_toRightOf="@+id/locic"></View>
+            android:layout_marginRight="8dp"
+            android:layout_toRightOf="@+id/locic"/>
 
     </RelativeLayout>
 
     <RelativeLayout
         android:id="@+id/layoutPhone"
-        android:padding="20dp"
+        android:padding="5dp"
         android:layout_width="wrap_content"
         android:layout_height="wrap_content"
-        app:layout_constraintBottom_toTopOf="@+id/continu"
+        app:layout_constraintTop_toTopOf="@id/continu"
         app:layout_constraintEnd_toEndOf="parent"
         app:layout_constraintStart_toStartOf="parent"
-        app:layout_constraintTop_toBottomOf="@+id/Enter"
-        app:layout_constraintVertical_bias="0.8">
+        app:layout_constraintBottom_toBottomOf="@+id/layoutCountry"
+        app:layout_constraintVertical_bias="2.0">
 
         <ImageView
             android:id="@+id/mobic"
-            android:layout_marginTop="5dp"
-            android:layout_width="40dp"
-            android:layout_height="40dp"
+            android:layout_marginTop="11dp"
+            android:layout_width="33dp"
+            android:layout_height="36dp"
             android:src="@drawable/mobile_icon" />
 
         <android.support.design.widget.TextInputLayout
@@ -143,6 +150,8 @@ android:layout_marginLeft="5dp"
         android:text="Continue"
         android:textSize="@dimen/textSizeLittleBig"
         android:textColor="#ffffff"
+        android:paddingTop="3dp"
+        android:paddingBottom="4dp"
         android:layout_alignParentBottom="true"
         app:layout_constraintBottom_toBottomOf="parent"
         app:layout_constraintEnd_toEndOf="parent"

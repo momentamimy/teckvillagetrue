@@ -1,10 +1,16 @@
 package teckvillage.developer.khaled_pc.teckvillagetrue.View;
 
 import android.Manifest;
+import android.content.Context;
 import android.content.Intent;
+import android.net.Uri;
+import android.os.Build;
+import android.provider.Settings;
 import android.support.annotation.NonNull;
+import android.support.annotation.RequiresApi;
 import android.support.v7.app.AppCompatActivity;
 import android.os.Bundle;
+import android.util.Log;
 import android.view.View;
 import android.widget.TextView;
 import android.widget.Toast;
@@ -25,8 +31,8 @@ public class SplashScreen extends AppCompatActivity implements EasyPermissions.P
     protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
         setContentView(R.layout.activity_splash_screen);
-        String[] perms={
 
+        String[] perms={
                 Manifest.permission.READ_CALL_LOG,
                 Manifest.permission.READ_PHONE_STATE,
                 Manifest.permission.CALL_PHONE,
@@ -38,6 +44,7 @@ public class SplashScreen extends AppCompatActivity implements EasyPermissions.P
                 Manifest.permission.WRITE_EXTERNAL_STORAGE,
                 Manifest.permission.CAMERA
         };
+
         if (EasyPermissions.hasPermissions(getApplicationContext(),perms))
         {
             //Toast.makeText(getApplicationContext(),"Granted",Toast.LENGTH_LONG).show();
@@ -45,11 +52,20 @@ public class SplashScreen extends AppCompatActivity implements EasyPermissions.P
             startActivity(intent);
             finish();
         }
+
         proceed=findViewById(R.id.proceed);
         proceed.setOnClickListener(new View.OnClickListener() {
+            @RequiresApi(api = Build.VERSION_CODES.M)
             @Override
             public void onClick(View v) {
-                callPermissions();
+                //checkDrawOverlayPermission();
+                if (Build.VERSION.SDK_INT >= Build.VERSION_CODES.M) {
+                    Log.v("App", "Build Version Greater than or equal to M: " + Build.VERSION_CODES.M);
+                    checkDrawOverlayPermission();
+                } else {
+                    Log.v("App", "OS Version Less than M");
+                    //No need for Permission as less then M OS.
+                }
             }
         });
 
@@ -59,8 +75,8 @@ public class SplashScreen extends AppCompatActivity implements EasyPermissions.P
     @AfterPermissionGranted(Request_Code)
     public void callPermissions()
     {
-        String[] perms={
 
+        String[] perms={
                 Manifest.permission.READ_CALL_LOG,
                 Manifest.permission.READ_PHONE_STATE,
                 Manifest.permission.CALL_PHONE,
@@ -113,6 +129,36 @@ public class SplashScreen extends AppCompatActivity implements EasyPermissions.P
         if (requestCode == AppSettingsDialog.DEFAULT_SETTINGS_REQ_CODE)
         {
            // Toast.makeText(this,"granted",Toast.LENGTH_LONG).show();
+        }
+
+        //check if received result code
+        //  is equal our requested code for draw permission
+        if (requestCode == REQUEST_CODE) {
+            if (Build.VERSION.SDK_INT >= Build.VERSION_CODES.M) {
+                if (Settings.canDrawOverlays(this)) {
+                    callPermissions();
+                }
+            }
+        }
+    }
+
+    // code to post/handler request for permission
+    public final static int REQUEST_CODE = 1018;
+
+    @RequiresApi(api = Build.VERSION_CODES.M)
+    public void checkDrawOverlayPermission() {
+        Log.v("App", "Package Name: " + getApplicationContext().getPackageName());
+
+        // check if we already  have permission to draw over other apps
+        if (!Settings.canDrawOverlays(this)) {
+            Log.v("App", "Requesting Permission" + Settings.canDrawOverlays(this));
+            // if not construct intent to request permission
+            Intent intent = new Intent(Settings.ACTION_MANAGE_OVERLAY_PERMISSION, Uri.parse("package:" + getApplicationContext().getPackageName()));
+             // request permission via start activity for result
+            startActivityForResult(intent, REQUEST_CODE);
+        } else {
+            Log.v("App", "We already have permission for it.");
+            callPermissions();
         }
     }
 }

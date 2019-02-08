@@ -13,7 +13,7 @@
         android:layout_width="@dimen/logoDimenWidth"
         android:layout_height="@dimen/logoDimenHeight"
         android:background="@drawable/logo"
-        app:layout_constraintBottom_toBottomOf="parent"
+        app:layout_constraintBottom_toBottomOf="@+id/welcome"
         app:layout_constraintEnd_toEndOf="parent"
         app:layout_constraintStart_toStartOf="parent"
         app:layout_constraintTop_toTopOf="parent"
@@ -31,7 +31,7 @@
         app:layout_constraintEnd_toEndOf="parent"
         app:layout_constraintStart_toStartOf="parent"
         app:layout_constraintTop_toBottomOf="@+id/logo"
-        app:layout_constraintVertical_bias="0.1" />
+        app:layout_constraintVertical_bias="0.05" />
 
     <TextView
         android:id="@+id/WhoCaller"
@@ -41,11 +41,11 @@
         android:text="Who Caller?"
         android:textColor="#ffffff"
         android:textSize="@dimen/textSizeBig"
-        app:layout_constraintBottom_toBottomOf="parent"
+        app:layout_constraintBottom_toBottomOf="@+id/NoMoreUnknown"
         app:layout_constraintEnd_toEndOf="parent"
         app:layout_constraintStart_toStartOf="parent"
         app:layout_constraintTop_toBottomOf="@+id/welcome"
-        app:layout_constraintVertical_bias="0.061" />
+        app:layout_constraintVertical_bias="0.15" />
 
     <TextView
         android:id="@+id/NoMoreUnknown"
@@ -58,7 +58,7 @@
         app:layout_constraintEnd_toEndOf="parent"
         app:layout_constraintStart_toStartOf="parent"
         app:layout_constraintTop_toBottomOf="@+id/WhoCaller"
-        app:layout_constraintVertical_bias="0.061"/>
+        app:layout_constraintVertical_bias="0.1"/>
 
     <TextView
         android:id="@+id/ByProceed"
@@ -71,7 +71,7 @@
         app:layout_constraintEnd_toEndOf="parent"
         app:layout_constraintStart_toStartOf="parent"
         app:layout_constraintTop_toBottomOf="@+id/NoMoreUnknown"
-        app:layout_constraintVertical_bias="0.5"/>
+        app:layout_constraintVertical_bias="0.45"/>
 
     <TextView
         android:id="@+id/termsOfService"
@@ -96,11 +96,13 @@
         android:text="Proceed"
         android:textSize="@dimen/textSizeLittleBig"
         android:textColor="#ffffff"
+        android:paddingBottom="4dp"
+        android:paddingTop="3dp"
         android:layout_alignParentBottom="true"
         app:layout_constraintBottom_toBottomOf="parent"
         app:layout_constraintEnd_toEndOf="parent"
         app:layout_constraintStart_toStartOf="parent"
-        app:layout_constraintTop_toTopOf="parent"
+        app:layout_constraintTop_toTopOf="@+id/termsOfService"
         app:layout_constraintVertical_bias="1.0"
         />
 </android.support.constraint.ConstraintLayout>
