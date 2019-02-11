@@ -9,24 +9,12 @@
     tools:context="teckvillage.developer.khaled_pc.teckvillagetrue.MainActivity"
     tools:showIn="@layout/app_bar_main">
 
-    <android.support.v7.widget.RecyclerView
-        android:id="@+id/contact_recycleview"
-        android:layout_weight="4"
+
+    <FrameLayout
         android:layout_width="match_parent"
         android:layout_height="match_parent"
-        />
+        android:id="@+id/fragment_container_main"
+       />
 
-    <View
-        android:layout_width="match_parent"
-        android:layout_height="1dp"
-        android:background="#BDBBBB"
-        />
-
-    <android.support.v7.widget.RecyclerView
-        android:id="@+id/Logs_recycleview"
-        android:layout_weight="1"
-        android:layout_width="match_parent"
-        android:layout_height="match_parent"
-        />
 
 </LinearLayout>

@@ -30,7 +30,7 @@
         app:layout_constraintEnd_toEndOf="parent"
         app:layout_constraintStart_toStartOf="parent"
         app:layout_constraintTop_toTopOf="parent"
-        app:layout_constraintVertical_bias="0.03" />
+        app:layout_constraintVertical_bias="0.04" />
 
     <TextView
         android:id="@+id/Select"
@@ -39,7 +39,7 @@
         android:text="Select your country and"
         android:textColor="#ffffff"
         android:textSize="@dimen/textSize"
-        android:layout_marginTop="8dp"
+        android:layout_marginTop="20dp"
         app:layout_constraintBottom_toTopOf="@+id/Enter"
         app:layout_constraintEnd_toEndOf="parent"
         app:layout_constraintStart_toStartOf="parent"
@@ -63,49 +63,64 @@
     <RelativeLayout
         android:id="@+id/layoutCountry"
         android:padding="8dp"
-        android:layout_marginTop="10dp"
+        android:layout_marginBottom="5dp"
+        android:layout_marginTop="40dp"
+        android:layout_marginStart="10dp"
+        android:layout_marginLeft="10dp"
         android:layout_width="wrap_content"
         android:layout_height="wrap_content"
         app:layout_constraintBottom_toTopOf="@+id/layoutPhone"
         app:layout_constraintEnd_toEndOf="parent"
         app:layout_constraintStart_toStartOf="parent"
         app:layout_constraintTop_toBottomOf="@+id/Enter"
-        app:layout_constraintVertical_bias="1.0">
+        app:layout_constraintVertical_bias="1.0"
+       >
 
         <ImageView
             android:id="@+id/locic"
-            android:layout_width="33dp"
-            android:layout_height="32dp"
-            android:src="@drawable/location" />
+            android:layout_width="22dp"
+            android:layout_height="22dp"
+            android:layout_marginTop="8dp"
+            android:layout_marginEnd="5dp"
+            android:layout_marginRight="5dp"
+            android:src="@drawable/location"
+             />
 
 
         <TextView
         android:id="@+id/CodeCountry"
-        android:layout_marginLeft="5dp"
         android:textColor="#fff"
-        android:text="select country"
-        android:textSize="@dimen/textSize"
-        android:layout_width="wrap_content"
+        android:text="Select Country"
+        android:textSize="18dp"
+        android:layout_width="match_parent"
         android:layout_height="wrap_content"
-        android:paddingBottom="8dp"
+        android:layout_marginRight="25dp"
+        android:layout_marginEnd="25dp"
         android:layout_toRightOf="@+id/locic"
-        android:layout_centerVertical="true"/>
+        android:layout_toEndOf="@+id/locic"
+        android:layout_centerVertical="true"
+            />
 
 
         <View
             android:background="#fff"
             android:id="@+id/country"
-            android:layout_alignBottom="@+id/locic"
+            android:layout_marginTop="8dp"
+            android:layout_below="@+id/CodeCountry"
             android:layout_width="match_parent"
             android:layout_height="1dp"
-            android:layout_marginRight="8dp"
-            android:layout_toRightOf="@+id/locic"/>
+            android:layout_marginEnd="25dp"
+            android:layout_marginRight="25dp"
+            android:layout_marginBottom="1dp"
+            android:layout_toRightOf="@+id/locic"
+            android:layout_toEndOf="@+id/locic" />
 
     </RelativeLayout>
 
     <RelativeLayout
         android:id="@+id/layoutPhone"
-        android:padding="5dp"
+        android:layout_marginStart="20dp"
+        android:layout_marginLeft="20dp"
         android:layout_width="wrap_content"
         android:layout_height="wrap_content"
         app:layout_constraintTop_toTopOf="@id/continu"
@@ -116,9 +131,9 @@
 
         <ImageView
             android:id="@+id/mobic"
-            android:layout_marginTop="11dp"
-            android:layout_width="33dp"
-            android:layout_height="36dp"
+            android:layout_marginTop="23dp"
+            android:layout_width="27dp"
+            android:layout_height="25dp"
             android:src="@drawable/mobile_icon" />
 
         <android.support.design.widget.TextInputLayout
@@ -127,14 +142,22 @@
             android:layout_width="match_parent"
             android:layout_height="wrap_content"
             app:errorTextAppearance="@style/WelcomeErrorAppearance"
+            android:hint="Phone Number"
             android:layout_toRightOf="@+id/mobic"
-            android:layout_marginRight="4dp">
+            android:layout_toEndOf="@+id/mobic"
+            android:layout_toStartOf="@+id/rest"
+            android:layout_toLeftOf="@+id/rest"
+            android:layout_marginEnd="35dp"
+            android:layout_marginRight="35dp"
+            tools:ignore="UnknownId"
+            >
             <EditText
                 android:id="@+id/phone_num"
                 android:layout_width="match_parent"
                 android:layout_height="wrap_content"
                 android:inputType="number"
                 android:textColor="#fff"
+                android:maxLength="11"
                 />
         </android.support.design.widget.TextInputLayout>
 
@@ -148,7 +171,7 @@
         android:layout_height="wrap_content"
         android:gravity="center"
         android:text="Continue"
-        android:textSize="@dimen/textSizeLittleBig"
+        android:textSize="25sp"
         android:textColor="#ffffff"
         android:paddingTop="3dp"
         android:paddingBottom="4dp"

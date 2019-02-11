@@ -64,9 +64,9 @@ public class Signup extends AppCompatActivity {
     ImageView add_personal_photo;
     TextView  FirstName,LastName,Email;
     TextInputLayout FirstNameError,LastNameError,EmailError;
-    Button continue_btn;
+    TextView continue_btn;
     CallbackManager callbackManager;
-    LoginButton loginButton;
+    ImageView loginButton;
     GoogleSignInClient mGoogleSignInClient;
     private static final String EMAIL = "email";
     private static final String PROFILE_PIC = "public_profile";
@@ -95,28 +95,35 @@ public class Signup extends AppCompatActivity {
         EmailError=findViewById(R.id.input_layout_Email);
         continue_btn=findViewById(R.id.btn_continue);
         // Set the dimensions of the sign-in button.
-        SignInButton signInButton = findViewById(R.id.btn_google);
-        signInButton.setSize(SignInButton.SIZE_STANDARD);
+        ImageView signInButton = findViewById(R.id.btn_google);
+        //signInButton.setSize(SignInButton.SIZE_STANDARD);
 
         //On click GOOGLE Login
         signInButton.setOnClickListener(new View.OnClickListener() {
             @Override
             public void onClick(View v) {
-
-                    signupGoogle();
+                signupGoogle();
             }
         });
 
 
 
         //FACEBOOK
-        loginButton = (LoginButton) findViewById(R.id.login_button);
-        loginButton.setReadPermissions(Arrays.asList(EMAIL,PROFILE_PIC,USER_FRIEND));
+        loginButton =  findViewById(R.id.login_button);
+        //*********************************************when click on facebook login ImageButtom(ClickListener)*****************************************************
+        loginButton.setOnClickListener(new View.OnClickListener() {
+            @Override
+            public void onClick(View v) {
+                LoginManager.getInstance().logInWithReadPermissions(Signup.this, Arrays.asList(EMAIL,PROFILE_PIC,USER_FRIEND));
+            }
+        });
+
+        //loginButton.setReadPermissions(Arrays.asList(EMAIL,PROFILE_PIC,USER_FRIEND));
         //LoginManager.getInstance().logInWithReadPermissions(this, Arrays.asList("public_profile"));
         // If you are using in a fragment, call loginButton.setFragment(this);
 
         // Callback registration
-        loginButton.registerCallback(callbackManager, new FacebookCallback<LoginResult>() {
+        LoginManager.getInstance().registerCallback(callbackManager, new FacebookCallback<LoginResult>() {
             @Override
             public void onSuccess(LoginResult loginResult) {
                 // App code
@@ -257,7 +264,7 @@ public class Signup extends AppCompatActivity {
                     String path = saveImage(bitmap);
                     //Toast.makeText(Signup.this, "Image Saved!", Toast.LENGTH_SHORT).show();
                     add_personal_photo.setImageBitmap(bitmap);
-                    add_personal_photo.setPadding(0,0,0,0);
+                    add_personal_photo.setPadding(20,20,20,20);
                 } catch (IOException e) {
                     e.printStackTrace();
                     Toast.makeText(Signup.this, "Failed!", Toast.LENGTH_SHORT).show();
@@ -267,6 +274,7 @@ public class Signup extends AppCompatActivity {
         } else if (requestCode == CAMERA) {
             Bitmap thumbnail = (Bitmap) data.getExtras().get("data");
             add_personal_photo.setImageBitmap(thumbnail);
+            add_personal_photo.setPadding(20,20,20,20);
             saveImage(thumbnail);
             //Toast.makeText(Signup.this, "Image Saved!", Toast.LENGTH_SHORT).show();
         }
@@ -333,7 +341,7 @@ public class Signup extends AppCompatActivity {
 
                             URL imageURL = new URL("https://graph.facebook.com/" + id + "/picture?type=large");
                             Picasso.with(Signup.this).load(imageURL.toString()).into(add_personal_photo);
-                            add_personal_photo.setPadding(0,0,0,0);
+                            add_personal_photo.setPadding(20,20,20,20);
 
                             //Put Data in EditText
                             FirstName.setText(firstName);
@@ -384,7 +392,7 @@ public class Signup extends AppCompatActivity {
     private void updateUI(GoogleSignInAccount account) {
         if(account!=null){
             Picasso.with(Signup.this).load(account.getPhotoUrl().toString()).into(add_personal_photo);
-            add_personal_photo.setPadding(0, 0, 0, 0);
+            add_personal_photo.setPadding(20,20,20,20);
 
             //Put Data in EditText
             FirstName.setText(account.getGivenName());
