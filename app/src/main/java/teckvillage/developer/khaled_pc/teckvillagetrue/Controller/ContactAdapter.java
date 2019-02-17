@@ -82,5 +82,16 @@ public class ContactAdapter extends RecyclerView.Adapter<ContactHolder> {
         return itemList.size();
     }
 
+    public int getLetterPosition(String letter){
+        Log.w("size", String.valueOf(itemList.size()));
+        for (int i = 0 ; i < itemList.size(); i++){
+            Log.w("let", String.valueOf(itemList.get(i).contacName.substring(0,1)));
+            if(itemList.get(i).contacName.substring(0,1).equals(letter)){
+                Log.w("pos", String.valueOf(i));
+                return i;
+            }
+        }
+        return -1;
+    }
 
 }

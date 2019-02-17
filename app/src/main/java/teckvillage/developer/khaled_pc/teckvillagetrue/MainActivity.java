@@ -83,7 +83,7 @@ public class MainActivity extends AppCompatActivity implements NavigationView.On
                 return;
             }
             FragmentTransaction fragmentTransaction=fragmentManager.beginTransaction();
-            Main_Fagment fragment_1=new Main_Fagment();
+            Contacts fragment_1=new Contacts();
             fragmentTransaction.add(R.id.fragment_container_main,fragment_1,null);
             fragmentTransaction.commit();
         }
