@@ -5,7 +5,6 @@ import android.os.Bundle;
 import android.support.v4.app.Fragment;
 import android.support.v7.widget.LinearLayoutManager;
 import android.support.v7.widget.RecyclerView;
-import android.util.Log;
 import android.view.LayoutInflater;
 import android.view.View;
 import android.view.ViewGroup;
@@ -19,9 +18,7 @@ import in.myinnos.alphabetsindexfastscrollrecycler.IndexFastScrollRecyclerView;
 import teckvillage.developer.khaled_pc.teckvillagetrue.Controller.AlphabetItem;
 import teckvillage.developer.khaled_pc.teckvillagetrue.Controller.ContactAdapter;
 import teckvillage.developer.khaled_pc.teckvillagetrue.Controller.LetterComparator;
-import teckvillage.developer.khaled_pc.teckvillagetrue.Controller.PinnedHeaderDecoration;
 import teckvillage.developer.khaled_pc.teckvillagetrue.Controller.UserContactsAdapters;
-import teckvillage.developer.khaled_pc.teckvillagetrue.model.ContactInfo;
 import teckvillage.developer.khaled_pc.teckvillagetrue.model.DataHelper;
 import teckvillage.developer.khaled_pc.teckvillagetrue.model.UserContactData;
 
@@ -46,14 +43,12 @@ public class Contacts extends Fragment {
 
 
     @Override
-    public View onCreateView(LayoutInflater inflater, ViewGroup container,
-                             Bundle savedInstanceState) {
+    public View onCreateView(LayoutInflater inflater, ViewGroup container, Bundle savedInstanceState) {
         // Inflate the layout for this fragment
         View view = inflater.inflate(R.layout.fragment_contacts, container, false);
 
+        //Initial recycleview
         mRecyclerView =  view.findViewById(R.id.fast_scroller_recycler);
-
-        //mRecyclerView.setLayoutManager(new LinearLayoutManager(getActivity()));
 
         contactInfos = new ArrayList<>();
 
@@ -82,20 +77,6 @@ public class Contacts extends Fragment {
         contactInfos.add(new UserContactData(null, "via", "Mobile"));
         contactInfos.add(new UserContactData(null, "joha", "Mobile"));
         contactInfos.add(new UserContactData(null, "hoda", "Mobile"));
-
-        //Collections.sort(contactInfos, new LetterComparator());
-
-
-        final PinnedHeaderDecoration decoration = new PinnedHeaderDecoration();
-        decoration.registerTypePinnedHeader(1, new PinnedHeaderDecoration.PinnedHeaderCreator() {
-            @Override
-            public boolean create(RecyclerView parent, int adapterPosition) {
-                return true;
-            }
-        });
-        //mRecyclerView.addItemDecoration(decoration);
-        //adapter = new ContactAdapter(getActivity(), contactInfos);
-        //mRecyclerView.setAdapter(adapter);
 
         initialiseData();
         initialiseUI();
@@ -127,7 +108,7 @@ public class Contacts extends Fragment {
 
     protected void initialiseUI() {
         mRecyclerView.setLayoutManager(new LinearLayoutManager(getActivity()));
-        mRecyclerView.setAdapter(new UserContactsAdapters(getActivity(),addAlphabets(sortList(contactInfos))));
+        mRecyclerView.setAdapter(new UserContactsAdapters(getActivity(),addAlphabets(new LetterComparator().sortList(contactInfos))));
 
         mRecyclerView.setIndexTextSize(12);
         mRecyclerView.setIndexBarColor("#33334c");
@@ -139,55 +120,44 @@ public class Contacts extends Fragment {
         mRecyclerView.setIndexBarTextColor("#FF024B68");
 
 
-
-
         mRecyclerView.setIndexBarVisibility(true);
         mRecyclerView.setIndexbarHighLateTextColor("#013c53");
         mRecyclerView.setIndexBarHighLateTextVisibility(true);
     }
 
 
-    ArrayList<UserContactData> sortList(ArrayList<UserContactData> list) {
-        Collections.sort(list, new Comparator<UserContactData>() {
-            @Override
-            public int compare(UserContactData usercontact1, UserContactData usercontact2) {
-                return usercontact1.usercontacName.compareTo(usercontact2.usercontacName);
-            }
-        });
-        return list;
-    }
 
+
+
+    /**
+     * Receive sorted list and divide it into Letters and contacts
+     * @param list
+     * @return
+     */
     ArrayList<UserContactData> addAlphabets(ArrayList<UserContactData> list) {
         int i = 0;
         ArrayList<UserContactData> customList = new ArrayList<UserContactData>();
         UserContactData userContactData = new UserContactData();
-        for (i = 0; i < list.size() ; i++) {
-            userContactData.usercontacName = String.valueOf(list.get(0).usercontacName.charAt(0));
-            Log.w("ssssa", String.valueOf(list.get(0).usercontacName.charAt(0)));
-            userContactData.setType(1);
-            customList.add(userContactData);
-
-            for (int j = 0; j < list.size() - 1; j++) {
-                UserContactData userContactData2 = new UserContactData();
-                char name1 = list.get(j).usercontacName.charAt(0);
-                char name2 = list.get(j + 1).usercontacName.charAt(0);
-                if (name1 == name2) {
-                    list.get(j).setType(2);
-                    customList.add(list.get(j));
-                } else {
-                    list.get(j).setType(2);
-                    customList.add(list.get(j));
-                    userContactData2.usercontacName=String.valueOf(name2);
-                    userContactData2.setType(1);
-                    customList.add(userContactData);
-                }
-
+        userContactData.usercontacName=String.valueOf(list.get(0).usercontacName.charAt(0));
+        userContactData.setType(1);
+        customList.add(userContactData);
+        for (i = 0; i < list.size() - 1; i++) {
+            UserContactData userContactData2 = new UserContactData();
+            char name1 = list.get(i).usercontacName.toUpperCase().charAt(0);
+            char name2 = list.get(i + 1).usercontacName.toUpperCase().charAt(0);
+            if (name1 == name2) {
+                list.get(i).setType(2);
+                customList.add(list.get(i));
+            } else {
+                list.get(i).setType(2);
+                customList.add(list.get(i));
+                userContactData2.usercontacName=String.valueOf(name2);
+                userContactData2.setType(1);
+                customList.add(userContactData2);
             }
-            list.get(i).setType(2);
-            customList.add(list.get(i));
-
         }
-
+        list.get(i).setType(2);
+        customList.add(list.get(i));
         return customList;
     }
 

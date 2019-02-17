@@ -1,26 +1,26 @@
 package teckvillage.developer.khaled_pc.teckvillagetrue.Controller;
 
+import java.util.ArrayList;
+import java.util.Collections;
 import java.util.Comparator;
 
 import teckvillage.developer.khaled_pc.teckvillagetrue.model.ContactInfo;
+import teckvillage.developer.khaled_pc.teckvillagetrue.model.UserContactData;
 
 /**
  * Created by khaled-pc on 2/13/2019.
  */
 
-public class LetterComparator implements Comparator<ContactInfo> {
+public class LetterComparator  {
 
-@Override
-public int compare(ContactInfo l, ContactInfo r) {
-        if (l == null || r == null) {
-        return 0;
+        public ArrayList<UserContactData> sortList(ArrayList<UserContactData> list) {
+                Collections.sort(list, new Comparator<UserContactData>() {
+                        @Override
+                        public int compare(UserContactData usercontact1, UserContactData usercontact2) {
+                                return usercontact1.usercontacName.substring(0, 1).toUpperCase().compareTo(usercontact2.usercontacName.substring(0, 1).toUpperCase());
+                        }
+                });
+                return list;
         }
 
-        String lhsSortLetters = l.contacName.substring(0, 1).toUpperCase();
-        String rhsSortLetters = r.contacName.substring(0, 1).toUpperCase();
-        if (lhsSortLetters == null || rhsSortLetters == null) {
-        return 0;
-        }
-        return lhsSortLetters.compareTo(rhsSortLetters);
-        }
         }

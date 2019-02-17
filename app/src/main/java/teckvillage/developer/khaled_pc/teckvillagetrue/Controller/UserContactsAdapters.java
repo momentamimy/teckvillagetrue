@@ -105,10 +105,7 @@ public class UserContactsAdapters extends RecyclerView.Adapter<UserContactsAdapt
 
     @Override
     public ViewHolder onCreateViewHolder(ViewGroup parent, int viewType) {
-       // View v = LayoutInflater.from(parent.getContext()).inflate(R.layout.user_contacts_row, parent, false);
-       // return new ViewHolder(v);
-
-        switch (viewType) {
+       switch (viewType) {
             case TYPE_LETTER:
                 View v = LayoutInflater.from(parent.getContext()).inflate(R.layout.letter_layout, parent, false);
                 return new ViewHolder(v);
@@ -125,16 +122,15 @@ public class UserContactsAdapters extends RecyclerView.Adapter<UserContactsAdapt
     public void onBindViewHolder(final ViewHolder holder, int position) {
         if(holder.contactName2!=null){
 
-
-       holder.contactName2.setText(mDataArray.get(position).usercontacName);
-       holder.contactName2.setText(mDataArray.get(position).usercontacName);
-       holder.contactCircleImageView2.setOnClickListener(new View.OnClickListener() {
-            @Override
-            public void onClick(View v) {
-                mDataArray.remove(holder.getAdapterPosition());
-                notifyDataSetChanged();
-            }
-        });
+           holder.contactName2.setText(mDataArray.get(position).usercontacName);
+           holder.contactName2.setText(mDataArray.get(position).usercontacName);
+           holder.contactCircleImageView2.setOnClickListener(new View.OnClickListener() {
+                @Override
+                public void onClick(View v) {
+                    mDataArray.remove(holder.getAdapterPosition());
+                    notifyDataSetChanged();
+                }
+            });
         }
 
         if(holder.letter!=null){
