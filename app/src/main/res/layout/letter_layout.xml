@@ -7,7 +7,7 @@
         android:layout_width="wrap_content"
         android:layout_height="wrap_content"
         android:textSize="25sp"
-        android:textColor="#b3b3b3"
+        android:textColor="#5F7D8C"
         android:layout_marginStart="20dp"
         android:text="A"/>
 
