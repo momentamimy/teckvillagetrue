@@ -78,6 +78,7 @@ public class Contacts extends Fragment {
         contactInfos.add(new UserContactData(null, "joha", "Mobile"));
         contactInfos.add(new UserContactData(null, "hoda", "Mobile"));
 
+
         initialiseData();
         initialiseUI();
 
