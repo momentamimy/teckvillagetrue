@@ -13,7 +13,7 @@
         <item name="windowNoTitle">true</item>
     </style>
     <style name="AppTheme.grayAccent">
-        <item name="colorAccent">#BDBBBB</item> <!-- Whatever color you want-->
+        <item name="colorAccent">#B0BEC5</item> <!-- Whatever color you want-->
     </style>
     <style name="AppTheme.AppBarOverlay" parent="ThemeOverlay.AppCompat.Dark.ActionBar" />
 
@@ -31,4 +31,6 @@
         <item name="android:textColor">#cc0000</item>  <!--  #cc0000 -->
         <item name="android:textSize">11sp</item>
     </style>
+
+
 </resources>

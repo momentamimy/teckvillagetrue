@@ -8,6 +8,8 @@ import android.net.Uri;
 import android.os.Build;
 import android.Manifest;
 import android.os.Bundle;
+import android.support.design.widget.BottomNavigationView;
+import android.support.v4.app.Fragment;
 import android.support.v4.app.FragmentManager;
 import android.support.v4.app.FragmentTransaction;
 import android.support.v7.widget.DefaultItemAnimator;
@@ -46,13 +48,17 @@ public class MainActivity extends AppCompatActivity implements NavigationView.On
     FrameLayout frameLayout;
     private static final String TAG_ANDROID_CONTACTS = "ANDROID_CONTACTS";
 
+    public BottomNavigationView navigationView2;
+
+
     @Override
     protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
         setContentView(R.layout.activity_main);
         Toolbar toolbar = (Toolbar) findViewById(R.id.toolbar);
         setSupportActionBar(toolbar);
-
+        navigationView2=findViewById(R.id.botnav);
+        fragmentManager=getSupportFragmentManager();
 
         frameLayout=(FrameLayout) findViewById(R.id.fragment_container_main);//connect Framelayout
 
@@ -68,18 +74,49 @@ public class MainActivity extends AppCompatActivity implements NavigationView.On
         navigationView.setNavigationItemSelectedListener(this);
 
         //****************************************************Set HomeFragment as default*********************************************************
+        navigationView2.setSelectedItemId(R.id.nav_phone);
         fragmentManager=getSupportFragmentManager();
+        final FragmentTransaction fragmentTransaction=fragmentManager.beginTransaction();
+
         if(findViewById(R.id.fragment_container_main) !=null){
 
             if(savedInstanceState !=null){
                 return;
             }
-            FragmentTransaction fragmentTransaction=fragmentManager.beginTransaction();
-            Contacts fragment_1=new Contacts();
+            Main_Fagment fragment_1=new Main_Fagment();
             fragmentTransaction.add(R.id.fragment_container_main,fragment_1,null);
             fragmentTransaction.commit();
         }
-    }
+
+        navigationView2.setOnNavigationItemSelectedListener(new BottomNavigationView.OnNavigationItemSelectedListener() {
+            @Override
+            public boolean onNavigationItemSelected(@NonNull MenuItem item) {
+                Fragment selectedFragment = null;
+                switch (item.getItemId())
+                {
+                    case R.id.nav_message:
+                        selectedFragment = new Message_Fragment();
+                        break;
+                    case R.id.nav_phone:
+                            selectedFragment=new Main_Fagment();
+                        break;
+                    case R.id.nav_contacts:
+                        selectedFragment=new Contacts();
+                        break;
+                }
+                getSupportFragmentManager().beginTransaction().replace(R.id.fragment_container_main,
+                        selectedFragment).commit();
+                return true;
+            }
+        });
+
+        }
+
+
+
+
+
+
 
 
 

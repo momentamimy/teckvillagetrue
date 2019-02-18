@@ -4,15 +4,15 @@
 
     <ProgressBar
         android:id="@+id/progress"
-        android:layout_width="80dp"
-        android:layout_height="80dp"
+        android:layout_width="65dp"
+        android:layout_height="65dp"
         android:visibility="gone"
         android:theme="@style/AppTheme.grayAccent"
         />
     <de.hdodenhof.circleimageview.CircleImageView
         android:id="@+id/progress_contact_img"
-        android:layout_width="60dp"
-        android:layout_height="60dp"
+        android:layout_width="45dp"
+        android:layout_height="45dp"
         android:layout_margin="10dp"
         android:src="@drawable/ic_nurse"
         android:visibility="gone"
@@ -20,32 +20,35 @@
 
     <de.hdodenhof.circleimageview.CircleImageView
         android:id="@+id/contact_img_log_recycle"
-        android:layout_width="60dp"
-        android:layout_height="60dp"
-        android:layout_margin="10dp"
+        android:layout_width="45dp"
+        android:layout_height="45dp"
+        android:layout_marginStart="20dp"
+        android:layout_marginEnd="10dp"
+        android:layout_marginVertical="10dp"
         android:src="@drawable/ic_nurse"
-        />
+        android:layout_marginLeft="15dp"
+        android:layout_marginRight="10dp" />
 
     <TextView
         android:id="@+id/name_of_log"
         android:layout_toEndOf="@+id/contact_img_log_recycle"
         android:layout_toRightOf="@+id/contact_img_log_recycle"
-        android:layout_marginTop="14dp"
+        android:layout_marginTop="10dp"
         android:layout_marginStart="8dp"
         android:layout_marginLeft="8dp"
         android:layout_width="wrap_content"
         android:layout_height="wrap_content"
         android:text="Abdalla Kamash"
-        android:textSize="20sp"
+        android:textSize="16sp"
         android:textColor="@android:color/black"
          />
 
 
     <ImageView
         android:id="@+id/type_of_call"
-        android:layout_width="13dp"
-        android:layout_height="13dp"
-        android:layout_marginTop="8dp"
+        android:layout_width="8dp"
+        android:layout_height="8dp"
+        android:layout_marginTop="6dp"
         android:layout_below="@+id/name_of_log"
         android:layout_toEndOf="@+id/contact_img_log_recycle"
         android:layout_toRightOf="@+id/contact_img_log_recycle"
@@ -59,7 +62,7 @@
         android:layout_width="wrap_content"
         android:layout_height="wrap_content"
         android:text="6:13 p.m"
-        android:textSize="19sp"
+        android:textSize="12sp"
         android:layout_marginTop="1dp"
         android:layout_marginStart="10dp"
         android:layout_marginLeft="10dp"
@@ -74,7 +77,7 @@
         android:layout_width="wrap_content"
         android:layout_height="wrap_content"
         android:text="Mobile"
-        android:textSize="18sp"
+        android:textSize="12sp"
         android:layout_marginTop="1dp"
         android:layout_marginStart="10dp"
         android:layout_marginLeft="10dp"
