@@ -4,12 +4,12 @@
 
     <TextView
         android:id="@+id/letter"
-        android:layout_width="20dp"
+        android:layout_width="23dp"
         android:layout_height="wrap_content"
         android:textSize="24sp"
         android:gravity="center"
         android:textColor="#5F7D8C"
-        android:layout_marginStart="32dp"
+        android:layout_marginStart="31dp"
         android:layout_marginLeft="32dp"
         android:text="A"
          />

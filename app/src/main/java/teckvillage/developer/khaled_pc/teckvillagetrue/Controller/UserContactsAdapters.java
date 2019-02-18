@@ -127,8 +127,10 @@ public class UserContactsAdapters extends RecyclerView.Adapter<UserContactsAdapt
            holder.contactCircleImageView2.setOnClickListener(new View.OnClickListener() {
                 @Override
                 public void onClick(View v) {
+                    /*
                     mDataArray.remove(holder.getAdapterPosition());
                     notifyDataSetChanged();
+                    */
                 }
             });
         }

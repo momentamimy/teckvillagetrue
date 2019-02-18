@@ -1,17 +1,20 @@
 package teckvillage.developer.khaled_pc.teckvillagetrue;
 
 
+import android.content.Intent;
+import android.os.Build;
 import android.os.Bundle;
+import android.provider.ContactsContract;
+import android.support.design.widget.FloatingActionButton;
 import android.support.v4.app.Fragment;
 import android.support.v7.widget.LinearLayoutManager;
 import android.support.v7.widget.RecyclerView;
+import android.util.Log;
 import android.view.LayoutInflater;
 import android.view.View;
 import android.view.ViewGroup;
 
 import java.util.ArrayList;
-import java.util.Collections;
-import java.util.Comparator;
 import java.util.List;
 
 import in.myinnos.alphabetsindexfastscrollrecycler.IndexFastScrollRecyclerView;
@@ -20,6 +23,7 @@ import teckvillage.developer.khaled_pc.teckvillagetrue.Controller.ContactAdapter
 import teckvillage.developer.khaled_pc.teckvillagetrue.Controller.LetterComparator;
 import teckvillage.developer.khaled_pc.teckvillagetrue.Controller.UserContactsAdapters;
 import teckvillage.developer.khaled_pc.teckvillagetrue.model.DataHelper;
+import teckvillage.developer.khaled_pc.teckvillagetrue.model.Get_User_Contacts;
 import teckvillage.developer.khaled_pc.teckvillagetrue.model.UserContactData;
 
 
@@ -28,14 +32,16 @@ import teckvillage.developer.khaled_pc.teckvillagetrue.model.UserContactData;
  */
 public class Contacts extends Fragment {
 
+    private static final int PICK_CONTACT_REQUEST =2 ;
     RecyclerView RecyclerView;
 
     ContactAdapter adapter;
     IndexFastScrollRecyclerView mRecyclerView;
+    Get_User_Contacts get_user_contacts;
 
     private List<String> mDataArray;
     private List<AlphabetItem> mAlphabetItems;
-    ArrayList<UserContactData> contactInfos;
+    FloatingActionButton add_user_contacts;
 
     public Contacts() {
         // Required empty public constructor
@@ -49,9 +55,27 @@ public class Contacts extends Fragment {
 
         //Initial recycleview
         mRecyclerView =  view.findViewById(R.id.fast_scroller_recycler);
+        add_user_contacts= view.findViewById(R.id.add_user_contacts);
+        get_user_contacts=new Get_User_Contacts(getActivity());
+        get_user_contacts.Checkandgetcontactlist();
 
-        contactInfos = new ArrayList<>();
+        //Fab Icon
+        if (Build.VERSION.SDK_INT >= Build.VERSION_CODES.LOLLIPOP) {
+            add_user_contacts.setImageDrawable(getResources().getDrawable(R.drawable.fab_add_user_contacts, getActivity().getTheme()));
+        } else {
+            add_user_contacts.setImageDrawable(getResources().getDrawable(R.drawable.ic_add_user_to_social_network));
+        }
 
+        //On click Add btn
+        add_user_contacts.setOnClickListener(new View.OnClickListener() {
+            @Override
+            public void onClick(View v) {
+                OpenACtivityAddContactsFromMobile();
+            }
+        });
+
+        //contactInfos = new ArrayList<>();
+        /*
         contactInfos.add(new UserContactData("","AD","ASD"));
         contactInfos.add(new UserContactData(null, "Boda", "Mobile"));
         contactInfos.add(new UserContactData(null, "Mahmoud", "Mobile"));
@@ -77,13 +101,21 @@ public class Contacts extends Fragment {
         contactInfos.add(new UserContactData(null, "via", "Mobile"));
         contactInfos.add(new UserContactData(null, "joha", "Mobile"));
         contactInfos.add(new UserContactData(null, "hoda", "Mobile"));
-
+         */
 
         initialiseData();
         initialiseUI();
 
 
         return view;
+    }
+
+    private void OpenACtivityAddContactsFromMobile() {
+        Intent i = new Intent(Intent.ACTION_INSERT);
+        i.setType(ContactsContract.Contacts.CONTENT_TYPE);
+        if (Integer.valueOf(Build.VERSION.SDK) > 14)
+            i.putExtra("finishActivityOnSaveCompleted", true); // Fix for 4.0.3 +
+        startActivityForResult(i, PICK_CONTACT_REQUEST);
     }
 
 
@@ -109,7 +141,7 @@ public class Contacts extends Fragment {
 
     protected void initialiseUI() {
         mRecyclerView.setLayoutManager(new LinearLayoutManager(getActivity()));
-        mRecyclerView.setAdapter(new UserContactsAdapters(getActivity(),addAlphabets(new LetterComparator().sortList(contactInfos))));
+        mRecyclerView.setAdapter(new UserContactsAdapters(getActivity(),addAlphabets(new LetterComparator().sortList(get_user_contacts.getContactList()))));
 
         mRecyclerView.setIndexTextSize(12);
         mRecyclerView.setIndexBarColor("#33334c");
@@ -119,7 +151,6 @@ public class Contacts extends Fragment {
         mRecyclerView.setIndexbarWidth(50);
         mRecyclerView.setPreviewPadding(0);
         mRecyclerView.setIndexBarTextColor("#FF024B68");
-
 
         mRecyclerView.setIndexBarVisibility(true);
         mRecyclerView.setIndexbarHighLateTextColor("#013c53");

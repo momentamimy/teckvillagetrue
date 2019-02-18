@@ -2,6 +2,7 @@
     xmlns:tools="http://schemas.android.com/tools"
     android:layout_width="match_parent"
     android:layout_height="match_parent"
+    xmlns:app="http://schemas.android.com/apk/res-auto"
     tools:context="teckvillage.developer.khaled_pc.teckvillagetrue.Contacts">
 
   <RelativeLayout
@@ -15,6 +16,24 @@
         android:layout_marginEnd="10dp"
         android:layout_marginRight="10dp" />
 
+    <android.support.design.widget.FloatingActionButton
+        android:id="@+id/add_user_contacts"
+        android:layout_marginBottom="20dp"
+        android:layout_marginEnd="40dp"
+        android:layout_marginRight="40dp"
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content"
+        app:elevation="6dp"
+        app:rippleColor="#36000000"
+        app:backgroundTintMode="src_over"
+        app:backgroundTint="@color/colorPrimary"
+        app:pressedTranslationZ="12dp"
+        app:fabSize="auto"
+        android:src="@drawable/fab_add_user_contacts"
+        android:layout_alignParentEnd="true"
+        android:layout_alignParentRight="true"
+        android:layout_alignParentBottom="true"
+        />
 
 
   </RelativeLayout>
