@@ -22,6 +22,7 @@ import android.widget.RelativeLayout;
 import android.widget.TextView;
 
 import java.util.ArrayList;
+import java.util.HashMap;
 import java.util.List;
 
 import teckvillage.developer.khaled_pc.teckvillagetrue.Controller.ContactAdapter;
@@ -29,6 +30,7 @@ import teckvillage.developer.khaled_pc.teckvillagetrue.Controller.CustomGridAdap
 import teckvillage.developer.khaled_pc.teckvillagetrue.Controller.LogAdapter;
 import teckvillage.developer.khaled_pc.teckvillagetrue.View.KeyboardlessEditText;
 import teckvillage.developer.khaled_pc.teckvillagetrue.model.ContactInfo;
+import teckvillage.developer.khaled_pc.teckvillagetrue.model.Get_Calls_Log;
 import teckvillage.developer.khaled_pc.teckvillagetrue.model.GridListDataModel;
 import teckvillage.developer.khaled_pc.teckvillagetrue.model.LogInfo;
 
@@ -38,6 +40,7 @@ import teckvillage.developer.khaled_pc.teckvillagetrue.model.LogInfo;
  */
 public class Main_Fagment extends Fragment {
 
+    List<LogInfo> consolidatedList = new ArrayList<>();
     /*--------------------------------------dial_pad_layout------------------------------------------*/
     public RelativeLayout padLayout;
     public FloatingActionButton fab;
@@ -93,7 +96,8 @@ public class Main_Fagment extends Fragment {
         phone_num_edt = (KeyboardlessEditText) view.findViewById(R.id.dial_pad_num_editText);
         back_space=view.findViewById(R.id.backspace_imageView);
         textLayout=view.findViewById(R.id.dial_num_edt_rl);
-        /*--------------------------------------dial_pad_layout------------------------------------------*/
+        Get_Calls_Log get_calls_log=new Get_Calls_Log(getActivity());
+
 
         /*--------------------------------------dial_pad_layout------------------------------------------*/
         //make padlayout invisable
@@ -167,7 +171,6 @@ public class Main_Fagment extends Fragment {
         });
         /*--------------------------------------dial_pad_layout------------------------------------------*/
 
-
         lLayout = new LinearLayoutManager(getContext(),LinearLayoutManager.HORIZONTAL, false);
         lLayout1 = new LinearLayoutManager(getActivity());
 
@@ -188,13 +191,38 @@ public class Main_Fagment extends Fragment {
 
 
 
+        //**********************Log List******************************
         List<LogInfo> logInfos=new ArrayList<>();
-        logInfos.add(new LogInfo("http://i.imgur.com/DvpvklR.png","khaled","income","06:43","Mobile"));
-        logInfos.add(new LogInfo("https://firebasestorage.googleapis.com/v0/b/chatapp-f5386.appspot.com/o/imgs%2F3C8oCUSQjlZqV0kivIBhpwT5fca2.jpg?alt=media&token=a9e39edd-6d27-4995-969d-a76ddbfb1aab","khaled","income","07:03 PM","Mobile"));
-        logInfos.add(new LogInfo(null,"khaled","income","01:30 PM","Mobile"));
-        logInfos.add(new LogInfo(null,"momen","outcome","10:40 AM","Mobile"));
-        logInfos.add(new LogInfo(null,"khaled","income","02:20 pm","Mobile"));
-        logInfos.add(new LogInfo(null,"momen","outcome","05:55 pm","Mobile"));
+        if(get_calls_log.CheckPermission()){
+
+            logInfos=get_calls_log.getCallDetails();
+
+        }
+
+        HashMap<String, List<LogInfo>> groupedHashMap = groupDataIntoHashMap(logInfos);
+
+
+        /*
+        for (String date : groupedHashMap.keySet()) {
+            int i=0;
+            LogInfo logInfoo=new LogInfo();
+            //DateItem dateItem = new DateItem();
+           // dateItem.setDate(date);
+           // consolidatedList.add(dateItem);
+            logInfoo.logDate=date;
+            consolidatedList.get(i).setType(1);
+            consolidatedList.add(logInfoo);
+            i++;
+
+            for (LogInfo pojoOfJsonArray : groupedHashMap.get(date)) {
+                GeneralItem generalItem = new GeneralItem();
+                LogInfo logInfo2=new LogInfo();
+                generalItem.setPojoOfJsonArray(pojoOfJsonArray);//setBookingDataTabs(bookingDataTabs);
+                consolidatedList.get(i).setType(2);
+                consolidatedList.add(generalItem.);
+            }
+        }
+            */
 
         logs.setLayoutManager(lLayout1);
         logs.setItemAnimator(new DefaultItemAnimator());
@@ -203,6 +231,32 @@ public class Main_Fagment extends Fragment {
 
 
         return view;
+    }
+
+
+
+    private HashMap<String, List<LogInfo>> groupDataIntoHashMap(List<LogInfo> listOfPojosOfJsonArray) {
+
+        HashMap<String, List<LogInfo>> groupedHashMap = new HashMap<>();
+
+        for (LogInfo pojoOfJsonArray : listOfPojosOfJsonArray) {
+
+            String hashMapKey = pojoOfJsonArray.logDate;
+
+            if (groupedHashMap.containsKey(hashMapKey)) {
+                // The key is already in the HashMap; add the pojo object
+                // against the existing key.
+                groupedHashMap.get(hashMapKey).add(pojoOfJsonArray);
+            } else {
+                // The key is not there in the HashMap; create a new key-value pair
+                List<LogInfo> list = new ArrayList<>();
+                list.add(pojoOfJsonArray);
+                groupedHashMap.put(hashMapKey, list);
+            }
+        }
+
+
+        return groupedHashMap;
     }
 
     /*-------------------------------------------dial_pad_layout--------------------------------------------------*/

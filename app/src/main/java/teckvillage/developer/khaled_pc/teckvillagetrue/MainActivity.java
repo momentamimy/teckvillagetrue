@@ -4,6 +4,7 @@ import android.content.ContentResolver;
 import android.content.Context;
 import android.content.pm.PackageManager;
 import android.database.Cursor;
+import android.graphics.drawable.Drawable;
 import android.net.Uri;
 import android.os.Build;
 import android.Manifest;
@@ -19,6 +20,9 @@ import android.support.annotation.NonNull;
 import android.support.v4.app.ActivityCompat;
 import android.support.v4.content.ContextCompat;
 import android.support.v7.widget.RecyclerView;
+import android.text.Spannable;
+import android.text.SpannableString;
+import android.text.style.ImageSpan;
 import android.util.Log;
 import android.support.design.widget.NavigationView;
 import android.support.v4.view.GravityCompat;
@@ -77,9 +81,7 @@ public class MainActivity extends AppCompatActivity implements NavigationView.On
         navigationView2.setSelectedItemId(R.id.nav_phone);
         fragmentManager=getSupportFragmentManager();
         final FragmentTransaction fragmentTransaction=fragmentManager.beginTransaction();
-
         if(findViewById(R.id.fragment_container_main) !=null){
-
             if(savedInstanceState !=null){
                 return;
             }
@@ -134,7 +136,23 @@ public class MainActivity extends AppCompatActivity implements NavigationView.On
     public boolean onCreateOptionsMenu(Menu menu) {
         // Inflate the menu; this adds items to the action bar if it is present.
         getMenuInflater().inflate(R.menu.main, menu);
+        menu.add(0, 1, 1, menuIconWithText(getResources().getDrawable(R.drawable.ic_recieve_call_menu), "Income"));
+        menu.add(0, 2, 2, menuIconWithText(getResources().getDrawable(R.drawable.ic_arrow_right_menu), "Outgoing"));
+        menu.add(0, 3, 3, menuIconWithText(getResources().getDrawable(R.drawable.ic_missed_menu), "Missed"));
+        menu.add(0, 4, 4, menuIconWithText(getResources().getDrawable(R.drawable.ic_block_black_24dp), "Blocked"));
+
+
         return true;
+    }
+
+    private CharSequence menuIconWithText(Drawable r, String title) {
+
+        r.setBounds(0, 0, r.getIntrinsicWidth(), r.getIntrinsicHeight());
+        SpannableString sb = new SpannableString("    " + title);
+        ImageSpan imageSpan = new ImageSpan(r, ImageSpan.ALIGN_BOTTOM);
+        sb.setSpan(imageSpan, 0, 1, Spannable.SPAN_EXCLUSIVE_EXCLUSIVE);
+
+        return sb;
     }
 
     @Override
@@ -145,7 +163,15 @@ public class MainActivity extends AppCompatActivity implements NavigationView.On
         int id = item.getItemId();
 
         //noinspection SimplifiableIfStatement
-        if (id == R.id.action_settings) {
+        if (id == 1) {
+            return true;
+        }else if (id == 2) {
+            return true;
+        }
+        else if (id == 3) {
+            return true;
+        }
+        else if (id == 4) {
             return true;
         }
 
@@ -246,7 +272,43 @@ public class MainActivity extends AppCompatActivity implements NavigationView.On
 
 
 
+    // After user select Allow or Deny button in request runtime permission dialog
+    // , this method will be invoked.
+    @Override
+    public void onRequestPermissionsResult(int requestCode, @NonNull String[] permissions, @NonNull int[] grantResults) {
+        super.onRequestPermissionsResult(requestCode, permissions, grantResults);
 
+        switch (requestCode) {
+            case 1:
+                // If request is cancelled, the result arrays are empty.
+                if (grantResults.length > 0 && grantResults[0] == PackageManager.PERMISSION_GRANTED) {
+                    //granted
+
+                    Toast.makeText(getApplicationContext(), "You allowed permission, please click the button again.", Toast.LENGTH_LONG).show();
+
+                }
+                else {
+
+                    Toast.makeText(getApplicationContext(), "You must approve the permission", Toast.LENGTH_SHORT).show();
+                }
+                break;
+
+            case 3:
+                // If request is cancelled, the result arrays are empty.
+                if (grantResults.length > 0 && grantResults[0] == PackageManager.PERMISSION_GRANTED) {
+                    //granted
+
+                    Toast.makeText(getApplicationContext(), "You allowed permission, please click the button again.", Toast.LENGTH_LONG).show();
+
+                }
+                else {
+
+                    Toast.makeText(getApplicationContext(), "You must approve the permission", Toast.LENGTH_SHORT).show();
+                }
+                break;
+
+        }
+    }
 
 
 

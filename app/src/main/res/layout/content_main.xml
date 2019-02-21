@@ -24,7 +24,7 @@
         android:layout_height="4dp"
         android:background="@drawable/shadow"
         android:layout_above="@+id/botnav"
-        ></View>
+        />
 
     <android.support.design.widget.BottomNavigationView
         android:id="@+id/botnav"
@@ -32,7 +32,7 @@
         android:layout_height="wrap_content"
         android:layout_alignParentBottom="true"
         app:menu="@menu/bottomnavigationview"
-        ></android.support.design.widget.BottomNavigationView>
+        />
 
 
 

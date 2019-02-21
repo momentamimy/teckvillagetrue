@@ -5,35 +5,38 @@
     xmlns:app="http://schemas.android.com/apk/res-auto"
     tools:context="teckvillage.developer.khaled_pc.teckvillagetrue.Main_Fagment">
 
-    <LinearLayout
+    <RelativeLayout
         android:layout_width="match_parent"
         android:layout_height="match_parent"
         android:orientation="vertical">
 
     <android.support.v7.widget.RecyclerView
         android:id="@+id/contact_recycleview"
-        android:layout_weight="4"
         android:layout_width="match_parent"
-        android:layout_height="match_parent"
+        android:layout_height="wrap_content"
         />
 
     <View
+        android:id="@+id/sparater"
+        android:layout_marginTop="16dp"
+        android:layout_below="@+id/contact_recycleview"
         android:layout_width="match_parent"
         android:layout_height="1dp"
-        android:background="#BDBBBB"
+        android:background="#E6EBEF"
         />
 
     <android.support.v7.widget.RecyclerView
         android:id="@+id/Logs_recycleview"
-        android:layout_weight="1"
+        android:layout_below="@+id/sparater"
         android:layout_width="match_parent"
         android:layout_height="match_parent"
         />
 
-    </LinearLayout>
+    </RelativeLayout>
 
 
     <RelativeLayout
+
         android:layout_width="match_parent"
         android:layout_height="match_parent">
 

@@ -6,6 +6,8 @@ public class LogInfo {
     public String logIcon;
     public String logDate;
     public String callType;
+    int type;
+
     public LogInfo(String imageUrl,String logName,String logIcon,String logDate,String callType)
     {
         this.imageUrl=imageUrl;
@@ -14,4 +16,19 @@ public class LogInfo {
         this.logDate=logDate;
         this.callType=callType;
     }
+
+    public LogInfo()
+    {
+
+    }
+
+
+    public int getType() {
+        return type;
+    }
+
+    public void setType(int type) {
+        this.type = type;
+    }
+
 }

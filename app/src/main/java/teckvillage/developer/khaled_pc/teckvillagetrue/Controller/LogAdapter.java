@@ -11,7 +11,6 @@ import com.squareup.picasso.Picasso;
 import java.util.List;
 
 import teckvillage.developer.khaled_pc.teckvillagetrue.R;
-import teckvillage.developer.khaled_pc.teckvillagetrue.View.ContactHolder;
 import teckvillage.developer.khaled_pc.teckvillagetrue.View.LogHolder;
 import teckvillage.developer.khaled_pc.teckvillagetrue.model.LogInfo;
 
@@ -56,15 +55,15 @@ public class LogAdapter extends RecyclerView.Adapter<LogHolder> {
                     });
         }
         holder.logName.setText(logInfo.logName);
-        if (logInfo.logIcon.equals("income"))
+        if (logInfo.logIcon.equals("INCOMING"))
         {
-            holder.logIcon.setImageDrawable(context.getResources().getDrawable(R.drawable.ic_left_down));
+            holder.logIcon.setImageDrawable(context.getResources().getDrawable(R.drawable.ic_call_received_arrow));
         }
-        else if (logInfo.logIcon.equals("outcome"))
+        else if (logInfo.logIcon.equals("OUTGOING"))
         {
-            holder.logIcon.setImageDrawable(context.getResources().getDrawable(R.drawable.ic_right_up));
+            holder.logIcon.setImageDrawable(context.getResources().getDrawable(R.drawable.ic_arrow_right_up));
         }
-        else if (logInfo.logIcon.equals("missed"))
+        else if (logInfo.logIcon.equals("MISSED"))
         {
             holder.logIcon.setImageDrawable(context.getResources().getDrawable(R.drawable.ic_call_missed));
         }

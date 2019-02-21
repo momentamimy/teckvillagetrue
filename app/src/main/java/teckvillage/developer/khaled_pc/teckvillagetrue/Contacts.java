@@ -2,9 +2,11 @@ package teckvillage.developer.khaled_pc.teckvillagetrue;
 
 
 import android.content.Intent;
+import android.content.pm.PackageManager;
 import android.os.Build;
 import android.os.Bundle;
 import android.provider.ContactsContract;
+import android.support.annotation.NonNull;
 import android.support.design.widget.FloatingActionButton;
 import android.support.v4.app.Fragment;
 import android.support.v7.widget.LinearLayoutManager;
@@ -13,6 +15,7 @@ import android.util.Log;
 import android.view.LayoutInflater;
 import android.view.View;
 import android.view.ViewGroup;
+import android.widget.Toast;
 
 import java.util.ArrayList;
 import java.util.List;
@@ -33,9 +36,7 @@ import teckvillage.developer.khaled_pc.teckvillagetrue.model.UserContactData;
 public class Contacts extends Fragment {
 
     private static final int PICK_CONTACT_REQUEST =2 ;
-    RecyclerView RecyclerView;
 
-    ContactAdapter adapter;
     IndexFastScrollRecyclerView mRecyclerView;
     Get_User_Contacts get_user_contacts;
 
@@ -49,7 +50,7 @@ public class Contacts extends Fragment {
 
 
     @Override
-    public View onCreateView(LayoutInflater inflater, ViewGroup container, Bundle savedInstanceState) {
+    public View onCreateView(@NonNull LayoutInflater inflater, ViewGroup container, Bundle savedInstanceState) {
         // Inflate the layout for this fragment
         View view = inflater.inflate(R.layout.fragment_contacts, container, false);
 
@@ -57,7 +58,13 @@ public class Contacts extends Fragment {
         mRecyclerView =  view.findViewById(R.id.fast_scroller_recycler);
         add_user_contacts= view.findViewById(R.id.add_user_contacts);
         get_user_contacts=new Get_User_Contacts(getActivity());
-        get_user_contacts.Checkandgetcontactlist();
+
+        if(get_user_contacts.CheckPermission()){
+
+            initialiseUI();
+
+        }
+
 
         //Fab Icon
         if (Build.VERSION.SDK_INT >= Build.VERSION_CODES.LOLLIPOP) {
@@ -74,37 +81,9 @@ public class Contacts extends Fragment {
             }
         });
 
-        //contactInfos = new ArrayList<>();
-        /*
-        contactInfos.add(new UserContactData("","AD","ASD"));
-        contactInfos.add(new UserContactData(null, "Boda", "Mobile"));
-        contactInfos.add(new UserContactData(null, "Mahmoud", "Mobile"));
-        contactInfos.add(new UserContactData(null, "cea eltarabily", "Mobile"));
-        contactInfos.add(new UserContactData(null, "Dude", "Mobile"));
-        contactInfos.add(new UserContactData(null, "Rolla", "Mobile"));
-        contactInfos.add(new UserContactData(null, "khaled", "Mobile"));
-        contactInfos.add(new UserContactData(null, "Yuda", "Mobile"));
-        contactInfos.add(new UserContactData(null, "zead", "Mobile"));
-        contactInfos.add(new UserContactData(null, "Mosab", "Mobile"));
-        contactInfos.add(new UserContactData(null, "Mumen", "Mobile"));
-        contactInfos.add(new UserContactData(null, "ola", "Mobile"));
-        contactInfos.add(new UserContactData(null, "illa", "Mobile"));
-        contactInfos.add(new UserContactData(null, "Pola", "Mobile"));
-        contactInfos.add(new UserContactData(null, "lhaled", "Mobile"));
-        contactInfos.add(new UserContactData(null, "qula", "Mobile"));
-        contactInfos.add(new UserContactData(null, "wael", "Mobile"));
-        contactInfos.add(new UserContactData(null, "sia", "Mobile"));
-        contactInfos.add(new UserContactData(null, "gola", "Mobile"));
-        contactInfos.add(new UserContactData(null, "eman", "Mobile"));
-        contactInfos.add(new UserContactData(null, "noha", "Mobile"));
-        contactInfos.add(new UserContactData(null, "fatma", "Mobile"));
-        contactInfos.add(new UserContactData(null, "via", "Mobile"));
-        contactInfos.add(new UserContactData(null, "joha", "Mobile"));
-        contactInfos.add(new UserContactData(null, "hoda", "Mobile"));
-         */
 
-        initialiseData();
-        initialiseUI();
+        //initialiseData();
+
 
 
         return view;
@@ -139,7 +118,7 @@ public class Contacts extends Fragment {
         }
     }
 
-    protected void initialiseUI() {
+    public void initialiseUI() {
         mRecyclerView.setLayoutManager(new LinearLayoutManager(getActivity()));
         mRecyclerView.setAdapter(new UserContactsAdapters(getActivity(),addAlphabets(new LetterComparator().sortList(get_user_contacts.getContactList()))));
 
@@ -160,7 +139,6 @@ public class Contacts extends Fragment {
 
 
 
-
     /**
      * Receive sorted list and divide it into Letters and contacts
      * @param list
@@ -171,12 +149,25 @@ public class Contacts extends Fragment {
         ArrayList<UserContactData> customList = new ArrayList<UserContactData>();
         UserContactData userContactData = new UserContactData();
         userContactData.usercontacName=String.valueOf(list.get(0).usercontacName.charAt(0));
+        //grouping for first Char
+        if(userContactData.usercontacName.matches(".*\\d+.*")){
+            userContactData.usercontacName="#";
+        }
         userContactData.setType(1);
         customList.add(userContactData);
         for (i = 0; i < list.size() - 1; i++) {
             UserContactData userContactData2 = new UserContactData();
             char name1 = list.get(i).usercontacName.toUpperCase().charAt(0);
             char name2 = list.get(i + 1).usercontacName.toUpperCase().charAt(0);
+
+            //Grouping Numbers
+            if(Character.isDigit(name1)){
+                name1='#';
+            }
+            if(Character.isDigit(name2)){
+                name2='#';
+            }
+
             if (name1 == name2) {
                 list.get(i).setType(2);
                 customList.add(list.get(i));
@@ -192,5 +183,8 @@ public class Contacts extends Fragment {
         customList.add(list.get(i));
         return customList;
     }
+
+
+
 
 }

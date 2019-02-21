@@ -18,7 +18,9 @@ import android.widget.Toast;
 
 import java.util.ArrayList;
 
+import teckvillage.developer.khaled_pc.teckvillagetrue.Contacts;
 import teckvillage.developer.khaled_pc.teckvillagetrue.Controller.AlphabetItem;
+import teckvillage.developer.khaled_pc.teckvillagetrue.Permission;
 
 import static com.facebook.FacebookSdk.getApplicationContext;
 
@@ -26,98 +28,40 @@ import static com.facebook.FacebookSdk.getApplicationContext;
  * Created by khaled-pc on 2/18/2019.
  */
 
-public class Get_User_Contacts implements  ActivityCompat.OnRequestPermissionsResultCallback{
+public class Get_User_Contacts {
+    private static final int REQUESTCODE =1 ;
     Context context;
     ArrayList<UserContactData> contactInfos;
+    Permission permission;
 
     private static final String TAG ="fields" ;
 
     public Get_User_Contacts(Context context) {
         this.context=context;
-
+        permission=new Permission(context);
     }
 
-    public  void Checkandgetcontactlist(){
+    public  boolean CheckPermission(){
+        boolean check;
+
         //read contacts
-        if(!hasPhoneContactsPermission(Manifest.permission.READ_CONTACTS))
+        if(!permission.hasPhoneContactsPermission(Manifest.permission.READ_CONTACTS))
         {
-            requestPermission(Manifest.permission.READ_CONTACTS);
+            check=false;
+            permission.requestPermission(Manifest.permission.READ_CONTACTS,REQUESTCODE);
+
+
         }else {
-            getContactList();
-            //doSomethingForEachUniquePhoneNumber(this);
-            Toast.makeText(context, "Contact data has been printed in the android monitor log..", Toast.LENGTH_SHORT).show();
+            check=true;
+            //Toast.makeText(context, "Contact data has been printed in the android monitor log..", Toast.LENGTH_SHORT).show();
         }
+        return check;
     }
 
 
-    // Request a runtime permission to app user.
-    private void requestPermission(String permission)
-    {
-        String requestPermissionArray[] = {permission};
-        ActivityCompat.requestPermissions((Activity) context, requestPermissionArray, 1);
-    }
 
 
-    // Check whether user has phone contacts manipulation permission or not.
-    private boolean hasPhoneContactsPermission(String permission)
-    {
-        boolean ret = false;
 
-        // If android sdk version is bigger than 23 the need to check run time permission.
-        if(Build.VERSION.SDK_INT >= Build.VERSION_CODES.M) {
-
-            // return phone read contacts permission grant status.
-            int hasPermission = ContextCompat.checkSelfPermission(getApplicationContext(), permission);
-            // If permission is granted then return true.
-            if (hasPermission == PackageManager.PERMISSION_GRANTED) {
-                ret = true;
-            }
-        }else
-        {
-            ret = true;
-        }
-        return ret;
-    }
-
-    /*
-    // After user select Allow or Deny button in request runtime permission dialog
-    // , this method will be invoked.
-    @Override
-    public void onRequestPermissionsResult(int requestCode, @NonNull String[] permissions, @NonNull int[] grantResults) {
-        super.onRequestPermissionsResult(requestCode, permissions, grantResults);
-
-        int length = grantResults.length;
-        if(length > 0)
-        {
-            int grantResult = grantResults[0];
-
-            if(grantResult == PackageManager.PERMISSION_GRANTED) {
-
-                Toast.makeText(getApplicationContext(), "You allowed permission, please click the button again.", Toast.LENGTH_LONG).show();
-            }else
-            {
-                Toast.makeText(getApplicationContext(), "You denied permission.", Toast.LENGTH_LONG).show();
-            }
-        }
-    }
-    */
-
-    @Override
-    public void onRequestPermissionsResult(int requestCode, String permissions[], int[] grantResults) {
-        int length = grantResults.length;
-        if(length > 0)
-        {
-            int grantResult = grantResults[0];
-
-            if(grantResult == PackageManager.PERMISSION_GRANTED) {
-
-                Toast.makeText(getApplicationContext(), "You allowed permission, please click the button again.", Toast.LENGTH_LONG).show();
-            }else
-            {
-                Toast.makeText(getApplicationContext(), "You denied permission.", Toast.LENGTH_LONG).show();
-            }
-        }
-    }
 
 
      public ArrayList<UserContactData> getContactList() {
@@ -142,8 +86,6 @@ public class Get_User_Contacts implements  ActivityCompat.OnRequestPermissionsRe
                     Log.i(TAG, "Name: " + name);
 
                     contactInfos.add(new UserContactData("",name,"PortSaid,Egypt",id));
-                    Log.w("feen", String.valueOf(contactInfos.size()));
-
 
                     while (pCur.moveToNext()) {
                         int phoneType = pCur.getInt(pCur.getColumnIndex(ContactsContract.CommonDataKinds.Phone.TYPE));
