@@ -2,6 +2,7 @@ package teckvillage.developer.khaled_pc.teckvillagetrue.Controller;
 
 import android.content.Context;
 import android.support.v7.widget.RecyclerView;
+import android.text.TextUtils;
 import android.view.LayoutInflater;
 import android.view.View;
 import android.view.ViewGroup;
@@ -55,15 +56,26 @@ public class LogAdapter extends RecyclerView.Adapter<LogHolder> {
                     });
         }
         holder.logName.setText(logInfo.logName);
-        if (logInfo.logIcon.equals("INCOMING"))
+        if (!TextUtils.isEmpty(logInfo.logIcon))
         {
-            holder.logIcon.setImageDrawable(context.getResources().getDrawable(R.drawable.ic_call_received_arrow));
+            if (logInfo.logIcon.equals("INCOMING"))
+            {
+                holder.logIcon.setImageDrawable(context.getResources().getDrawable(R.drawable.ic_call_received_arrow));
+            }
+            else if (logInfo.logIcon.equals("OUTGOING"))
+            {
+                holder.logIcon.setImageDrawable(context.getResources().getDrawable(R.drawable.ic_arrow_right_up));
+            }
+            else if (logInfo.logIcon.equals("MISSED"))
+            {
+                holder.logIcon.setImageDrawable(context.getResources().getDrawable(R.drawable.ic_call_missed));
+            }
+            else if (logInfo.logIcon.equals("Other"))
+            {
+                holder.logIcon.setImageDrawable(context.getResources().getDrawable(R.drawable.ic_call_missed));
+            }
         }
-        else if (logInfo.logIcon.equals("OUTGOING"))
-        {
-            holder.logIcon.setImageDrawable(context.getResources().getDrawable(R.drawable.ic_arrow_right_up));
-        }
-        else if (logInfo.logIcon.equals("MISSED"))
+        else
         {
             holder.logIcon.setImageDrawable(context.getResources().getDrawable(R.drawable.ic_call_missed));
         }

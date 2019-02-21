@@ -132,4 +132,46 @@ public class Get_User_Contacts {
         return contactInfos;
     }
 
+    public ArrayList<UserContactData> getContactListFormessage() {
+        contactInfos = new ArrayList<>();
+        ContentResolver cr = context.getContentResolver();
+        Cursor cur = cr.query(ContactsContract.Contacts.CONTENT_URI, null, null, null, ContactsContract.Contacts.DISPLAY_NAME + " ASC ");
+        String lastnumber = "0";
+
+        if ((cur != null ? cur.getCount() : 0) > 0) {
+            while (cur != null && cur.moveToNext()) {
+                String phoneNumber = null;
+                int id = cur.getInt(cur.getColumnIndex(ContactsContract.Contacts._ID));
+                String name = cur.getString(cur.getColumnIndex(ContactsContract.Contacts.DISPLAY_NAME));
+
+
+                if (cur.getInt(cur.getColumnIndex(ContactsContract.Contacts.HAS_PHONE_NUMBER)) > 0) {
+                    Cursor pCur = cr.query(ContactsContract.CommonDataKinds.Phone.CONTENT_URI,
+                            null,
+                            ContactsContract.CommonDataKinds.Phone.DISPLAY_NAME + " = ?",
+                            new String[]{name}, null);
+
+                    Log.i(TAG, "Name: " + name);
+
+                    while (pCur.moveToNext()) {
+                        int phoneType = pCur.getInt(pCur.getColumnIndex(ContactsContract.CommonDataKinds.Phone.TYPE));
+                        phoneNumber = pCur.getString(pCur.getColumnIndex(ContactsContract.CommonDataKinds.Phone.NUMBER));
+
+                        contactInfos.add(new UserContactData("",name,"PortSaid,Egypt",id,phoneNumber));
+
+
+                    }
+                  pCur.close();
+                }
+            }
+
+        }
+
+        if(cur!=null){
+            cur.close();
+        }
+
+        return contactInfos;
+    }
+
 }

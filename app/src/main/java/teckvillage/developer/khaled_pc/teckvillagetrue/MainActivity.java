@@ -98,16 +98,43 @@ public class MainActivity extends AppCompatActivity implements NavigationView.On
                 {
                     case R.id.nav_message:
                         selectedFragment = new Message_Fragment();
+                            Fragment f = getSupportFragmentManager().findFragmentById(R.id.fragment_container_main);
+                            if (f instanceof Message_Fragment) {
+                                // Do something
+                            }
+                            else
+                            {
+                                getSupportFragmentManager().beginTransaction().replace(R.id.fragment_container_main,
+                                        selectedFragment).commit();
+
+                            }
                         break;
                     case R.id.nav_phone:
                             selectedFragment=new Main_Fagment();
+                            Fragment f1 = getSupportFragmentManager().findFragmentById(R.id.fragment_container_main);
+                            if (f1 instanceof Main_Fagment) {
+                                // Do something
+                            }
+                            else
+                            {
+                                getSupportFragmentManager().beginTransaction().replace(R.id.fragment_container_main,
+                                        selectedFragment).commit();
+                            }
                         break;
                     case R.id.nav_contacts:
                         selectedFragment=new Contacts();
+                            Fragment f2 = getSupportFragmentManager().findFragmentById(R.id.fragment_container_main);
+                            if (f2 instanceof Contacts) {
+                                // Do something
+                               }
+                            else
+                            {
+                                getSupportFragmentManager().beginTransaction().replace(R.id.fragment_container_main,
+                                        selectedFragment).commit();
+                            }
                         break;
                 }
-                getSupportFragmentManager().beginTransaction().replace(R.id.fragment_container_main,
-                        selectedFragment).commit();
+
                 return true;
             }
         });

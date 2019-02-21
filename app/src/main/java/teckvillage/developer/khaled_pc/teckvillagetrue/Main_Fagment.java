@@ -2,8 +2,10 @@ package teckvillage.developer.khaled_pc.teckvillagetrue;
 
 
 import android.animation.ObjectAnimator;
+import android.content.Intent;
 import android.content.res.ColorStateList;
 import android.graphics.drawable.AnimationDrawable;
+import android.net.Uri;
 import android.os.Bundle;
 import android.support.design.widget.FloatingActionButton;
 import android.support.v4.app.Fragment;
@@ -106,7 +108,16 @@ public class Main_Fagment extends Fragment {
         fab.setOnClickListener(new View.OnClickListener() {
             @Override
             public void onClick(View v) {
-                callButtonAnim();
+                if (phone_num_edt.getText().length()==0)
+                {
+                    callButtonAnim();
+                }
+                else
+                {
+                    Intent intent = new Intent(Intent.ACTION_CALL);
+                    intent.setData(Uri.parse("tel:"+phone_num_edt.getText().toString()));
+                    startActivity(intent);
+                }
             }
         });
 
@@ -145,11 +156,7 @@ public class Main_Fagment extends Fragment {
             @Override
             public void onClick(View v) {
                 String num=phone_num_edt.getText().toString();
-                if (phone_num_edt.getText().length()==1)
-                {
-                    deleteAnim();
-                    firstclick=true;
-                }
+
                 if (CursorVisibility)
                 {
                     removeSelection(phone_num_edt);
@@ -157,6 +164,12 @@ public class Main_Fagment extends Fragment {
                 else
                 {
                     phone_num_edt.setText(removeChar(num));
+                }
+
+                if (phone_num_edt.getText().length()==0)
+                {
+                    deleteAnim();
+                    firstclick=true;
                 }
             }
         });
@@ -376,7 +389,7 @@ public class Main_Fagment extends Fragment {
         fab.setBackgroundTintList(ColorStateList.valueOf(getResources().getColor(R.color.greenColor)));
 
 
-        ObjectAnimator anim = ObjectAnimator.ofFloat(fab,"rotation",360);
+        ObjectAnimator anim = ObjectAnimator.ofFloat(fab,"rotation",720);
         anim.setDuration(200);
         anim.start();
 
@@ -399,7 +412,7 @@ public class Main_Fagment extends Fragment {
         gridShadow.setVisibility(View.VISIBLE);
         fab.setBackgroundTintList(ColorStateList.valueOf(getResources().getColor(R.color.colorPrimary)));
 
-        ObjectAnimator anim = ObjectAnimator.ofFloat(fab,"rotation",0);
+        ObjectAnimator anim = ObjectAnimator.ofFloat(fab,"rotation",360);
         anim.setDuration(200);
         anim.start();
 

@@ -78,6 +78,7 @@ public class Get_Calls_Log {
 
             String dir = null;
             int dircode = Integer.parseInt(callType);
+            Log.d("lalalalala,", String.valueOf(dircode));
             switch (dircode) {
                 case CallLog.Calls.OUTGOING_TYPE:
                     dir = "OUTGOING";
@@ -89,6 +90,9 @@ public class Get_Calls_Log {
 
                 case CallLog.Calls.MISSED_TYPE:
                     dir = "MISSED";
+                    break;
+                case 5:
+                    dir = "Other";
                     break;
             }
 

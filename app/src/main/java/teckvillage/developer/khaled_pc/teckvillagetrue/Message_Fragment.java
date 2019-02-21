@@ -41,7 +41,7 @@ public class Message_Fragment extends Fragment {
         tabs=view.findViewById(R.id.tabs);
         pager=view.findViewById(R.id.appViewPager);
 
-        CustomMessageViewAdapter adapter=new CustomMessageViewAdapter(getActivity().getSupportFragmentManager());
+        CustomMessageViewAdapter adapter=new CustomMessageViewAdapter(getChildFragmentManager());
 
         //add style for transforming of viewpager
         pager.setPageTransformer(true, adapter);

@@ -9,6 +9,7 @@ public class UserContactData {
     public String userimageUrl;
     public String usercontacName;
     public String country;
+    public String phoneNum;
     int type;
     int id;
 
@@ -18,6 +19,15 @@ public class UserContactData {
         this.usercontacName=usercontacName;
         this.country=country;
         this.id=id;
+    }
+
+    public UserContactData(String userimageUrl,String usercontacName,String country,int id,String phoneNum)
+    {
+        this.userimageUrl=userimageUrl;
+        this.usercontacName=usercontacName;
+        this.country=country;
+        this.id=id;
+        this.phoneNum=phoneNum;
     }
 
     public UserContactData() {
