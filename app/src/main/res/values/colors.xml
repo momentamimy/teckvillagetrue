@@ -1,8 +1,10 @@
 <?xml version="1.0" encoding="utf-8"?>
 <resources>
     <color name="colorPrimary">#0089c0</color>
-    <color name="colorPrimaryDark">#007aa9</color>
-    <color name="colorAccent">#8BEB8F</color>
+    <color name="colorPrimaryDark">#01729f</color>
+    <color name="colorAccent">#01729f</color>
     <color name="greenColor">#1EE7D3</color>
     <color name="dialpad_ripple_color">#10000000</color>
+    <color name="pressed_color">#4d90fe</color>
+    <color name="default_color">#ffffff</color>
 </resources>

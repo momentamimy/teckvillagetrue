@@ -49,24 +49,12 @@ public class UserContactsAdapters extends RecyclerView.Adapter<UserContactsAdapt
     @Override
     public Object[] getSections() {
 
-        //List<String> sections = new ArrayList<>(mSections.length());
         String[] sections = new String[mSections.length()];
 
         for (int i = 0; i < mSections.length(); i++)
             sections[i] = String.valueOf(mSections.charAt(i));
         return sections;
 
-        /*
-        mSectionPositions = new ArrayList<>(26);
-        for (int i = 0, size = mDataArray.size(); i < size; i++) {
-            String section = String.valueOf(mDataArray.get(i).charAt(0)).toUpperCase();
-            if (!sections.contains(section)) {
-                sections.add(section);
-                mSectionPositions.add(i);
-            }
-        }
-
-        return sections.toArray(new String[0]);*/
     }
 
 

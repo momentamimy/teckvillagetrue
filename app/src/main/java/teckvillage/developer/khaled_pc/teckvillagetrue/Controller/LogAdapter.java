@@ -1,6 +1,11 @@
 package teckvillage.developer.khaled_pc.teckvillagetrue.Controller;
 
+import android.Manifest;
 import android.content.Context;
+import android.content.Intent;
+import android.content.pm.PackageManager;
+import android.net.Uri;
+import android.support.v4.app.ActivityCompat;
 import android.support.v7.widget.RecyclerView;
 import android.text.TextUtils;
 import android.view.LayoutInflater;
@@ -16,71 +21,122 @@ import teckvillage.developer.khaled_pc.teckvillagetrue.View.LogHolder;
 import teckvillage.developer.khaled_pc.teckvillagetrue.model.LogInfo;
 
 public class LogAdapter extends RecyclerView.Adapter<LogHolder> {
+    private static final int TYPE_DATE = 1;
+    private static final int TYPE_ITEM = 2;
     private List<LogInfo> itemList;
     private Context context;
 
-    public LogAdapter(Context context,List<LogInfo> itemList)
-    {
-        this.context=context;
-        this.itemList=itemList;
+    public LogAdapter(Context context, List<LogInfo> itemList) {
+        this.context = context;
+        this.itemList = itemList;
     }
 
     @Override
     public LogHolder onCreateViewHolder(ViewGroup parent, int viewType) {
 
-        View layoutView = LayoutInflater.from(parent.getContext()).inflate(R.layout.row_of_logs_recycleview, null);
-        LogHolder rbv = new LogHolder(layoutView);
-        return rbv;
+        // View layoutView = LayoutInflater.from(parent.getContext()).inflate(R.layout.row_of_logs_recycleview, null);
+        //LogHolder rbv = new LogHolder(layoutView);
+        //return rbv;
+
+
+        switch (viewType) {
+            case TYPE_DATE:
+                View layoutView = LayoutInflater.from(parent.getContext()).inflate(R.layout.row_section_for_date_recycler, null);
+                LogHolder rbv = new LogHolder(layoutView);
+                return rbv;
+            case TYPE_ITEM:
+                View layoutView2 = LayoutInflater.from(parent.getContext()).inflate(R.layout.row_of_logs_recycleview, null);
+                LogHolder rbv2 = new LogHolder(layoutView2);
+                return rbv2;
+            default:
+                View layoutView3 = LayoutInflater.from(parent.getContext()).inflate(R.layout.row_of_logs_recycleview, null);
+                LogHolder rbv3 = new LogHolder(layoutView3);
+                return rbv3;
+        }
     }
 
     @Override
-    public void onBindViewHolder(final LogHolder holder, int position) {
-        LogInfo logInfo = itemList.get(position);
-        if (logInfo.imageUrl!=null)
-        {
-            Picasso.with(context)
-                    .load(logInfo.imageUrl)
-                    .into(holder.logCircleImageView, new com.squareup.picasso.Callback() {
-                        @Override
-                        public void onSuccess() {
-                            holder.progressBar.setVisibility(View.GONE);
-                            holder.progressCircleImageView.setVisibility(View.GONE);
-                        }
+    public int getItemViewType(int position) {
+        int viewType = 0;
+        if (itemList.get(position).getType() == TYPE_DATE) {
+            viewType = TYPE_DATE;
+        } else if (itemList.get(position).getType() == TYPE_ITEM) {
+            viewType = TYPE_ITEM;
+        }
 
-                        @Override
-                        public void onError() {
-                            holder.logCircleImageView.setImageDrawable(context.getResources().getDrawable(R.drawable.ic_nurse));
-                            holder.progressBar.setVisibility(View.GONE);
-                            holder.progressCircleImageView.setVisibility(View.GONE);
+        return viewType;
+    }
+
+
+    @Override
+    public void onBindViewHolder(final LogHolder holder, int position) {
+        final LogInfo logInfo = itemList.get(position);
+        if (holder.logName != null) {
+
+
+            holder.item.setOnClickListener(new View.OnClickListener() {
+                @Override
+                public void onClick(View v) {
+                    v.setSelected(true);
+
+                        Intent intent = new Intent(Intent.ACTION_CALL);
+                        intent.setData(Uri.parse("tel:" + logInfo.getNumber()));
+                        if (ActivityCompat.checkSelfPermission(context, Manifest.permission.CALL_PHONE) != PackageManager.PERMISSION_GRANTED) {
+                            // TODO: Consider calling
+                            //    ActivityCompat#requestPermissions
+                            // here to request the missing permissions, and then overriding
+                            //   public void onRequestPermissionsResult(int requestCode, String[] permissions,
+                            //                                          int[] grantResults)
+                            // to handle the case where the user grants the permission. See the documentation
+                            // for ActivityCompat#requestPermissions for more details.
+                            return;
                         }
-                    });
-        }
-        holder.logName.setText(logInfo.logName);
-        if (!TextUtils.isEmpty(logInfo.logIcon))
-        {
-            if (logInfo.logIcon.equals("INCOMING"))
-            {
-                holder.logIcon.setImageDrawable(context.getResources().getDrawable(R.drawable.ic_call_received_arrow));
+                       context.startActivity(intent);
+                }
+            });
+
+            if (logInfo.imageUrl != null) {
+                Picasso.with(context)
+                        .load(logInfo.imageUrl)
+                        .into(holder.logCircleImageView, new com.squareup.picasso.Callback() {
+                            @Override
+                            public void onSuccess() {
+                                holder.progressBar.setVisibility(View.GONE);
+                                holder.progressCircleImageView.setVisibility(View.GONE);
+                            }
+
+                            @Override
+                            public void onError() {
+                                holder.logCircleImageView.setImageDrawable(context.getResources().getDrawable(R.drawable.ic_nurse));
+                                holder.progressBar.setVisibility(View.GONE);
+                                holder.progressCircleImageView.setVisibility(View.GONE);
+                            }
+                        });
             }
-            else if (logInfo.logIcon.equals("OUTGOING"))
-            {
-                holder.logIcon.setImageDrawable(context.getResources().getDrawable(R.drawable.ic_arrow_right_up));
-            }
-            else if (logInfo.logIcon.equals("MISSED"))
-            {
+            holder.logName.setText(logInfo.logName);
+            if (!TextUtils.isEmpty(logInfo.logIcon)) {
+                if (logInfo.logIcon.equals("INCOMING")) {
+                    holder.logIcon.setImageDrawable(context.getResources().getDrawable(R.drawable.ic_call_received_arrow));
+                } else if (logInfo.logIcon.equals("OUTGOING")) {
+                    holder.logIcon.setImageDrawable(context.getResources().getDrawable(R.drawable.ic_arrow_right_up));
+                } else if (logInfo.logIcon.equals("MISSED")) {
+                    holder.logIcon.setImageDrawable(context.getResources().getDrawable(R.drawable.ic_call_missed));
+                } else if (logInfo.logIcon.equals("Other")) {
+                    holder.logIcon.setImageDrawable(context.getResources().getDrawable(R.drawable.ic_call_missed));
+                }
+            } else {
                 holder.logIcon.setImageDrawable(context.getResources().getDrawable(R.drawable.ic_call_missed));
             }
-            else if (logInfo.logIcon.equals("Other"))
-            {
-                holder.logIcon.setImageDrawable(context.getResources().getDrawable(R.drawable.ic_call_missed));
-            }
+            holder.logDate.setText(logInfo.hour);
+            holder.callType.setText(logInfo.callType);
+
         }
-        else
-        {
-            holder.logIcon.setImageDrawable(context.getResources().getDrawable(R.drawable.ic_call_missed));
+
+        if (holder.datesection != null) {
+            holder.datesection.setText(logInfo.getDateString());
         }
-        holder.logDate.setText(String.valueOf(logInfo.logDate));
-        holder.callType.setText(logInfo.callType);
+
+
 
     }
 

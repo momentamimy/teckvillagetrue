@@ -59,12 +59,13 @@ public class SplashScreen extends AppCompatActivity implements EasyPermissions.P
             @Override
             public void onClick(View v) {
                 //checkDrawOverlayPermission();
-                if (Build.VERSION.SDK_INT >= Build.VERSION_CODES.M) {
+                if (Build.VERSION.SDK_INT == Build.VERSION_CODES.M) {
                     Log.v("App", "Build Version Greater than or equal to M: " + Build.VERSION_CODES.M);
                     checkDrawOverlayPermission();
                 } else {
                     Log.v("App", "OS Version Less than M");
                     //No need for Permission as less then M OS.
+                    callPermissions();
                 }
             }
         });

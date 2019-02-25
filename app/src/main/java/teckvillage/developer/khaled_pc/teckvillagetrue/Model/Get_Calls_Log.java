@@ -74,7 +74,7 @@ public class Get_Calls_Log {
             String callDuration = managedCursor.getString(duration);
             //Date Format  "dd-MM-yyyy h:mm a"
             SimpleDateFormat formatter = new SimpleDateFormat("h:mm a", Locale.ENGLISH);
-            String dateString = formatter.format(new Date(Long.parseLong(callDate)));
+            String dateStringhour = formatter.format(new Date(Long.parseLong(callDate)));
 
             String dir = null;
             int dircode = Integer.parseInt(callType);
@@ -115,13 +115,13 @@ public class Get_Calls_Log {
             }
 
             sb.append("\nName phone Number:--- " + phName + "\nPhone Number:--- " + phNumber + "\nPhone Number Type:--- " + typephone + " \nCall Type:--- "
-                    + dir + " \nCall Date:--- " + dateString
+                    + dir + " \nCall Date:--- " + dateStringhour
                     + " \nCall duration in sec :--- " + callDuration);
             sb.append("\n----------------------------------");
             if(phName==null){
                 phName=phNumber;
             }
-            loglist.add(new LogInfo(null,phName,dir,dateString,typephone));
+            loglist.add(new LogInfo(null,phName,dir,callDayTime,typephone,dateStringhour,phNumber));
         }
         managedCursor.close();
         return loglist;

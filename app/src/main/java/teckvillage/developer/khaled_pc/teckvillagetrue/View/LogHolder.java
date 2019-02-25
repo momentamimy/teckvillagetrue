@@ -4,6 +4,7 @@ import android.support.v7.widget.RecyclerView;
 import android.view.View;
 import android.widget.ImageView;
 import android.widget.ProgressBar;
+import android.widget.RelativeLayout;
 import android.widget.TextView;
 
 import de.hdodenhof.circleimageview.CircleImageView;
@@ -18,6 +19,8 @@ public class LogHolder extends RecyclerView.ViewHolder {
     public TextView callType;
     public ProgressBar progressBar;
     public CircleImageView progressCircleImageView;
+    public TextView datesection;
+    public RelativeLayout item;
 
     public LogHolder(View itemView) {
         super(itemView);
@@ -28,5 +31,7 @@ public class LogHolder extends RecyclerView.ViewHolder {
         callType=itemView.findViewById(R.id.type_of_num_log);
         progressBar=itemView.findViewById(R.id.progress);
         progressCircleImageView=itemView.findViewById(R.id.progress_contact_img);
+        datesection=itemView.findViewById(R.id.datesection);
+        item=itemView.findViewById(R.id.layoutlist);
     }
 }

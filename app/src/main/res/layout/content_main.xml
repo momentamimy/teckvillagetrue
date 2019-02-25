@@ -22,6 +22,7 @@
         android:id="@+id/shadow_botnav"
         android:layout_width="match_parent"
         android:layout_height="4dp"
+        android:visibility="gone"
         android:background="@drawable/shadow"
         android:layout_above="@+id/botnav"
         />
@@ -30,6 +31,7 @@
         android:id="@+id/botnav"
         android:layout_width="match_parent"
         android:layout_height="wrap_content"
+        android:background="@android:color/white"
         android:layout_alignParentBottom="true"
         app:menu="@menu/bottomnavigationview"
         />

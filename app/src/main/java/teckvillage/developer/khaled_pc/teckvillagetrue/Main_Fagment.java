@@ -2,6 +2,7 @@ package teckvillage.developer.khaled_pc.teckvillagetrue;
 
 
 import android.animation.ObjectAnimator;
+import android.content.Context;
 import android.content.Intent;
 import android.content.res.ColorStateList;
 import android.graphics.drawable.AnimationDrawable;
@@ -12,7 +13,9 @@ import android.support.v4.app.Fragment;
 import android.support.v7.widget.DefaultItemAnimator;
 import android.support.v7.widget.LinearLayoutManager;
 import android.support.v7.widget.RecyclerView;
+import android.text.format.DateFormat;
 import android.util.DisplayMetrics;
+import android.util.Log;
 import android.view.LayoutInflater;
 import android.view.MotionEvent;
 import android.view.View;
@@ -23,9 +26,14 @@ import android.widget.ImageView;
 import android.widget.RelativeLayout;
 import android.widget.TextView;
 
+import java.text.SimpleDateFormat;
 import java.util.ArrayList;
+import java.util.Calendar;
+import java.util.Collections;
+import java.util.Date;
 import java.util.HashMap;
 import java.util.List;
+import java.util.Locale;
 
 import teckvillage.developer.khaled_pc.teckvillagetrue.Controller.ContactAdapter;
 import teckvillage.developer.khaled_pc.teckvillagetrue.Controller.CustomGridAdapter;
@@ -35,6 +43,7 @@ import teckvillage.developer.khaled_pc.teckvillagetrue.model.ContactInfo;
 import teckvillage.developer.khaled_pc.teckvillagetrue.model.Get_Calls_Log;
 import teckvillage.developer.khaled_pc.teckvillagetrue.model.GridListDataModel;
 import teckvillage.developer.khaled_pc.teckvillagetrue.model.LogInfo;
+import teckvillage.developer.khaled_pc.teckvillagetrue.model.UserContactData;
 
 
 /**
@@ -205,14 +214,12 @@ public class Main_Fagment extends Fragment {
 
 
         //**********************Log List******************************
-        List<LogInfo> logInfos=new ArrayList<>();
+        ArrayList<LogInfo> logInfos=new ArrayList<>();
         if(get_calls_log.CheckPermission()){
 
             logInfos=get_calls_log.getCallDetails();
 
         }
-
-        HashMap<String, List<LogInfo>> groupedHashMap = groupDataIntoHashMap(logInfos);
 
 
         /*
@@ -237,9 +244,11 @@ public class Main_Fagment extends Fragment {
         }
             */
 
+        Collections.sort(logInfos, LogInfo.BY_DATE);
+
         logs.setLayoutManager(lLayout1);
         logs.setItemAnimator(new DefaultItemAnimator());
-        LogAdapter adapter1=new LogAdapter(getActivity(),logInfos);
+        LogAdapter adapter1=new LogAdapter(getActivity(),groupListByDate(logInfos));
         logs.setAdapter(adapter1);
 
 
@@ -248,29 +257,62 @@ public class Main_Fagment extends Fragment {
 
 
 
-    private HashMap<String, List<LogInfo>> groupDataIntoHashMap(List<LogInfo> listOfPojosOfJsonArray) {
+    /**
+     * Receive sorted list and divide it into Letters and contacts
+     * @param list
+     * @return
+     */
+    ArrayList<LogInfo> groupListByDate(ArrayList<LogInfo> list) {
+        int i = 0;
+        ArrayList<LogInfo> customList = new ArrayList<LogInfo>();
+        LogInfo logInfo = new LogInfo();
+        logInfo.logDate=list.get(0).logDate;
+        logInfo.setDateString(getFormattedDate(getActivity(),logInfo.logDate.getTime()));
+        logInfo.setType(1);
+        customList.add(logInfo);
+        for (i = 0; i < list.size() - 1; i++) {
+            LogInfo logInfo12 = new LogInfo();
+            //SimpleDateFormat formatter = new SimpleDateFormat("dd-MM-yyyy", Locale.ENGLISH);
+            String dateString1 =getFormattedDate(getActivity(),  list.get(i).logDate.getTime());
+            String dateString2 =getFormattedDate(getActivity(),  list.get(i + 1).logDate.getTime());
+            //String dateString1 = formatter.format(list.get(i).logDate.getTime());
+            //String dateString2 = formatter.format(list.get(i + 1).logDate.getTime());
 
-        HashMap<String, List<LogInfo>> groupedHashMap = new HashMap<>();
-
-        for (LogInfo pojoOfJsonArray : listOfPojosOfJsonArray) {
-
-            String hashMapKey = pojoOfJsonArray.logDate;
-
-            if (groupedHashMap.containsKey(hashMapKey)) {
-                // The key is already in the HashMap; add the pojo object
-                // against the existing key.
-                groupedHashMap.get(hashMapKey).add(pojoOfJsonArray);
+            if (dateString1.equals(dateString2)) {
+                list.get(i).setType(2);
+                customList.add(list.get(i));
             } else {
-                // The key is not there in the HashMap; create a new key-value pair
-                List<LogInfo> list = new ArrayList<>();
-                list.add(pojoOfJsonArray);
-                groupedHashMap.put(hashMapKey, list);
+                list.get(i).setType(2);
+                customList.add(list.get(i));
+                logInfo12.setDateString(dateString2);
+                logInfo12.setType(1);
+                customList.add(logInfo12);
             }
         }
-
-
-        return groupedHashMap;
+        list.get(i).setType(2);
+        customList.add(list.get(i));
+        return customList;
     }
+
+    public String getFormattedDate(Context context, long smsTimeInMilis) {
+        Calendar smsTime = Calendar.getInstance();
+        smsTime.setTimeInMillis(smsTimeInMilis);
+
+        Calendar now = Calendar.getInstance();
+
+        final String dateTimeFormatString = "EEEE, dd MMM";
+        if (now.get(Calendar.DATE) == smsTime.get(Calendar.DATE)&&(smsTime.get(Calendar.YEAR) == now.get(Calendar.YEAR)&&(smsTime.get(Calendar.MONTH) == now.get(Calendar.MONTH))) ) {
+            return "Today " ;
+        } else if (now.get(Calendar.DATE) - smsTime.get(Calendar.DATE) == 1  ){
+            return "Yesterday " ;
+        } else if (now.get(Calendar.YEAR) == smsTime.get(Calendar.YEAR)) {
+            return DateFormat.format(dateTimeFormatString, smsTime).toString();
+        } else {
+            return DateFormat.format("EEEE, dd MMM yyyy", smsTime).toString();
+        }
+    }
+
+
 
     /*-------------------------------------------dial_pad_layout--------------------------------------------------*/
     public void removeSelection(KeyboardlessEditText inputText)
