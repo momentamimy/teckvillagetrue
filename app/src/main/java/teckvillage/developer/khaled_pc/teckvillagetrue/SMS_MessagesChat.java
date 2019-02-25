@@ -5,12 +5,15 @@ import android.app.Activity;
 import android.app.PendingIntent;
 import android.content.BroadcastReceiver;
 import android.content.ContentResolver;
+import android.content.ContentValues;
 import android.content.Context;
 import android.content.Intent;
 import android.content.IntentFilter;
 import android.content.pm.PackageManager;
 import android.database.Cursor;
 import android.net.Uri;
+import android.os.Build;
+import android.provider.Telephony;
 import android.support.design.widget.FloatingActionButton;
 import android.support.v4.app.ActivityCompat;
 import android.support.v4.content.ContextCompat;
@@ -151,6 +154,12 @@ public class SMS_MessagesChat extends AppCompatActivity {
 
     private void sendSMS(String phoneNumber, String message)
     {
+
+        Calendar calendar=Calendar.getInstance();
+        String stringDate=String.valueOf(calendar.get(Calendar.DAY_OF_MONTH))+"/"+String.valueOf(calendar.get(Calendar.MONTH)+1)+"/"+String.valueOf(calendar.get(Calendar.YEAR));
+        messageInfos.add(new MessageInfo(null,"",message,stringDate,phoneNumber));
+        MessageAdapter adapter=new MessageAdapter(getApplicationContext(),messageInfos);
+        chat_RecyclerView.setAdapter(adapter);
         String SENT = "SMS_SENT"; String DELIVERED = "SMS_DELIVERED";
         PendingIntent sentPI = PendingIntent.getBroadcast(this, 0,
                 new Intent(SENT), 0);
@@ -168,10 +177,12 @@ public class SMS_MessagesChat extends AppCompatActivity {
                     case Activity.RESULT_OK:
                         Toast.makeText(getBaseContext(), "SMS sent",
                                 Toast.LENGTH_SHORT).show();
+                        getmessages();
                         break;
                     case SmsManager.RESULT_ERROR_GENERIC_FAILURE:
                         Toast.makeText(getBaseContext(), "Generic failure",
                                 Toast.LENGTH_SHORT).show();
+                        getmessages();
                         break;
                     case SmsManager.RESULT_ERROR_NO_SERVICE:
                         Toast.makeText(getBaseContext(), "No service",
@@ -210,7 +221,44 @@ public class SMS_MessagesChat extends AppCompatActivity {
         SmsManager sms = SmsManager.getDefault();
         sms.sendTextMessage(phoneNumber, null, message, sentPI, deliveredPI);
 
-        getmessages();
-    }
 
+       // addMessageToSent(phoneNumber,message);
+       /* if (Build.VERSION.SDK_INT >= Build.VERSION_CODES.KITKAT) {
+            final String myPackageName = getPackageName();
+            if (!Telephony.Sms.getDefaultSmsPackage(this).equals(myPackageName)) {
+
+                Intent intent = new Intent(Telephony.Sms.Intents.ACTION_CHANGE_DEFAULT);
+                intent.putExtra(Telephony.Sms.Intents.EXTRA_PACKAGE_NAME, myPackageName);
+                startActivityForResult(intent, 1);
+            }else {
+                saveSms(phoneNumber, message);
+            }
+        }else {
+            saveSms(phoneNumber, message);
+        }*/
+    }
+    public boolean saveSms(String phoneNumber, String message) {
+        boolean ret = false;
+        try {
+            ContentValues values = new ContentValues();
+            values.put("address", phoneNumber);
+            values.put("body", message);
+
+
+            if (Build.VERSION.SDK_INT >= Build.VERSION_CODES.KITKAT) {
+                Uri uri = Telephony.Sms.Sent.CONTENT_URI;
+
+                getContentResolver().insert(uri, values);
+            }
+            else {
+                getContentResolver().insert(Uri.parse("content://sms/sent"), values);
+            }
+
+            ret = true;
+        } catch (Exception ex) {
+            ex.printStackTrace();
+            ret = false;
+        }
+        return ret;
+    }
 }
