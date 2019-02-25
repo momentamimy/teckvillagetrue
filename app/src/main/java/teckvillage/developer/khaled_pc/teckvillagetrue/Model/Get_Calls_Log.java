@@ -5,8 +5,10 @@ import android.annotation.SuppressLint;
 import android.content.Context;
 import android.content.pm.PackageManager;
 import android.database.Cursor;
+import android.net.Uri;
 import android.os.Build;
 import android.provider.CallLog;
+import android.provider.Contacts;
 import android.provider.ContactsContract;
 import android.support.v4.app.ActivityCompat;
 import android.util.Log;
@@ -28,6 +30,7 @@ public class Get_Calls_Log {
     Context context;
     Permission permission;
     ArrayList<LogInfo> loglist;
+
 
     public Get_Calls_Log(Context context) {
         this.context = context;
@@ -54,7 +57,7 @@ public class Get_Calls_Log {
 
 
     public ArrayList<LogInfo> getCallDetails() {
-        loglist=new ArrayList<>();
+        loglist = new ArrayList<>();
         StringBuffer sb = new StringBuffer();
         @SuppressLint("MissingPermission") Cursor managedCursor = context.getContentResolver().query(CallLog.Calls.CONTENT_URI, null, null, null, CallLog.Calls.DATE + " DESC");
         int name = managedCursor.getColumnIndex(CallLog.Calls.CACHED_NAME);
@@ -78,7 +81,7 @@ public class Get_Calls_Log {
 
             String dir = null;
             int dircode = Integer.parseInt(callType);
-            Log.d("lalalalala,", String.valueOf(dircode));
+
             switch (dircode) {
                 case CallLog.Calls.OUTGOING_TYPE:
                     dir = "OUTGOING";
@@ -99,16 +102,16 @@ public class Get_Calls_Log {
             String typephone = null;
             switch (phmobileType) {
                 case ContactsContract.CommonDataKinds.Phone.TYPE_MOBILE:
-                    typephone="Mobile";
+                    typephone = "Mobile";
                     break;
                 case ContactsContract.CommonDataKinds.Phone.TYPE_HOME:
-                    typephone="Home";
+                    typephone = "Home";
                     break;
                 case ContactsContract.CommonDataKinds.Phone.TYPE_WORK:
-                    typephone="Work";
+                    typephone = "Work";
                     break;
                 case ContactsContract.CommonDataKinds.Phone.TYPE_OTHER:
-                    typephone="Other";
+                    typephone = "Other";
                     break;
                 default:
                     break;
@@ -118,13 +121,84 @@ public class Get_Calls_Log {
                     + dir + " \nCall Date:--- " + dateStringhour
                     + " \nCall duration in sec :--- " + callDuration);
             sb.append("\n----------------------------------");
-            if(phName==null){
-                phName=phNumber;
+
+            //if cash name is null return name from Contacts
+            if (phName == null) {
+                if (phNumber != null) {
+                    if(contactExists(phNumber)){
+                        phName = getContactName(phNumber);
+                    }else {
+                        if(phNumber.equals("")){
+                            phName = "Unknown";
+                        }else {
+                            phName = phNumber;
+                        }
+
+                    }
+
+                } else {
+                    phName = "Unknown Number";
+                }
             }
-            loglist.add(new LogInfo(null,phName,dir,callDayTime,typephone,dateStringhour,phNumber));
+
+            loglist.add(new LogInfo(null, phName, dir, callDayTime, typephone, dateStringhour, phNumber));
         }
         managedCursor.close();
         return loglist;
 
     }
+
+
+    String getContactName(final String phoneNumber) {
+        Uri uri = Uri.withAppendedPath(ContactsContract.PhoneLookup.CONTENT_FILTER_URI, Uri.encode(phoneNumber));
+
+        String[] projection = new String[]{ContactsContract.PhoneLookup.DISPLAY_NAME};
+
+        String contactName = "";
+        try {
+
+
+            Cursor cursor = context.getContentResolver().query(uri, projection, null, null, null);
+
+            if (cursor != null) {
+                if (cursor.moveToFirst()) {
+                    contactName = cursor.getString(0);
+                }
+                cursor.close();
+            }
+
+
+
+
+
+        } catch (Exception E) {
+            Log.w("Error", E.getMessage());
+        }
+        return contactName;
+
+    }
+
+     boolean contactExists(String number) {
+        // number is the phone number
+        Uri lookupUri = Uri.withAppendedPath(ContactsContract.PhoneLookup.CONTENT_FILTER_URI, Uri.encode(number));
+        String[] mPhoneNumberProjection = {  ContactsContract.PhoneLookup.NUMBER };
+        Cursor cur = null;
+        try {
+
+         cur = context.getContentResolver().query(lookupUri,mPhoneNumberProjection, null, null, null);
+
+            if (cur.moveToFirst()) {
+                return true;
+            }
+        }catch (Exception e) {
+
+            return false;
+        }finally {
+            if (cur != null)
+                cur.close();
+        }
+        return false;
+    }
+
+
 }

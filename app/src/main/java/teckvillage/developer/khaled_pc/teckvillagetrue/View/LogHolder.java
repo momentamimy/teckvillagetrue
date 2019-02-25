@@ -3,6 +3,7 @@ package teckvillage.developer.khaled_pc.teckvillagetrue.View;
 import android.support.v7.widget.RecyclerView;
 import android.view.View;
 import android.widget.ImageView;
+import android.widget.LinearLayout;
 import android.widget.ProgressBar;
 import android.widget.RelativeLayout;
 import android.widget.TextView;
@@ -15,12 +16,14 @@ public class LogHolder extends RecyclerView.ViewHolder {
     public CircleImageView logCircleImageView;
     public TextView logName;
     public ImageView logIcon;
-    public TextView logDate;
+    public TextView logDate,numbersofcallinminte;
     public TextView callType;
     public ProgressBar progressBar;
     public CircleImageView progressCircleImageView;
     public TextView datesection;
-    public RelativeLayout item;
+    public LinearLayout item;
+    public RelativeLayout calllayout;
+    public RelativeLayout infoicon,chaticon;
 
     public LogHolder(View itemView) {
         super(itemView);
@@ -33,5 +36,9 @@ public class LogHolder extends RecyclerView.ViewHolder {
         progressCircleImageView=itemView.findViewById(R.id.progress_contact_img);
         datesection=itemView.findViewById(R.id.datesection);
         item=itemView.findViewById(R.id.layoutlist);
+        infoicon=itemView.findViewById(R.id.info);
+        chaticon=itemView.findViewById(R.id.chaticon);
+        calllayout=itemView.findViewById(R.id.firstl);
+        numbersofcallinminte=itemView.findViewById(R.id.numbersofcall);
     }
 }

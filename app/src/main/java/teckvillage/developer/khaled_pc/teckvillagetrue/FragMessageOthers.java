@@ -178,7 +178,6 @@ public class FragMessageOthers extends Fragment {
             e.printStackTrace();
         }
 
-        // Todo : Thanks For Watching...
     }
 
 

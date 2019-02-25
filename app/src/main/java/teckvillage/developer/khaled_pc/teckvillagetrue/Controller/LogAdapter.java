@@ -11,6 +11,7 @@ import android.text.TextUtils;
 import android.view.LayoutInflater;
 import android.view.View;
 import android.view.ViewGroup;
+import android.widget.Toast;
 
 import com.squareup.picasso.Picasso;
 
@@ -34,11 +35,6 @@ public class LogAdapter extends RecyclerView.Adapter<LogHolder> {
     @Override
     public LogHolder onCreateViewHolder(ViewGroup parent, int viewType) {
 
-        // View layoutView = LayoutInflater.from(parent.getContext()).inflate(R.layout.row_of_logs_recycleview, null);
-        //LogHolder rbv = new LogHolder(layoutView);
-        //return rbv;
-
-
         switch (viewType) {
             case TYPE_DATE:
                 View layoutView = LayoutInflater.from(parent.getContext()).inflate(R.layout.row_section_for_date_recycler, null);
@@ -46,10 +42,14 @@ public class LogAdapter extends RecyclerView.Adapter<LogHolder> {
                 return rbv;
             case TYPE_ITEM:
                 View layoutView2 = LayoutInflater.from(parent.getContext()).inflate(R.layout.row_of_logs_recycleview, null);
+                RecyclerView.LayoutParams lp = new RecyclerView.LayoutParams(ViewGroup.LayoutParams.MATCH_PARENT, ViewGroup.LayoutParams.WRAP_CONTENT);
+                layoutView2.setLayoutParams(lp);
                 LogHolder rbv2 = new LogHolder(layoutView2);
                 return rbv2;
             default:
                 View layoutView3 = LayoutInflater.from(parent.getContext()).inflate(R.layout.row_of_logs_recycleview, null);
+                RecyclerView.LayoutParams lp2 = new RecyclerView.LayoutParams(ViewGroup.LayoutParams.MATCH_PARENT, ViewGroup.LayoutParams.WRAP_CONTENT);
+                layoutView3.setLayoutParams(lp2);
                 LogHolder rbv3 = new LogHolder(layoutView3);
                 return rbv3;
         }
@@ -74,10 +74,9 @@ public class LogAdapter extends RecyclerView.Adapter<LogHolder> {
         if (holder.logName != null) {
 
 
-            holder.item.setOnClickListener(new View.OnClickListener() {
+            holder.calllayout.setOnClickListener(new View.OnClickListener() {
                 @Override
                 public void onClick(View v) {
-                    v.setSelected(true);
 
                         Intent intent = new Intent(Intent.ACTION_CALL);
                         intent.setData(Uri.parse("tel:" + logInfo.getNumber()));
@@ -92,6 +91,23 @@ public class LogAdapter extends RecyclerView.Adapter<LogHolder> {
                             return;
                         }
                        context.startActivity(intent);
+                }
+            });
+
+
+            holder.chaticon.setOnClickListener(new View.OnClickListener() {
+                @Override
+                public void onClick(View v) {
+                    Toast.makeText(context, "You Click me", Toast.LENGTH_LONG).show();
+
+                }
+            });
+
+            holder.infoicon.setOnClickListener(new View.OnClickListener() {
+                @Override
+                public void onClick(View v) {
+                    Toast.makeText(context, "You Click me", Toast.LENGTH_LONG).show();
+
                 }
             });
 

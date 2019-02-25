@@ -84,6 +84,11 @@ public class Main_Fagment extends Fragment {
     RecyclerView contacts,logs;
     LinearLayoutManager lLayout;
     LinearLayoutManager lLayout1;
+    ArrayList<LogInfo> logInfos;
+    ArrayList<LogInfo> loguinfoupdate;
+    LogAdapter adapter1;
+    Get_Calls_Log get_calls_log;
+    boolean shouldExecuteOnResume;
 
     public Main_Fagment() {
         // Required empty public constructor
@@ -107,7 +112,7 @@ public class Main_Fagment extends Fragment {
         phone_num_edt = (KeyboardlessEditText) view.findViewById(R.id.dial_pad_num_editText);
         back_space=view.findViewById(R.id.backspace_imageView);
         textLayout=view.findViewById(R.id.dial_num_edt_rl);
-        Get_Calls_Log get_calls_log=new Get_Calls_Log(getActivity());
+         get_calls_log=new Get_Calls_Log(getActivity());
 
 
         /*--------------------------------------dial_pad_layout------------------------------------------*/
@@ -214,7 +219,7 @@ public class Main_Fagment extends Fragment {
 
 
         //**********************Log List******************************
-        ArrayList<LogInfo> logInfos=new ArrayList<>();
+        logInfos=new ArrayList<>();
         if(get_calls_log.CheckPermission()){
 
             logInfos=get_calls_log.getCallDetails();
@@ -222,33 +227,11 @@ public class Main_Fagment extends Fragment {
         }
 
 
-        /*
-        for (String date : groupedHashMap.keySet()) {
-            int i=0;
-            LogInfo logInfoo=new LogInfo();
-            //DateItem dateItem = new DateItem();
-           // dateItem.setDate(date);
-           // consolidatedList.add(dateItem);
-            logInfoo.logDate=date;
-            consolidatedList.get(i).setType(1);
-            consolidatedList.add(logInfoo);
-            i++;
-
-            for (LogInfo pojoOfJsonArray : groupedHashMap.get(date)) {
-                GeneralItem generalItem = new GeneralItem();
-                LogInfo logInfo2=new LogInfo();
-                generalItem.setPojoOfJsonArray(pojoOfJsonArray);//setBookingDataTabs(bookingDataTabs);
-                consolidatedList.get(i).setType(2);
-                consolidatedList.add(generalItem.);
-            }
-        }
-            */
-
         Collections.sort(logInfos, LogInfo.BY_DATE);
 
         logs.setLayoutManager(lLayout1);
         logs.setItemAnimator(new DefaultItemAnimator());
-        LogAdapter adapter1=new LogAdapter(getActivity(),groupListByDate(logInfos));
+        adapter1=new LogAdapter(getActivity(),groupListByDate(logInfos));
         logs.setAdapter(adapter1);
 
 
@@ -303,7 +286,7 @@ public class Main_Fagment extends Fragment {
         final String dateTimeFormatString = "EEEE, dd MMM";
         if (now.get(Calendar.DATE) == smsTime.get(Calendar.DATE)&&(smsTime.get(Calendar.YEAR) == now.get(Calendar.YEAR)&&(smsTime.get(Calendar.MONTH) == now.get(Calendar.MONTH))) ) {
             return "Today " ;
-        } else if (now.get(Calendar.DATE) - smsTime.get(Calendar.DATE) == 1  ){
+        } else if (now.get(Calendar.DATE) - smsTime.get(Calendar.DATE) == 1&&(smsTime.get(Calendar.YEAR) == now.get(Calendar.YEAR)&&(smsTime.get(Calendar.MONTH) == now.get(Calendar.MONTH)))){
             return "Yesterday " ;
         } else if (now.get(Calendar.YEAR) == smsTime.get(Calendar.YEAR)) {
             return DateFormat.format(dateTimeFormatString, smsTime).toString();
@@ -471,4 +454,38 @@ public class Main_Fagment extends Fragment {
         timer.start();
     }
     /*-------------------------------------------dial_pad_layout--------------------------------------------------*/
+
+    @Override
+    public void onResume() {
+        super.onResume();
+        if(shouldExecuteOnResume){
+            // Your onResume Code Here
+            get_calls_log=new Get_Calls_Log(getActivity());
+
+            logInfos.clear();
+            loguinfoupdate=new ArrayList<LogInfo>();
+
+            if(get_calls_log.CheckPermission()){
+
+                loguinfoupdate=get_calls_log.getCallDetails();
+
+            }
+
+
+            Collections.sort(loguinfoupdate, LogInfo.BY_DATE);
+
+            logs.setLayoutManager(lLayout1);
+            logs.setItemAnimator(new DefaultItemAnimator());
+            adapter1=new LogAdapter(getActivity(),groupListByDate(loguinfoupdate));
+            logs.setAdapter(adapter1);
+            adapter1.notifyDataSetChanged();
+            //toggleEmptyCases();
+        } else{
+            shouldExecuteOnResume = true;
+        }
+
+    }
+
+
+
 }
