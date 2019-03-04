@@ -1,7 +1,6 @@
 package teckvillage.developer.khaled_pc.teckvillagetrue;
 
 import android.content.Context;
-import android.graphics.Color;
 import android.support.v7.widget.RecyclerView;
 import android.text.Spannable;
 import android.text.SpannableString;
@@ -13,7 +12,6 @@ import android.widget.TextView;
 
 import java.util.List;
 
-import teckvillage.developer.khaled_pc.teckvillagetrue.R;
 import teckvillage.developer.khaled_pc.teckvillagetrue.View.SearchLogHolder;
 import teckvillage.developer.khaled_pc.teckvillagetrue.model.LogInfo;
 

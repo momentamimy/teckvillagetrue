@@ -1,7 +1,5 @@
 package teckvillage.developer.khaled_pc.teckvillagetrue.model;
 
-import android.net.Uri;
-
 public class ContactInfo {
     public String imageUrl;
     public String contacName;

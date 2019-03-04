@@ -23,6 +23,7 @@ import android.text.SpannableString;
 import android.text.format.DateFormat;
 import android.text.style.ImageSpan;
 import android.util.DisplayMetrics;
+import android.util.Log;
 import android.view.LayoutInflater;
 import android.view.MenuItem;
 import android.view.MotionEvent;
@@ -46,6 +47,7 @@ import teckvillage.developer.khaled_pc.teckvillagetrue.Controller.LogAdapter;
 import teckvillage.developer.khaled_pc.teckvillagetrue.model.Get_Calls_Log;
 import teckvillage.developer.khaled_pc.teckvillagetrue.View.KeyboardlessEditText;
 import teckvillage.developer.khaled_pc.teckvillagetrue.model.ContactInfo;
+import teckvillage.developer.khaled_pc.teckvillagetrue.model.Get_Calls_Log;
 import teckvillage.developer.khaled_pc.teckvillagetrue.model.GridListDataModel;
 import teckvillage.developer.khaled_pc.teckvillagetrue.model.LogInfo;
 

@@ -159,6 +159,11 @@ public class Get_User_Contacts {
 
         }
 
+
+
+
+
+
         if(cur!=null){
             cur.close();
         }
