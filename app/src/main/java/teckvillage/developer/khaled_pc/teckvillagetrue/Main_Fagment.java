@@ -203,13 +203,12 @@ public class Main_Fagment extends Fragment {
 
         List<ContactInfo> contactInfos=new ArrayList<>();
 
-        contactInfos.add(new ContactInfo("http://i.imgur.com/DvpvklR.png","khaled","Mobile"));
-        contactInfos.add(new ContactInfo("https://firebasestorage.googleapis.com/v0/b/chatapp-f5386.appspot.com/o/imgs%2F3C8oCUSQjlZqV0kivIBhpwT5fca2.jpg?alt=media&token=a9e39edd-6d27-4995-969d-a76ddbfb1aab","Mo'men El-Tamimy","Mobile"));
-        contactInfos.add(new ContactInfo(null,"khaled","Mobile"));
-        contactInfos.add(new ContactInfo(null,"khaled eltarabily","Mobile"));
-        contactInfos.add(new ContactInfo(null,"khaled","Mobile"));
-        contactInfos.add(new ContactInfo(null,"khaled","Mobile"));
-        contactInfos.add(new ContactInfo(null,"khaled","Mobile"));
+        if(get_calls_log.CheckPermission()){
+
+            contactInfos= get_calls_log.getTopTenContacts();
+
+        }
+
 
         contacts.setLayoutManager(lLayout);
         contacts.setItemAnimator(new DefaultItemAnimator());
@@ -223,6 +222,7 @@ public class Main_Fagment extends Fragment {
         if(get_calls_log.CheckPermission()){
 
             logInfos=get_calls_log.getCallDetails();
+
 
         }
 

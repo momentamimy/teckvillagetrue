@@ -84,6 +84,14 @@ public class Contacts extends Fragment {
 
         //initialiseData();
 
+        /*
+        ArrayList<UserContactData> contactInfos = new ArrayList<>();
+        contactInfos=get_user_contacts.getContactList();
+        for (int i=0;i<contactInfos.size();i++){
+            Log.w("print",contactInfos.get(i).usercontacName);
+        }
+        */
+
 
 
         return view;
@@ -120,7 +128,7 @@ public class Contacts extends Fragment {
 
     public void initialiseUI() {
         mRecyclerView.setLayoutManager(new LinearLayoutManager(getActivity()));
-        mRecyclerView.setAdapter(new UserContactsAdapters(getActivity(),addAlphabets(new LetterComparator().sortList(get_user_contacts.getContactList()))));
+        mRecyclerView.setAdapter(new UserContactsAdapters(getActivity(),addAlphabets(new LetterComparator().sortList(get_user_contacts.getContactListContactsRecycleview()))));
 
         mRecyclerView.setIndexTextSize(12);
         mRecyclerView.setIndexBarColor("#33334c");

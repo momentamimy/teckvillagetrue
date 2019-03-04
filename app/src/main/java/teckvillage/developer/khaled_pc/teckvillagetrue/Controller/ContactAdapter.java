@@ -1,11 +1,15 @@
 package teckvillage.developer.khaled_pc.teckvillagetrue.Controller;
 
+import android.Manifest;
 import android.content.Context;
 import android.content.ContextWrapper;
+import android.content.Intent;
+import android.content.pm.PackageManager;
 import android.graphics.Bitmap;
 import android.graphics.drawable.BitmapDrawable;
 import android.graphics.drawable.Drawable;
 import android.net.Uri;
+import android.support.v4.app.ActivityCompat;
 import android.support.v7.widget.RecyclerView;
 import android.util.Log;
 import android.view.LayoutInflater;
@@ -50,13 +54,14 @@ public class ContactAdapter extends RecyclerView.Adapter<ContactHolder> {
 
     @Override
     public void onBindViewHolder(final ContactHolder holder, int position) {
-        ContactInfo contactInfo=itemList.get(position);
+        final ContactInfo contactInfo=itemList.get(position);
         holder.contactName.setText(contactInfo.contacName);
         holder.numberType.setText(contactInfo.numberType);
         if (contactInfo.imageUrl!=null)
         {
             holder.progressBar.setVisibility(View.VISIBLE);
             holder.progressCircleImageView.setVisibility(View.VISIBLE);
+
             Picasso.with(context)
                     .load(contactInfo.imageUrl)
                     .into(holder.contactCircleImageView, new com.squareup.picasso.Callback() {
@@ -74,6 +79,26 @@ public class ContactAdapter extends RecyclerView.Adapter<ContactHolder> {
                         }
                     });
         }
+
+        holder.layout.setOnClickListener(new View.OnClickListener() {
+            @Override
+            public void onClick(View v) {
+                Intent intent = new Intent(Intent.ACTION_CALL);
+                intent.setData(Uri.parse("tel:" + contactInfo.phoneNum));
+                if (ActivityCompat.checkSelfPermission(context, Manifest.permission.CALL_PHONE) != PackageManager.PERMISSION_GRANTED) {
+                    // TODO: Consider calling
+                    //    ActivityCompat#requestPermissions
+                    // here to request the missing permissions, and then overriding
+                    //   public void onRequestPermissionsResult(int requestCode, String[] permissions,
+                    //                                          int[] grantResults)
+                    // to handle the case where the user grants the permission. See the documentation
+                    // for ActivityCompat#requestPermissions for more details.
+                    return;
+                }
+                context.startActivity(intent);
+            }
+        });
+
         }
 
 

@@ -110,7 +110,7 @@ public class UserContactsAdapters extends RecyclerView.Adapter<UserContactsAdapt
     public void onBindViewHolder(final ViewHolder holder, int position) {
         if(holder.contactName2!=null){
 
-           holder.contactName2.setText(mDataArray.get(position).usercontacName);
+
            holder.contactName2.setText(mDataArray.get(position).usercontacName);
            holder.contactCircleImageView2.setOnClickListener(new View.OnClickListener() {
                 @Override
@@ -124,7 +124,7 @@ public class UserContactsAdapters extends RecyclerView.Adapter<UserContactsAdapt
         }
 
         if(holder.letter!=null){
-            Log.w("letter",mDataArray.get(position).usercontacName);
+            //Log.w("letter",mDataArray.get(position).usercontacName);
             holder.letter.setText(mDataArray.get(position).usercontacName);
 
         }

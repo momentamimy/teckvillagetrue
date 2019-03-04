@@ -14,8 +14,8 @@
         android:id="@+id/fast_scroller_recycler"
         android:layout_width="match_parent"
         android:layout_height="match_parent"
-        android:layout_marginEnd="10dp"
-        android:layout_marginRight="10dp" />
+        android:layout_marginEnd="6dp"
+        android:layout_marginRight="6dp" />
 
     <android.support.design.widget.FloatingActionButton
         android:id="@+id/add_user_contacts"

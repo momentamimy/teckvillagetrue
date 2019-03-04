@@ -70,9 +70,21 @@ public class LogAdapter extends RecyclerView.Adapter<LogHolder> {
 
     @Override
     public void onBindViewHolder(final LogHolder holder, int position) {
+        String lastnumber = "0";
+        int numofcall=0;
+
         final LogInfo logInfo = itemList.get(position);
         if (holder.logName != null) {
 
+            /*
+            if (logInfo.getNumber().contains(lastnumber))
+            {
+                numofcall++;
+            }
+            else {
+                lastnumber = logInfo.getNumber();
+
+            }*/
 
             holder.calllayout.setOnClickListener(new View.OnClickListener() {
                 @Override
@@ -131,18 +143,31 @@ public class LogAdapter extends RecyclerView.Adapter<LogHolder> {
             }
             holder.logName.setText(logInfo.logName);
             if (!TextUtils.isEmpty(logInfo.logIcon)) {
-                if (logInfo.logIcon.equals("INCOMING")) {
-                    holder.logIcon.setImageDrawable(context.getResources().getDrawable(R.drawable.ic_call_received_arrow));
-                } else if (logInfo.logIcon.equals("OUTGOING")) {
-                    holder.logIcon.setImageDrawable(context.getResources().getDrawable(R.drawable.ic_arrow_right_up));
-                } else if (logInfo.logIcon.equals("MISSED")) {
-                    holder.logIcon.setImageDrawable(context.getResources().getDrawable(R.drawable.ic_call_missed));
-                } else if (logInfo.logIcon.equals("Other")) {
-                    holder.logIcon.setImageDrawable(context.getResources().getDrawable(R.drawable.ic_call_missed));
+                switch (logInfo.logIcon) {
+                    case "INCOMING":
+                        holder.logIcon.setImageDrawable(context.getResources().getDrawable(R.drawable.ic_call_received_arrow));
+                        break;
+                    case "OUTGOING":
+                        holder.logIcon.setImageDrawable(context.getResources().getDrawable(R.drawable.ic_arrow_right_up));
+                        break;
+                    case "MISSED":
+                        holder.logIcon.setImageDrawable(context.getResources().getDrawable(R.drawable.ic_call_missed));
+                        break;
+                    case "REJECTED":
+                        holder.logIcon.setImageDrawable(context.getResources().getDrawable(R.drawable.ic_call_received_arrow));
+                        break;
+                    case "VOICEMAIL":
+                        holder.logIcon.setImageDrawable(context.getResources().getDrawable(R.drawable.ic_voicemail));
+                        break;
+                    case "BLOCKED":
+                        holder.logIcon.setImageDrawable(context.getResources().getDrawable(R.drawable.ic_rejected_call));
+                        break;
+                    case "ANSWERED":
+                        holder.logIcon.setImageDrawable(context.getResources().getDrawable(R.drawable.ic_call_received_arrow));
+                        break;
                 }
-            } else {
-                holder.logIcon.setImageDrawable(context.getResources().getDrawable(R.drawable.ic_call_missed));
             }
+
             holder.logDate.setText(logInfo.hour);
             holder.callType.setText(logInfo.callType);
 
