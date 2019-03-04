@@ -238,6 +238,7 @@ public class Get_Calls_Log {
                                 default:
                                     typephone = "Other";
                                     break;
+
                             }
 
                         } else {
