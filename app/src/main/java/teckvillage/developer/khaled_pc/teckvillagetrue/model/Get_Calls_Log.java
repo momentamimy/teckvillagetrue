@@ -198,8 +198,8 @@ public class Get_Calls_Log {
 
                     } else {
 
-                        // phName = phNumber;
-
+                         phName = phNumber;
+                           /*
                         if (contactExists(phNumber)) {
                             //phName = getContactName(phNumber);
                             phName = contactsName;
@@ -244,7 +244,7 @@ public class Get_Calls_Log {
                             } else {
                                 phName = phNumber;
                             }
-                        }
+                        }*/
                     }
 
                 } else {
