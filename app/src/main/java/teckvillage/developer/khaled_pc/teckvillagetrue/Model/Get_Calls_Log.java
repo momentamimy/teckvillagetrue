@@ -3,15 +3,11 @@ package teckvillage.developer.khaled_pc.teckvillagetrue.model;
 import android.Manifest;
 import android.annotation.SuppressLint;
 import android.content.Context;
-import android.content.pm.PackageManager;
 import android.database.Cursor;
 import android.net.Uri;
 import android.os.Build;
 import android.provider.CallLog;
-import android.provider.Contacts;
 import android.provider.ContactsContract;
-import android.support.v4.app.ActivityCompat;
-import android.telephony.PhoneNumberUtils;
 import android.util.Log;
 import android.widget.ListView;
 

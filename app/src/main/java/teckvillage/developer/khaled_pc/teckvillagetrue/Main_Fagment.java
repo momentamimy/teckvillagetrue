@@ -11,8 +11,6 @@ import android.net.Uri;
 import android.os.Bundle;
 import android.support.design.widget.FloatingActionButton;
 import android.support.v4.app.Fragment;
-import android.support.v4.view.GravityCompat;
-import android.support.v4.widget.DrawerLayout;
 import android.support.v7.widget.DefaultItemAnimator;
 import android.support.v7.widget.LinearLayoutManager;
 import android.support.v7.widget.PopupMenu;
@@ -22,10 +20,7 @@ import android.text.SpannableString;
 import android.text.format.DateFormat;
 import android.text.style.ImageSpan;
 import android.util.DisplayMetrics;
-import android.util.Log;
 import android.view.LayoutInflater;
-import android.view.Menu;
-import android.view.MenuInflater;
 import android.view.MenuItem;
 import android.view.MotionEvent;
 import android.view.View;
@@ -36,24 +31,18 @@ import android.widget.ImageView;
 import android.widget.RelativeLayout;
 import android.widget.TextView;
 
-import java.text.SimpleDateFormat;
 import java.util.ArrayList;
 import java.util.Calendar;
 import java.util.Collections;
-import java.util.Date;
-import java.util.HashMap;
 import java.util.List;
-import java.util.Locale;
 
 import teckvillage.developer.khaled_pc.teckvillagetrue.Controller.ContactAdapter;
 import teckvillage.developer.khaled_pc.teckvillagetrue.Controller.CustomGridAdapter;
 import teckvillage.developer.khaled_pc.teckvillagetrue.Controller.LogAdapter;
 import teckvillage.developer.khaled_pc.teckvillagetrue.View.KeyboardlessEditText;
 import teckvillage.developer.khaled_pc.teckvillagetrue.model.ContactInfo;
-import teckvillage.developer.khaled_pc.teckvillagetrue.model.Get_Calls_Log;
 import teckvillage.developer.khaled_pc.teckvillagetrue.model.GridListDataModel;
 import teckvillage.developer.khaled_pc.teckvillagetrue.model.LogInfo;
-import teckvillage.developer.khaled_pc.teckvillagetrue.model.UserContactData;
 
 
 /**
