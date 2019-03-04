@@ -1,7 +1,6 @@
 package teckvillage.developer.khaled_pc.teckvillagetrue;
 
 import android.content.ContentResolver;
-import android.content.Context;
 import android.content.Intent;
 import android.content.pm.PackageManager;
 import android.database.Cursor;
