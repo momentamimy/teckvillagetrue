@@ -207,6 +207,39 @@ public class Get_Calls_Log {
                         if (contactExists(phNumber)) {
                             //phName = getContactName(phNumber);
                             phName = contactsName;
+                            switch (TypeOfNumph) {
+                                case ContactsContract.CommonDataKinds.Phone.TYPE_MOBILE:
+                                    typephone = "Mobile";
+                                    break;
+                                case ContactsContract.CommonDataKinds.Phone.TYPE_HOME:
+                                    typephone = "Home";
+                                    break;
+                                case ContactsContract.CommonDataKinds.Phone.TYPE_WORK:
+                                    typephone = "Work";
+                                    break;
+                                case ContactsContract.CommonDataKinds.Phone.TYPE_FAX_WORK:
+                                    typephone = "Work Fax";
+                                    break;
+                                case ContactsContract.CommonDataKinds.Phone.TYPE_FAX_HOME:
+                                    typephone = "Home Fax";
+                                    break;
+                                case ContactsContract.CommonDataKinds.Phone.TYPE_MAIN:
+                                    typephone = "Main";
+                                    break;
+                                case ContactsContract.CommonDataKinds.Phone.TYPE_PAGER:
+                                    typephone = "Pager";
+                                    break;
+                                case ContactsContract.CommonDataKinds.Phone.TYPE_CUSTOM:
+                                    typephone = "Custom";
+                                    break;
+                                case ContactsContract.CommonDataKinds.Phone.TYPE_OTHER:
+                                    typephone = "Other";
+                                    break;
+                                default:
+                                    typephone = "Other";
+                                    break;
+                            }
+
                         } else {
                             if (phNumber.equals("")) {
                                 phName = "Unknown";
