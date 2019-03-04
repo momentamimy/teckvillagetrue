@@ -474,6 +474,7 @@ public class Get_Calls_Log {
             }
 
 
+
        return  contactInfos;
     }
 
