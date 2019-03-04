@@ -21,9 +21,9 @@ import in.myinnos.alphabetsindexfastscrollrecycler.IndexFastScrollRecyclerView;
 import teckvillage.developer.khaled_pc.teckvillagetrue.Controller.AlphabetItem;
 import teckvillage.developer.khaled_pc.teckvillagetrue.Controller.LetterComparator;
 import teckvillage.developer.khaled_pc.teckvillagetrue.Controller.UserContactsAdapters;
-import teckvillage.developer.khaled_pc.teckvillagetrue.Model.DataHelper;
-import teckvillage.developer.khaled_pc.teckvillagetrue.Model.Get_User_Contacts;
-import teckvillage.developer.khaled_pc.teckvillagetrue.Model.UserContactData;
+import teckvillage.developer.khaled_pc.teckvillagetrue.model.DataHelper;
+import teckvillage.developer.khaled_pc.teckvillagetrue.model.Get_User_Contacts;
+import teckvillage.developer.khaled_pc.teckvillagetrue.model.UserContactData;
 
 
 /**

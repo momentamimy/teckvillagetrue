@@ -12,7 +12,7 @@ import android.widget.TextView;
 import java.util.ArrayList;
 
 import teckvillage.developer.khaled_pc.teckvillagetrue.R;
-import teckvillage.developer.khaled_pc.teckvillagetrue.Model.MessageInfo;
+import teckvillage.developer.khaled_pc.teckvillagetrue.model.MessageInfo;
 
 public class CustomListViewAdapter extends ArrayAdapter<MessageInfo> {
 

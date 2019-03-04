@@ -1,4 +1,4 @@
-package teckvillage.developer.khaled_pc.teckvillagetrue.Model;
+package teckvillage.developer.khaled_pc.teckvillagetrue.model;
 
 import android.Manifest;
 import android.content.ContentResolver;

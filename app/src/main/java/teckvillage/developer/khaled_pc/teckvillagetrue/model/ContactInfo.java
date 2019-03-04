@@ -1,4 +1,4 @@
-package teckvillage.developer.khaled_pc.teckvillagetrue.Model;
+package teckvillage.developer.khaled_pc.teckvillagetrue.model;
 
 public class ContactInfo {
     public String imageUrl;
@@ -12,5 +12,6 @@ public class ContactInfo {
         this.contacName=contacName;
         this.numberType=numberType;
         this.phoneNum=phoneNum;
+
     }
 }

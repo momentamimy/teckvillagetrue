@@ -12,7 +12,7 @@ import java.util.List;
 import de.hdodenhof.circleimageview.CircleImageView;
 import in.myinnos.alphabetsindexfastscrollrecycler.utilities_fs.StringMatcher;
 import teckvillage.developer.khaled_pc.teckvillagetrue.R;
-import teckvillage.developer.khaled_pc.teckvillagetrue.Model.UserContactData;
+import teckvillage.developer.khaled_pc.teckvillagetrue.model.UserContactData;
 
 
 /**

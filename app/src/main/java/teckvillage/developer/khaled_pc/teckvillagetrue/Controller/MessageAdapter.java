@@ -13,7 +13,7 @@ import java.util.List;
 
 import teckvillage.developer.khaled_pc.teckvillagetrue.R;
 import teckvillage.developer.khaled_pc.teckvillagetrue.View.SMSMessageHolder;
-import teckvillage.developer.khaled_pc.teckvillagetrue.Model.MessageInfo;
+import teckvillage.developer.khaled_pc.teckvillagetrue.model.MessageInfo;
 
 public class MessageAdapter extends RecyclerView.Adapter<SMSMessageHolder> {
     List<MessageInfo> itemList;

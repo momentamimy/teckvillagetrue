@@ -32,7 +32,7 @@ import java.util.List;
 
 import de.hdodenhof.circleimageview.CircleImageView;
 import teckvillage.developer.khaled_pc.teckvillagetrue.Controller.MessageAdapter;
-import teckvillage.developer.khaled_pc.teckvillagetrue.Model.MessageInfo;
+import teckvillage.developer.khaled_pc.teckvillagetrue.model.MessageInfo;
 
 public class SMS_MessagesChat extends AppCompatActivity {
 

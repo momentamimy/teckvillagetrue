@@ -1,4 +1,4 @@
-package teckvillage.developer.khaled_pc.teckvillagetrue.Model;
+package teckvillage.developer.khaled_pc.teckvillagetrue.model;
 
 import java.util.Comparator;
 import java.util.Date;
