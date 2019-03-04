@@ -1,9 +1,7 @@
 package teckvillage.developer.khaled_pc.teckvillagetrue.Controller;
 
 import android.content.Context;
-import android.graphics.drawable.Drawable;
 import android.support.v7.widget.RecyclerView;
-import android.util.Log;
 import android.view.LayoutInflater;
 import android.view.View;
 import android.view.ViewGroup;
@@ -14,7 +12,7 @@ import java.util.List;
 import de.hdodenhof.circleimageview.CircleImageView;
 import in.myinnos.alphabetsindexfastscrollrecycler.utilities_fs.StringMatcher;
 import teckvillage.developer.khaled_pc.teckvillagetrue.R;
-import teckvillage.developer.khaled_pc.teckvillagetrue.model.UserContactData;
+import teckvillage.developer.khaled_pc.teckvillagetrue.Model.UserContactData;
 
 
 /**

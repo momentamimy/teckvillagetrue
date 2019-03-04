@@ -5,10 +5,9 @@ import android.content.Context;
 import android.content.Intent;
 import android.os.Bundle;
 import android.telephony.SmsMessage;
-import android.widget.Toast;
 
 import teckvillage.developer.khaled_pc.teckvillagetrue.FragMessageOthers;
-import teckvillage.developer.khaled_pc.teckvillagetrue.model.MessageInfo;
+import teckvillage.developer.khaled_pc.teckvillagetrue.Model.MessageInfo;
 
 public class SMSBReceiver extends BroadcastReceiver {
     public static final String SMS_BUNDLE = "pdus";

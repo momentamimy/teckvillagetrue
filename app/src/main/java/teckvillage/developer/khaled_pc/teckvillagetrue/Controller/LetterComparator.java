@@ -4,8 +4,7 @@ import java.util.ArrayList;
 import java.util.Collections;
 import java.util.Comparator;
 
-import teckvillage.developer.khaled_pc.teckvillagetrue.model.ContactInfo;
-import teckvillage.developer.khaled_pc.teckvillagetrue.model.UserContactData;
+import teckvillage.developer.khaled_pc.teckvillagetrue.Model.UserContactData;
 
 /**
  * Created by khaled-pc on 2/13/2019.

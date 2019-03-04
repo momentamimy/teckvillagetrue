@@ -1,7 +1,6 @@
 package teckvillage.developer.khaled_pc.teckvillagetrue;
 
 import android.content.ContentResolver;
-import android.content.Context;
 import android.content.Intent;
 import android.content.pm.PackageManager;
 import android.database.Cursor;
@@ -23,9 +22,9 @@ import java.util.ArrayList;
 import java.util.Calendar;
 
 import teckvillage.developer.khaled_pc.teckvillagetrue.Controller.CustomListViewAdapter;
-import teckvillage.developer.khaled_pc.teckvillagetrue.model.Get_User_Contacts;
-import teckvillage.developer.khaled_pc.teckvillagetrue.model.MessageInfo;
-import teckvillage.developer.khaled_pc.teckvillagetrue.model.UserContactData;
+import teckvillage.developer.khaled_pc.teckvillagetrue.Model.Get_User_Contacts;
+import teckvillage.developer.khaled_pc.teckvillagetrue.Model.MessageInfo;
+import teckvillage.developer.khaled_pc.teckvillagetrue.Model.UserContactData;
 
 
 public class FragMessageContact extends Fragment {

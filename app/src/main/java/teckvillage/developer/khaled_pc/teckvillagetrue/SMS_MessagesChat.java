@@ -1,6 +1,5 @@
 package teckvillage.developer.khaled_pc.teckvillagetrue;
 
-import android.Manifest;
 import android.app.Activity;
 import android.app.PendingIntent;
 import android.content.BroadcastReceiver;
@@ -9,14 +8,11 @@ import android.content.ContentValues;
 import android.content.Context;
 import android.content.Intent;
 import android.content.IntentFilter;
-import android.content.pm.PackageManager;
 import android.database.Cursor;
 import android.net.Uri;
 import android.os.Build;
 import android.provider.Telephony;
 import android.support.design.widget.FloatingActionButton;
-import android.support.v4.app.ActivityCompat;
-import android.support.v4.content.ContextCompat;
 import android.support.v7.app.AppCompatActivity;
 import android.os.Bundle;
 import android.support.v7.widget.LinearLayoutManager;
@@ -36,7 +32,7 @@ import java.util.List;
 
 import de.hdodenhof.circleimageview.CircleImageView;
 import teckvillage.developer.khaled_pc.teckvillagetrue.Controller.MessageAdapter;
-import teckvillage.developer.khaled_pc.teckvillagetrue.model.MessageInfo;
+import teckvillage.developer.khaled_pc.teckvillagetrue.Model.MessageInfo;
 
 public class SMS_MessagesChat extends AppCompatActivity {
 

@@ -1,19 +1,11 @@
-package teckvillage.developer.khaled_pc.teckvillagetrue.model;
+package teckvillage.developer.khaled_pc.teckvillagetrue.Model;
 
 import android.Manifest;
-import android.app.Activity;
 import android.content.ContentResolver;
 import android.content.Context;
-import android.content.pm.PackageManager;
 import android.database.Cursor;
-import android.os.Build;
 import android.provider.ContactsContract;
-import android.support.annotation.NonNull;
-import android.support.v4.app.ActivityCompat;
-import android.support.v4.content.ContextCompat;
-import android.support.v7.app.AppCompatActivity;
 import android.util.Log;
-import android.widget.Toast;
 
 
 import java.util.ArrayList;
@@ -21,11 +13,7 @@ import java.util.HashMap;
 import java.util.List;
 import java.util.Map;
 
-import teckvillage.developer.khaled_pc.teckvillagetrue.Contacts;
-import teckvillage.developer.khaled_pc.teckvillagetrue.Controller.AlphabetItem;
 import teckvillage.developer.khaled_pc.teckvillagetrue.Permission;
-
-import static com.facebook.FacebookSdk.getApplicationContext;
 
 /**
  * Created by khaled-pc on 2/18/2019.

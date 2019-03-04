@@ -1,4 +1,4 @@
-package teckvillage.developer.khaled_pc.teckvillagetrue.model;
+package teckvillage.developer.khaled_pc.teckvillagetrue.Model;
 
 import java.util.List;
 

@@ -6,32 +6,26 @@ import android.content.pm.PackageManager;
 import android.database.Cursor;
 import android.net.Uri;
 import android.os.Bundle;
-import android.provider.ContactsContract;
 import android.support.annotation.NonNull;
 import android.support.annotation.Nullable;
 import android.support.v4.app.ActivityCompat;
 import android.support.v4.app.Fragment;
 import android.support.v4.content.ContextCompat;
-import android.support.v7.widget.RecyclerView;
 import android.text.TextUtils;
 import android.view.LayoutInflater;
 import android.view.View;
 import android.view.ViewGroup;
 import android.widget.AdapterView;
-import android.widget.ArrayAdapter;
 import android.widget.ListView;
 import android.widget.Toast;
 
 import java.util.ArrayList;
 import java.util.Calendar;
-import java.util.Date;
 
 import teckvillage.developer.khaled_pc.teckvillagetrue.Controller.CustomListViewAdapter;
-import teckvillage.developer.khaled_pc.teckvillagetrue.model.Get_User_Contacts;
-import teckvillage.developer.khaled_pc.teckvillagetrue.model.MessageInfo;
-import teckvillage.developer.khaled_pc.teckvillagetrue.model.UserContactData;
-
-import static android.provider.Telephony.Carriers.NAME;
+import teckvillage.developer.khaled_pc.teckvillagetrue.Model.Get_User_Contacts;
+import teckvillage.developer.khaled_pc.teckvillagetrue.Model.MessageInfo;
+import teckvillage.developer.khaled_pc.teckvillagetrue.Model.UserContactData;
 
 
 public class FragMessageOthers extends Fragment {

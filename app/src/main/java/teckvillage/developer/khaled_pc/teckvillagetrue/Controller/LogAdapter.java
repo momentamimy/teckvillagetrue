@@ -19,7 +19,7 @@ import java.util.List;
 
 import teckvillage.developer.khaled_pc.teckvillagetrue.R;
 import teckvillage.developer.khaled_pc.teckvillagetrue.View.LogHolder;
-import teckvillage.developer.khaled_pc.teckvillagetrue.model.LogInfo;
+import teckvillage.developer.khaled_pc.teckvillagetrue.Model.LogInfo;
 
 public class LogAdapter extends RecyclerView.Adapter<LogHolder> {
     private static final int TYPE_DATE = 1;
