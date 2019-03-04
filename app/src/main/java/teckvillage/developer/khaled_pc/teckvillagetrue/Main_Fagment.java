@@ -6,17 +6,27 @@ import android.content.Context;
 import android.content.Intent;
 import android.content.res.ColorStateList;
 import android.graphics.drawable.AnimationDrawable;
+import android.graphics.drawable.Drawable;
 import android.net.Uri;
 import android.os.Bundle;
 import android.support.design.widget.FloatingActionButton;
 import android.support.v4.app.Fragment;
+import android.support.v4.view.GravityCompat;
+import android.support.v4.widget.DrawerLayout;
 import android.support.v7.widget.DefaultItemAnimator;
 import android.support.v7.widget.LinearLayoutManager;
+import android.support.v7.widget.PopupMenu;
 import android.support.v7.widget.RecyclerView;
+import android.text.Spannable;
+import android.text.SpannableString;
 import android.text.format.DateFormat;
+import android.text.style.ImageSpan;
 import android.util.DisplayMetrics;
 import android.util.Log;
 import android.view.LayoutInflater;
+import android.view.Menu;
+import android.view.MenuInflater;
+import android.view.MenuItem;
 import android.view.MotionEvent;
 import android.view.View;
 import android.view.ViewGroup;
@@ -111,7 +121,64 @@ public class Main_Fagment extends Fragment {
         gridShadow=view.findViewById(R.id.shadow_gridView1);
         phone_num_edt = (KeyboardlessEditText) view.findViewById(R.id.dial_pad_num_editText);
         back_space=view.findViewById(R.id.backspace_imageView);
-        textLayout=view.findViewById(R.id.dial_num_edt_rl);
+        final ImageView threedots=view.findViewById(R.id.threedots);
+        ImageView icon=view.findViewById(R.id.iconnnn);
+
+        icon.setOnClickListener(new View.OnClickListener() {
+            @Override
+            public void onClick(View v) {
+
+                ((MainActivity) getActivity()).openDrawer();
+            }
+        });
+
+
+
+
+        //********Option menu****************************
+        threedots.setOnClickListener(new View.OnClickListener() {
+            @Override
+            public void onClick(View v) {
+
+                //
+                final PopupMenu popupMenu = new PopupMenu(getContext(), threedots);
+
+                popupMenu.setOnMenuItemClickListener(new PopupMenu.OnMenuItemClickListener() {
+                    public boolean onMenuItemClick(MenuItem item) {
+
+                        switch (item.getItemId()) {
+                            case 1:
+                                // item one clicked
+                                return true;
+                            case 2:
+                                // item one clicked
+                                return true;
+                            case 3:
+                                // item one clicked
+                                return true;
+                            case 4:
+                                // item one clicked
+                                return true;
+
+                        }
+
+                        return false;
+                    }
+                });
+                popupMenu.inflate(R.menu.main);
+                popupMenu.getMenu().add(0, 1, 1, menuIconWithText(getResources().getDrawable(R.drawable.ic_recieve_call_menu), "Income"));
+                popupMenu.getMenu().add(0, 2, 2, menuIconWithText(getResources().getDrawable(R.drawable.ic_arrow_right_menu), "Outgoing"));
+                popupMenu.getMenu().add(0, 3, 3, menuIconWithText(getResources().getDrawable(R.drawable.ic_missed_menu), "Missed"));
+                popupMenu.getMenu().add(0, 4, 4, menuIconWithText(getResources().getDrawable(R.drawable.ic_block_black_24dp), "Blocked"));
+
+                popupMenu.show();
+
+
+
+            }
+        });
+
+
          get_calls_log=new Get_Calls_Log(getActivity());
 
 
@@ -485,6 +552,25 @@ public class Main_Fagment extends Fragment {
         }
 
     }
+
+    @Override
+    public void onCreate(Bundle savedInstanceState) {
+        super.onCreate(savedInstanceState);
+        setHasOptionsMenu(true);
+    }
+
+
+
+    private CharSequence menuIconWithText(Drawable r, String title) {
+
+        r.setBounds(0, 0, r.getIntrinsicWidth(), r.getIntrinsicHeight());
+        SpannableString sb = new SpannableString("    " + title);
+        ImageSpan imageSpan = new ImageSpan(r, ImageSpan.ALIGN_BOTTOM);
+        sb.setSpan(imageSpan, 0, 1, Spannable.SPAN_EXCLUSIVE_EXCLUSIVE);
+
+        return sb;
+    }
+
 
 
 

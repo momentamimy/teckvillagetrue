@@ -15,6 +15,7 @@ import android.util.Log;
 import android.view.LayoutInflater;
 import android.view.View;
 import android.view.ViewGroup;
+import android.widget.ImageView;
 import android.widget.Toast;
 
 import java.util.ArrayList;
@@ -57,6 +58,18 @@ public class Contacts extends Fragment {
         //Initial recycleview
         mRecyclerView =  view.findViewById(R.id.fast_scroller_recycler);
         add_user_contacts= view.findViewById(R.id.add_user_contacts);
+        ImageView icon=view.findViewById(R.id.iconnnn);
+
+        icon.setOnClickListener(new View.OnClickListener() {
+            @Override
+            public void onClick(View v) {
+
+                ((MainActivity) getActivity()).openDrawer();
+            }
+        });
+
+
+
         get_user_contacts=new Get_User_Contacts(getActivity());
 
         if(get_user_contacts.CheckPermission()){
