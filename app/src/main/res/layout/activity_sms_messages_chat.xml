@@ -52,10 +52,64 @@
         android:layout_below="@+id/appbar"
         android:layout_width="match_parent"
         android:layout_height="match_parent"
-        android:layout_above="@+id/messageContainer"
+        android:layout_above="@+id/LayOut"
         ></android.support.v7.widget.RecyclerView>
+<RelativeLayout
+    android:id="@+id/LayOut"
+    android:layout_width="wrap_content"
+    android:layout_height="90dp"
+    android:layout_alignParentBottom="true"
+    >
+    <LinearLayout
+        android:id="@+id/Cant_Replay_Layout"
+        android:layout_width="match_parent"
+        android:layout_height="wrap_content"
+        android:layout_alignParentBottom="true"
+        android:orientation="vertical"
+        android:visibility="gone">
+    <android.support.v7.widget.CardView
+        android:layout_width="match_parent"
+        android:layout_height="wrap_content"
+        android:layout_margin="10dp"
+        app:cardCornerRadius="20dp"
+        app:cardElevation="5dp">
 
+        <RelativeLayout
+            android:layout_width="match_parent"
+            android:layout_height="wrap_content"
+            android:padding="5dp">
 
+            <ImageView
+                android:id="@+id/block_icon"
+                android:layout_width="wrap_content"
+                android:layout_height="wrap_content"
+                android:src="@drawable/ic_block_black_24dp"/>
+
+            <TextView
+                android:layout_centerVertical="true"
+                android:layout_marginStart="20dp"
+                android:layout_toEndOf="@+id/block_icon"
+                android:layout_width="match_parent"
+                android:layout_height="wrap_content"
+                android:text="Block &amp; report spam "
+                android:textColor="#5F7D8C"
+                android:textSize="20dp"
+                android:layout_toRightOf="@+id/block_icon"
+                android:layout_marginLeft="20dp" />
+
+        </RelativeLayout>
+    </android.support.v7.widget.CardView>
+
+    <TextView
+        android:layout_alignParentBottom="true"
+        android:layout_width="match_parent"
+        android:layout_height="wrap_content"
+        android:text="Replay not supported "
+        android:textColor="#919191"
+        android:textSize="15dp"
+        android:gravity="center"
+        android:layout_marginBottom="10dp"/>
+    </LinearLayout>
     <RelativeLayout
         android:id="@+id/messageContainer"
         android:layout_width="match_parent"
@@ -105,4 +159,6 @@
             app:fabSize="normal"
             android:layout_alignParentRight="true" />
     </RelativeLayout>
+
+</RelativeLayout>
 </RelativeLayout>

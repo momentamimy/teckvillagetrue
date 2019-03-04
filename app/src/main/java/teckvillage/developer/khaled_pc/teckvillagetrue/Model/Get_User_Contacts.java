@@ -17,9 +17,6 @@ import android.widget.Toast;
 
 
 import java.util.ArrayList;
-import java.util.HashMap;
-import java.util.List;
-import java.util.Map;
 
 import teckvillage.developer.khaled_pc.teckvillagetrue.Contacts;
 import teckvillage.developer.khaled_pc.teckvillagetrue.Controller.AlphabetItem;
@@ -76,7 +73,7 @@ public class Get_User_Contacts {
         if ((cur != null ? cur.getCount() : 0) > 0) {
             while (cur != null && cur.moveToNext()) {
                 String phoneNumber = null;
-                Long id = cur.getLong(cur.getColumnIndex(ContactsContract.Contacts._ID));
+                int id = cur.getInt(cur.getColumnIndex(ContactsContract.Contacts._ID));
                 String name = cur.getString(cur.getColumnIndex(ContactsContract.Contacts.DISPLAY_NAME));
 
 
@@ -100,7 +97,6 @@ public class Get_User_Contacts {
                         }
                         else {
                             phoneNumber = phoneNumber.replaceAll("\\s", "");
-                            phoneNumber = phoneNumber.replace("-","");
                             lastnumber = phoneNumber;
 
                             switch (phoneType) {
@@ -145,7 +141,7 @@ public class Get_User_Contacts {
         if ((cur != null ? cur.getCount() : 0) > 0) {
             while (cur != null && cur.moveToNext()) {
                 String phoneNumber = null;
-                long id = cur.getLong(cur.getColumnIndex(ContactsContract.Contacts._ID));
+                int id = cur.getInt(cur.getColumnIndex(ContactsContract.Contacts._ID));
                 String name = cur.getString(cur.getColumnIndex(ContactsContract.Contacts.DISPLAY_NAME));
 
 
@@ -169,87 +165,6 @@ public class Get_User_Contacts {
                 }
             }
 
-        }
-
-        if(cur!=null){
-            cur.close();
-        }
-
-        return contactInfos;
-    }
-
-
-    //read all contacts fast
-    public ArrayList<UserContactData> getContactListFaster() {
-        String lastnumber = "0";
-        Map<Long, List<String>> phones = new HashMap<>();
-        contactInfos = new ArrayList<>();
-        ContentResolver cr = context.getContentResolver();
-
-        // First build a mapping: contact-id > list of phones
-        Cursor cur = cr.query(ContactsContract.CommonDataKinds.Phone.CONTENT_URI, new String[] { ContactsContract.CommonDataKinds.Phone.CONTACT_ID, ContactsContract.CommonDataKinds.Phone.NUMBER }, null, null, null);
-        while (cur != null && cur.moveToNext()) {
-            long contactId = cur.getLong(0);
-            String phone = cur.getString(1);
-
-            if (phone.contains(lastnumber))
-            {
-              //repeated num
-            }
-            else {
-                List list;
-                if (phones.containsKey(contactId)) {
-                    list = phones.get(contactId);
-                } else {
-                    list = new ArrayList<String>();
-                    phones.put(contactId, list);
-                }
-                phone = phone.replaceAll("\\s", "");
-                phone = phone.replace("-", "");
-                lastnumber = phone;
-                list.add(phone);
-            }
-
-        }
-        cur.close();
-
-         // Next query for all contacts, and use the phones mapping
-        cur = cr.query(ContactsContract.Contacts.CONTENT_URI, new String[] { ContactsContract.Contacts._ID, ContactsContract.Contacts.DISPLAY_NAME ,ContactsContract.Contacts.HAS_PHONE_NUMBER}, null, null, null);
-
-        while (cur != null && cur.moveToNext()) {
-
-            if (cur.getInt(cur.getColumnIndex(ContactsContract.Contacts.HAS_PHONE_NUMBER)) > 0) {
-
-                    long id = cur.getLong(0);
-                    String name = cur.getString(1);
-                    List<String> contactPhones = phones.get(id);
-                    // addContact(id, name, contactPhones);
-                    contactInfos.add(new UserContactData("", name, "PortSaid,Egypt", id, contactPhones));
-
-            }
-        }
-
-        return contactInfos;
-    }
-
-
-    public ArrayList<UserContactData> getContactListContactsRecycleview() {
-        contactInfos = new ArrayList<>();
-        ContentResolver cr = context.getContentResolver();
-
-        // Next query for all contacts, and use the phones mapping
-        Cursor cur = cr.query(ContactsContract.Contacts.CONTENT_URI, new String[] { ContactsContract.Contacts._ID, ContactsContract.Contacts.DISPLAY_NAME ,ContactsContract.Contacts.HAS_PHONE_NUMBER}, null, null, null);
-
-        while (cur != null && cur.moveToNext()) {
-
-            if (cur.getInt(cur.getColumnIndex(ContactsContract.Contacts.HAS_PHONE_NUMBER)) > 0 ) {
-
-                long id = cur.getLong(0);
-                String name = cur.getString(1);
-                if(!name.equals("")){
-                    contactInfos.add(new UserContactData("", name, "PortSaid,Egypt", id));
-                }
-            }
         }
 
         if(cur!=null){

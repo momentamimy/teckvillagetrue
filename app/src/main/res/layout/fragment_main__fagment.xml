@@ -82,14 +82,14 @@
         android:layout_height="wrap_content"
         />
 
-    <View
-        android:id="@+id/sparater"
-        android:layout_marginTop="16dp"
-        android:layout_below="@+id/contact_recycleview"
-        android:layout_width="match_parent"
-        android:layout_height="1dp"
-        android:background="#E6EBEF"
-        />
+        <View
+            android:id="@+id/sparater"
+            android:layout_marginTop="16dp"
+            android:layout_below="@+id/contact_recycleview"
+            android:layout_width="match_parent"
+            android:layout_height="1dp"
+            android:background="#E6EBEF"
+            />
 
     <android.support.v7.widget.RecyclerView
         android:id="@+id/Logs_recycleview"
@@ -106,138 +106,174 @@
         android:layout_width="match_parent"
         android:layout_height="match_parent">
 
-    <RelativeLayout
-        android:layout_above="@+id/botnav"
-        android:layout_marginTop="0dp"
-        android:id="@+id/pad_layout"
-        android:layout_width="match_parent"
-        android:layout_height="match_parent">
-
-        <View
-            android:id="@+id/shadow_dial_num_edt_rl"
+        <android.support.design.widget.CoordinatorLayout
+            android:id="@+id/search_call_layout"
             android:layout_width="match_parent"
-            android:layout_height="4dp"
-            android:background="@drawable/shadow"
-            android:layout_above="@+id/dial_num_edt_rl"
-            ></View>
+            android:layout_height="match_parent"
+            android:visibility="gone">
+
+            <android.support.design.widget.AppBarLayout
+                android:background="#fff"
+                android:id="@+id/Call_CardView"
+                android:layout_width="match_parent"
+                android:layout_height="wrap_content">
+                <android.support.v7.widget.Toolbar
+                    app:layout_scrollFlags="scroll|enterAlways"
+                    android:layout_height="wrap_content"
+                    android:layout_width="match_parent">
+
+
+                    <RelativeLayout
+                        android:layout_width="match_parent"
+                        android:layout_height="wrap_content">
+
+                        <ImageView
+                            android:padding="10dp"
+                            android:id="@+id/close_Search"
+                            android:layout_width="wrap_content"
+                            android:layout_height="wrap_content"
+                            android:src="@drawable/ic_close_black_24dp"
+                            android:layout_centerVertical="true"/>
+                        <TextView
+                            android:layout_width="match_parent"
+                            android:layout_height="wrap_content"
+                            android:text="Call"
+                            android:textColor="#000"
+                            android:textSize="20dp"
+                            android:layout_toEndOf="@+id/close_Search"
+                            android:layout_toRightOf="@+id/close_Search"
+                            android:layout_marginStart="20dp"
+                            android:layout_marginLeft="20dp"
+                            android:layout_centerVertical="true"/>
+
+                    </RelativeLayout>
+                </android.support.v7.widget.Toolbar>
+            </android.support.design.widget.AppBarLayout>
+            <android.support.v7.widget.RecyclerView
+                android:layout_below="@+id/Call_CardView"
+                android:background="#fff"
+                android:id="@+id/Search_Log_recycleview"
+                android:layout_width="match_parent"
+                android:layout_height="match_parent"
+                app:layout_behavior="@string/appbar_scrolling_view_behavior"></android.support.v7.widget.RecyclerView>
+
+        </android.support.design.widget.CoordinatorLayout>
 
         <RelativeLayout
-            android:background="#fff"
-            android:id="@+id/dial_num_edt_rl"
-            android:layout_width="fill_parent"
-            android:layout_height="wrap_content"
-            android:layout_alignLeft="@+id/gridView1"
-            android:layout_above="@+id/gridView1"
-            android:visibility="gone"
-            >
+            android:layout_above="@+id/botnav"
+            android:layout_marginTop="0dp"
+            android:id="@+id/pad_layout"
+            android:layout_width="match_parent"
+            android:layout_height="match_parent">
 
-            <ImageView
-                android:padding="10dp"
-                android:id="@+id/add_Contact"
-                android:layout_width="50dp"
-                android:layout_height="50dp"
-                android:layout_centerVertical="true"
-                android:layout_marginRight="15dp"
-                android:background="@drawable/ic_filter_state"
-                android:src="@drawable/ic_add_contact" />
+            <View
+                android:id="@+id/shadow_dial_num_edt_rl"
+                android:layout_width="match_parent"
+                android:layout_height="4dp"
+                android:background="@drawable/shadow"
+                android:layout_above="@+id/dial_num_edt_rl"
+                ></View>
 
-            <teckvillage.developer.khaled_pc.teckvillagetrue.View.KeyboardlessEditText
-                android:textColor="#0089c0"
-                android:id="@+id/dial_pad_num_editText"
+            <RelativeLayout
+                android:background="#fff"
+                android:id="@+id/dial_num_edt_rl"
+                android:layout_width="fill_parent"
+                android:layout_height="wrap_content"
+                android:layout_alignLeft="@+id/gridView1"
+                android:layout_above="@+id/gridView1"
+                android:visibility="gone"
+                >
+
+                <ImageView
+                    android:padding="10dp"
+                    android:id="@+id/add_Contact"
+                    android:layout_width="50dp"
+                    android:layout_height="50dp"
+                    android:layout_centerVertical="true"
+                    android:layout_marginRight="15dp"
+                    android:background="@drawable/ic_filter_state"
+                    android:src="@drawable/ic_add_contact" />
+
+                <teckvillage.developer.khaled_pc.teckvillagetrue.View.KeyboardlessEditText
+                    android:textColor="#0089c0"
+                    android:id="@+id/dial_pad_num_editText"
+                    android:layout_width="wrap_content"
+                    android:layout_height="wrap_content"
+                    android:layout_alignParentTop="true"
+                    android:layout_marginRight="10dp"
+                    android:layout_toLeftOf="@+id/backspace_imageView"
+                    android:layout_toRightOf="@+id/add_Contact"
+                    android:ems="10"
+                    android:gravity="center"
+                    android:textSize="30dp"
+                    android:text=""
+                    android:inputType="none"
+                    android:textIsSelectable="true"
+                    android:background="#00000000"
+                    android:windowSoftInputMode="stateAlwaysHidden"
+                    android:cursorVisible="false"
+                    >
+                    <requestFocus />
+                </teckvillage.developer.khaled_pc.teckvillagetrue.View.KeyboardlessEditText>
+
+                <ImageView
+                    android:padding="10dp"
+                    android:id="@+id/backspace_imageView"
+                    android:layout_width="50dp"
+                    android:layout_height="50dp"
+                    android:layout_alignParentRight="true"
+                    android:layout_centerVertical="true"
+                    android:layout_marginRight="15dp"
+                    android:background="@drawable/ic_filter_state"
+                    android:src="@drawable/ic_backspace_black_24dp" />
+            </RelativeLayout>
+
+            <View
+                android:id="@+id/shadow_gridView1"
+                android:layout_width="match_parent"
+                android:layout_height="4dp"
+                android:background="@drawable/shadow"
+                android:layout_above="@+id/gridView1"
+                android:visibility="gone"
+                ></View>
+
+            <GridView
+                android:background="#fff"
+                android:id="@+id/gridView1"
                 android:layout_width="wrap_content"
                 android:layout_height="wrap_content"
-                android:layout_alignParentTop="true"
-                android:layout_marginRight="10dp"
-                android:layout_toLeftOf="@+id/backspace_imageView"
-                android:layout_toRightOf="@+id/add_Contact"
-                android:ems="10"
-                android:gravity="center"
-                android:textSize="30dp"
-                android:text=""
-                android:inputType="none"
-                android:textIsSelectable="true"
-                android:background="#00000000"
-                android:windowSoftInputMode="stateAlwaysHidden"
-                android:cursorVisible="false"
+                android:layout_above="@+id/dialpad_bottom_rl"
+                android:numColumns="3"
+                android:listSelector="#00000000"
                 >
-                <requestFocus />
-            </teckvillage.developer.khaled_pc.teckvillagetrue.View.KeyboardlessEditText>
 
-            <ImageView
+            </GridView>
+
+            <TextView
+                android:id="@+id/dialpad_bottom_rl"
+                android:layout_alignParentBottom="true"
+                android:background="#fff"
+                android:layout_width="match_parent"
+                android:layout_height="wrap_content"
                 android:padding="10dp"
-                android:id="@+id/backspace_imageView"
-                android:layout_width="50dp"
-                android:layout_height="50dp"
-                android:layout_alignParentRight="true"
-                android:layout_centerVertical="true"
-                android:layout_marginRight="15dp"
-                android:background="@drawable/ic_filter_state"
-                android:src="@drawable/ic_backspace_black_24dp" />
+                android:textSize="45dp"/>
+
         </RelativeLayout>
-
-        <View
-            android:id="@+id/shadow_gridView1"
-            android:layout_width="match_parent"
-            android:layout_height="4dp"
-            android:background="@drawable/shadow"
-            android:layout_above="@+id/gridView1"
-            android:visibility="gone"
-            ></View>
-
-        <GridView
-            android:background="#fff"
-            android:id="@+id/gridView1"
+        <android.support.design.widget.FloatingActionButton
+            android:id="@+id/fab"
+            android:layout_margin="20dp"
             android:layout_width="wrap_content"
             android:layout_height="wrap_content"
-            android:layout_above="@+id/dialpad_bottom_rl"
-            android:numColumns="3"
-            android:listSelector="#00000000"
-            >
-
-        </GridView>
-
-        <LinearLayout
-            android:background="#fff"
-            android:id="@+id/dialpad_bottom_rl"
-            android:layout_width="match_parent"
-            android:layout_height="wrap_content"
+            app:elevation="6dp"
+            android:src="@drawable/animation_list2"
+            app:rippleColor="#36000000"
+            app:backgroundTintMode="src_over"
+            app:backgroundTint="@color/colorPrimary"
+            app:pressedTranslationZ="12dp"
+            app:fabSize="normal"
+            android:layout_alignParentEnd="true"
+            android:layout_alignParentRight="true"
             android:layout_alignParentBottom="true"
-            android:gravity="center"
-            android:padding="20dp">
-            <android.support.design.widget.FloatingActionButton
-                android:id="@+id/fab1"
-                android:layout_width="wrap_content"
-                android:layout_height="wrap_content"
-                app:elevation="6dp"
-                android:src="@drawable/animation_list2"
-                app:rippleColor="#36000000"
-                app:backgroundTintMode="src_over"
-                app:backgroundTint="@color/colorPrimary"
-                app:pressedTranslationZ="12dp"
-                app:fabSize="normal"
-                android:visibility="invisible"
-                android:layout_above="@+id/botnav"
-                android:layout_alignParentEnd="true"
-                android:layout_alignParentRight="true"
-                />
-        </LinearLayout>
-
-    </RelativeLayout>
-    <android.support.design.widget.FloatingActionButton
-        android:id="@+id/fab"
-        android:layout_margin="20dp"
-        android:layout_width="wrap_content"
-        android:layout_height="wrap_content"
-        app:elevation="6dp"
-        android:src="@drawable/animation_list2"
-        app:rippleColor="#36000000"
-        app:backgroundTintMode="src_over"
-        app:backgroundTint="@color/colorPrimary"
-        app:pressedTranslationZ="12dp"
-        app:fabSize="normal"
-        android:layout_alignParentEnd="true"
-        android:layout_alignParentRight="true"
-        android:layout_alignParentBottom="true"
-        />
+            />
     </RelativeLayout>
 </FrameLayout>

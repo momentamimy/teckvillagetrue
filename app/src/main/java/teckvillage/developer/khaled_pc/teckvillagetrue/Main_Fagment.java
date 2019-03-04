@@ -1,6 +1,7 @@
 package teckvillage.developer.khaled_pc.teckvillagetrue;
 
 
+import android.animation.AnimatorSet;
 import android.animation.ObjectAnimator;
 import android.content.Context;
 import android.content.Intent;
@@ -8,7 +9,9 @@ import android.content.res.ColorStateList;
 import android.graphics.drawable.AnimationDrawable;
 import android.graphics.drawable.Drawable;
 import android.net.Uri;
+import android.os.AsyncTask;
 import android.os.Bundle;
+import android.support.design.widget.CoordinatorLayout;
 import android.support.design.widget.FloatingActionButton;
 import android.support.v4.app.Fragment;
 import android.support.v4.view.GravityCompat;
@@ -30,20 +33,17 @@ import android.view.MenuItem;
 import android.view.MotionEvent;
 import android.view.View;
 import android.view.ViewGroup;
+import android.widget.AbsListView;
 import android.widget.AdapterView;
 import android.widget.GridView;
 import android.widget.ImageView;
 import android.widget.RelativeLayout;
 import android.widget.TextView;
 
-import java.text.SimpleDateFormat;
 import java.util.ArrayList;
 import java.util.Calendar;
 import java.util.Collections;
-import java.util.Date;
-import java.util.HashMap;
 import java.util.List;
-import java.util.Locale;
 
 import teckvillage.developer.khaled_pc.teckvillagetrue.Controller.ContactAdapter;
 import teckvillage.developer.khaled_pc.teckvillagetrue.Controller.CustomGridAdapter;
@@ -53,7 +53,6 @@ import teckvillage.developer.khaled_pc.teckvillagetrue.model.ContactInfo;
 import teckvillage.developer.khaled_pc.teckvillagetrue.model.Get_Calls_Log;
 import teckvillage.developer.khaled_pc.teckvillagetrue.model.GridListDataModel;
 import teckvillage.developer.khaled_pc.teckvillagetrue.model.LogInfo;
-import teckvillage.developer.khaled_pc.teckvillagetrue.model.UserContactData;
 
 
 /**
@@ -87,18 +86,24 @@ public class Main_Fagment extends Fragment {
     boolean aBoolean=false;//for dial phone button open_close
     boolean CursorVisibility=false;
     boolean firstclick=true;
+    boolean scroll;
 
     AnimationDrawable rocketAnimation;//icon anim
     /*--------------------------------------dial_pad_layout------------------------------------------*/
 
-    RecyclerView contacts,logs;
+    RecyclerView contacts,logs,searchLogs;
     LinearLayoutManager lLayout;
     LinearLayoutManager lLayout1;
+    LinearLayoutManager lLayout2;
+    ArrayList<LogInfo> callLogInfos=new ArrayList<>();
     ArrayList<LogInfo> logInfos;
     ArrayList<LogInfo> loguinfoupdate;
     LogAdapter adapter1;
     Get_Calls_Log get_calls_log;
     boolean shouldExecuteOnResume;
+
+    CoordinatorLayout searchCallLayout;
+    ImageView close_search;
 
     public Main_Fagment() {
         // Required empty public constructor
@@ -110,11 +115,28 @@ public class Main_Fagment extends Fragment {
         // Inflate the layout for this fragment
         View view=inflater.inflate(R.layout.fragment_main__fagment, container, false);
 
+        close_search=view.findViewById(R.id.close_Search);
+        close_search.setOnClickListener(new View.OnClickListener() {
+            @Override
+            public void onClick(View v) {
+                close_search_anim_button(200);
 
+            }
+        });
+
+        TextView textView=view.findViewById(R.id.dialpad_bottom_rl);
+        textView.setOnClickListener(new View.OnClickListener() {
+            @Override
+            public void onClick(View v) {
+
+            }
+        });
         contacts=view.findViewById(R.id.contact_recycleview);
         logs=view.findViewById(R.id.Logs_recycleview);
+        searchLogs=view.findViewById(R.id.Search_Log_recycleview);
 
         /*--------------------------------------dial_pad_layout------------------------------------------*/
+        searchCallLayout=view.findViewById(R.id.search_call_layout);
         padLayout=view.findViewById(R.id.pad_layout);
         fab=view.findViewById(R.id.fab);
         gridView = (GridView) view.findViewById(R.id.gridView1);
@@ -180,6 +202,8 @@ public class Main_Fagment extends Fragment {
 
 
          get_calls_log=new Get_Calls_Log(getActivity());
+        textLayout=view.findViewById(R.id.dial_num_edt_rl);
+        get_calls_log=new Get_Calls_Log(getActivity());
 
 
         /*--------------------------------------dial_pad_layout------------------------------------------*/
@@ -192,6 +216,10 @@ public class Main_Fagment extends Fragment {
                 if (phone_num_edt.getText().length()==0)
                 {
                     callButtonAnim();
+                }
+                else if (scroll==true)
+                {
+                    scrollOpenAnim(400);
                 }
                 else
                 {
@@ -216,7 +244,7 @@ public class Main_Fagment extends Fragment {
 
                 if (firstclick)
                 {
-                    writeAnim();
+                    writeAnim(400);
                     firstclick=false;
                 }
 
@@ -230,6 +258,9 @@ public class Main_Fagment extends Fragment {
                 {
                     phone_num_edt.setText(phone_num_edt.getText().toString()+grid_num_tv.getText());
                 }
+                //SortSearchCallList(phone_num_edt.getText().toString());
+                myTask task=new myTask();
+                task.execute(SortSearchCallList(phone_num_edt.getText().toString()));
             }
         });
 
@@ -249,9 +280,12 @@ public class Main_Fagment extends Fragment {
 
                 if (phone_num_edt.getText().length()==0)
                 {
-                    deleteAnim();
+                    deleteAnim(400);
                     firstclick=true;
                 }
+                //SortSearchCallList(phone_num_edt.getText().toString());
+                myTask task=new myTask();
+                task.execute(SortSearchCallList(phone_num_edt.getText().toString()));
             }
         });
 
@@ -267,6 +301,7 @@ public class Main_Fagment extends Fragment {
 
         lLayout = new LinearLayoutManager(getContext(),LinearLayoutManager.HORIZONTAL, false);
         lLayout1 = new LinearLayoutManager(getActivity());
+        lLayout2 = new LinearLayoutManager(getActivity());
 
         List<ContactInfo> contactInfos=new ArrayList<>();
 
@@ -289,10 +324,44 @@ public class Main_Fagment extends Fragment {
         if(get_calls_log.CheckPermission()){
 
             logInfos=get_calls_log.getCallDetails();
+            callLogInfos=logInfos;
+            for (int i=0;i<callLogInfos.size();i++)
+            {
+                for (int j=i+1;j<callLogInfos.size();j++)
+                {
+                    if (callLogInfos.get(i).getNumber().equals(callLogInfos.get(j).getNumber()))
+                    {
+                        callLogInfos.remove(j--);
+                    }
+                }
+            }
+
 
 
         }
 
+
+        /*
+        for (String date : groupedHashMap.keySet()) {
+            int i=0;
+            LogInfo logInfoo=new LogInfo();
+            //DateItem dateItem = new DateItem();
+           // dateItem.setDate(date);
+           // consolidatedList.add(dateItem);
+            logInfoo.logDate=date;
+            consolidatedList.get(i).setType(1);
+            consolidatedList.add(logInfoo);
+            i++;
+
+            for (LogInfo pojoOfJsonArray : groupedHashMap.get(date)) {
+                GeneralItem generalItem = new GeneralItem();
+                LogInfo logInfo2=new LogInfo();
+                generalItem.setPojoOfJsonArray(pojoOfJsonArray);//setBookingDataTabs(bookingDataTabs);
+                consolidatedList.get(i).setType(2);
+                consolidatedList.add(generalItem.);
+            }
+        }
+            */
 
         Collections.sort(logInfos, LogInfo.BY_DATE);
 
@@ -301,10 +370,101 @@ public class Main_Fagment extends Fragment {
         adapter1=new LogAdapter(getActivity(),groupListByDate(logInfos));
         logs.setAdapter(adapter1);
 
+        searchLogs.setLayoutManager(lLayout2);
+        searchLogs.setItemAnimator(new DefaultItemAnimator());
+        CallSearchLogAdapter adapter2=new CallSearchLogAdapter(getActivity(),callLogInfos,phone_num_edt.getText().toString());
+        searchLogs.setAdapter(adapter2);
 
+        logs.addOnScrollListener(new RecyclerView.OnScrollListener() {
+            @Override
+            public void onScrolled(RecyclerView recyclerView, int dx, int dy) {
+                super.onScrolled(recyclerView, dx, dy);
+                if (dy > 0) {
+                    // Scrolling up
+                    //Log.d("mememem:","meeeshyyyyyy_UP");
+                } else {
+                    // Scrolling down
+                    //Log.d("mememem:","meeeshyyyyyy_Down");
+                }
+                if (aBoolean==true) {
+                    close_button(400);
+                    aBoolean = false;
+                }
+            }
+        });
+        searchLogs.addOnScrollListener(new RecyclerView.OnScrollListener() {
+            @Override
+            public void onScrolled(RecyclerView recyclerView, int dx, int dy) {
+                super.onScrolled(recyclerView, dx, dy);
+                if (dy > 0) {
+                    // Scrolling up
+                    //Log.d("mememem:","meeeshyyyyyy_UP");
+                } else {
+                    // Scrolling down
+                    //Log.d("mememem:","meeeshyyyyyy_Down");
+                }
+                //scrollCloseAnim();
+            }
+
+            @Override
+            public void onScrollStateChanged(RecyclerView recyclerView, int newState) {
+                super.onScrollStateChanged(recyclerView, newState);
+
+                if (newState == AbsListView.OnScrollListener.SCROLL_STATE_FLING) {
+                    // Do something
+                    Log.d("mememem:","111111");
+                } else if (newState == AbsListView.OnScrollListener.SCROLL_STATE_TOUCH_SCROLL) {
+                    // Do something
+                    Log.d("mememem:","222222");
+                } else {
+                    // Do something
+                    Log.d("mememem:","333333");
+                }
+                if (!scroll)
+                    scrollCloseAnim(400);
+            }
+        });
         return view;
     }
+    private class myTask extends AsyncTask<List<LogInfo>, Void, List<LogInfo>> {
 
+        @Override
+        protected List<LogInfo> doInBackground(List<LogInfo>... lists) {
+            return lists[0];
+        }
+
+        @Override
+        protected void onPostExecute(List<LogInfo> infos) {
+            super.onPostExecute(infos);
+            CallSearchLogAdapter adapter=new CallSearchLogAdapter(getActivity(),infos,phone_num_edt.getText().toString());
+            searchLogs.setAdapter(adapter);
+        }
+    }
+
+
+    private List<LogInfo> SortSearchCallList(String num) {
+        ArrayList<LogInfo> infos=new ArrayList<>();
+        for (int i=0;i<callLogInfos.size();i++)
+        {
+            if (callLogInfos.get(i).getNumber().contains(num))
+            {
+                infos.add(callLogInfos.get(i));
+            }
+        }
+        int position;
+        for (int i=0;i<infos.size();i++)
+        {
+            position =  infos.get(i).getNumber().indexOf(num);
+            if (infos.get(0).getNumber().indexOf(num)>position)
+            {
+                LogInfo inf=infos.get(i);
+                infos.remove(i);
+                infos.add(0,inf);
+            }
+        }
+
+        return infos;
+    }
 
 
     /**
@@ -417,21 +577,20 @@ public class Main_Fagment extends Fragment {
 
     }
     ObjectAnimator translationY;
-    public void callLayoutAnim(boolean up_down)
+    public ObjectAnimator callLayoutAnim(boolean up_down,int duration)
     {
 
         DisplayMetrics metrics = getResources().getDisplayMetrics();
 
         if (up_down){
             translationY=ObjectAnimator.ofFloat(padLayout, "y", 0); // metrics.heightPixels or root.getHeight()
-            translationY.setDuration(400);
-            translationY.start();
+            translationY.setDuration(duration);
         }else {
             translationY = ObjectAnimator.ofFloat(padLayout, "y", metrics.widthPixels*2); // metrics.heightPixels or root.getHeight()
-            translationY.setDuration(400);
-            translationY.start();
+            translationY.setDuration(duration);
         }
 
+        return translationY;
 
     }
 
@@ -439,50 +598,53 @@ public class Main_Fagment extends Fragment {
     {
         if (!aBoolean)
         {
-            open_button();
+            open_button(400);
             aBoolean=true;
         }
         else
         {
-            close_button();
+            close_button(400);
             aBoolean=false;
         }
 
     }
 
-    public void open_button()
+    public void open_button(int duration)
     {
-        callLayoutAnim(!aBoolean);
+        ObjectAnimator callLayoutAnim=callLayoutAnim(!aBoolean,400);
         DisplayMetrics metrics = getResources().getDisplayMetrics();
         ObjectAnimator translationX = ObjectAnimator.ofFloat(fab, "x", metrics.widthPixels / 2 - fab.getWidth() / 2); // metrics.heightPixels or root.getHeight()
         ObjectAnimator rotate=ObjectAnimator.ofFloat(fab,"rotation",360);
-        rotate.setDuration(400);
-        rotate.start();
-        translationX.setDuration(400);
-        translationX.start();
+        rotate.setDuration(duration);
+        translationX.setDuration(duration);
+        AnimatorSet animatorSet=new AnimatorSet();
+        animatorSet.playTogether(callLayoutAnim,rotate,translationX);
+        animatorSet.start();
     }
 
-    public void close_button()
+    public void close_button(int duration)
     {
-        callLayoutAnim(!aBoolean);
+        ObjectAnimator callLayoutAnim=callLayoutAnim(!aBoolean,400);
         DisplayMetrics metrics = getResources().getDisplayMetrics();
         ObjectAnimator translationX = ObjectAnimator.ofFloat(fab, "x", metrics.widthPixels-fab.getWidth()-20); // metrics.heightPixels or root.getHeight()
         ObjectAnimator rotate=ObjectAnimator.ofFloat(fab,"rotation",0);
-        rotate.setDuration(400);
-        rotate.start();
-        translationX.setDuration(400);
-        translationX.start();
+        rotate.setDuration(duration);
+        translationX.setDuration(duration);
+        AnimatorSet animatorSet=new AnimatorSet();
+        animatorSet.playTogether(callLayoutAnim,rotate,translationX);
+        animatorSet.start();
     }
 
-    public void writeAnim()
+    public void writeAnim(final int duration)
     {
+        searchCallLayout.setVisibility(View.VISIBLE);
         textLayout.setVisibility(View.VISIBLE);
         gridShadow.setVisibility(View.GONE);
         fab.setBackgroundTintList(ColorStateList.valueOf(getResources().getColor(R.color.greenColor)));
 
 
         ObjectAnimator anim = ObjectAnimator.ofFloat(fab,"rotation",720);
-        anim.setDuration(200);
+        anim.setDuration(duration);
         anim.start();
 
         rocketAnimation = (AnimationDrawable) fab.getDrawable();
@@ -490,7 +652,7 @@ public class Main_Fagment extends Fragment {
 
         Thread timer= new Thread(){
             public void run(){
-                try { synchronized(this){ wait(200);
+                try { synchronized(this){ wait(duration);
                     getActivity().runOnUiThread(new Runnable() {@Override public void run() {
                         fab.setImageResource(R.drawable.animation_list);
                     }}); }
@@ -498,14 +660,15 @@ public class Main_Fagment extends Fragment {
         timer.start();
     }
 
-    public void deleteAnim()
+    public void deleteAnim(final int duration)
     {
+        searchCallLayout.setVisibility(View.GONE);
         textLayout.setVisibility(View.GONE);
         gridShadow.setVisibility(View.VISIBLE);
         fab.setBackgroundTintList(ColorStateList.valueOf(getResources().getColor(R.color.colorPrimary)));
 
         ObjectAnimator anim = ObjectAnimator.ofFloat(fab,"rotation",360);
-        anim.setDuration(200);
+        anim.setDuration(duration);
         anim.start();
 
         rocketAnimation = (AnimationDrawable) fab.getDrawable();
@@ -513,9 +676,96 @@ public class Main_Fagment extends Fragment {
 
         Thread timer= new Thread(){
             public void run(){
-                try { synchronized(this){ wait(200);
+                try { synchronized(this){ wait(duration);
                     getActivity().runOnUiThread(new Runnable() {@Override public void run() {
                         fab.setImageResource(R.drawable.animation_list2);
+                    }}); }
+                } catch (InterruptedException e) { e.printStackTrace(); } }};
+        timer.start();
+    }
+
+
+
+    public void scrollOpenAnim(final int duration)
+    {
+        scroll=false;
+        translationY=ObjectAnimator.ofFloat(padLayout, "y", 0);
+        translationY.setDuration(duration);
+        DisplayMetrics metrics = getResources().getDisplayMetrics();
+        ObjectAnimator translationX = ObjectAnimator.ofFloat(fab, "x", metrics.widthPixels / 2 - fab.getWidth() / 2); // metrics.heightPixels or root.getHeight()
+        translationX.setDuration(duration);
+        //translationX.start();
+
+        fab.setBackgroundTintList(ColorStateList.valueOf(getResources().getColor(R.color.greenColor)));
+
+
+        ObjectAnimator anim = ObjectAnimator.ofFloat(fab,"rotation",720);
+        anim.setDuration(duration);
+        //anim.start();
+
+        AnimatorSet set=new AnimatorSet();
+        set.playTogether(translationY,translationX,anim);
+        set.start();
+
+        rocketAnimation = (AnimationDrawable) fab.getDrawable();
+        rocketAnimation.start();
+
+        Thread timer= new Thread(){
+            public void run(){
+                try { synchronized(this){ wait(duration);
+                    getActivity().runOnUiThread(new Runnable() {@Override public void run() {
+                        fab.setImageResource(R.drawable.animation_list);
+                    }}); }
+                } catch (InterruptedException e) { e.printStackTrace(); } }};
+        timer.start();
+    }
+
+    public void scrollCloseAnim(final int duration)
+    {
+        DisplayMetrics metrics = getResources().getDisplayMetrics();
+        scroll=true;
+        translationY = ObjectAnimator.ofFloat(padLayout, "y", metrics.widthPixels*2); // metrics.heightPixels or root.getHeight()
+        translationY.setDuration(400);
+
+        ObjectAnimator translationX = ObjectAnimator.ofFloat(fab, "x", metrics.widthPixels-fab.getWidth()-20); // metrics.heightPixels or root.getHeight()
+        translationX.setDuration(duration);
+        //translationX.start();
+        fab.setBackgroundTintList(ColorStateList.valueOf(getResources().getColor(R.color.colorPrimary)));
+
+        ObjectAnimator anim = ObjectAnimator.ofFloat(fab,"rotation",360);
+        anim.setDuration(duration);
+        //anim.start();
+
+        AnimatorSet set=new AnimatorSet();
+        set.playTogether(translationY,translationX,anim);
+        set.start();
+
+        rocketAnimation = (AnimationDrawable) fab.getDrawable();
+        rocketAnimation.start();
+
+        Thread timer= new Thread(){
+            public void run(){
+                try { synchronized(this){ wait(duration);
+                    getActivity().runOnUiThread(new Runnable() {@Override public void run() {
+                        fab.setImageResource(R.drawable.animation_list2);
+                    }}); }
+                } catch (InterruptedException e) { e.printStackTrace(); } }};
+        timer.start();
+    }
+
+    public void close_search_anim_button(final int duration)
+    {
+        deleteAnim(duration);
+        Thread timer= new Thread(){
+            public void run(){
+                try { synchronized(this){ wait(duration);
+                    getActivity().runOnUiThread(new Runnable() {@Override public void run() {
+                        close_button(duration);
+                        phone_num_edt.setText("");
+                        aBoolean=false;
+                        scroll=false;
+                        CursorVisibility=false;
+                        firstclick=true;
                     }}); }
                 } catch (InterruptedException e) { e.printStackTrace(); } }};
         timer.start();
