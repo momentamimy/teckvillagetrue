@@ -1,6 +1,8 @@
 package teckvillage.developer.khaled_pc.teckvillagetrue.Controller;
 
 import android.content.Context;
+import android.graphics.Typeface;
+import android.util.Log;
 import android.view.LayoutInflater;
 import android.view.View;
 import android.view.ViewGroup;
@@ -55,6 +57,21 @@ public class CustomListViewAdapter extends ArrayAdapter<MessageInfo> {
             logName.setText(dataModel.logName);
             textMessage.setText(dataModel.logMessage);
             messageDate.setText(dataModel.logDate);
+        Log.d("dada5wqeqe",dataModel.read);
+            if (dataModel.read.equals("1"))
+            {
+                Log.d("dada5wqeqe","true");
+                logName.setTypeface(logName.getTypeface(), Typeface.NORMAL);
+                textMessage.setTypeface(textMessage.getTypeface(), Typeface.NORMAL);
+                messageDate.setTypeface(messageDate.getTypeface(), Typeface.NORMAL);
+            }
+            else if (dataModel.read.equals("0"))
+            {
+                Log.d("dada5wqeqe","false");
+                logName.setTypeface(logName.getTypeface(), Typeface.BOLD);
+                textMessage.setTypeface(textMessage.getTypeface(), Typeface.BOLD);
+                messageDate.setTypeface(messageDate.getTypeface(), Typeface.BOLD);
+            }
             // Return the completed view to render on screen
             return convertView;
 

@@ -100,6 +100,7 @@ public class FragMessageOthers extends Fragment {
         int indexBody = smsInboxCursor.getColumnIndex("body");
         int indexAddress = smsInboxCursor.getColumnIndex("address");
         int dateColumn = smsInboxCursor.getColumnIndex("date");
+        int index_seen = smsInboxCursor.getColumnIndex("seen");
 
         if (indexBody < 0 || !smsInboxCursor.moveToFirst()) return;
         customListViewAdapter.clear();
@@ -113,7 +114,7 @@ public class FragMessageOthers extends Fragment {
                 calendar.setTimeInMillis(timestamp);
                 String stringDate = String.valueOf(calendar.get(Calendar.DAY_OF_MONTH)) + "/" + String.valueOf(calendar.get(Calendar.MONTH) + 1) + "/" + String.valueOf(calendar.get(Calendar.YEAR));
 
-                MessageInfo info = new MessageInfo(null, smsInboxCursor.getString(indexAddress), smsInboxCursor.getString(indexBody), stringDate, smsInboxCursor.getString(indexAddress));
+                MessageInfo info = new MessageInfo(null, smsInboxCursor.getString(indexAddress), smsInboxCursor.getString(indexBody), stringDate, smsInboxCursor.getString(indexAddress),smsInboxCursor.getString(index_seen));
                 boolean Add = true;
                 for (int i = 0; i < messageInfos.size(); i++) {
                     if (!TextUtils.isEmpty(messageInfos.get(i).logName))

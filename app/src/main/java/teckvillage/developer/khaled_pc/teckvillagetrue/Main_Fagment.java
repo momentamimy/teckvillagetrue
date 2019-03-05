@@ -37,6 +37,7 @@ import android.widget.GridView;
 import android.widget.ImageView;
 import android.widget.RelativeLayout;
 import android.widget.TextView;
+import android.widget.Toast;
 
 import java.util.ArrayList;
 import java.util.Calendar;
@@ -61,7 +62,7 @@ import teckvillage.developer.khaled_pc.teckvillagetrue.model.LogInfo;
 /**
  * A simple {@link Fragment} subclass.
  */
-public class Main_Fagment extends Fragment {
+public class Main_Fagment extends Fragment implements OnBackPressedListener{
 
     List<LogInfo> consolidatedList = new ArrayList<>();
     /*--------------------------------------dial_pad_layout------------------------------------------*/
@@ -261,16 +262,26 @@ public class Main_Fagment extends Fragment {
         }
 
         gridView.setAdapter(new CustomGridAdapter(getContext(), myGridList));
+        gridView.setOnItemLongClickListener(new AdapterView.OnItemLongClickListener() {
+            @Override
+            public boolean onItemLongClick(AdapterView<?> parent, View view, int position, long id) {
+                Toast.makeText(getContext(),"meshey",Toast.LENGTH_LONG).show();
+                return false;
+            }
+        });
         gridView.setOnItemClickListener(new AdapterView.OnItemClickListener() {
             @Override
             public void onItemClick(AdapterView<?> parent, View view, int position, long id) {
 
                 if (firstclick)
                 {
-                    writeAnim(400);
+                    writeAnim(300);
                     firstclick=false;
                 }
-
+                else
+                {
+                    SortSearchCallList(phone_num_edt.getText().toString());
+                }
                 grid_num_tv = (TextView) view.findViewById(R.id.grid_num_textView);
                 //Toast.makeText(getApplicationContext(), grid_num_tv.getText(), Toast.LENGTH_SHORT).show();
                 if (CursorVisibility)
@@ -280,10 +291,10 @@ public class Main_Fagment extends Fragment {
                 else
                 {
                     phone_num_edt.setText(phone_num_edt.getText().toString()+grid_num_tv.getText());
+
                 }
-                //SortSearchCallList(phone_num_edt.getText().toString());
-                myTask task=new myTask();
-                task.execute(SortSearchCallList(phone_num_edt.getText().toString()));
+                SortSearchCallList(phone_num_edt.getText().toString());
+
             }
         });
 
@@ -303,12 +314,10 @@ public class Main_Fagment extends Fragment {
 
                 if (phone_num_edt.getText().length()==0)
                 {
-                    deleteAnim(400);
+                    deleteAnim(300);
                     firstclick=true;
                 }
-                //SortSearchCallList(phone_num_edt.getText().toString());
-                myTask task=new myTask();
-                task.execute(SortSearchCallList(phone_num_edt.getText().toString()));
+                SortSearchCallList(phone_num_edt.getText().toString());
             }
         });
 
@@ -443,30 +452,39 @@ public class Main_Fagment extends Fragment {
                 } else if (newState == AbsListView.OnScrollListener.SCROLL_STATE_TOUCH_SCROLL) {
                     // Do something
                     Log.d("mememem:","222222");
+                    if (!scroll)
+                        scrollCloseAnim(400);
                 } else {
                     // Do something
                     Log.d("mememem:","333333");
                 }
-                if (!scroll)
-                    scrollCloseAnim(400);
             }
         });
         return view;
     }
-    private class myTask extends AsyncTask<List<LogInfo>, Void, List<LogInfo>> {
 
-        @Override
-        protected List<LogInfo> doInBackground(List<LogInfo>... lists) {
-            return lists[0];
+    @Override
+    public void onBackPressed() {
+        if (aBoolean&&firstclick)
+        {
+            close_button(400);
+            aBoolean=false;
+        }
+        else if (aBoolean&&!firstclick&&!scroll)
+        {
+            scrollCloseAnim(400);
+        }
+        else if (aBoolean&&!firstclick&&scroll)
+        {
+            close_search_anim_button(200);
+        }
+        else
+        {
+            getActivity().finish();
         }
 
-        @Override
-        protected void onPostExecute(List<LogInfo> infos) {
-            super.onPostExecute(infos);
-            CallSearchLogAdapter adapter=new CallSearchLogAdapter(getActivity(),infos,phone_num_edt.getText().toString());
-            searchLogs.setAdapter(adapter);
-        }
     }
+
 
 
     private List<LogInfo> SortSearchCallList(String num) {
@@ -489,6 +507,9 @@ public class Main_Fagment extends Fragment {
                 infos.add(0,inf);
             }
         }
+
+        CallSearchLogAdapter adapter=new CallSearchLogAdapter(getActivity(),infos,phone_num_edt.getText().toString());
+        searchLogs.setAdapter(adapter);
 
         return infos;
     }
@@ -627,6 +648,7 @@ public class Main_Fagment extends Fragment {
                 try { synchronized(this){ wait(duration);
                     getActivity().runOnUiThread(new Runnable() {@Override public void run() {
                         fab.setImageResource(R.drawable.animation_list);
+                        SortSearchCallList(phone_num_edt.getText().toString());
                     }}); }
                 } catch (InterruptedException e) { e.printStackTrace(); } }};
         timer.start();
@@ -768,6 +790,24 @@ public class Main_Fagment extends Fragment {
             adapter1=new LogAdapter(getActivity(),groupListByDate.groupListByDate(loguinfoupdate));
             logs.setAdapter(adapter1);
             adapter1.notifyDataSetChanged();
+            //Dah elcall search mlksh da3wa beeh ya3m**********************************************
+            callLogInfos=loguinfoupdate;
+            for (int i=0;i<callLogInfos.size();i++)
+            {
+                for (int j=i+1;j<callLogInfos.size();j++)
+                {
+                    if (callLogInfos.get(i).getNumber().equals(callLogInfos.get(j).getNumber()))
+                    {
+                        callLogInfos.remove(j--);
+                    }
+                }
+            }
+            searchLogs.setLayoutManager(lLayout2);
+            searchLogs.setItemAnimator(new DefaultItemAnimator());
+            CallSearchLogAdapter adapter2=new CallSearchLogAdapter(getActivity(),callLogInfos,phone_num_edt.getText().toString());
+            searchLogs.setAdapter(adapter2);
+            adapter2.notifyDataSetChanged();
+            //*************************************************************************************
             //toggleEmptyCases();
         } else{
             shouldExecuteOnResume = true;

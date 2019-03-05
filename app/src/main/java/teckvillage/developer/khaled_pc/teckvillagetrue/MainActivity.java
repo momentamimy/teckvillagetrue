@@ -132,6 +132,9 @@ public class MainActivity extends AppCompatActivity implements NavigationView.On
     @Override
     public void onBackPressed() {
         DrawerLayout drawer = (DrawerLayout) findViewById(R.id.drawer_layout);
+        List<Fragment> fragmentList = getSupportFragmentManager().getFragments();
+
+
         if (drawer.isDrawerOpen(GravityCompat.START)) {
             drawer.closeDrawer(GravityCompat.START);
         } else {
@@ -140,13 +143,20 @@ public class MainActivity extends AppCompatActivity implements NavigationView.On
                 getFragmentManager().popBackStack();
             } else {
 
-                super.onBackPressed();
+ //             super.onBackPressed();
 
             }
 
+            if (fragmentList != null) {
+                //TODO: Perform your logic to pass back press here
+                for(Fragment fragment : fragmentList){
+                    if(fragment instanceof OnBackPressedListener){
+                        ((OnBackPressedListener)fragment).onBackPressed();
+                    }
+                }
+            }
+
         }
-
-
     }
 
 

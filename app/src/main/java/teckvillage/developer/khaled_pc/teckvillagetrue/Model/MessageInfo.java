@@ -38,12 +38,14 @@ public class MessageInfo {
     public String logMessage;
     public String logDate;
     public String logAddress;
-    public MessageInfo(String imageUrl,String logName,String logMessage,String logDate,String logAddress)
-    {
-        this.imageUrl=imageUrl;
-        this.logName=logName;
-        this.logMessage=logMessage;
-        this.logDate=logDate;
-        this.logAddress=logAddress;
+    public String read;
+    public MessageInfo(String imageUrl, String logName, String logMessage, String logDate, String logAddress, String  read) {
+        this.imageUrl = imageUrl;
+        this.logName = logName;
+        this.logMessage = logMessage;
+        this.logDate = logDate;
+        this.logAddress = logAddress;
+        this.read = read;
     }
+
 }
