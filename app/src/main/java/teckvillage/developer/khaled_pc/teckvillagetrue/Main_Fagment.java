@@ -200,6 +200,7 @@ public class Main_Fagment extends Fragment {
                         return false;
                     }
                 });
+
                 popupMenu.inflate(R.menu.main);
                 popupMenu.getMenu().add(0, 1, 1, menuIconWithText(getResources().getDrawable(R.drawable.ic_recieve_call_menu), "Income"));
                 popupMenu.getMenu().add(0, 2, 2, menuIconWithText(getResources().getDrawable(R.drawable.ic_arrow_right_menu), "Outgoing"));
