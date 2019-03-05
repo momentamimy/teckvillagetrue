@@ -478,7 +478,6 @@ public class Get_Calls_Log {
     public ArrayList<LogInfo> getMissed() {
         loglist = new ArrayList<>();
 
-
         String[] projection = {
                 CallLog.Calls.CACHED_NAME,
                 CallLog.Calls.CACHED_NUMBER_TYPE,

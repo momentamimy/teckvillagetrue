@@ -46,7 +46,9 @@ import java.util.List;
 import teckvillage.developer.khaled_pc.teckvillagetrue.Controller.ContactAdapter;
 import teckvillage.developer.khaled_pc.teckvillagetrue.Controller.CustomGridAdapter;
 import teckvillage.developer.khaled_pc.teckvillagetrue.Controller.LogAdapter;
+import teckvillage.developer.khaled_pc.teckvillagetrue.View.Income_Call_fragment;
 import teckvillage.developer.khaled_pc.teckvillagetrue.View.Missed_Call_fragment;
+import teckvillage.developer.khaled_pc.teckvillagetrue.View.Outgoing_Call_fragment;
 import teckvillage.developer.khaled_pc.teckvillagetrue.model.Get_Calls_Log;
 import teckvillage.developer.khaled_pc.teckvillagetrue.View.KeyboardlessEditText;
 import teckvillage.developer.khaled_pc.teckvillagetrue.model.ContactInfo;
@@ -177,9 +179,19 @@ public class Main_Fagment extends Fragment {
                         switch (item.getItemId()) {
                             case 1:
                                 // item one clicked
+                                Income_Call_fragment nextFrag3= new Income_Call_fragment();
+                                getActivity().getSupportFragmentManager().beginTransaction()
+                                        .add(R.id.fragment_container_main, nextFrag3, "findThisFragment")
+                                        .addToBackStack(null)
+                                        .commit();
                                 return true;
                             case 2:
                                 // item one clicked
+                                Outgoing_Call_fragment nextFrag2= new Outgoing_Call_fragment();
+                                getActivity().getSupportFragmentManager().beginTransaction()
+                                        .add(R.id.fragment_container_main, nextFrag2, "findThisFragment")
+                                        .addToBackStack(null)
+                                        .commit();
                                 return true;
                             case 3:
                                 // item one clicked
