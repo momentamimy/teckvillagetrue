@@ -46,7 +46,7 @@ public class MainActivity extends AppCompatActivity implements NavigationView.On
         Toolbar toolbar = (Toolbar) findViewById(R.id.toolbar);
         setSupportActionBar(toolbar);
         navigationView2=findViewById(R.id.botnav);
-        fragmentManager=getSupportFragmentManager();
+
 
         frameLayout=(FrameLayout) findViewById(R.id.fragment_container_main);//connect Framelayout
 
@@ -135,9 +135,18 @@ public class MainActivity extends AppCompatActivity implements NavigationView.On
         if (drawer.isDrawerOpen(GravityCompat.START)) {
             drawer.closeDrawer(GravityCompat.START);
         } else {
-            super.onBackPressed();
-            finish();
+
+            if (getFragmentManager().getBackStackEntryCount() != 0) {
+                getFragmentManager().popBackStack();
+            } else {
+
+                super.onBackPressed();
+
+            }
+
         }
+
+
     }
 
 

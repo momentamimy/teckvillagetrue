@@ -14,6 +14,8 @@ import android.os.Bundle;
 import android.support.design.widget.CoordinatorLayout;
 import android.support.design.widget.FloatingActionButton;
 import android.support.v4.app.Fragment;
+import android.support.v4.app.FragmentManager;
+import android.support.v4.app.FragmentTransaction;
 import android.support.v7.widget.DefaultItemAnimator;
 import android.support.v7.widget.LinearLayoutManager;
 import android.support.v7.widget.PopupMenu;
@@ -44,11 +46,13 @@ import java.util.List;
 import teckvillage.developer.khaled_pc.teckvillagetrue.Controller.ContactAdapter;
 import teckvillage.developer.khaled_pc.teckvillagetrue.Controller.CustomGridAdapter;
 import teckvillage.developer.khaled_pc.teckvillagetrue.Controller.LogAdapter;
+import teckvillage.developer.khaled_pc.teckvillagetrue.View.Missed_Call_fragment;
 import teckvillage.developer.khaled_pc.teckvillagetrue.model.Get_Calls_Log;
 import teckvillage.developer.khaled_pc.teckvillagetrue.View.KeyboardlessEditText;
 import teckvillage.developer.khaled_pc.teckvillagetrue.model.ContactInfo;
 import teckvillage.developer.khaled_pc.teckvillagetrue.model.Get_Calls_Log;
 import teckvillage.developer.khaled_pc.teckvillagetrue.model.GridListDataModel;
+import teckvillage.developer.khaled_pc.teckvillagetrue.model.GroupListByDate;
 import teckvillage.developer.khaled_pc.teckvillagetrue.model.LogInfo;
 
 
@@ -101,6 +105,7 @@ public class Main_Fagment extends Fragment {
 
     CoordinatorLayout searchCallLayout;
     ImageView close_search;
+    GroupListByDate groupListByDate;
 
     public Main_Fagment() {
         // Required empty public constructor
@@ -112,12 +117,13 @@ public class Main_Fagment extends Fragment {
         // Inflate the layout for this fragment
         View view=inflater.inflate(R.layout.fragment_main__fagment, container, false);
 
+        groupListByDate=new GroupListByDate();
+
         close_search=view.findViewById(R.id.close_Search);
         close_search.setOnClickListener(new View.OnClickListener() {
             @Override
             public void onClick(View v) {
                 close_search_anim_button(200);
-
             }
         });
 
@@ -128,6 +134,7 @@ public class Main_Fagment extends Fragment {
 
             }
         });
+
         contacts=view.findViewById(R.id.contact_recycleview);
         logs=view.findViewById(R.id.Logs_recycleview);
         searchLogs=view.findViewById(R.id.Search_Log_recycleview);
@@ -143,6 +150,8 @@ public class Main_Fagment extends Fragment {
         final ImageView threedots=view.findViewById(R.id.threedots);
         ImageView icon=view.findViewById(R.id.iconnnn);
 
+
+        //Open Drawer from Fragment
         icon.setOnClickListener(new View.OnClickListener() {
             @Override
             public void onClick(View v) {
@@ -174,6 +183,13 @@ public class Main_Fagment extends Fragment {
                                 return true;
                             case 3:
                                 // item one clicked
+                                Missed_Call_fragment nextFrag= new Missed_Call_fragment();
+                                getActivity().getSupportFragmentManager().beginTransaction()
+                                        .add(R.id.fragment_container_main, nextFrag, "findThisFragment")
+                                        .addToBackStack(null)
+                                        .commit();
+
+
                                 return true;
                             case 4:
                                 // item one clicked
@@ -192,15 +208,13 @@ public class Main_Fagment extends Fragment {
 
                 popupMenu.show();
 
-
-
             }
         });
 
 
-         get_calls_log=new Get_Calls_Log(getActivity());
-        textLayout=view.findViewById(R.id.dial_num_edt_rl);
         get_calls_log=new Get_Calls_Log(getActivity());
+        textLayout=view.findViewById(R.id.dial_num_edt_rl);
+        //get_calls_log=new Get_Calls_Log(getActivity());
 
 
         /*--------------------------------------dial_pad_layout------------------------------------------*/
@@ -236,8 +250,7 @@ public class Main_Fagment extends Fragment {
         gridView.setAdapter(new CustomGridAdapter(getContext(), myGridList));
         gridView.setOnItemClickListener(new AdapterView.OnItemClickListener() {
             @Override
-            public void onItemClick(AdapterView<?> parent, View view,
-                                    int position, long id) {
+            public void onItemClick(AdapterView<?> parent, View view, int position, long id) {
 
                 if (firstclick)
                 {
@@ -321,6 +334,7 @@ public class Main_Fagment extends Fragment {
         if(get_calls_log.CheckPermission()){
 
             logInfos=get_calls_log.getCallDetails();
+
             callLogInfos=logInfos;
             for (int i=0;i<callLogInfos.size();i++)
             {
@@ -364,8 +378,11 @@ public class Main_Fagment extends Fragment {
 
         logs.setLayoutManager(lLayout1);
         logs.setItemAnimator(new DefaultItemAnimator());
-        adapter1=new LogAdapter(getActivity(),groupListByDate(logInfos));
+        adapter1=new LogAdapter(getActivity(),groupListByDate.groupListByDate(logInfos));
         logs.setAdapter(adapter1);
+
+
+
 
         searchLogs.setLayoutManager(lLayout2);
         searchLogs.setItemAnimator(new DefaultItemAnimator());
@@ -463,61 +480,6 @@ public class Main_Fagment extends Fragment {
         return infos;
     }
 
-
-    /**
-     * Receive sorted list and divide it into Letters and contacts
-     * @param list
-     * @return
-     */
-    ArrayList<LogInfo> groupListByDate(ArrayList<LogInfo> list) {
-        int i = 0;
-        ArrayList<LogInfo> customList = new ArrayList<LogInfo>();
-        LogInfo logInfo = new LogInfo();
-        logInfo.logDate=list.get(0).logDate;
-        logInfo.setDateString(getFormattedDate(getActivity(),logInfo.logDate.getTime()));
-        logInfo.setType(1);
-        customList.add(logInfo);
-        for (i = 0; i < list.size() - 1; i++) {
-            LogInfo logInfo12 = new LogInfo();
-            //SimpleDateFormat formatter = new SimpleDateFormat("dd-MM-yyyy", Locale.ENGLISH);
-            String dateString1 =getFormattedDate(getActivity(),  list.get(i).logDate.getTime());
-            String dateString2 =getFormattedDate(getActivity(),  list.get(i + 1).logDate.getTime());
-            //String dateString1 = formatter.format(list.get(i).logDate.getTime());
-            //String dateString2 = formatter.format(list.get(i + 1).logDate.getTime());
-
-            if (dateString1.equals(dateString2)) {
-                list.get(i).setType(2);
-                customList.add(list.get(i));
-            } else {
-                list.get(i).setType(2);
-                customList.add(list.get(i));
-                logInfo12.setDateString(dateString2);
-                logInfo12.setType(1);
-                customList.add(logInfo12);
-            }
-        }
-        list.get(i).setType(2);
-        customList.add(list.get(i));
-        return customList;
-    }
-
-    public String getFormattedDate(Context context, long smsTimeInMilis) {
-        Calendar smsTime = Calendar.getInstance();
-        smsTime.setTimeInMillis(smsTimeInMilis);
-
-        Calendar now = Calendar.getInstance();
-
-        final String dateTimeFormatString = "EEEE, dd MMM";
-        if (now.get(Calendar.DATE) == smsTime.get(Calendar.DATE)&&(smsTime.get(Calendar.YEAR) == now.get(Calendar.YEAR)&&(smsTime.get(Calendar.MONTH) == now.get(Calendar.MONTH))) ) {
-            return "Today " ;
-        } else if (now.get(Calendar.DATE) - smsTime.get(Calendar.DATE) == 1&&(smsTime.get(Calendar.YEAR) == now.get(Calendar.YEAR)&&(smsTime.get(Calendar.MONTH) == now.get(Calendar.MONTH)))){
-            return "Yesterday " ;
-        } else if (now.get(Calendar.YEAR) == smsTime.get(Calendar.YEAR)) {
-            return DateFormat.format(dateTimeFormatString, smsTime).toString();
-        } else {
-            return DateFormat.format("EEEE, dd MMM yyyy", smsTime).toString();
-        }
-    }
 
 
 
@@ -790,7 +752,7 @@ public class Main_Fagment extends Fragment {
 
             logs.setLayoutManager(lLayout1);
             logs.setItemAnimator(new DefaultItemAnimator());
-            adapter1=new LogAdapter(getActivity(),groupListByDate(loguinfoupdate));
+            adapter1=new LogAdapter(getActivity(),groupListByDate.groupListByDate(loguinfoupdate));
             logs.setAdapter(adapter1);
             adapter1.notifyDataSetChanged();
             //toggleEmptyCases();

@@ -1,0 +1,68 @@
+<FrameLayout xmlns:android="http://schemas.android.com/apk/res/android"
+    xmlns:tools="http://schemas.android.com/tools"
+    android:layout_width="match_parent"
+    android:layout_height="match_parent"
+    android:id="@+id/missed_layout"
+    xmlns:app="http://schemas.android.com/apk/res-auto"
+    tools:context="teckvillage.developer.khaled_pc.teckvillagetrue.View.Missed_Call_fragment">
+
+    <android.support.design.widget.CoordinatorLayout
+        android:id="@+id/search_call_layout"
+        android:layout_width="match_parent"
+        android:layout_height="match_parent">
+
+        <android.support.design.widget.AppBarLayout
+            android:background="#fff"
+            android:id="@+id/Call_CardView"
+            android:layout_width="match_parent"
+            android:layout_height="wrap_content">
+
+            <android.support.v7.widget.Toolbar
+                android:id="@+id/toolbarmissed"
+                app:layout_scrollFlags="scroll|enterAlways"
+                android:layout_height="wrap_content"
+                android:layout_width="match_parent">
+
+
+                <RelativeLayout
+                    android:layout_width="match_parent"
+                    android:layout_height="wrap_content">
+
+                    <ImageView
+                        android:padding="10dp"
+                        android:id="@+id/close_Search"
+                        android:layout_width="wrap_content"
+                        android:layout_height="wrap_content"
+                        android:src="@drawable/ic_close_black_24dp"
+                        android:layout_centerVertical="true"/>
+
+                    <TextView
+                        android:id="@+id/titleoffragment"
+                        android:layout_width="match_parent"
+                        android:layout_height="wrap_content"
+                        android:text="Call"
+                        android:textColor="#000"
+                        android:textSize="20dp"
+                        android:layout_toEndOf="@+id/close_Search"
+                        android:layout_toRightOf="@+id/close_Search"
+                        android:layout_marginStart="20dp"
+                        android:layout_marginLeft="20dp"
+                        android:layout_centerVertical="true"/>
+
+                </RelativeLayout>
+
+            </android.support.v7.widget.Toolbar>
+
+        </android.support.design.widget.AppBarLayout>
+
+        <android.support.v7.widget.RecyclerView
+            android:layout_below="@+id/Call_CardView"
+            android:background="#fff"
+            android:id="@+id/Search_Log_recycleview"
+            android:layout_width="match_parent"
+            android:layout_height="match_parent"
+            app:layout_behavior="@string/appbar_scrolling_view_behavior" />
+
+    </android.support.design.widget.CoordinatorLayout>
+
+</FrameLayout>
