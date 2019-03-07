@@ -140,21 +140,22 @@ public class MainActivity extends AppCompatActivity implements NavigationView.On
         } else {
 
             if (getFragmentManager().getBackStackEntryCount() != 0) {
-                getFragmentManager().popBackStack();
+                getFragmentManager().popBackStackImmediate();
+                Log.w("pip","pip");
             } else {
 
- //             super.onBackPressed();
-
-            }
-
-            if (fragmentList != null) {
-                //TODO: Perform your logic to pass back press here
-                for(Fragment fragment : fragmentList){
-                    if(fragment instanceof OnBackPressedListener){
-                        ((OnBackPressedListener)fragment).onBackPressed();
+                if (fragmentList != null) {
+                    //TODO: Perform your logic to pass back press here
+                    for(Fragment fragment : fragmentList){
+                        if(fragment instanceof OnBackPressedListener){
+                            ((OnBackPressedListener)fragment).onBackPressed();
+                        }
                     }
                 }
+
             }
+
+
 
         }
     }

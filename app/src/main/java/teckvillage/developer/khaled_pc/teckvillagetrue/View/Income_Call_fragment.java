@@ -65,7 +65,7 @@ public class Income_Call_fragment extends Fragment {
             @Override
             public void onClick(View v) {
                 if (getFragmentManager().getBackStackEntryCount() != 0) {
-                    getFragmentManager().popBackStack();
+                    getFragmentManager().popBackStackImmediate();
                 }
             }
         });

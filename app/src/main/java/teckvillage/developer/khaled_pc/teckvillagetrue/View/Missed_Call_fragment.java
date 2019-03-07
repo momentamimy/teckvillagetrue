@@ -69,7 +69,7 @@ public class Missed_Call_fragment extends Fragment {
             @Override
             public void onClick(View v) {
                 if (getFragmentManager().getBackStackEntryCount() != 0) {
-                    getFragmentManager().popBackStack();
+                    getFragmentManager().popBackStackImmediate();
                 }
             }
         });
@@ -91,14 +91,6 @@ public class Missed_Call_fragment extends Fragment {
         searchLogs.setItemAnimator(new DefaultItemAnimator());
         adapter1=new LogAdapter(getActivity(),groupListByDate.groupListByDate(logInfos));
         searchLogs.setAdapter(adapter1);
-
-        /*
-        logs.setLayoutManager(lLayout1);
-        logs.setItemAnimator(new DefaultItemAnimator());
-        adapter1=new LogAdapter(getActivity(),groupListByDate(logInfos));
-        logs.setAdapter(adapter1);
-        */
-
 
 
         return view;
