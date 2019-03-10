@@ -139,9 +139,9 @@ public class MainActivity extends AppCompatActivity implements NavigationView.On
             drawer.closeDrawer(GravityCompat.START);
         } else {
 
-            if (getFragmentManager().getBackStackEntryCount() != 0) {
-                getFragmentManager().popBackStackImmediate();
-                Log.w("pip","pip");
+            if (getSupportFragmentManager().getBackStackEntryCount() > 0) {
+                getSupportFragmentManager().popBackStack();
+
             } else {
 
                 if (fragmentList != null) {
@@ -154,8 +154,6 @@ public class MainActivity extends AppCompatActivity implements NavigationView.On
                 }
 
             }
-
-
 
         }
     }
