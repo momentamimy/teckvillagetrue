@@ -131,7 +131,6 @@ public class Main_Fagment extends Fragment implements OnBackPressedListener {
 
     @Override
     public View onCreateView(LayoutInflater inflater, ViewGroup container, Bundle savedInstanceState) {
-        Log.d("mesheyyyy", "Oncreate");
         // Inflate the layout for this fragment
         View view = inflater.inflate(R.layout.fragment_main__fagment, container, false);
 
