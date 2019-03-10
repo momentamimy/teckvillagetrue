@@ -1,28 +1,37 @@
 package teckvillage.developer.khaled_pc.teckvillagetrue;
 
 
+import android.Manifest;
 import android.animation.AnimatorSet;
 import android.animation.ObjectAnimator;
+import android.app.Dialog;
 import android.content.Context;
 import android.content.Intent;
+import android.content.SharedPreferences;
+import android.content.pm.PackageManager;
 import android.content.res.ColorStateList;
+import android.database.Cursor;
+import android.graphics.Color;
 import android.graphics.drawable.AnimationDrawable;
+import android.graphics.drawable.ColorDrawable;
 import android.graphics.drawable.Drawable;
 import android.net.Uri;
-import android.os.AsyncTask;
 import android.os.Bundle;
+import android.provider.ContactsContract;
 import android.support.design.widget.CoordinatorLayout;
 import android.support.design.widget.FloatingActionButton;
+import android.support.design.widget.TextInputLayout;
+import android.support.v4.app.ActivityCompat;
 import android.support.v4.app.Fragment;
-import android.support.v4.app.FragmentManager;
-import android.support.v4.app.FragmentTransaction;
 import android.support.v7.widget.DefaultItemAnimator;
 import android.support.v7.widget.LinearLayoutManager;
 import android.support.v7.widget.PopupMenu;
 import android.support.v7.widget.RecyclerView;
+import android.support.v7.widget.Toolbar;
+import android.telephony.TelephonyManager;
 import android.text.Spannable;
 import android.text.SpannableString;
-import android.text.format.DateFormat;
+import android.text.TextUtils;
 import android.text.style.ImageSpan;
 import android.util.DisplayMetrics;
 import android.util.Log;
@@ -31,16 +40,16 @@ import android.view.MenuItem;
 import android.view.MotionEvent;
 import android.view.View;
 import android.view.ViewGroup;
+import android.view.Window;
 import android.widget.AbsListView;
 import android.widget.AdapterView;
+import android.widget.EditText;
 import android.widget.GridView;
 import android.widget.ImageView;
 import android.widget.RelativeLayout;
 import android.widget.TextView;
-import android.widget.Toast;
 
 import java.util.ArrayList;
-import java.util.Calendar;
 import java.util.Collections;
 import java.util.List;
 
@@ -53,16 +62,18 @@ import teckvillage.developer.khaled_pc.teckvillagetrue.View.Outgoing_Call_fragme
 import teckvillage.developer.khaled_pc.teckvillagetrue.model.Get_Calls_Log;
 import teckvillage.developer.khaled_pc.teckvillagetrue.View.KeyboardlessEditText;
 import teckvillage.developer.khaled_pc.teckvillagetrue.model.ContactInfo;
-import teckvillage.developer.khaled_pc.teckvillagetrue.model.Get_Calls_Log;
 import teckvillage.developer.khaled_pc.teckvillagetrue.model.GridListDataModel;
 import teckvillage.developer.khaled_pc.teckvillagetrue.model.GroupListByDate;
 import teckvillage.developer.khaled_pc.teckvillagetrue.model.LogInfo;
+
+import static android.app.Activity.RESULT_CANCELED;
+import static android.app.Activity.RESULT_OK;
 
 
 /**
  * A simple {@link Fragment} subclass.
  */
-public class Main_Fagment extends Fragment implements OnBackPressedListener{
+public class Main_Fagment extends Fragment implements OnBackPressedListener {
 
     List<LogInfo> consolidatedList = new ArrayList<>();
     /*--------------------------------------dial_pad_layout------------------------------------------*/
@@ -75,31 +86,34 @@ public class Main_Fagment extends Fragment implements OnBackPressedListener{
     public RelativeLayout textLayout;
     public ImageView back_space;
 
-    static final String[] GRID_NUM = new String[] {
+    static final String[] GRID_NUM = new String[]{
             "1", "2", "3",
             "4", "5", "6",
-            "7" ,"8", "9" ,
+            "7", "8", "9",
             "*", "0", "#"};
-    static final String[] GRID_LETTERS = new String[] {
+    static final String[] GRID_LETTERS = new String[]{
             " ", "abc", "def",
             "ghi", "jkl", "mno",
-            "pqrs" ,"tuv", "wxyz" ,
+            "pqrs", "tuv", "wxyz",
             " ", "+", " "};
     public ArrayList<GridListDataModel> myGridList = new ArrayList<GridListDataModel>();
 
-    boolean aBoolean=false;//for dial phone button open_close
-    boolean CursorVisibility=false;
-    boolean firstclick=true;
+    boolean aBoolean = false;//for dial phone button open_close
+    boolean CursorVisibility = false;
+    boolean firstclick = true;
     boolean scroll;
 
     AnimationDrawable rocketAnimation;//icon anim
+    Dialog MyDialogSpeedDial;
+    Dialog MyDialogAssignNum;
+    SharedPreferences sharedPreferences;
     /*--------------------------------------dial_pad_layout------------------------------------------*/
 
-    RecyclerView contacts,logs,searchLogs;
+    RecyclerView contacts, logs, searchLogs;
     LinearLayoutManager lLayout;
     LinearLayoutManager lLayout1;
     LinearLayoutManager lLayout2;
-    ArrayList<LogInfo> callLogInfos=new ArrayList<>();
+    ArrayList<LogInfo> callLogInfos = new ArrayList<>();
     ArrayList<LogInfo> logInfos;
     ArrayList<LogInfo> loguinfoupdate;
     LogAdapter adapter1;
@@ -117,12 +131,13 @@ public class Main_Fagment extends Fragment implements OnBackPressedListener{
 
     @Override
     public View onCreateView(LayoutInflater inflater, ViewGroup container, Bundle savedInstanceState) {
+        Log.d("mesheyyyy", "Oncreate");
         // Inflate the layout for this fragment
-        View view=inflater.inflate(R.layout.fragment_main__fagment, container, false);
+        View view = inflater.inflate(R.layout.fragment_main__fagment, container, false);
 
-        groupListByDate=new GroupListByDate();
+        groupListByDate = new GroupListByDate();
 
-        close_search=view.findViewById(R.id.close_Search);
+        close_search = view.findViewById(R.id.close_Search);
         close_search.setOnClickListener(new View.OnClickListener() {
             @Override
             public void onClick(View v) {
@@ -130,7 +145,7 @@ public class Main_Fagment extends Fragment implements OnBackPressedListener{
             }
         });
 
-        TextView textView=view.findViewById(R.id.dialpad_bottom_rl);
+        TextView textView = view.findViewById(R.id.dialpad_bottom_rl);
         textView.setOnClickListener(new View.OnClickListener() {
             @Override
             public void onClick(View v) {
@@ -138,20 +153,21 @@ public class Main_Fagment extends Fragment implements OnBackPressedListener{
             }
         });
 
-        contacts=view.findViewById(R.id.contact_recycleview);
-        logs=view.findViewById(R.id.Logs_recycleview);
-        searchLogs=view.findViewById(R.id.Search_Log_recycleview);
+        contacts = view.findViewById(R.id.contact_recycleview);
+        logs = view.findViewById(R.id.Logs_recycleview);
+        searchLogs = view.findViewById(R.id.Search_Log_recycleview);
 
         /*--------------------------------------dial_pad_layout------------------------------------------*/
-        searchCallLayout=view.findViewById(R.id.search_call_layout);
-        padLayout=view.findViewById(R.id.pad_layout);
-        fab=view.findViewById(R.id.fab);
+        searchCallLayout = view.findViewById(R.id.search_call_layout);
+        padLayout = view.findViewById(R.id.pad_layout);
+        fab = view.findViewById(R.id.fab);
         gridView = (GridView) view.findViewById(R.id.gridView1);
-        gridShadow=view.findViewById(R.id.shadow_gridView1);
+        gridShadow = view.findViewById(R.id.shadow_gridView1);
         phone_num_edt = (KeyboardlessEditText) view.findViewById(R.id.dial_pad_num_editText);
-        back_space=view.findViewById(R.id.backspace_imageView);
-        final ImageView threedots=view.findViewById(R.id.threedots);
-        ImageView icon=view.findViewById(R.id.iconnnn);
+        back_space = view.findViewById(R.id.backspace_imageView);
+        final ImageView threedots = view.findViewById(R.id.threedots);
+        ImageView icon = view.findViewById(R.id.iconnnn);
+        sharedPreferences = getActivity().getSharedPreferences("number", Context.MODE_PRIVATE);
 
 
         //Open Drawer from Fragment
@@ -162,8 +178,6 @@ public class Main_Fagment extends Fragment implements OnBackPressedListener{
                 ((MainActivity) getActivity()).openDrawer();
             }
         });
-
-
 
 
         //********Option menu****************************
@@ -180,7 +194,7 @@ public class Main_Fagment extends Fragment implements OnBackPressedListener{
                         switch (item.getItemId()) {
                             case 1:
                                 // item one clicked
-                                Income_Call_fragment nextFrag3= new Income_Call_fragment();
+                                Income_Call_fragment nextFrag3 = new Income_Call_fragment();
                                 getActivity().getSupportFragmentManager().beginTransaction()
                                         .add(R.id.fragment_container_main, nextFrag3, "findThisFragment")
                                         .addToBackStack(null)
@@ -188,7 +202,7 @@ public class Main_Fagment extends Fragment implements OnBackPressedListener{
                                 return true;
                             case 2:
                                 // item one clicked
-                                Outgoing_Call_fragment nextFrag2= new Outgoing_Call_fragment();
+                                Outgoing_Call_fragment nextFrag2 = new Outgoing_Call_fragment();
                                 getActivity().getSupportFragmentManager().beginTransaction()
                                         .add(R.id.fragment_container_main, nextFrag2, "findThisFragment")
                                         .addToBackStack(null)
@@ -196,7 +210,7 @@ public class Main_Fagment extends Fragment implements OnBackPressedListener{
                                 return true;
                             case 3:
                                 // item one clicked
-                                Missed_Call_fragment nextFrag= new Missed_Call_fragment();
+                                Missed_Call_fragment nextFrag = new Missed_Call_fragment();
                                 getActivity().getSupportFragmentManager().beginTransaction()
                                         .add(R.id.fragment_container_main, nextFrag, "findThisFragment")
                                         .addToBackStack(null)
@@ -226,8 +240,8 @@ public class Main_Fagment extends Fragment implements OnBackPressedListener{
         });
 
 
-        get_calls_log=new Get_Calls_Log(getActivity());
-        textLayout=view.findViewById(R.id.dial_num_edt_rl);
+        get_calls_log = new Get_Calls_Log(getActivity());
+        textLayout = view.findViewById(R.id.dial_num_edt_rl);
         //get_calls_log=new Get_Calls_Log(getActivity());
 
 
@@ -238,40 +252,141 @@ public class Main_Fagment extends Fragment implements OnBackPressedListener{
         fab.setOnClickListener(new View.OnClickListener() {
             @Override
             public void onClick(View v) {
-                if (phone_num_edt.getText().length()==0)
-                {
+                if (phone_num_edt.getText().length() == 0) {
                     callButtonAnim();
-                }
-                else if (scroll==true)
-                {
+                } else if (scroll == true) {
                     scrollOpenAnim(400);
-                }
-                else
-                {
+                } else {
                     Intent intent = new Intent(Intent.ACTION_CALL);
-                    intent.setData(Uri.parse("tel:"+phone_num_edt.getText().toString()));
+                    intent.setData(Uri.parse("tel:" + phone_num_edt.getText().toString()));
                     startActivity(intent);
                 }
             }
         });
 
         //fill numbers
-        for (int i=0;i<GRID_NUM.length;i++)
-        {
-            myGridList.add(new GridListDataModel(GRID_NUM[i],GRID_LETTERS[i]));
+        for (int i = 0; i < GRID_NUM.length; i++) {
+            myGridList.add(new GridListDataModel(GRID_NUM[i], GRID_LETTERS[i]));
         }
 
         gridView.setAdapter(new CustomGridAdapter(getContext(), myGridList));
         gridView.setOnItemLongClickListener(new AdapterView.OnItemLongClickListener() {
             @Override
             public boolean onItemLongClick(AdapterView<?> parent, View view, int position, long id) {
-                Toast.makeText(getContext(),"meshey",Toast.LENGTH_LONG).show();
-                return false;
+                grid_num_tv = (TextView) view.findViewById(R.id.grid_num_textView);
+                if (grid_num_tv.getText().toString().equals("1")) {
+                    TelephonyManager tel = (TelephonyManager) getContext().getSystemService(Context.TELEPHONY_SERVICE);
+                    if (ActivityCompat.checkSelfPermission(getContext(), Manifest.permission.READ_PHONE_STATE) != PackageManager.PERMISSION_GRANTED) {
+                        // TODO: Consider calling
+                        //    ActivityCompat#requestPermissions
+                        // here to request the missing permissions, and then overriding
+                        //   public void onRequestPermissionsResult(int requestCode, String[] permissions,
+                        //                                          int[] grantResults)
+                        // to handle the case where the user grants the permission. See the documentation
+                        // for ActivityCompat#requestPermissions for more details.
+                        return true;
+                    }
+                    String num = tel.getVoiceMailNumber();
+                    Intent intent = new Intent(Intent.ACTION_CALL);
+                    intent.setData(Uri.parse("tel:"+num));
+                    startActivity(intent);
+
+
+                }
+                else if (grid_num_tv.getText().toString().equals("0"))
+                {
+                    if (CursorVisibility)
+                    {
+                        insertSelection(phone_num_edt,"+");
+                    }
+                    else
+                    {
+                        phone_num_edt.setText(phone_num_edt.getText().toString()+"+");
+                    }
+
+                    if (firstclick)
+                    {
+                        writeAnim(300);
+                        firstclick=false;
+                    }
+                    else
+                    {
+                        SortSearchCallList(phone_num_edt.getText().toString());
+                    }
+                }
+                else if (grid_num_tv.getText().toString().equals("#"))
+                {
+                    if (CursorVisibility)
+                    {
+                        insertSelection(phone_num_edt,";");
+                    }
+                    else
+                    {
+                        phone_num_edt.setText(phone_num_edt.getText().toString()+";");
+                    }
+
+                    if (firstclick)
+                    {
+                        writeAnim(300);
+                        firstclick=false;
+                    }
+                    else
+                    {
+                        SortSearchCallList(phone_num_edt.getText().toString());
+                    }
+                }
+                else if (grid_num_tv.getText().toString().equals("*"))
+                {
+                    if (CursorVisibility)
+                    {
+                        insertSelection(phone_num_edt,",");
+                    }
+                    else
+                    {
+                        phone_num_edt.setText(phone_num_edt.getText().toString()+",");
+                    }
+
+                    if (firstclick)
+                    {
+                        writeAnim(300);
+                        firstclick=false;
+                    }
+                    else
+                    {
+                        SortSearchCallList(phone_num_edt.getText().toString());
+                    }
+                }
+                else
+                {
+                    String choosenNum=sharedPreferences.getString("#"+grid_num_tv.getText().toString(),"");
+                    if (choosenNum.equals(""))
+                    {
+                        MyCustomSpeedDialog(grid_num_tv.getText().toString());
+                    }
+                    else
+                    {
+                        Intent intent = new Intent(Intent.ACTION_CALL);
+                        intent.setData(Uri.parse("tel:"+choosenNum));
+                        startActivity(intent);
+                    }
+                }
+                return true;
             }
         });
         gridView.setOnItemClickListener(new AdapterView.OnItemClickListener() {
             @Override
             public void onItemClick(AdapterView<?> parent, View view, int position, long id) {
+                grid_num_tv = (TextView) view.findViewById(R.id.grid_num_textView);
+
+                    //Toast.makeText(getApplicationContext(), grid_num_tv.getText(), Toast.LENGTH_SHORT).show();
+                if (CursorVisibility)
+                {
+                    insertSelection(phone_num_edt,grid_num_tv.getText().toString());
+                }
+                else
+                {
+                    phone_num_edt.setText(phone_num_edt.getText().toString()+grid_num_tv.getText());
+                }
 
                 if (firstclick)
                 {
@@ -282,19 +397,6 @@ public class Main_Fagment extends Fragment implements OnBackPressedListener{
                 {
                     SortSearchCallList(phone_num_edt.getText().toString());
                 }
-                grid_num_tv = (TextView) view.findViewById(R.id.grid_num_textView);
-                //Toast.makeText(getApplicationContext(), grid_num_tv.getText(), Toast.LENGTH_SHORT).show();
-                if (CursorVisibility)
-                {
-                    insertSelection(phone_num_edt,grid_num_tv.getText().toString());
-                }
-                else
-                {
-                    phone_num_edt.setText(phone_num_edt.getText().toString()+grid_num_tv.getText());
-
-                }
-                SortSearchCallList(phone_num_edt.getText().toString());
-
             }
         });
 
@@ -422,26 +524,29 @@ public class Main_Fagment extends Fragment implements OnBackPressedListener{
                     // Scrolling down
                     //Log.d("mememem:","meeeshyyyyyy_Down");
                 }
-                if (aBoolean==true) {
-                    close_button(400);
-                    aBoolean = false;
+
+            }
+            @Override
+            public void onScrollStateChanged(RecyclerView recyclerView, int newState) {
+                super.onScrollStateChanged(recyclerView, newState);
+
+                if (newState == AbsListView.OnScrollListener.SCROLL_STATE_FLING) {
+                    // Do something
+                    Log.d("mememem:","111111");
+                } else if (newState == AbsListView.OnScrollListener.SCROLL_STATE_TOUCH_SCROLL) {
+                    // Do something
+                    Log.d("mememem:","222222");
+                    if (aBoolean==true) {
+                        close_button(400);
+                        aBoolean = false;
+                    }
+                } else {
+                    // Do something
+                    Log.d("mememem:","333333");
                 }
             }
         });
         searchLogs.addOnScrollListener(new RecyclerView.OnScrollListener() {
-            @Override
-            public void onScrolled(RecyclerView recyclerView, int dx, int dy) {
-                super.onScrolled(recyclerView, dx, dy);
-                if (dy > 0) {
-                    // Scrolling up
-                    //Log.d("mememem:","meeeshyyyyyy_UP");
-                } else {
-                    // Scrolling down
-                    //Log.d("mememem:","meeeshyyyyyy_Down");
-                }
-                //scrollCloseAnim();
-            }
-
             @Override
             public void onScrollStateChanged(RecyclerView recyclerView, int newState) {
                 super.onScrollStateChanged(recyclerView, newState);
@@ -480,10 +585,12 @@ public class Main_Fagment extends Fragment implements OnBackPressedListener{
         }
         else
         {
-            getActivity().finish();
+
+                getActivity().finish();
         }
 
     }
+
 
 
 
@@ -645,7 +752,7 @@ public class Main_Fagment extends Fragment implements OnBackPressedListener{
 
         Thread timer= new Thread(){
             public void run(){
-                try { synchronized(this){ wait(duration);
+                try { synchronized(this){ wait(duration+100);
                     getActivity().runOnUiThread(new Runnable() {@Override public void run() {
                         fab.setImageResource(R.drawable.animation_list);
                         SortSearchCallList(phone_num_edt.getText().toString());
@@ -769,6 +876,7 @@ public class Main_Fagment extends Fragment implements OnBackPressedListener{
     @Override
     public void onResume() {
         super.onResume();
+        Log.d("mesheyyyy","onresume");
         if(shouldExecuteOnResume){
             // Your onResume Code Here
             get_calls_log=new Get_Calls_Log(getActivity());
@@ -802,11 +910,7 @@ public class Main_Fagment extends Fragment implements OnBackPressedListener{
                     }
                 }
             }
-            searchLogs.setLayoutManager(lLayout2);
-            searchLogs.setItemAnimator(new DefaultItemAnimator());
-            CallSearchLogAdapter adapter2=new CallSearchLogAdapter(getActivity(),callLogInfos,phone_num_edt.getText().toString());
-            searchLogs.setAdapter(adapter2);
-            adapter2.notifyDataSetChanged();
+
             //*************************************************************************************
             //toggleEmptyCases();
         } else{
@@ -833,7 +937,108 @@ public class Main_Fagment extends Fragment implements OnBackPressedListener{
         return sb;
     }
 
+    public void MyCustomAssignNumDialog(final String number) {
+        MyDialogAssignNum = new Dialog(getContext());
+        MyDialogAssignNum.requestWindowFeature(Window.FEATURE_NO_TITLE);
+        MyDialogAssignNum.setContentView(R.layout.assign_number_speed_dial_dialog);
+        MyDialogAssignNum.show();
+        Window window = MyDialogAssignNum.getWindow();
+        window.setLayout(Toolbar.LayoutParams.WRAP_CONTENT, Toolbar.LayoutParams.WRAP_CONTENT);
+        MyDialogAssignNum.getWindow().setBackgroundDrawable(new ColorDrawable(Color.TRANSPARENT));
+        TextView speedDialTitle=MyDialogAssignNum.findViewById(R.id.speed_dial_title);
+        speedDialTitle.setText("Speed dial #"+number);
+        final EditText phoneNum=MyDialogAssignNum.findViewById(R.id.edit_phone_number);
+        final TextInputLayout inputLayout=MyDialogAssignNum.findViewById(R.id.input_layout_phone_number);
+        TextView OK,Cancel;
+        OK=MyDialogAssignNum.findViewById(R.id.btn_submit);
+        Cancel=MyDialogAssignNum.findViewById(R.id.btn_close);
+        OK.setOnClickListener(new View.OnClickListener() {
+            @Override
+            public void onClick(View v) {
 
+                if (TextUtils.isEmpty(phoneNum.getText().toString().trim()))
+                {
+                    inputLayout.setError("Empty Field");
+                }
+                else
+                {
+                    SharedPreferences.Editor editor=sharedPreferences.edit();
+                    editor.putString("#"+number,phoneNum.getText().toString().trim());
+                    editor.commit();
+                    MyDialogAssignNum.dismiss();
+                    MyDialogSpeedDial.dismiss();
+                }
+            }
+        });
+        Cancel.setOnClickListener(new View.OnClickListener() {
+            @Override
+            public void onClick(View v) {
+                MyDialogAssignNum.dismiss();
+            }
+        });
+    }
 
+    public static final int PICK_CONTACT=1;
+    public void MyCustomSpeedDialog(final String number){
+        MyDialogSpeedDial = new Dialog(getContext());
+        MyDialogSpeedDial.requestWindowFeature(Window.FEATURE_NO_TITLE);
+        MyDialogSpeedDial.setContentView(R.layout.long_press_dialog);
+        Window window = MyDialogSpeedDial.getWindow();
+        window.setLayout(Toolbar.LayoutParams.WRAP_CONTENT, Toolbar.LayoutParams.WRAP_CONTENT);
+        MyDialogSpeedDial.getWindow().setBackgroundDrawable(new ColorDrawable(Color.TRANSPARENT));
+        TextView speedDialTitle=MyDialogSpeedDial.findViewById(R.id.speed_dial_title);
+        speedDialTitle.setText("Speed dial #"+number);
+        TextView assignContact=MyDialogSpeedDial.findViewById(R.id.assign_contact);
+        assignContact.setOnClickListener(new View.OnClickListener() {
+            @Override
+            public void onClick(View v) {
+                Intent intent = new Intent(Intent.ACTION_PICK,ContactsContract.Contacts.CONTENT_URI);
+                intent.setType(ContactsContract.CommonDataKinds.Phone.CONTENT_TYPE);
+                startActivityForResult(intent,PICK_CONTACT);
+            }
+        });
+        TextView assignPhoneNumber=MyDialogSpeedDial.findViewById(R.id.assign_phone_number);
+        assignPhoneNumber.setOnClickListener(new View.OnClickListener() {
+            @Override
+            public void onClick(View v) {
+                MyCustomAssignNumDialog(number);
+            }
+        });
+        TextView editSpeedDial=MyDialogSpeedDial.findViewById(R.id.edit_speed_dial);
+        editSpeedDial.setOnClickListener(new View.OnClickListener() {
+            @Override
+            public void onClick(View v) {
+                startActivity(new Intent(getContext(), EditSpeedDialActivity.class));
+                MyDialogSpeedDial.dismiss();
+            }
+        });
+        MyDialogSpeedDial.show();
+    }
 
+    @Override
+    public void onActivityResult(int reqCode, int resultCode, Intent data) {
+        if ((reqCode == PICK_CONTACT) && (resultCode == RESULT_OK)) {
+            Cursor MyCursor = null;
+            try {
+                Uri uri = data.getData();
+                MyCursor = getActivity().getContentResolver().query(uri, new String[] { ContactsContract.CommonDataKinds.Phone.NUMBER }, null, null, null);
+                if (MyCursor != null && MyCursor.moveToNext()) {
+                    String phone = MyCursor.getString(0);
+                    Log.d("Phone",phone);
+
+                    SharedPreferences.Editor editor=sharedPreferences.edit();
+                    editor.putString("#"+grid_num_tv.getText().toString(),phone);
+                    editor.commit();
+                    MyDialogSpeedDial.dismiss();
+                }
+            } catch (Exception e) {
+                e.printStackTrace();
+            }
+        }
+        else if ((reqCode == PICK_CONTACT) && (resultCode == RESULT_CANCELED))
+        {
+
+            //MyDialogSpeedDial.dismiss();
+        }
+    }
 }

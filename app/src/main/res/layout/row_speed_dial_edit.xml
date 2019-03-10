@@ -1,0 +1,36 @@
+<?xml version="1.0" encoding="utf-8"?>
+<RelativeLayout
+    xmlns:android="http://schemas.android.com/apk/res/android"
+        android:id="@+id/Voice_Mail_Layout"
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content"
+    android:background="#fff"
+        android:padding="10dp">
+
+        <TextView
+            android:id="@+id/Dial_Number"
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:background="@drawable/circle_number"
+            android:text="1"
+            android:textSize="18dp"
+            android:gravity="center"
+            />
+        <TextView
+            android:id="@+id/add_contact_or_number"
+            android:layout_marginHorizontal="20dp"
+            android:layout_toEndOf="@+id/Dial_Number"
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:layout_centerVertical="true"
+            android:text="add contact or number"
+            android:layout_toRightOf="@+id/Dial_Number" />
+    <ImageView
+        android:layout_centerVertical="true"
+        android:layout_alignParentEnd="true"
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content"
+        android:src="@drawable/ic_edit_blue_gray_24dp"
+        android:layout_alignParentRight="true" />
+
+</RelativeLayout>
