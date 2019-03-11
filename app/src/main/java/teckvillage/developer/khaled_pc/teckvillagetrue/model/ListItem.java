@@ -5,4 +5,6 @@ package teckvillage.developer.khaled_pc.teckvillagetrue.model;
  */
 
 public interface ListItem {
+    void zfa();
+
 }

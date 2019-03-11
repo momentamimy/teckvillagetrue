@@ -6,6 +6,7 @@ import android.animation.AnimatorSet;
 import android.animation.ObjectAnimator;
 import android.app.Dialog;
 import android.content.Context;
+import android.content.DialogInterface;
 import android.content.Intent;
 import android.content.SharedPreferences;
 import android.content.pm.PackageManager;
@@ -17,12 +18,17 @@ import android.graphics.drawable.ColorDrawable;
 import android.graphics.drawable.Drawable;
 import android.net.Uri;
 import android.os.Bundle;
+import android.provider.CallLog;
 import android.provider.ContactsContract;
 import android.support.design.widget.CoordinatorLayout;
 import android.support.design.widget.FloatingActionButton;
 import android.support.design.widget.TextInputLayout;
 import android.support.v4.app.ActivityCompat;
 import android.support.v4.app.Fragment;
+import android.support.v4.app.LoaderManager;
+import android.support.v4.content.CursorLoader;
+import android.support.v4.content.Loader;
+import android.support.v7.app.AlertDialog;
 import android.support.v7.widget.DefaultItemAnimator;
 import android.support.v7.widget.LinearLayoutManager;
 import android.support.v7.widget.PopupMenu;
@@ -43,19 +49,24 @@ import android.view.ViewGroup;
 import android.view.Window;
 import android.widget.AbsListView;
 import android.widget.AdapterView;
+import android.widget.CursorAdapter;
 import android.widget.EditText;
 import android.widget.GridView;
 import android.widget.ImageView;
 import android.widget.RelativeLayout;
 import android.widget.TextView;
 
+import java.text.SimpleDateFormat;
 import java.util.ArrayList;
 import java.util.Collections;
+import java.util.Date;
 import java.util.List;
+import java.util.Locale;
 
 import teckvillage.developer.khaled_pc.teckvillagetrue.Controller.ContactAdapter;
 import teckvillage.developer.khaled_pc.teckvillagetrue.Controller.CustomGridAdapter;
 import teckvillage.developer.khaled_pc.teckvillagetrue.Controller.LogAdapter;
+import teckvillage.developer.khaled_pc.teckvillagetrue.View.Blocked_Call_fragment;
 import teckvillage.developer.khaled_pc.teckvillagetrue.View.Income_Call_fragment;
 import teckvillage.developer.khaled_pc.teckvillagetrue.View.Missed_Call_fragment;
 import teckvillage.developer.khaled_pc.teckvillagetrue.View.Outgoing_Call_fragment;
@@ -73,8 +84,11 @@ import static android.app.Activity.RESULT_OK;
 /**
  * A simple {@link Fragment} subclass.
  */
-public class Main_Fagment extends Fragment implements OnBackPressedListener {
+public class Main_Fagment extends Fragment implements OnBackPressedListener ,
+        LoaderManager.LoaderCallbacks<Cursor> {
 
+    String lastnum="0";
+    int numbersofcall=1;
     List<LogInfo> consolidatedList = new ArrayList<>();
     /*--------------------------------------dial_pad_layout------------------------------------------*/
     public RelativeLayout padLayout;
@@ -85,6 +99,7 @@ public class Main_Fagment extends Fragment implements OnBackPressedListener {
     public KeyboardlessEditText phone_num_edt;
     public RelativeLayout textLayout;
     public ImageView back_space;
+    ArrayList<LogInfo> loglist102 = new ArrayList<>();
 
     static final String[] GRID_NUM = new String[]{
             "1", "2", "3",
@@ -134,6 +149,11 @@ public class Main_Fagment extends Fragment implements OnBackPressedListener {
         Log.d("mesheyyyy", "Oncreate");
         // Inflate the layout for this fragment
         View view = inflater.inflate(R.layout.fragment_main__fagment, container, false);
+
+
+
+
+        getActivity().getSupportLoaderManager().initLoader(1, null, this);
 
         groupListByDate = new GroupListByDate();
 
@@ -216,10 +236,47 @@ public class Main_Fagment extends Fragment implements OnBackPressedListener {
                                         .addToBackStack(null)
                                         .commit();
 
-
                                 return true;
                             case 4:
                                 // item one clicked
+                                Blocked_Call_fragment nextFrag5 = new Blocked_Call_fragment();
+                                getActivity().getSupportFragmentManager().beginTransaction()
+                                        .add(R.id.fragment_container_main, nextFrag5, "findThisFragment")
+                                        .addToBackStack(null)
+                                        .commit();
+                                return true;
+                            case 5:
+                                // item one clicked
+                                AlertDialog.Builder builder = new AlertDialog.Builder(getActivity());
+                                builder.setTitle("Delete all calls");
+                                builder.setMessage("Are you sure you want clear all calls");
+
+                                builder.setPositiveButton("OK", new DialogInterface.OnClickListener() {
+                                    @Override
+                                    public void onClick(DialogInterface dialog, int which) {
+
+                                        if (ActivityCompat.checkSelfPermission(getActivity(), Manifest.permission.WRITE_CALL_LOG) != PackageManager.PERMISSION_GRANTED) {
+                                            // TODO: Consider calling
+                                            //    ActivityCompat#requestPermissions
+                                            // here to request the missing permissions, and then overriding
+                                            //   public void onRequestPermissionsResult(int requestCode, String[] permissions,
+                                            //                                          int[] grantResults)
+                                            // to handle the case where the user grants the permission. See the documentation
+                                            // for ActivityCompat#requestPermissions for more details.
+                                            return;
+                                        }
+                                        getActivity().getContentResolver().delete(android.provider.CallLog.Calls.CONTENT_URI, null, null);
+
+                                    }
+                                });
+                                builder.setNegativeButton("CANCEL", new DialogInterface.OnClickListener() {
+                                    @Override
+                                    public void onClick(DialogInterface dialog, int which) {
+                                        dialog.dismiss();
+                                    }
+                                });
+                                builder.show();
+
                                 return true;
 
                         }
@@ -233,6 +290,7 @@ public class Main_Fagment extends Fragment implements OnBackPressedListener {
                 popupMenu.getMenu().add(0, 2, 2, menuIconWithText(getResources().getDrawable(R.drawable.ic_arrow_right_menu), "Outgoing"));
                 popupMenu.getMenu().add(0, 3, 3, menuIconWithText(getResources().getDrawable(R.drawable.ic_missed_menu), "Missed"));
                 popupMenu.getMenu().add(0, 4, 4, menuIconWithText(getResources().getDrawable(R.drawable.ic_block_black_24dp), "Blocked"));
+                popupMenu.getMenu().add(5, 5, 5, menuIconWithText(getResources().getDrawable(R.drawable.ic_delete_black_24dp), "Delete all calls"));
 
                 popupMenu.show();
 
@@ -288,85 +346,56 @@ public class Main_Fagment extends Fragment implements OnBackPressedListener {
                     }
                     String num = tel.getVoiceMailNumber();
                     Intent intent = new Intent(Intent.ACTION_CALL);
-                    intent.setData(Uri.parse("tel:"+num));
+                    intent.setData(Uri.parse("tel:" + num));
                     startActivity(intent);
 
 
-                }
-                else if (grid_num_tv.getText().toString().equals("0"))
-                {
-                    if (CursorVisibility)
-                    {
-                        insertSelection(phone_num_edt,"+");
-                    }
-                    else
-                    {
-                        phone_num_edt.setText(phone_num_edt.getText().toString()+"+");
+                } else if (grid_num_tv.getText().toString().equals("0")) {
+                    if (CursorVisibility) {
+                        insertSelection(phone_num_edt, "+");
+                    } else {
+                        phone_num_edt.setText(phone_num_edt.getText().toString() + "+");
                     }
 
-                    if (firstclick)
-                    {
+                    if (firstclick) {
                         writeAnim(300);
-                        firstclick=false;
-                    }
-                    else
-                    {
+                        firstclick = false;
+                    } else {
                         SortSearchCallList(phone_num_edt.getText().toString());
                     }
-                }
-                else if (grid_num_tv.getText().toString().equals("#"))
-                {
-                    if (CursorVisibility)
-                    {
-                        insertSelection(phone_num_edt,";");
-                    }
-                    else
-                    {
-                        phone_num_edt.setText(phone_num_edt.getText().toString()+";");
+                } else if (grid_num_tv.getText().toString().equals("#")) {
+                    if (CursorVisibility) {
+                        insertSelection(phone_num_edt, ";");
+                    } else {
+                        phone_num_edt.setText(phone_num_edt.getText().toString() + ";");
                     }
 
-                    if (firstclick)
-                    {
+                    if (firstclick) {
                         writeAnim(300);
-                        firstclick=false;
-                    }
-                    else
-                    {
+                        firstclick = false;
+                    } else {
                         SortSearchCallList(phone_num_edt.getText().toString());
                     }
-                }
-                else if (grid_num_tv.getText().toString().equals("*"))
-                {
-                    if (CursorVisibility)
-                    {
-                        insertSelection(phone_num_edt,",");
-                    }
-                    else
-                    {
-                        phone_num_edt.setText(phone_num_edt.getText().toString()+",");
+                } else if (grid_num_tv.getText().toString().equals("*")) {
+                    if (CursorVisibility) {
+                        insertSelection(phone_num_edt, ",");
+                    } else {
+                        phone_num_edt.setText(phone_num_edt.getText().toString() + ",");
                     }
 
-                    if (firstclick)
-                    {
+                    if (firstclick) {
                         writeAnim(300);
-                        firstclick=false;
-                    }
-                    else
-                    {
+                        firstclick = false;
+                    } else {
                         SortSearchCallList(phone_num_edt.getText().toString());
                     }
-                }
-                else
-                {
-                    String choosenNum=sharedPreferences.getString("#"+grid_num_tv.getText().toString(),"");
-                    if (choosenNum.equals(""))
-                    {
+                } else {
+                    String choosenNum = sharedPreferences.getString("#" + grid_num_tv.getText().toString(), "");
+                    if (choosenNum.equals("")) {
                         MyCustomSpeedDialog(grid_num_tv.getText().toString());
-                    }
-                    else
-                    {
+                    } else {
                         Intent intent = new Intent(Intent.ACTION_CALL);
-                        intent.setData(Uri.parse("tel:"+choosenNum));
+                        intent.setData(Uri.parse("tel:" + choosenNum));
                         startActivity(intent);
                     }
                 }
@@ -378,23 +407,17 @@ public class Main_Fagment extends Fragment implements OnBackPressedListener {
             public void onItemClick(AdapterView<?> parent, View view, int position, long id) {
                 grid_num_tv = (TextView) view.findViewById(R.id.grid_num_textView);
 
-                    //Toast.makeText(getApplicationContext(), grid_num_tv.getText(), Toast.LENGTH_SHORT).show();
-                if (CursorVisibility)
-                {
-                    insertSelection(phone_num_edt,grid_num_tv.getText().toString());
-                }
-                else
-                {
-                    phone_num_edt.setText(phone_num_edt.getText().toString()+grid_num_tv.getText());
+                //Toast.makeText(getApplicationContext(), grid_num_tv.getText(), Toast.LENGTH_SHORT).show();
+                if (CursorVisibility) {
+                    insertSelection(phone_num_edt, grid_num_tv.getText().toString());
+                } else {
+                    phone_num_edt.setText(phone_num_edt.getText().toString() + grid_num_tv.getText());
                 }
 
-                if (firstclick)
-                {
+                if (firstclick) {
                     writeAnim(300);
-                    firstclick=false;
-                }
-                else
-                {
+                    firstclick = false;
+                } else {
                     SortSearchCallList(phone_num_edt.getText().toString());
                 }
             }
@@ -403,21 +426,17 @@ public class Main_Fagment extends Fragment implements OnBackPressedListener {
         back_space.setOnClickListener(new View.OnClickListener() {
             @Override
             public void onClick(View v) {
-                String num=phone_num_edt.getText().toString();
+                String num = phone_num_edt.getText().toString();
 
-                if (CursorVisibility)
-                {
+                if (CursorVisibility) {
                     removeSelection(phone_num_edt);
-                }
-                else
-                {
+                } else {
                     phone_num_edt.setText(removeChar(num));
                 }
 
-                if (phone_num_edt.getText().length()==0)
-                {
+                if (phone_num_edt.getText().length() == 0) {
                     deleteAnim(300);
-                    firstclick=true;
+                    firstclick = true;
                 }
                 SortSearchCallList(phone_num_edt.getText().toString());
             }
@@ -427,90 +446,70 @@ public class Main_Fagment extends Fragment implements OnBackPressedListener {
         phone_num_edt.setOnTouchListener(new View.OnTouchListener() {
             @Override
             public boolean onTouch(View v, MotionEvent event) {
-                CursorVisibility=true;
+                CursorVisibility = true;
                 return false;
             }
         });
         /*--------------------------------------dial_pad_layout------------------------------------------*/
 
-        lLayout = new LinearLayoutManager(getContext(),LinearLayoutManager.HORIZONTAL, false);
+        lLayout = new LinearLayoutManager(getContext(), LinearLayoutManager.HORIZONTAL, false);
         lLayout1 = new LinearLayoutManager(getActivity());
         lLayout2 = new LinearLayoutManager(getActivity());
 
-        List<ContactInfo> contactInfos=new ArrayList<>();
+        List<ContactInfo> contactInfos = new ArrayList<>();
 
-        if(get_calls_log.CheckPermission()){
+        if (get_calls_log.CheckPermission()) {
 
-            contactInfos= get_calls_log.getTopTenContacts();
+            contactInfos = get_calls_log.getTopTenContacts();
 
         }
 
 
         contacts.setLayoutManager(lLayout);
         contacts.setItemAnimator(new DefaultItemAnimator());
-        ContactAdapter adapter=new ContactAdapter(getActivity(),contactInfos);
+        ContactAdapter adapter = new ContactAdapter(getActivity(), contactInfos);
         contacts.setAdapter(adapter);
 
 
-
+        /*
         //**********************Log List******************************
-        logInfos=new ArrayList<>();
-        if(get_calls_log.CheckPermission()){
+        logInfos = new ArrayList<>();
+        if (get_calls_log.CheckPermission()) {
 
-            logInfos=get_calls_log.getCallDetails();
+            logInfos = get_calls_log.getCallDetails();
 
-            callLogInfos=logInfos;
-            for (int i=0;i<callLogInfos.size();i++)
-            {
-                for (int j=i+1;j<callLogInfos.size();j++)
-                {
-                    if (callLogInfos.get(i).getNumber().equals(callLogInfos.get(j).getNumber()))
-                    {
+            callLogInfos = logInfos;
+            for (int i = 0; i < callLogInfos.size(); i++) {
+                for (int j = i + 1; j < callLogInfos.size(); j++) {
+                    if (callLogInfos.get(i).getNumber().equals(callLogInfos.get(j).getNumber())) {
                         callLogInfos.remove(j--);
                     }
                 }
             }
 
 
-
         }
 
-
-        /*
-        for (String date : groupedHashMap.keySet()) {
-            int i=0;
-            LogInfo logInfoo=new LogInfo();
-            //DateItem dateItem = new DateItem();
-           // dateItem.setDate(date);
-           // consolidatedList.add(dateItem);
-            logInfoo.logDate=date;
-            consolidatedList.get(i).setType(1);
-            consolidatedList.add(logInfoo);
-            i++;
-
-            for (LogInfo pojoOfJsonArray : groupedHashMap.get(date)) {
-                GeneralItem generalItem = new GeneralItem();
-                LogInfo logInfo2=new LogInfo();
-                generalItem.setPojoOfJsonArray(pojoOfJsonArray);//setBookingDataTabs(bookingDataTabs);
-                consolidatedList.get(i).setType(2);
-                consolidatedList.add(generalItem.);
-            }
-        }
-            */
-
-        Collections.sort(logInfos, LogInfo.BY_DATE);
 
         logs.setLayoutManager(lLayout1);
         logs.setItemAnimator(new DefaultItemAnimator());
-        adapter1=new LogAdapter(getActivity(),groupListByDate.groupListByDate(logInfos));
-        logs.setAdapter(adapter1);
 
+        if(logInfos.size()!=0){
+            Collections.sort(logInfos, LogInfo.BY_DATE);
+
+            adapter1 = new LogAdapter(getActivity(), groupListByDate.groupListByDate(logInfos));
+            logs.setAdapter(adapter1);
+        }else {
+            adapter1 = new LogAdapter(getActivity(), logInfos);
+            logs.setAdapter(adapter1);
+
+        }*/
 
 
 
         searchLogs.setLayoutManager(lLayout2);
         searchLogs.setItemAnimator(new DefaultItemAnimator());
-        CallSearchLogAdapter adapter2=new CallSearchLogAdapter(getActivity(),callLogInfos,phone_num_edt.getText().toString());
+        CallSearchLogAdapter adapter2 = new CallSearchLogAdapter(getActivity(), callLogInfos, phone_num_edt.getText().toString());
         searchLogs.setAdapter(adapter2);
 
         logs.addOnScrollListener(new RecyclerView.OnScrollListener() {
@@ -526,23 +525,24 @@ public class Main_Fagment extends Fragment implements OnBackPressedListener {
                 }
 
             }
+
             @Override
             public void onScrollStateChanged(RecyclerView recyclerView, int newState) {
                 super.onScrollStateChanged(recyclerView, newState);
 
                 if (newState == AbsListView.OnScrollListener.SCROLL_STATE_FLING) {
                     // Do something
-                    Log.d("mememem:","111111");
+                    Log.d("mememem:", "111111");
                 } else if (newState == AbsListView.OnScrollListener.SCROLL_STATE_TOUCH_SCROLL) {
                     // Do something
-                    Log.d("mememem:","222222");
-                    if (aBoolean==true) {
+                    Log.d("mememem:", "222222");
+                    if (aBoolean == true) {
                         close_button(400);
                         aBoolean = false;
                     }
                 } else {
                     // Do something
-                    Log.d("mememem:","333333");
+                    Log.d("mememem:", "333333");
                 }
             }
         });
@@ -553,15 +553,15 @@ public class Main_Fagment extends Fragment implements OnBackPressedListener {
 
                 if (newState == AbsListView.OnScrollListener.SCROLL_STATE_FLING) {
                     // Do something
-                    Log.d("mememem:","111111");
+                    Log.d("mememem:", "111111");
                 } else if (newState == AbsListView.OnScrollListener.SCROLL_STATE_TOUCH_SCROLL) {
                     // Do something
-                    Log.d("mememem:","222222");
+                    Log.d("mememem:", "222222");
                     if (!scroll)
                         scrollCloseAnim(400);
                 } else {
                     // Do something
-                    Log.d("mememem:","333333");
+                    Log.d("mememem:", "333333");
                 }
             }
         });
@@ -570,123 +570,100 @@ public class Main_Fagment extends Fragment implements OnBackPressedListener {
 
     @Override
     public void onBackPressed() {
-        if (aBoolean&&firstclick)
-        {
+        if (aBoolean && firstclick) {
             close_button(400);
-            aBoolean=false;
-        }
-        else if (aBoolean&&!firstclick&&!scroll)
-        {
+            aBoolean = false;
+        } else if (aBoolean && !firstclick && !scroll) {
             scrollCloseAnim(400);
-        }
-        else if (aBoolean&&!firstclick&&scroll)
-        {
+        } else if (aBoolean && !firstclick && scroll) {
             close_search_anim_button(200);
-        }
-        else
-        {
+        } else {
 
-                getActivity().finish();
+            getActivity().finish();
         }
 
     }
 
 
-
-
     private List<LogInfo> SortSearchCallList(String num) {
-        ArrayList<LogInfo> infos=new ArrayList<>();
-        for (int i=0;i<callLogInfos.size();i++)
-        {
-            if (callLogInfos.get(i).getNumber().contains(num))
-            {
+        ArrayList<LogInfo> infos = new ArrayList<>();
+        for (int i = 0; i < callLogInfos.size(); i++) {
+            if (callLogInfos.get(i).getNumber().contains(num)) {
                 infos.add(callLogInfos.get(i));
             }
         }
         int position;
-        for (int i=0;i<infos.size();i++)
-        {
-            position =  infos.get(i).getNumber().indexOf(num);
-            if (infos.get(0).getNumber().indexOf(num)>position)
-            {
-                LogInfo inf=infos.get(i);
+        for (int i = 0; i < infos.size(); i++) {
+            position = infos.get(i).getNumber().indexOf(num);
+            if (infos.get(0).getNumber().indexOf(num) > position) {
+                LogInfo inf = infos.get(i);
                 infos.remove(i);
-                infos.add(0,inf);
+                infos.add(0, inf);
             }
         }
 
-        CallSearchLogAdapter adapter=new CallSearchLogAdapter(getActivity(),infos,phone_num_edt.getText().toString());
+        CallSearchLogAdapter adapter = new CallSearchLogAdapter(getActivity(), infos, phone_num_edt.getText().toString());
         searchLogs.setAdapter(adapter);
 
         return infos;
     }
 
 
-
-
     /*-------------------------------------------dial_pad_layout--------------------------------------------------*/
-    public void removeSelection(KeyboardlessEditText inputText)
-    {
+    public void removeSelection(KeyboardlessEditText inputText) {
 
-        int selectionStart=inputText.getSelectionStart();
-        int selectionEnd=inputText.getSelectionEnd();
+        int selectionStart = inputText.getSelectionStart();
+        int selectionEnd = inputText.getSelectionEnd();
 
 
-        if(selectionStart!=selectionEnd)
-        {
-            inputText.getText().delete(selectionStart,selectionEnd);
-        }
-        else
-        {
-            if (selectionEnd!=0)
-                inputText.getText().delete(selectionStart-1,selectionStart);
+        if (selectionStart != selectionEnd) {
+            inputText.getText().delete(selectionStart, selectionEnd);
+        } else {
+            if (selectionEnd != 0)
+                inputText.getText().delete(selectionStart - 1, selectionStart);
         }
     }
 
-    public void insertSelection(KeyboardlessEditText inputText,String numString)
-    {
-        int selectionStart=inputText.getSelectionStart();
-        int selectionEnd=inputText.getSelectionEnd();
+    public void insertSelection(KeyboardlessEditText inputText, String numString) {
+        int selectionStart = inputText.getSelectionStart();
+        int selectionEnd = inputText.getSelectionEnd();
 
-        if(selectionStart!=selectionEnd)
-        {
-            inputText.getText().replace(selectionStart,selectionEnd,numString);
-            selectionEnd=inputText.getSelectionEnd();
+        if (selectionStart != selectionEnd) {
+            inputText.getText().replace(selectionStart, selectionEnd, numString);
+            selectionEnd = inputText.getSelectionEnd();
             inputText.setSelection(selectionEnd);
-        }
-        else
-        {
-            inputText.getText().insert(selectionStart,numString);
+        } else {
+            inputText.getText().insert(selectionStart, numString);
         }
     }
 
     public String removeChar(String str) {
-        if (str != null && str.length() > 0 ) {
+        if (str != null && str.length() > 0) {
             str = str.substring(0, str.length() - 1);
         }
         return str;
     }
 
-    public void callAnimDefault()
-    {
+    public void callAnimDefault() {
 
         DisplayMetrics metrics = getResources().getDisplayMetrics();
-        ObjectAnimator translationY = ObjectAnimator.ofFloat(padLayout, "y", metrics.widthPixels*2); // metrics.heightPixels or root.getHeight()
+        ObjectAnimator translationY = ObjectAnimator.ofFloat(padLayout, "y", metrics.widthPixels * 2); // metrics.heightPixels or root.getHeight()
         translationY.setDuration(0);
         translationY.start();
 
     }
+
     ObjectAnimator translationY;
-    public ObjectAnimator callLayoutAnim(boolean up_down,int duration)
-    {
+
+    public ObjectAnimator callLayoutAnim(boolean up_down, int duration) {
 
         DisplayMetrics metrics = getResources().getDisplayMetrics();
 
-        if (up_down){
-            translationY=ObjectAnimator.ofFloat(padLayout, "y", 0); // metrics.heightPixels or root.getHeight()
+        if (up_down) {
+            translationY = ObjectAnimator.ofFloat(padLayout, "y", 0); // metrics.heightPixels or root.getHeight()
             translationY.setDuration(duration);
-        }else {
-            translationY = ObjectAnimator.ofFloat(padLayout, "y", metrics.widthPixels*2); // metrics.heightPixels or root.getHeight()
+        } else {
+            translationY = ObjectAnimator.ofFloat(padLayout, "y", metrics.widthPixels * 2); // metrics.heightPixels or root.getHeight()
             translationY.setDuration(duration);
         }
 
@@ -694,103 +671,113 @@ public class Main_Fagment extends Fragment implements OnBackPressedListener {
 
     }
 
-    public void callButtonAnim()
-    {
-        if (!aBoolean)
-        {
+    public void callButtonAnim() {
+        if (!aBoolean) {
             open_button(400);
-            aBoolean=true;
-        }
-        else
-        {
+            aBoolean = true;
+        } else {
             close_button(400);
-            aBoolean=false;
+            aBoolean = false;
         }
 
     }
 
-    public void open_button(int duration)
-    {
-        ObjectAnimator callLayoutAnim=callLayoutAnim(!aBoolean,400);
+    public void open_button(int duration) {
+        ObjectAnimator callLayoutAnim = callLayoutAnim(!aBoolean, 400);
         DisplayMetrics metrics = getResources().getDisplayMetrics();
         ObjectAnimator translationX = ObjectAnimator.ofFloat(fab, "x", metrics.widthPixels / 2 - fab.getWidth() / 2); // metrics.heightPixels or root.getHeight()
-        ObjectAnimator rotate=ObjectAnimator.ofFloat(fab,"rotation",360);
+        ObjectAnimator rotate = ObjectAnimator.ofFloat(fab, "rotation", 360);
         rotate.setDuration(duration);
         translationX.setDuration(duration);
-        AnimatorSet animatorSet=new AnimatorSet();
-        animatorSet.playTogether(callLayoutAnim,rotate,translationX);
+        AnimatorSet animatorSet = new AnimatorSet();
+        animatorSet.playTogether(callLayoutAnim, rotate, translationX);
         animatorSet.start();
     }
 
-    public void close_button(int duration)
-    {
-        ObjectAnimator callLayoutAnim=callLayoutAnim(!aBoolean,400);
+    public void close_button(int duration) {
+        ObjectAnimator callLayoutAnim = callLayoutAnim(!aBoolean, 400);
         DisplayMetrics metrics = getResources().getDisplayMetrics();
-        ObjectAnimator translationX = ObjectAnimator.ofFloat(fab, "x", metrics.widthPixels-fab.getWidth()-20); // metrics.heightPixels or root.getHeight()
-        ObjectAnimator rotate=ObjectAnimator.ofFloat(fab,"rotation",0);
+        ObjectAnimator translationX = ObjectAnimator.ofFloat(fab, "x", metrics.widthPixels - fab.getWidth() - 20); // metrics.heightPixels or root.getHeight()
+        ObjectAnimator rotate = ObjectAnimator.ofFloat(fab, "rotation", 0);
         rotate.setDuration(duration);
         translationX.setDuration(duration);
-        AnimatorSet animatorSet=new AnimatorSet();
-        animatorSet.playTogether(callLayoutAnim,rotate,translationX);
+        AnimatorSet animatorSet = new AnimatorSet();
+        animatorSet.playTogether(callLayoutAnim, rotate, translationX);
         animatorSet.start();
     }
 
-    public void writeAnim(final int duration)
-    {
+    public void writeAnim(final int duration) {
         searchCallLayout.setVisibility(View.VISIBLE);
         textLayout.setVisibility(View.VISIBLE);
         gridShadow.setVisibility(View.GONE);
         fab.setBackgroundTintList(ColorStateList.valueOf(getResources().getColor(R.color.greenColor)));
 
 
-        ObjectAnimator anim = ObjectAnimator.ofFloat(fab,"rotation",720);
+        ObjectAnimator anim = ObjectAnimator.ofFloat(fab, "rotation", 720);
         anim.setDuration(duration);
         anim.start();
 
         rocketAnimation = (AnimationDrawable) fab.getDrawable();
         rocketAnimation.start();
 
-        Thread timer= new Thread(){
-            public void run(){
-                try { synchronized(this){ wait(duration+100);
-                    getActivity().runOnUiThread(new Runnable() {@Override public void run() {
-                        fab.setImageResource(R.drawable.animation_list);
-                        SortSearchCallList(phone_num_edt.getText().toString());
-                    }}); }
-                } catch (InterruptedException e) { e.printStackTrace(); } }};
+        Thread timer = new Thread() {
+            public void run() {
+                try {
+                    synchronized (this) {
+                        wait(duration + 100);
+                        getActivity().runOnUiThread(new Runnable() {
+                            @Override
+                            public void run() {
+                                fab.setImageResource(R.drawable.animation_list);
+                                SortSearchCallList(phone_num_edt.getText().toString());
+                            }
+                        });
+                    }
+                } catch (InterruptedException e) {
+                    e.printStackTrace();
+                }
+            }
+        };
         timer.start();
     }
 
-    public void deleteAnim(final int duration)
-    {
+    public void deleteAnim(final int duration) {
         searchCallLayout.setVisibility(View.GONE);
         textLayout.setVisibility(View.GONE);
         gridShadow.setVisibility(View.VISIBLE);
         fab.setBackgroundTintList(ColorStateList.valueOf(getResources().getColor(R.color.colorPrimary)));
 
-        ObjectAnimator anim = ObjectAnimator.ofFloat(fab,"rotation",360);
+        ObjectAnimator anim = ObjectAnimator.ofFloat(fab, "rotation", 360);
         anim.setDuration(duration);
         anim.start();
 
         rocketAnimation = (AnimationDrawable) fab.getDrawable();
         rocketAnimation.start();
 
-        Thread timer= new Thread(){
-            public void run(){
-                try { synchronized(this){ wait(duration);
-                    getActivity().runOnUiThread(new Runnable() {@Override public void run() {
-                        fab.setImageResource(R.drawable.animation_list2);
-                    }}); }
-                } catch (InterruptedException e) { e.printStackTrace(); } }};
+        Thread timer = new Thread() {
+            public void run() {
+                try {
+                    synchronized (this) {
+                        wait(duration);
+                        getActivity().runOnUiThread(new Runnable() {
+                            @Override
+                            public void run() {
+                                fab.setImageResource(R.drawable.animation_list2);
+                            }
+                        });
+                    }
+                } catch (InterruptedException e) {
+                    e.printStackTrace();
+                }
+            }
+        };
         timer.start();
     }
 
 
-
-    public void scrollOpenAnim(final int duration)
-    {
-        scroll=false;
-        translationY=ObjectAnimator.ofFloat(padLayout, "y", 0);
+    public void scrollOpenAnim(final int duration) {
+        scroll = false;
+        translationY = ObjectAnimator.ofFloat(padLayout, "y", 0);
         translationY.setDuration(duration);
         DisplayMetrics metrics = getResources().getDisplayMetrics();
         ObjectAnimator translationX = ObjectAnimator.ofFloat(fab, "x", metrics.widthPixels / 2 - fab.getWidth() / 2); // metrics.heightPixels or root.getHeight()
@@ -800,75 +787,103 @@ public class Main_Fagment extends Fragment implements OnBackPressedListener {
         fab.setBackgroundTintList(ColorStateList.valueOf(getResources().getColor(R.color.greenColor)));
 
 
-        ObjectAnimator anim = ObjectAnimator.ofFloat(fab,"rotation",720);
+        ObjectAnimator anim = ObjectAnimator.ofFloat(fab, "rotation", 720);
         anim.setDuration(duration);
         //anim.start();
 
-        AnimatorSet set=new AnimatorSet();
-        set.playTogether(translationY,translationX,anim);
+        AnimatorSet set = new AnimatorSet();
+        set.playTogether(translationY, translationX, anim);
         set.start();
 
         rocketAnimation = (AnimationDrawable) fab.getDrawable();
         rocketAnimation.start();
 
-        Thread timer= new Thread(){
-            public void run(){
-                try { synchronized(this){ wait(duration);
-                    getActivity().runOnUiThread(new Runnable() {@Override public void run() {
-                        fab.setImageResource(R.drawable.animation_list);
-                    }}); }
-                } catch (InterruptedException e) { e.printStackTrace(); } }};
+        Thread timer = new Thread() {
+            public void run() {
+                try {
+                    synchronized (this) {
+                        wait(duration);
+                        getActivity().runOnUiThread(new Runnable() {
+                            @Override
+                            public void run() {
+                                fab.setImageResource(R.drawable.animation_list);
+                            }
+                        });
+                    }
+                } catch (InterruptedException e) {
+                    e.printStackTrace();
+                }
+            }
+        };
         timer.start();
     }
 
-    public void scrollCloseAnim(final int duration)
-    {
+    public void scrollCloseAnim(final int duration) {
         DisplayMetrics metrics = getResources().getDisplayMetrics();
-        scroll=true;
-        translationY = ObjectAnimator.ofFloat(padLayout, "y", metrics.widthPixels*2); // metrics.heightPixels or root.getHeight()
+        scroll = true;
+        translationY = ObjectAnimator.ofFloat(padLayout, "y", metrics.widthPixels * 2); // metrics.heightPixels or root.getHeight()
         translationY.setDuration(400);
 
-        ObjectAnimator translationX = ObjectAnimator.ofFloat(fab, "x", metrics.widthPixels-fab.getWidth()-20); // metrics.heightPixels or root.getHeight()
+        ObjectAnimator translationX = ObjectAnimator.ofFloat(fab, "x", metrics.widthPixels - fab.getWidth() - 20); // metrics.heightPixels or root.getHeight()
         translationX.setDuration(duration);
         //translationX.start();
         fab.setBackgroundTintList(ColorStateList.valueOf(getResources().getColor(R.color.colorPrimary)));
 
-        ObjectAnimator anim = ObjectAnimator.ofFloat(fab,"rotation",360);
+        ObjectAnimator anim = ObjectAnimator.ofFloat(fab, "rotation", 360);
         anim.setDuration(duration);
         //anim.start();
 
-        AnimatorSet set=new AnimatorSet();
-        set.playTogether(translationY,translationX,anim);
+        AnimatorSet set = new AnimatorSet();
+        set.playTogether(translationY, translationX, anim);
         set.start();
 
         rocketAnimation = (AnimationDrawable) fab.getDrawable();
         rocketAnimation.start();
 
-        Thread timer= new Thread(){
-            public void run(){
-                try { synchronized(this){ wait(duration);
-                    getActivity().runOnUiThread(new Runnable() {@Override public void run() {
-                        fab.setImageResource(R.drawable.animation_list2);
-                    }}); }
-                } catch (InterruptedException e) { e.printStackTrace(); } }};
+        Thread timer = new Thread() {
+            public void run() {
+                try {
+                    synchronized (this) {
+                        wait(duration);
+                        getActivity().runOnUiThread(new Runnable() {
+                            @Override
+                            public void run() {
+                                fab.setImageResource(R.drawable.animation_list2);
+                            }
+                        });
+                    }
+                } catch (InterruptedException e) {
+                    e.printStackTrace();
+                }
+            }
+        };
         timer.start();
     }
 
-    public void close_search_anim_button(final int duration)
-    {
+    public void close_search_anim_button(final int duration) {
         deleteAnim(duration);
-        Thread timer= new Thread(){
-            public void run(){
-                try { synchronized(this){ wait(duration);
-                    getActivity().runOnUiThread(new Runnable() {@Override public void run() {
-                        close_button(duration);
-                        phone_num_edt.setText("");
-                        aBoolean=false;
-                        scroll=false;
-                        CursorVisibility=false;
-                        firstclick=true;
-                    }}); }
-                } catch (InterruptedException e) { e.printStackTrace(); } }};
+        Thread timer = new Thread() {
+            public void run() {
+                try {
+                    synchronized (this) {
+                        wait(duration);
+                        getActivity().runOnUiThread(new Runnable() {
+                            @Override
+                            public void run() {
+                                close_button(duration);
+                                phone_num_edt.setText("");
+                                aBoolean = false;
+                                scroll = false;
+                                CursorVisibility = false;
+                                firstclick = true;
+                            }
+                        });
+                    }
+                } catch (InterruptedException e) {
+                    e.printStackTrace();
+                }
+            }
+        };
         timer.start();
     }
     /*-------------------------------------------dial_pad_layout--------------------------------------------------*/
@@ -876,17 +891,17 @@ public class Main_Fagment extends Fragment implements OnBackPressedListener {
     @Override
     public void onResume() {
         super.onResume();
-        Log.d("mesheyyyy","onresume");
-        if(shouldExecuteOnResume){
+        Log.d("mesheyyyy", "onresume");
+        if (shouldExecuteOnResume) {
             // Your onResume Code Here
-            get_calls_log=new Get_Calls_Log(getActivity());
+            get_calls_log = new Get_Calls_Log(getActivity());
 
             logInfos.clear();
-            loguinfoupdate=new ArrayList<LogInfo>();
+            loguinfoupdate = new ArrayList<LogInfo>();
 
-            if(get_calls_log.CheckPermission()){
+            if (get_calls_log.CheckPermission()) {
 
-                loguinfoupdate=get_calls_log.getCallDetails();
+                loguinfoupdate = get_calls_log.getCallDetails();
 
             }
 
@@ -895,17 +910,14 @@ public class Main_Fagment extends Fragment implements OnBackPressedListener {
 
             logs.setLayoutManager(lLayout1);
             logs.setItemAnimator(new DefaultItemAnimator());
-            adapter1=new LogAdapter(getActivity(),groupListByDate.groupListByDate(loguinfoupdate));
+            adapter1 = new LogAdapter(getActivity(), groupListByDate.groupListByDate(loguinfoupdate));
             logs.setAdapter(adapter1);
             adapter1.notifyDataSetChanged();
             //Dah elcall search mlksh da3wa beeh ya3m**********************************************
-            callLogInfos=loguinfoupdate;
-            for (int i=0;i<callLogInfos.size();i++)
-            {
-                for (int j=i+1;j<callLogInfos.size();j++)
-                {
-                    if (callLogInfos.get(i).getNumber().equals(callLogInfos.get(j).getNumber()))
-                    {
+            callLogInfos = loguinfoupdate;
+            for (int i = 0; i < callLogInfos.size(); i++) {
+                for (int j = i + 1; j < callLogInfos.size(); j++) {
+                    if (callLogInfos.get(i).getNumber().equals(callLogInfos.get(j).getNumber())) {
                         callLogInfos.remove(j--);
                     }
                 }
@@ -913,7 +925,7 @@ public class Main_Fagment extends Fragment implements OnBackPressedListener {
 
             //*************************************************************************************
             //toggleEmptyCases();
-        } else{
+        } else {
             shouldExecuteOnResume = true;
         }
 
@@ -924,7 +936,6 @@ public class Main_Fagment extends Fragment implements OnBackPressedListener {
         super.onCreate(savedInstanceState);
         setHasOptionsMenu(true);
     }
-
 
 
     private CharSequence menuIconWithText(Drawable r, String title) {
@@ -945,25 +956,22 @@ public class Main_Fagment extends Fragment implements OnBackPressedListener {
         Window window = MyDialogAssignNum.getWindow();
         window.setLayout(Toolbar.LayoutParams.WRAP_CONTENT, Toolbar.LayoutParams.WRAP_CONTENT);
         MyDialogAssignNum.getWindow().setBackgroundDrawable(new ColorDrawable(Color.TRANSPARENT));
-        TextView speedDialTitle=MyDialogAssignNum.findViewById(R.id.speed_dial_title);
-        speedDialTitle.setText("Speed dial #"+number);
-        final EditText phoneNum=MyDialogAssignNum.findViewById(R.id.edit_phone_number);
-        final TextInputLayout inputLayout=MyDialogAssignNum.findViewById(R.id.input_layout_phone_number);
-        TextView OK,Cancel;
-        OK=MyDialogAssignNum.findViewById(R.id.btn_submit);
-        Cancel=MyDialogAssignNum.findViewById(R.id.btn_close);
+        TextView speedDialTitle = MyDialogAssignNum.findViewById(R.id.speed_dial_title);
+        speedDialTitle.setText("Speed dial #" + number);
+        final EditText phoneNum = MyDialogAssignNum.findViewById(R.id.edit_phone_number);
+        final TextInputLayout inputLayout = MyDialogAssignNum.findViewById(R.id.input_layout_phone_number);
+        TextView OK, Cancel;
+        OK = MyDialogAssignNum.findViewById(R.id.btn_submit);
+        Cancel = MyDialogAssignNum.findViewById(R.id.btn_close);
         OK.setOnClickListener(new View.OnClickListener() {
             @Override
             public void onClick(View v) {
 
-                if (TextUtils.isEmpty(phoneNum.getText().toString().trim()))
-                {
+                if (TextUtils.isEmpty(phoneNum.getText().toString().trim())) {
                     inputLayout.setError("Empty Field");
-                }
-                else
-                {
-                    SharedPreferences.Editor editor=sharedPreferences.edit();
-                    editor.putString("#"+number,phoneNum.getText().toString().trim());
+                } else {
+                    SharedPreferences.Editor editor = sharedPreferences.edit();
+                    editor.putString("#" + number, phoneNum.getText().toString().trim());
                     editor.commit();
                     MyDialogAssignNum.dismiss();
                     MyDialogSpeedDial.dismiss();
@@ -978,33 +986,34 @@ public class Main_Fagment extends Fragment implements OnBackPressedListener {
         });
     }
 
-    public static final int PICK_CONTACT=1;
-    public void MyCustomSpeedDialog(final String number){
+    public static final int PICK_CONTACT = 1;
+
+    public void MyCustomSpeedDialog(final String number) {
         MyDialogSpeedDial = new Dialog(getContext());
         MyDialogSpeedDial.requestWindowFeature(Window.FEATURE_NO_TITLE);
         MyDialogSpeedDial.setContentView(R.layout.long_press_dialog);
         Window window = MyDialogSpeedDial.getWindow();
         window.setLayout(Toolbar.LayoutParams.WRAP_CONTENT, Toolbar.LayoutParams.WRAP_CONTENT);
         MyDialogSpeedDial.getWindow().setBackgroundDrawable(new ColorDrawable(Color.TRANSPARENT));
-        TextView speedDialTitle=MyDialogSpeedDial.findViewById(R.id.speed_dial_title);
-        speedDialTitle.setText("Speed dial #"+number);
-        TextView assignContact=MyDialogSpeedDial.findViewById(R.id.assign_contact);
+        TextView speedDialTitle = MyDialogSpeedDial.findViewById(R.id.speed_dial_title);
+        speedDialTitle.setText("Speed dial #" + number);
+        TextView assignContact = MyDialogSpeedDial.findViewById(R.id.assign_contact);
         assignContact.setOnClickListener(new View.OnClickListener() {
             @Override
             public void onClick(View v) {
-                Intent intent = new Intent(Intent.ACTION_PICK,ContactsContract.Contacts.CONTENT_URI);
+                Intent intent = new Intent(Intent.ACTION_PICK, ContactsContract.Contacts.CONTENT_URI);
                 intent.setType(ContactsContract.CommonDataKinds.Phone.CONTENT_TYPE);
-                startActivityForResult(intent,PICK_CONTACT);
+                startActivityForResult(intent, PICK_CONTACT);
             }
         });
-        TextView assignPhoneNumber=MyDialogSpeedDial.findViewById(R.id.assign_phone_number);
+        TextView assignPhoneNumber = MyDialogSpeedDial.findViewById(R.id.assign_phone_number);
         assignPhoneNumber.setOnClickListener(new View.OnClickListener() {
             @Override
             public void onClick(View v) {
                 MyCustomAssignNumDialog(number);
             }
         });
-        TextView editSpeedDial=MyDialogSpeedDial.findViewById(R.id.edit_speed_dial);
+        TextView editSpeedDial = MyDialogSpeedDial.findViewById(R.id.edit_speed_dial);
         editSpeedDial.setOnClickListener(new View.OnClickListener() {
             @Override
             public void onClick(View v) {
@@ -1021,24 +1030,266 @@ public class Main_Fagment extends Fragment implements OnBackPressedListener {
             Cursor MyCursor = null;
             try {
                 Uri uri = data.getData();
-                MyCursor = getActivity().getContentResolver().query(uri, new String[] { ContactsContract.CommonDataKinds.Phone.NUMBER }, null, null, null);
+                MyCursor = getActivity().getContentResolver().query(uri, new String[]{ContactsContract.CommonDataKinds.Phone.NUMBER}, null, null, null);
                 if (MyCursor != null && MyCursor.moveToNext()) {
                     String phone = MyCursor.getString(0);
-                    Log.d("Phone",phone);
+                    Log.d("Phone", phone);
 
-                    SharedPreferences.Editor editor=sharedPreferences.edit();
-                    editor.putString("#"+grid_num_tv.getText().toString(),phone);
+                    SharedPreferences.Editor editor = sharedPreferences.edit();
+                    editor.putString("#" + grid_num_tv.getText().toString(), phone);
                     editor.commit();
                     MyDialogSpeedDial.dismiss();
                 }
             } catch (Exception e) {
                 e.printStackTrace();
             }
-        }
-        else if ((reqCode == PICK_CONTACT) && (resultCode == RESULT_CANCELED))
-        {
+        } else if ((reqCode == PICK_CONTACT) && (resultCode == RESULT_CANCELED)) {
 
             //MyDialogSpeedDial.dismiss();
         }
+    }
+
+    //For delette speific number from call log
+    public void DeleteCallLogByNumber(String number) {
+        String queryString = "NUMBER=" + number;
+        if (ActivityCompat.checkSelfPermission(getActivity(), Manifest.permission.WRITE_CALL_LOG) != PackageManager.PERMISSION_GRANTED) {
+            // TODO: Consider calling
+            //    ActivityCompat#requestPermissions
+            // here to request the missing permissions, and then overriding
+            //   public void onRequestPermissionsResult(int requestCode, String[] permissions,
+            //                                          int[] grantResults)
+            // to handle the case where the user grants the permission. See the documentation
+            // for ActivityCompat#requestPermissions for more details.
+            return;
+        }
+        getActivity().getContentResolver().delete(CallLog.Calls.CONTENT_URI, queryString, null);
+    }
+
+
+    @Override
+    public Loader onCreateLoader(int id, Bundle args) {
+        Uri CONTACT_URI =CallLog.Calls.CONTENT_URI;
+        String[] projection = {
+                CallLog.Calls.CACHED_NAME,
+                CallLog.Calls.CACHED_NUMBER_TYPE,
+                CallLog.Calls.NUMBER,
+                CallLog.Calls.TYPE,
+                CallLog.Calls.DATE,
+                CallLog.Calls.DURATION,
+        };
+        CursorLoader cursorLoader = new CursorLoader(getActivity(), CONTACT_URI, projection, null, null, CallLog.Calls.DATE + " DESC");
+        return cursorLoader;
+    }
+
+
+    @Override
+    public void onLoadFinished(Loader<Cursor> loader, Cursor cursor) {
+
+
+        String phName, phNumber, callDate, callDuration, dateStringhour;
+        String dir = null;
+        String typephone = null;
+        int phmobileType, callType;
+        Date callDayTime;
+
+        //Date Format  "dd-MM-yyyy h:mm a"
+        SimpleDateFormat formatter = new SimpleDateFormat("h:mm a", Locale.ENGLISH);
+
+
+        if (cursor.moveToNext() == false) Log.e("GOPAL", "Empty Cursor");
+        else {
+            while (cursor.moveToNext()) {
+                phName =cursor.getString(cursor.getColumnIndex(CallLog.Calls.CACHED_NAME));
+                phmobileType =cursor.getInt(cursor.getColumnIndex(CallLog.Calls.CACHED_NUMBER_TYPE));
+                phNumber = cursor.getString(cursor.getColumnIndex(CallLog.Calls.NUMBER));
+                callType =cursor.getInt(cursor.getColumnIndex(CallLog.Calls.TYPE));
+                callDate = cursor.getString(cursor.getColumnIndex(CallLog.Calls.DATE));
+                callDayTime = new Date(Long.valueOf(callDate));
+
+
+
+
+                //callDuration = managedCursor.getString(duration);
+                dateStringhour = formatter.format(new Date(Long.parseLong(callDate)));
+
+                switch (callType) {
+                    case CallLog.Calls.OUTGOING_TYPE:
+                        dir = "OUTGOING";
+                        break;
+
+                    case CallLog.Calls.INCOMING_TYPE:
+                        dir = "INCOMING";
+                        break;
+
+                    case CallLog.Calls.MISSED_TYPE:
+                        dir = "MISSED";
+                        break;
+
+                    case CallLog.Calls.REJECTED_TYPE:
+                        dir = "REJECTED";
+                        break;
+
+                    case CallLog.Calls.VOICEMAIL_TYPE:
+                        dir = "VOICEMAIL";
+                        break;
+
+                    case CallLog.Calls.BLOCKED_TYPE:
+                        dir = "BLOCKED";
+                        break;
+
+                    case CallLog.Calls.ANSWERED_EXTERNALLY_TYPE:
+                        dir = "ANSWERED";
+                        break;
+                }
+
+                switch (phmobileType) {
+                    case ContactsContract.CommonDataKinds.Phone.TYPE_MOBILE:
+                        typephone = "Mobile";
+                        break;
+                    case ContactsContract.CommonDataKinds.Phone.TYPE_HOME:
+                        typephone = "Home";
+                        break;
+                    case ContactsContract.CommonDataKinds.Phone.TYPE_WORK:
+                        typephone = "Work";
+                        break;
+                    case ContactsContract.CommonDataKinds.Phone.TYPE_FAX_WORK:
+                        typephone = "Work Fax";
+                        break;
+                    case ContactsContract.CommonDataKinds.Phone.TYPE_FAX_HOME:
+                        typephone = "Home Fax";
+                        break;
+                    case ContactsContract.CommonDataKinds.Phone.TYPE_MAIN:
+                        typephone = "Main";
+                        break;
+                    case ContactsContract.CommonDataKinds.Phone.TYPE_PAGER:
+                        typephone = "Pager";
+                        break;
+                    case ContactsContract.CommonDataKinds.Phone.TYPE_CUSTOM:
+                        typephone = "Custom";
+                        break;
+                    case ContactsContract.CommonDataKinds.Phone.TYPE_OTHER:
+                        typephone = "Other";
+                        break;
+                    default:
+                        break;
+                }
+                if (phName == null || phName.equals("")) {
+                    if (phNumber != null) {
+
+                        if (phNumber.equals("")) {
+
+                            phName = "Unknown";
+
+                        } else {
+
+                            phName = phNumber;
+                           /*
+                        if (contactExists(phNumber)) {
+                            //phName = getContactName(phNumber);
+                            phName = contactsName;
+                            switch (TypeOfNumph) {
+                                case ContactsContract.CommonDataKinds.Phone.TYPE_MOBILE:
+                                    typephone = "Mobile";
+                                    break;
+                                case ContactsContract.CommonDataKinds.Phone.TYPE_HOME:
+                                    typephone = "Home";
+                                    break;
+                                case ContactsContract.CommonDataKinds.Phone.TYPE_WORK:
+                                    typephone = "Work";
+                                    break;
+                                case ContactsContract.CommonDataKinds.Phone.TYPE_FAX_WORK:
+                                    typephone = "Work Fax";
+                                    break;
+                                case ContactsContract.CommonDataKinds.Phone.TYPE_FAX_HOME:
+                                    typephone = "Home Fax";
+                                    break;
+                                case ContactsContract.CommonDataKinds.Phone.TYPE_MAIN:
+                                    typephone = "Main";
+                                    break;
+                                case ContactsContract.CommonDataKinds.Phone.TYPE_PAGER:
+                                    typephone = "Pager";
+                                    break;
+                                case ContactsContract.CommonDataKinds.Phone.TYPE_CUSTOM:
+                                    typephone = "Custom";
+                                    break;
+                                case ContactsContract.CommonDataKinds.Phone.TYPE_OTHER:
+                                    typephone = "Other";
+                                    break;
+                                default:
+                                    typephone = "Other";
+                                    break;
+
+                            }
+
+                        } else {
+                            if (phNumber.equals("")) {
+                                phName = "Unknown";
+
+                            } else {
+                                phName = phNumber;
+                            }
+                        }*/
+                        }
+
+
+                    } else {
+                        phName = "Unknown Number";
+                    }
+                }
+
+
+                /*
+                if(phNumber.equals(lastnum)){
+                    numbersofcall++;
+                    Log.w("loolp", String.valueOf(numbersofcall));
+                    lastnum=phNumber;
+                }else {
+                    lastnum=phNumber;
+                    Log.w("iiiii", String.valueOf(numbersofcall));
+                    loglist102.add(new LogInfo(null, phName, dir, callDayTime, typephone, dateStringhour, phNumber,numbersofcall));
+                    numbersofcall=1;
+                }*/
+
+                loglist102.add(new LogInfo(null, phName, dir, callDayTime, typephone, dateStringhour, phNumber,numbersofcall));
+
+            }
+
+
+
+            }
+
+
+        ArrayList<LogInfo> loglist103 = new ArrayList<>();
+
+
+         for(int i=0;i<loglist102.size()-1;i++) {
+
+             String numString1 = loglist102.get(i).getNumber();
+             String num = loglist102.get(i + 1).getNumber();
+
+
+             if (numString1.equals(num)) {
+                 numbersofcall++;
+
+
+             } else {
+
+                 loglist103.add(new LogInfo(null, loglist102.get(i).logName, loglist102.get(i).logIcon, loglist102.get(i).logDate, loglist102.get(i).callType, loglist102.get(i).hour, loglist102.get(i).getNumber(), numbersofcall));
+                 numbersofcall = 1;
+             }
+         }
+
+        logs.setLayoutManager(lLayout1);
+        logs.setItemAnimator(new DefaultItemAnimator());
+        adapter1 = new LogAdapter(getActivity(), groupListByDate.groupListByDate(loglist103));
+        logs.setAdapter(adapter1);
+        adapter1.notifyDataSetChanged();
+    }
+
+
+
+    @Override
+    public void onLoaderReset(Loader loader) {
+
     }
 }

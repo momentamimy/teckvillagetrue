@@ -13,8 +13,9 @@ public class LogInfo {
     String dateString;
     String number;
     int type;
+    int numberofcall;
 
-    public LogInfo(String imageUrl,String logName,String logIcon,Date logDate,String callType,String hour,String number)
+    public LogInfo(String imageUrl,String logName,String logIcon,Date logDate,String callType,String hour,String number,int numberofcall)
     {
         this.imageUrl=imageUrl;
         this.logName=logName;
@@ -23,6 +24,7 @@ public class LogInfo {
         this.callType=callType;
         this.hour=hour;
         this.number=number;
+        this.numberofcall=numberofcall;
     }
 
     public LogInfo()
@@ -37,6 +39,14 @@ public class LogInfo {
             return t1.logDate.compareTo(cases.logDate);
         }
     };
+
+    public int getNumberofcall() {
+        return numberofcall;
+    }
+
+    public void setNumberofcall(int numberofcall) {
+        this.numberofcall = numberofcall;
+    }
 
     public String getNumber() {
         return number;

@@ -92,15 +92,6 @@ public class Contacts extends Fragment {
 
         //initialiseData();
 
-        /*
-        ArrayList<UserContactData> contactInfos = new ArrayList<>();
-        contactInfos=get_user_contacts.getContactList();
-        for (int i=0;i<contactInfos.size();i++){
-            Log.w("print",contactInfos.get(i).usercontacName);
-        }
-        */
-
-
 
         return view;
     }

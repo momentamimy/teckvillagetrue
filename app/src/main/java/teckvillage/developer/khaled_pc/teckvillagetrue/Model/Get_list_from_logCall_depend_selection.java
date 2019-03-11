@@ -193,7 +193,7 @@ public class Get_list_from_logCall_depend_selection {
                 }
             }
 
-            loglist.add(new LogInfo(null, phName, dir, callDayTime, typephone, dateStringhour, phNumber));
+            loglist.add(new LogInfo(null, phName, dir, callDayTime, typephone, dateStringhour, phNumber,0));
         }
 
         managedCursor.close();

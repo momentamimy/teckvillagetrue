@@ -252,7 +252,7 @@ public class Get_Calls_Log {
                 }
             }
 
-            loglist.add(new LogInfo(null, phName, dir, callDayTime, typephone, dateStringhour, phNumber));
+            loglist.add(new LogInfo(null, phName, dir, callDayTime, typephone, dateStringhour, phNumber,0));
         }
 
         managedCursor.close();
@@ -643,7 +643,7 @@ public class Get_Calls_Log {
                 }
             }
 
-            loglist.add(new LogInfo(null, phName, dir, callDayTime, typephone, dateStringhour, phNumber));
+            loglist.add(new LogInfo(null, phName, dir, callDayTime, typephone, dateStringhour, phNumber,0));
         }
 
         managedCursor.close();

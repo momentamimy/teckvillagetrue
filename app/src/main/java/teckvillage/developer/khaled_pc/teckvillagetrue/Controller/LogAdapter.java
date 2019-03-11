@@ -26,6 +26,7 @@ public class LogAdapter extends RecyclerView.Adapter<LogHolder> {
     private static final int TYPE_ITEM = 2;
     private List<LogInfo> itemList;
     private Context context;
+    int numofcallvar;
 
     public LogAdapter(Context context, List<LogInfo> itemList) {
         this.context = context;
@@ -71,7 +72,7 @@ public class LogAdapter extends RecyclerView.Adapter<LogHolder> {
     @Override
     public void onBindViewHolder(final LogHolder holder, int position) {
         String lastnumber = "0";
-        int numofcall=0;
+
 
         final LogInfo logInfo = itemList.get(position);
         if (holder.logName != null) {
@@ -85,6 +86,14 @@ public class LogAdapter extends RecyclerView.Adapter<LogHolder> {
                 lastnumber = logInfo.getNumber();
 
             }*/
+
+            numofcallvar=logInfo.getNumberofcall();
+            if(numofcallvar==1){
+                holder.numbersofcallinminte.setVisibility(View.GONE);
+            }else {
+                holder.numbersofcallinminte.setText("("+numofcallvar+")");
+            }
+
 
             holder.calllayout.setOnClickListener(new View.OnClickListener() {
                 @Override
