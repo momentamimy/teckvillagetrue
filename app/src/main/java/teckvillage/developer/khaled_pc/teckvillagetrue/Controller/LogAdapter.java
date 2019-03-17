@@ -8,6 +8,7 @@ import android.net.Uri;
 import android.support.v4.app.ActivityCompat;
 import android.support.v7.widget.RecyclerView;
 import android.text.TextUtils;
+import android.util.Log;
 import android.view.LayoutInflater;
 import android.view.View;
 import android.view.ViewGroup;
@@ -88,6 +89,7 @@ public class LogAdapter extends RecyclerView.Adapter<LogHolder> {
             }*/
 
             numofcallvar=logInfo.getNumberofcall();
+            Log.w("hwa feh", String.valueOf(numofcallvar));
             if(numofcallvar==1){
                 holder.numbersofcallinminte.setVisibility(View.GONE);
             }else {

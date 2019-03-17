@@ -20,6 +20,8 @@ import android.net.Uri;
 import android.os.Bundle;
 import android.provider.CallLog;
 import android.provider.ContactsContract;
+import android.support.annotation.NonNull;
+import android.support.annotation.Nullable;
 import android.support.design.widget.CoordinatorLayout;
 import android.support.design.widget.FloatingActionButton;
 import android.support.design.widget.TextInputLayout;
@@ -84,8 +86,7 @@ import static android.app.Activity.RESULT_OK;
 /**
  * A simple {@link Fragment} subclass.
  */
-public class Main_Fagment extends Fragment implements OnBackPressedListener ,
-        LoaderManager.LoaderCallbacks<Cursor> {
+public class Main_Fagment extends Fragment implements OnBackPressedListener , LoaderManager.LoaderCallbacks<Cursor> {
 
     String lastnum="0";
     int numbersofcall=1;
@@ -100,6 +101,7 @@ public class Main_Fagment extends Fragment implements OnBackPressedListener ,
     public RelativeLayout textLayout;
     public ImageView back_space;
     ArrayList<LogInfo> loglist102 = new ArrayList<>();
+    ArrayList<LogInfo> loglist103 = new ArrayList<>(); ;
 
     static final String[] GRID_NUM = new String[]{
             "1", "2", "3",
@@ -129,7 +131,7 @@ public class Main_Fagment extends Fragment implements OnBackPressedListener ,
     LinearLayoutManager lLayout1;
     LinearLayoutManager lLayout2;
     ArrayList<LogInfo> callLogInfos = new ArrayList<>();
-    ArrayList<LogInfo> logInfos;
+    ArrayList<LogInfo> logInfos = new ArrayList<>();;
     ArrayList<LogInfo> loguinfoupdate;
     LogAdapter adapter1;
     Get_Calls_Log get_calls_log;
@@ -150,10 +152,11 @@ public class Main_Fagment extends Fragment implements OnBackPressedListener ,
         // Inflate the layout for this fragment
         View view = inflater.inflate(R.layout.fragment_main__fagment, container, false);
 
+        getLoaderManager().initLoader(1, null, this);
 
 
+        logs = view.findViewById(R.id.Logs_recycleview);
 
-        getActivity().getSupportLoaderManager().initLoader(1, null, this);
 
         groupListByDate = new GroupListByDate();
 
@@ -174,7 +177,7 @@ public class Main_Fagment extends Fragment implements OnBackPressedListener ,
         });
 
         contacts = view.findViewById(R.id.contact_recycleview);
-        logs = view.findViewById(R.id.Logs_recycleview);
+
         searchLogs = view.findViewById(R.id.Search_Log_recycleview);
 
         /*--------------------------------------dial_pad_layout------------------------------------------*/
@@ -453,7 +456,7 @@ public class Main_Fagment extends Fragment implements OnBackPressedListener ,
         /*--------------------------------------dial_pad_layout------------------------------------------*/
 
         lLayout = new LinearLayoutManager(getContext(), LinearLayoutManager.HORIZONTAL, false);
-        lLayout1 = new LinearLayoutManager(getActivity());
+
         lLayout2 = new LinearLayoutManager(getActivity());
 
         List<ContactInfo> contactInfos = new ArrayList<>();
@@ -504,6 +507,18 @@ public class Main_Fagment extends Fragment implements OnBackPressedListener ,
             logs.setAdapter(adapter1);
 
         }*/
+
+
+
+        lLayout1 = new LinearLayoutManager(getActivity());
+
+        logs.setLayoutManager(lLayout1);
+        logs.setItemAnimator(new DefaultItemAnimator());
+        adapter1 = new LogAdapter(getActivity(),loglist103);
+        logs.setAdapter(adapter1);
+        adapter1.notifyDataSetChanged();
+
+
 
 
 
@@ -891,7 +906,16 @@ public class Main_Fagment extends Fragment implements OnBackPressedListener ,
     @Override
     public void onResume() {
         super.onResume();
-        Log.d("mesheyyyy", "onresume");
+        if (shouldExecuteOnResume) {
+            Log.d("mesheyyyy", "onresume");
+
+            //loglist103.clear();
+            //Uri CONTACT_URI =CallLog.Calls.CONTENT_URI;
+            //getLoaderManager().restartLoader(0, null, this);
+            //getContext().getContentResolver().notifyChange(CONTACT_URI, null);
+            adapter1.notifyDataSetChanged();
+        }
+        /*
         if (shouldExecuteOnResume) {
             // Your onResume Code Here
             get_calls_log = new Get_Calls_Log(getActivity());
@@ -927,15 +951,11 @@ public class Main_Fagment extends Fragment implements OnBackPressedListener ,
             //toggleEmptyCases();
         } else {
             shouldExecuteOnResume = true;
-        }
+        }*/
 
     }
 
-    @Override
-    public void onCreate(Bundle savedInstanceState) {
-        super.onCreate(savedInstanceState);
-        setHasOptionsMenu(true);
-    }
+
 
 
     private CharSequence menuIconWithText(Drawable r, String title) {
@@ -1084,7 +1104,12 @@ public class Main_Fagment extends Fragment implements OnBackPressedListener ,
 
     @Override
     public void onLoadFinished(Loader<Cursor> loader, Cursor cursor) {
-
+        Log.d("mesheyyyy", "onLoadFinished");
+        //logInfos = new ArrayList<>();
+        //ArrayList<LogInfo> loglist103 = new ArrayList<>();
+        //groupListByDate = new GroupListByDate();
+        loglist103.clear();
+        logInfos.clear();
 
         String phName, phNumber, callDate, callDuration, dateStringhour;
         String dir = null;
@@ -1098,16 +1123,16 @@ public class Main_Fagment extends Fragment implements OnBackPressedListener ,
 
         if (cursor.moveToNext() == false) Log.e("GOPAL", "Empty Cursor");
         else {
-            while (cursor.moveToNext()) {
-                phName =cursor.getString(cursor.getColumnIndex(CallLog.Calls.CACHED_NAME));
-                phmobileType =cursor.getInt(cursor.getColumnIndex(CallLog.Calls.CACHED_NUMBER_TYPE));
+            do {
+                phName = cursor.getString(cursor.getColumnIndex(CallLog.Calls.CACHED_NAME));
+                phmobileType = cursor.getInt(cursor.getColumnIndex(CallLog.Calls.CACHED_NUMBER_TYPE));
                 phNumber = cursor.getString(cursor.getColumnIndex(CallLog.Calls.NUMBER));
-                callType =cursor.getInt(cursor.getColumnIndex(CallLog.Calls.TYPE));
+                callType = cursor.getInt(cursor.getColumnIndex(CallLog.Calls.TYPE));
                 callDate = cursor.getString(cursor.getColumnIndex(CallLog.Calls.DATE));
                 callDayTime = new Date(Long.valueOf(callDate));
 
 
-
+                // do what ever you want here
 
                 //callDuration = managedCursor.getString(duration);
                 dateStringhour = formatter.format(new Date(Long.parseLong(callDate)));
@@ -1238,52 +1263,37 @@ public class Main_Fagment extends Fragment implements OnBackPressedListener ,
                 }
 
 
-                /*
-                if(phNumber.equals(lastnum)){
+
+                logInfos.add(new LogInfo(null, phName, dir, callDayTime, typephone, dateStringhour, phNumber, numbersofcall));
+
+
+            } while (cursor.moveToNext());
+
+
+            for (int i = 0; i < logInfos.size() - 1; i++) {
+
+                String numString1 = logInfos.get(i).getNumber();
+                String num = logInfos.get(i + 1).getNumber();
+
+
+                if (numString1.equals(num)) {
                     numbersofcall++;
-                    Log.w("loolp", String.valueOf(numbersofcall));
-                    lastnum=phNumber;
-                }else {
-                    lastnum=phNumber;
-                    Log.w("iiiii", String.valueOf(numbersofcall));
-                    loglist102.add(new LogInfo(null, phName, dir, callDayTime, typephone, dateStringhour, phNumber,numbersofcall));
-                    numbersofcall=1;
-                }*/
+                    Log.w("plsssssssss", String.valueOf(numbersofcall));
 
-                loglist102.add(new LogInfo(null, phName, dir, callDayTime, typephone, dateStringhour, phNumber,numbersofcall));
+                } else {
 
+                    loglist103.add(new LogInfo(null, logInfos.get(i).logName, logInfos.get(i).logIcon, logInfos.get(i).logDate, logInfos.get(i).callType, logInfos.get(i).hour, logInfos.get(i).getNumber(), numbersofcall));
+                    numbersofcall = 1;
+                }
             }
 
 
+            Log.d("size", String.valueOf(loglist103.size()));
+            adapter1 = new LogAdapter(getActivity(),groupListByDate.groupListByDate(loglist103));
+            logs.setAdapter(adapter1);
+            adapter1.notifyDataSetChanged();
 
-            }
-
-
-        ArrayList<LogInfo> loglist103 = new ArrayList<>();
-
-
-         for(int i=0;i<loglist102.size()-1;i++) {
-
-             String numString1 = loglist102.get(i).getNumber();
-             String num = loglist102.get(i + 1).getNumber();
-
-
-             if (numString1.equals(num)) {
-                 numbersofcall++;
-
-
-             } else {
-
-                 loglist103.add(new LogInfo(null, loglist102.get(i).logName, loglist102.get(i).logIcon, loglist102.get(i).logDate, loglist102.get(i).callType, loglist102.get(i).hour, loglist102.get(i).getNumber(), numbersofcall));
-                 numbersofcall = 1;
-             }
-         }
-
-        logs.setLayoutManager(lLayout1);
-        logs.setItemAnimator(new DefaultItemAnimator());
-        adapter1 = new LogAdapter(getActivity(), groupListByDate.groupListByDate(loglist103));
-        logs.setAdapter(adapter1);
-        adapter1.notifyDataSetChanged();
+        }
     }
 
 

@@ -18,8 +18,12 @@ public class GroupListByDate {
      * @return
      */
     public ArrayList<LogInfo> groupListByDate(ArrayList<LogInfo> list) {
-        int i = 0;
         ArrayList<LogInfo> customList = new ArrayList<LogInfo>();
+
+        if(list.size()>0){
+
+        int i = 0;
+
         LogInfo logInfo = new LogInfo();
         logInfo.logDate=list.get(0).logDate;
         logInfo.setDateString(getFormattedDate(logInfo.logDate.getTime()));
@@ -45,6 +49,8 @@ public class GroupListByDate {
         }
         list.get(i).setType(2);
         customList.add(list.get(i));
+        return customList;
+        }
         return customList;
     }
 
