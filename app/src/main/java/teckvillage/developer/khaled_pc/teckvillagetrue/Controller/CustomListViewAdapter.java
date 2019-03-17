@@ -38,11 +38,11 @@ public class CustomListViewAdapter extends ArrayAdapter<MessageInfo> {
 
         final View result;
 
-        if (convertView == null) {
+
 
             LayoutInflater inflater = LayoutInflater.from(getContext());
             convertView = inflater.inflate(R.layout.row_message, parent, false);
-        }
+
             TextView logName = (TextView) convertView.findViewById(R.id.name_of_log);
             TextView textMessage = convertView.findViewById(R.id.text_sms_message);
             TextView messageDate = convertView.findViewById(R.id.date_sms_message);
@@ -51,7 +51,7 @@ public class CustomListViewAdapter extends ArrayAdapter<MessageInfo> {
 
 
             Animation animation = AnimationUtils.loadAnimation(mContext, (position > lastPosition) ? R.anim.up_from_bottom : R.anim.down_from_top);
-            result.startAnimation(animation);
+            //result.startAnimation(animation);
             lastPosition = position;
 
             logName.setText(dataModel.logName);
@@ -76,5 +76,10 @@ public class CustomListViewAdapter extends ArrayAdapter<MessageInfo> {
             return convertView;
 
 
+    }
+
+    @Override
+    public int getCount() {
+        return dataSet.size();
     }
 }

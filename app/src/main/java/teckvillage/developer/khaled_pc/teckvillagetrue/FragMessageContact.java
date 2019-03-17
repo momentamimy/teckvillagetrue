@@ -12,9 +12,11 @@ import android.support.v4.app.ActivityCompat;
 import android.support.v4.app.Fragment;
 import android.support.v4.content.ContextCompat;
 import android.text.TextUtils;
+import android.util.Log;
 import android.view.LayoutInflater;
 import android.view.View;
 import android.view.ViewGroup;
+import android.widget.AbsListView;
 import android.widget.AdapterView;
 import android.widget.ListView;
 
@@ -34,10 +36,12 @@ public class FragMessageContact extends Fragment {
 
     private static FragMessageOthers inst;
     ArrayList<String> smsMessagesList = new ArrayList<String>();
-    ArrayList<MessageInfo> messageInfos=new ArrayList<>();
+    static ArrayList<MessageInfo> contactMessageInfos=new ArrayList<>();
+    static ArrayList<MessageInfo> allMessageContactInfos=new ArrayList<>();
     ListView smsListView;
     // ArrayAdapter arrayAdapter;
-    CustomListViewAdapter customListViewAdapter;
+    static CustomListViewAdapter customCotactsListViewAdapter;
+    static boolean endContactsList=false;
 
 
     public FragMessageContact() {
@@ -57,20 +61,42 @@ public class FragMessageContact extends Fragment {
         super.onViewCreated(view, savedInstanceState);
 
         get_user_contacts=new Get_User_Contacts(getActivity());
-        userContactData=get_user_contacts.getContactListFormessage();
 
         smsListView = (ListView) view.findViewById(R.id.SMSList);
 
-        //arrayAdapter = new ArrayAdapter<String>(getActivity(), android.R.layout.simple_list_item_1, smsMessagesList);
-        customListViewAdapter=new CustomListViewAdapter(messageInfos,getActivity());
-        smsListView.setAdapter(customListViewAdapter);
+        customCotactsListViewAdapter=new CustomListViewAdapter(contactMessageInfos,getActivity());
+        smsListView.setAdapter(customCotactsListViewAdapter);
+        smsListView.setOnItemClickListener(new AdapterView.OnItemClickListener() {
+            @Override
+            public void onItemClick(AdapterView<?> parent, View view, int position, long id) {
+                Intent intent=new Intent(getContext(),SMS_MessagesChat.class);
+                intent.putExtra("LogSMSName",contactMessageInfos.get(position).logName);
+                intent.putExtra("LogSMSAddress",contactMessageInfos.get(position).logAddress);
+                startActivity(intent);
+            }
+        });
+        smsListView.setOnScrollListener(new AbsListView.OnScrollListener() {
+            @Override
+            public void onScrollStateChanged(AbsListView view, int scrollState) {
+                Log.d("2a5er_position", String.valueOf(smsListView.getLastVisiblePosition()));
+                if (smsListView.getLastVisiblePosition()>=contactMessageInfos.size()-1&&!endContactsList)
+                {
+                    // getLoaderManager().initLoader(1,null,FragMessageOthers.this);
+                    createContactsloader();
+                }
+            }
+
+            @Override
+            public void onScroll(AbsListView view, int firstVisibleItem, int visibleItemCount, int totalItemCount) {
+
+            }
+        });
 
         // Add SMS Read Permision At Runtime
         // Todo : If Permission Is Not GRANTED
         if(ContextCompat.checkSelfPermission(getActivity().getBaseContext(), "android.permission.READ_SMS") == PackageManager.PERMISSION_GRANTED) {
 
             // Todo : If Permission Granted Then Show SMS
-            refreshSmsInbox();
 
         } else {
             // Todo : Then Set Permission
@@ -83,68 +109,30 @@ public class FragMessageContact extends Fragment {
     {
 
     }
-    public void refreshSmsInbox() {
-        ArrayList<MessageInfo> infos=new ArrayList<>();
-        userContactData=get_user_contacts.getContactListFormessage();
 
-        ContentResolver contentResolver = getActivity().getContentResolver();
-        Cursor smsInboxCursor = contentResolver.query(Uri.parse("content://sms/"), null, null, null, null);
-        int indextype=smsInboxCursor.getColumnIndex("type");
-        int indexBody = smsInboxCursor.getColumnIndex("body");
-        int indexAddress = smsInboxCursor.getColumnIndex("address");
-        int dateColumn = smsInboxCursor.getColumnIndex("date");
-        int readColumn = smsInboxCursor.getColumnIndex("read");
+    public static void createContactsloader()
+    {
+        if (!endContactsList)
+        {
+            int count=0;
+            int i=0;
+            for (i=contactMessageInfos.size();i<allMessageContactInfos.size();i++)
+            {
 
-        if (indexBody < 0 || !smsInboxCursor.moveToFirst()) return;
-        customListViewAdapter.clear();
-        //arrayAdapter.clear();
-        do {
-            if (!smsInboxCursor.getString(indextype).equals("5")) {
-
-
-                Calendar calendar = Calendar.getInstance();
-                Long timestamp = Long.parseLong(smsInboxCursor.getString(dateColumn));
-                calendar.setTimeInMillis(timestamp);
-                String stringDate = String.valueOf(calendar.get(Calendar.DAY_OF_MONTH)) + "/" + String.valueOf(calendar.get(Calendar.MONTH) + 1) + "/" + String.valueOf(calendar.get(Calendar.YEAR));
-
-                MessageInfo info = new MessageInfo(null, smsInboxCursor.getString(indexAddress), smsInboxCursor.getString(indexBody), stringDate, smsInboxCursor.getString(indexAddress),smsInboxCursor.getString(readColumn));
-                boolean Add = true;
-                for (int i = 0; i < messageInfos.size(); i++) {
-                    if (!TextUtils.isEmpty(messageInfos.get(i).logName))
-                        if (messageInfos.get(i).logName.equals(smsInboxCursor.getString(indexAddress))) {
-                            Add = false;
-                        }
+                if (count>20)
+                {
+                    break;
                 }
-
-                if (Add) {
-                    messageInfos.add(info);
-                }
-
-
-                //  arrayAdapter.add(str);
+                contactMessageInfos.add(allMessageContactInfos.get(i));
+                count++;
             }
-        } while (smsInboxCursor.moveToNext());
-        for (int i = 0; i < messageInfos.size(); i++) {
-            for (int j = 0; j < userContactData.size(); j++) {
-                if (!TextUtils.isEmpty(messageInfos.get(i).logName))
-                    if (messageInfos.get(i).logName.contains(userContactData.get(j).phoneNum)) {
-                        messageInfos.get(i).setLogName(userContactData.get(j).usercontacName);
-                        infos.add(messageInfos.get(i));
-                    }
-
+            if (i==allMessageContactInfos.size())
+            {
+                endContactsList=true;
             }
+            customCotactsListViewAdapter.notifyDataSetChanged();
         }
-        messageInfos=infos;
-        customListViewAdapter=new CustomListViewAdapter(messageInfos,getActivity());
-        smsListView.setAdapter(customListViewAdapter);
-        smsListView.setOnItemClickListener(new AdapterView.OnItemClickListener() {
-            @Override
-            public void onItemClick(AdapterView<?> parent, View view, int position, long id) {
-                Intent intent=new Intent(getContext(),SMS_MessagesChat.class);
-                intent.putExtra("LogSMSName",messageInfos.get(position).logName);
-                intent.putExtra("LogSMSAddress",messageInfos.get(position).logAddress);
-                startActivity(intent);
-            }
-        });
     }
+
+
 }

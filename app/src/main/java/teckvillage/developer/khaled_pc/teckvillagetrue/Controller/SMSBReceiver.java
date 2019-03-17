@@ -29,7 +29,7 @@ public class SMSBReceiver extends BroadcastReceiver {
 
             //this will update the UI with message
             FragMessageOthers inst = FragMessageOthers.instance();
-            inst.updateList(messageInfo);
+            //inst.updateList(messageInfo);
         }
     }
 }

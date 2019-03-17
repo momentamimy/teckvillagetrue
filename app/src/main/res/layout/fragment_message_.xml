@@ -41,6 +41,7 @@
                     />
 
                 <RelativeLayout
+                    android:id="@+id/search_layout"
                     android:layout_width="match_parent"
                     android:layout_height="match_parent"
                     >
@@ -116,6 +117,24 @@
             android:layout_width="match_parent"
             android:layout_height="match_parent"></android.support.v4.view.ViewPager>
 
+        <android.support.design.widget.FloatingActionButton
+            android:id="@+id/Send_message_fab_button"
+            android:layout_marginBottom="20dp"
+            android:layout_marginEnd="20dp"
+            android:layout_marginRight="20dp"
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            app:elevation="6dp"
+            app:rippleColor="#36000000"
+            app:backgroundTintMode="src_over"
+            app:backgroundTint="@color/colorPrimary"
+            app:pressedTranslationZ="12dp"
+            app:fabSize="auto"
+            android:src="@drawable/ic_chat"
+            android:layout_alignParentEnd="true"
+            android:layout_alignParentRight="true"
+            android:layout_alignParentBottom="true"
+            />
     </RelativeLayout>
 
 </FrameLayout>

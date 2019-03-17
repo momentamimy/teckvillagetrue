@@ -51,7 +51,8 @@ public class SMSReceiver extends BroadcastReceiver{
     }
     @RequiresApi(api = Build.VERSION_CODES.JELLY_BEAN)
     private void notification(String message, String sender, Context context){
-
+        //FragMessageOthers.instance().refreshSmsInbox();
+        //SMS_MessagesChat.instance().refresh();
         Intent intent;
         PendingIntent pendingIntent;
         NotificationCompat.Builder builder;

@@ -17,6 +17,7 @@ import android.graphics.drawable.AnimationDrawable;
 import android.graphics.drawable.ColorDrawable;
 import android.graphics.drawable.Drawable;
 import android.net.Uri;
+import android.os.Build;
 import android.os.Bundle;
 import android.provider.CallLog;
 import android.provider.ContactsContract;
@@ -102,6 +103,7 @@ public class Main_Fagment extends Fragment implements OnBackPressedListener , Lo
     public ImageView back_space;
     ArrayList<LogInfo> loglist102 = new ArrayList<>();
     ArrayList<LogInfo> loglist103 = new ArrayList<>(); ;
+    public ImageView add_contact;
 
     static final String[] GRID_NUM = new String[]{
             "1", "2", "3",
@@ -124,6 +126,7 @@ public class Main_Fagment extends Fragment implements OnBackPressedListener , Lo
     Dialog MyDialogSpeedDial;
     Dialog MyDialogAssignNum;
     SharedPreferences sharedPreferences;
+    RelativeLayout searchLayout;
     /*--------------------------------------dial_pad_layout------------------------------------------*/
 
     RecyclerView contacts, logs, searchLogs;
@@ -178,6 +181,13 @@ public class Main_Fagment extends Fragment implements OnBackPressedListener , Lo
         contacts = view.findViewById(R.id.contact_recycleview);
 
         searchLogs = view.findViewById(R.id.Search_Log_recycleview);
+        searchLayout=view.findViewById(R.id.search_layout);
+        searchLayout.setOnClickListener(new View.OnClickListener() {
+            @Override
+            public void onClick(View v) {
+                startActivity(new Intent(getContext(),SearchActivity.class));
+            }
+        });
 
         /*--------------------------------------dial_pad_layout------------------------------------------*/
         searchCallLayout = view.findViewById(R.id.search_call_layout);
@@ -187,6 +197,7 @@ public class Main_Fagment extends Fragment implements OnBackPressedListener , Lo
         gridShadow = view.findViewById(R.id.shadow_gridView1);
         phone_num_edt = (KeyboardlessEditText) view.findViewById(R.id.dial_pad_num_editText);
         back_space = view.findViewById(R.id.backspace_imageView);
+        add_contact = view.findViewById(R.id.add_Contact);
         final ImageView threedots = view.findViewById(R.id.threedots);
         ImageView icon = view.findViewById(R.id.iconnnn);
         sharedPreferences = getActivity().getSharedPreferences("number", Context.MODE_PRIVATE);
@@ -409,17 +420,23 @@ public class Main_Fagment extends Fragment implements OnBackPressedListener , Lo
             public void onItemClick(AdapterView<?> parent, View view, int position, long id) {
                 grid_num_tv = (TextView) view.findViewById(R.id.grid_num_textView);
 
-                //Toast.makeText(getApplicationContext(), grid_num_tv.getText(), Toast.LENGTH_SHORT).show();
-                if (CursorVisibility) {
-                    insertSelection(phone_num_edt, grid_num_tv.getText().toString());
-                } else {
-                    phone_num_edt.setText(phone_num_edt.getText().toString() + grid_num_tv.getText());
+                    //Toast.makeText(getApplicationContext(), grid_num_tv.getText(), Toast.LENGTH_SHORT).show();
+                if (CursorVisibility)
+                {
+                    insertSelection(phone_num_edt,grid_num_tv.getText().toString());
                 }
-
-                if (firstclick) {
+                else
+                {
+                    phone_num_edt.setText(phone_num_edt.getText().toString()+grid_num_tv.getText());
+                    phone_num_edt.setSelection(phone_num_edt.length()-1);
+                }
+                if (firstclick)
+                {
                     writeAnim(300);
-                    firstclick = false;
-                } else {
+                    firstclick=false;
+                }
+                else
+                {
                     SortSearchCallList(phone_num_edt.getText().toString());
                 }
             }
@@ -428,19 +445,44 @@ public class Main_Fagment extends Fragment implements OnBackPressedListener , Lo
         back_space.setOnClickListener(new View.OnClickListener() {
             @Override
             public void onClick(View v) {
-                String num = phone_num_edt.getText().toString();
+                String num=phone_num_edt.getText().toString();
 
-                if (CursorVisibility) {
+                if (CursorVisibility)
+                {
                     removeSelection(phone_num_edt);
-                } else {
+                }
+                else
+                {
                     phone_num_edt.setText(removeChar(num));
                 }
 
-                if (phone_num_edt.getText().length() == 0) {
+                if (phone_num_edt.getText().length()==0)
+                {
                     deleteAnim(300);
-                    firstclick = true;
+                    firstclick=true;
                 }
                 SortSearchCallList(phone_num_edt.getText().toString());
+            }
+        });
+        back_space.setOnLongClickListener(new View.OnLongClickListener() {
+            @Override
+            public boolean onLongClick(View v) {
+                phone_num_edt.setText("");
+                deleteAnim(300);
+                firstclick=true;
+                return true;
+            }
+        });
+
+        add_contact.setOnClickListener(new View.OnClickListener() {
+            @Override
+            public void onClick(View v) {
+                Intent i = new Intent(Intent.ACTION_INSERT_OR_EDIT);
+                i.setType(ContactsContract.Contacts.CONTENT_ITEM_TYPE);
+                i.putExtra(ContactsContract.Intents.Insert.PHONE, phone_num_edt.getText().toString());
+                if (Integer.valueOf(Build.VERSION.SDK) > 14)
+                    i.putExtra("finishActivityOnSaveCompleted", true); // Fix for 4.0.3 +
+                startActivityForResult(i, 50);
             }
         });
 
@@ -876,29 +918,12 @@ public class Main_Fagment extends Fragment implements OnBackPressedListener , Lo
 
     public void close_search_anim_button(final int duration) {
         deleteAnim(duration);
-        Thread timer = new Thread() {
-            public void run() {
-                try {
-                    synchronized (this) {
-                        wait(duration);
-                        getActivity().runOnUiThread(new Runnable() {
-                            @Override
-                            public void run() {
-                                close_button(duration);
-                                phone_num_edt.setText("");
-                                aBoolean = false;
-                                scroll = false;
-                                CursorVisibility = false;
-                                firstclick = true;
-                            }
-                        });
-                    }
-                } catch (InterruptedException e) {
-                    e.printStackTrace();
-                }
-            }
-        };
-        timer.start();
+        phone_num_edt.setText("");
+        aBoolean=false;
+        scroll=false;
+        CursorVisibility=false;
+        firstclick=true;
+
     }
     /*-------------------------------------------dial_pad_layout--------------------------------------------------*/
 

@@ -13,6 +13,7 @@ import android.view.LayoutInflater;
 import android.view.View;
 import android.view.ViewGroup;
 import android.widget.ImageView;
+import android.widget.RelativeLayout;
 
 import java.util.ArrayList;
 import java.util.List;
@@ -39,7 +40,7 @@ public class Contacts extends Fragment {
     private List<String> mDataArray;
     private List<AlphabetItem> mAlphabetItems;
     FloatingActionButton add_user_contacts;
-
+    RelativeLayout searchLayout;
     public Contacts() {
         // Required empty public constructor
     }
@@ -53,6 +54,13 @@ public class Contacts extends Fragment {
         //Initial recycleview
         mRecyclerView =  view.findViewById(R.id.fast_scroller_recycler);
         add_user_contacts= view.findViewById(R.id.add_user_contacts);
+        searchLayout=view.findViewById(R.id.search_layout);
+        searchLayout.setOnClickListener(new View.OnClickListener() {
+            @Override
+            public void onClick(View v) {
+                startActivity(new Intent(getContext(),SearchActivity.class));
+            }
+        });
         ImageView icon=view.findViewById(R.id.iconnnn);
 
         icon.setOnClickListener(new View.OnClickListener() {

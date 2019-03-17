@@ -78,17 +78,7 @@ public class SMS_MessagesChat extends AppCompatActivity {
         super.onCreate(savedInstanceState);
         setContentView(R.layout.activity_sms_messages_chat);
         updateMessageInfos=new ArrayList<>();
-        final String myPackageName = getPackageName();
-        if (Build.VERSION.SDK_INT >= Build.VERSION_CODES.KITKAT) {
-            if (!Telephony.Sms.getDefaultSmsPackage(this).equals(myPackageName)) {
-                Intent intent =
-                        new Intent(Telephony.Sms.Intents.ACTION_CHANGE_DEFAULT);
-                intent.putExtra(Telephony.Sms.Intents.EXTRA_PACKAGE_NAME,
-                        myPackageName);
-                startActivity(intent);
 
-            }
-        }
 
         Toolbar toolbar = (Toolbar) findViewById(R.id.toolbar);
         setSupportActionBar(toolbar);
@@ -110,9 +100,9 @@ public class SMS_MessagesChat extends AppCompatActivity {
 
         name=getIntent().getStringExtra("LogSMSName");
         address=getIntent().getStringExtra("LogSMSAddress");
+        Log.d("Address::::", address);
         String regex = "\\d+";
         String s=address.replace("+","");
-        name=address;
         if (!s.matches(regex))
         {
             Cant_Replay_Layout.setVisibility(View.VISIBLE);
@@ -143,19 +133,33 @@ public class SMS_MessagesChat extends AppCompatActivity {
         send.setOnClickListener(new View.OnClickListener() {
             @Override
             public void onClick(View v) {
-                String phoneNo = address;
-                String message = messageSend.getText().toString();
-                if (phoneNo.length()>0 && message.length()>0)
-                {
-                    messageSend.setText("");
-                    sendSMS(phoneNo,message);
+                final String myPackageName = getPackageName();
+                if (Build.VERSION.SDK_INT >= Build.VERSION_CODES.KITKAT) {
+                    if (!Telephony.Sms.getDefaultSmsPackage(getApplicationContext()).equals(myPackageName)) {
+                        Intent intent =
+                                new Intent(Telephony.Sms.Intents.ACTION_CHANGE_DEFAULT);
+                        intent.putExtra(Telephony.Sms.Intents.EXTRA_PACKAGE_NAME,
+                                myPackageName);
+                        startActivity(intent);
 
+                    }
+                    else {
+                        String phoneNo = address;
+                        String message = messageSend.getText().toString();
+                        if (phoneNo.length()>0 && message.length()>0)
+                        {
+                            messageSend.setText("");
+                            sendSMS(phoneNo,message);
+
+                        }
+
+                        else
+                            Toast.makeText(getBaseContext(),
+                                    "Please enter both phone number and message.",
+                                    Toast.LENGTH_SHORT).show();
+
+                    }
                 }
-
-                else
-                    Toast.makeText(getBaseContext(),
-                            "Please enter both phone number and message.",
-                            Toast.LENGTH_SHORT).show();
             }
         });
 
@@ -272,6 +276,14 @@ public class SMS_MessagesChat extends AppCompatActivity {
         refresh();
     }
 
+    public void update_unread(long id)
+    {
+        Log.d("8qrwrqrfsaq", "seen");
+        ContentValues values = new ContentValues();
+        values.put("seen", true);
+        values.put("read", true);
+        getContentResolver().update(Uri.parse("content://sms/inbox"), values, "_id="+id, null);
+    }
 
     public void refresh(){
         messageInfos.clear();
@@ -283,7 +295,7 @@ public class SMS_MessagesChat extends AppCompatActivity {
         final String SMS_URI_ALL = "content://sms/";
         try {
             Uri uri = Uri.parse(SMS_URI_INBOX);
-            String[] projection = new String[] { "_id", "address", "person", "body", "date", "type","seen","date_sent","thread_id","status"};
+            String[] projection = new String[] { "_id", "address", "person", "body", "date", "type","read","date_sent","thread_id","status"};
             Cursor cur = getContentResolver().query(uri, projection, null, null, "date desc");
             if (cur.moveToFirst()) {
                 int index_id = cur.getColumnIndex("_id");
@@ -292,7 +304,7 @@ public class SMS_MessagesChat extends AppCompatActivity {
                 int index_Body = cur.getColumnIndex("body");
                 int index_Date = cur.getColumnIndex("date");
                 int index_Type = cur.getColumnIndex("type");
-                int index_seen = cur.getColumnIndex("seen");
+                int index_seen = cur.getColumnIndex("read");
                 int index_date_sent = cur.getColumnIndex("date_sent");
                 int index_thread_id = cur.getColumnIndex("thread_id");
                 int index_status = cur.getColumnIndex("status");
@@ -309,9 +321,12 @@ public class SMS_MessagesChat extends AppCompatActivity {
                     String strthread_id = cur.getString(index_thread_id);
                     int int_status = cur.getInt(index_status);
 
-                    if (strAddress.contains(address.replaceAll("\\s+",""))) {
+                    if (strAddress.contains(address)) {
                         messageInfos.add(new sms_messages_model(id,strAddress, longDate, strbody+int_status,int_Type,strseen,date_sent,strthread_id,int_status));
-
+                        if (!strseen.equals("1"))
+                        {
+                            update_unread(id);
+                        }
                     }
                 } while (cur.moveToNext());
 
@@ -360,7 +375,7 @@ public class SMS_MessagesChat extends AppCompatActivity {
 
                     if (!TextUtils.isEmpty(strAddress))
                         if (int_Type!=1)
-                        if (strAddress.contains(address.replaceAll("\\s+",""))) {
+                        if (strAddress.contains(address)) {
                             messageInfos.add(new sms_messages_model(id,getSharedPreferences("logged_in",MODE_PRIVATE).getString("phone",""), longDate, strbody,int_Type,strseen,date_sent,strthread_id,int_status));
 
                         }

@@ -38,6 +38,33 @@ public class MessageInfo {
     public String logMessage;
     public String logDate;
     public String logAddress;
+
+    public String getTypeMessage() {
+        return typeMessage;
+    }
+
+    public void setTypeMessage(String typeMessage) {
+        this.typeMessage = typeMessage;
+    }
+
+    public String typeMessage;
+
+    public String getLogAddress() {
+        return logAddress;
+    }
+
+    public void setLogAddress(String logAddress) {
+        this.logAddress = logAddress;
+    }
+
+    public String getRead() {
+        return read;
+    }
+
+    public void setRead(String read) {
+        this.read = read;
+    }
+
     public String read;
     public MessageInfo(String imageUrl, String logName, String logMessage, String logDate, String logAddress, String  read) {
         this.imageUrl = imageUrl;

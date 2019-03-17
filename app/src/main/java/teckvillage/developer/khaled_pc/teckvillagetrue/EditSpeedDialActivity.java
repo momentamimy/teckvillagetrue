@@ -19,6 +19,7 @@ import android.view.View;
 import android.view.Window;
 import android.widget.AdapterView;
 import android.widget.EditText;
+import android.widget.ImageView;
 import android.widget.ListView;
 import android.widget.TextView;
 
@@ -27,6 +28,7 @@ import java.util.List;
 
 public class EditSpeedDialActivity extends AppCompatActivity {
 
+    ImageView backButton;
     ListView speed_dial_edit_list;
     SpeedDialEditAdapter speedDialEditAdapter;
     List<EditSpeedModel> editSpeedModels;
@@ -37,6 +39,13 @@ public class EditSpeedDialActivity extends AppCompatActivity {
     protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
         setContentView(R.layout.activity_edit_speed_dial);
+        backButton=findViewById(R.id.back_Speed_dial);
+        backButton.setOnClickListener(new View.OnClickListener() {
+            @Override
+            public void onClick(View v) {
+                finish();
+            }
+        });
         sharedPreferences = getSharedPreferences("number", Context.MODE_PRIVATE);
         speed_dial_edit_list=findViewById(R.id.speed_dial_edit_list);
         editSpeedModels=new ArrayList<>();

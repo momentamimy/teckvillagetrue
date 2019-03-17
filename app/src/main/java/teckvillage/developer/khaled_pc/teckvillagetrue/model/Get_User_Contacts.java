@@ -4,6 +4,7 @@ import android.Manifest;
 import android.content.ContentResolver;
 import android.content.Context;
 import android.database.Cursor;
+import android.net.Uri;
 import android.provider.ContactsContract;
 import android.util.Log;
 
@@ -126,8 +127,10 @@ public class Get_User_Contacts {
 
     public ArrayList<UserContactData> getContactListFormessage() {
         contactInfos = new ArrayList<>();
+        List<String> names=new ArrayList<>();
         ContentResolver cr = context.getContentResolver();
-        Cursor cur = cr.query(ContactsContract.Contacts.CONTENT_URI, null, null, null, ContactsContract.Contacts.DISPLAY_NAME + " ASC ");
+        String[] projection=new String[] { ContactsContract.Contacts._ID, ContactsContract.Contacts.HAS_PHONE_NUMBER, ContactsContract.Contacts.DISPLAY_NAME};
+        Cursor cur = cr.query(ContactsContract.Contacts.CONTENT_URI, projection, null, null, ContactsContract.Contacts.DISPLAY_NAME + " ASC ");
         String lastnumber = "0";
 
         if ((cur != null ? cur.getCount() : 0) > 0) {
@@ -135,18 +138,18 @@ public class Get_User_Contacts {
                 String phoneNumber = null;
                 long id = cur.getLong(cur.getColumnIndex(ContactsContract.Contacts._ID));
                 String name = cur.getString(cur.getColumnIndex(ContactsContract.Contacts.DISPLAY_NAME));
-
-
+                names.add(name);
+                String[] projection2=new String[] {ContactsContract.CommonDataKinds.Phone.HAS_PHONE_NUMBER,ContactsContract.CommonDataKinds.Phone.NUMBER};
                 if (cur.getInt(cur.getColumnIndex(ContactsContract.Contacts.HAS_PHONE_NUMBER)) > 0) {
                     Cursor pCur = cr.query(ContactsContract.CommonDataKinds.Phone.CONTENT_URI,
-                            null,
+                            projection2,
                             ContactsContract.CommonDataKinds.Phone.DISPLAY_NAME + " = ?",
                             new String[]{name}, null);
 
                     Log.i(TAG, "Name: " + name);
 
                     while (pCur.moveToNext()) {
-                        int phoneType = pCur.getInt(pCur.getColumnIndex(ContactsContract.CommonDataKinds.Phone.TYPE));
+                        //int phoneType = pCur.getInt(pCur.getColumnIndex(ContactsContract.CommonDataKinds.Phone.TYPE));
                         phoneNumber = pCur.getString(pCur.getColumnIndex(ContactsContract.CommonDataKinds.Phone.NUMBER));
 
                         contactInfos.add(new UserContactData("",name,"PortSaid,Egypt",id,phoneNumber));
@@ -161,16 +164,45 @@ public class Get_User_Contacts {
 
 
 
-
-
-
         if(cur!=null){
             cur.close();
         }
 
         return contactInfos;
     }
+    public String getContactName(final String phoneNumber, Context context)
+    {
+        Uri uri=Uri.withAppendedPath(ContactsContract.PhoneLookup.CONTENT_FILTER_URI,Uri.encode(phoneNumber));
 
+        String[] projection = new String[]{ContactsContract.PhoneLookup.DISPLAY_NAME};
+
+        String contactName="";
+        Cursor cursor=context.getContentResolver().query(uri,projection,null,null,null);
+
+        if (cursor != null) {
+            if(cursor.moveToFirst()) {
+                contactName=cursor.getString(0);
+            }
+            cursor.close();
+        }
+
+        return contactName;
+    }
+
+    public String getPhoneNumber(String name, Context context) {
+        String ret = null;
+        String selection = ContactsContract.CommonDataKinds.Phone.DISPLAY_NAME+" like'%" + name +"%'";
+        String[] projection = new String[] { ContactsContract.CommonDataKinds.Phone.NUMBER};
+        Cursor c = context.getContentResolver().query(ContactsContract.CommonDataKinds.Phone.CONTENT_URI,
+                projection, selection, null, null);
+        if (c.moveToFirst()) {
+            ret = c.getString(0);
+        }
+        c.close();
+        if(ret==null)
+            ret = "Unsaved";
+        return ret;
+    }
 
     //read all contacts fast
     public ArrayList<UserContactData> getContactListFaster() {
