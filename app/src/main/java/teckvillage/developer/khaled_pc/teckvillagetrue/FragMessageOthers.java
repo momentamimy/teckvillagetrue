@@ -1,6 +1,7 @@
 package teckvillage.developer.khaled_pc.teckvillagetrue;
 
 import android.content.ContentResolver;
+import android.content.Context;
 import android.support.v4.content.CursorLoader;
 import android.content.Intent;
 import android.content.pm.PackageManager;
@@ -29,6 +30,8 @@ import android.widget.AdapterView;
 import android.widget.ListView;
 import android.widget.TextView;
 import android.widget.Toast;
+
+import net.steamcrafted.loadtoast.LoadToast;
 
 import java.util.ArrayList;
 import java.util.Calendar;
@@ -124,6 +127,7 @@ public class FragMessageOthers extends Fragment implements LoaderManager.LoaderC
 
     }
 
+
     public static void createOthersloader()
     {
         if (!endOhtersList)
@@ -144,6 +148,7 @@ public class FragMessageOthers extends Fragment implements LoaderManager.LoaderC
             {
                 endOhtersList=true;
             }
+
             customOhtersListViewAdapter.notifyDataSetChanged();
         }
     }

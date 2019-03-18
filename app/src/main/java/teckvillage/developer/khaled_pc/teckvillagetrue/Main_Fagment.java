@@ -1310,7 +1310,7 @@ public class Main_Fagment extends Fragment implements OnBackPressedListener , Lo
                     numbersofcall = 1;
                 }
             }
-
+            callLogInfos=loglist103;
 
             Log.d("size", String.valueOf(loglist103.size()));
             adapter1 = new LogAdapter(getActivity(),groupListByDate.groupListByDate(loglist103));

@@ -33,6 +33,8 @@ import teckvillage.developer.khaled_pc.teckvillagetrue.Controller.CustomMessageV
 import teckvillage.developer.khaled_pc.teckvillagetrue.model.Get_User_Contacts;
 import teckvillage.developer.khaled_pc.teckvillagetrue.model.MessageInfo;
 
+import static teckvillage.developer.khaled_pc.teckvillagetrue.FragMessageContact.DismissLoadingContactToast;
+import static teckvillage.developer.khaled_pc.teckvillagetrue.FragMessageContact.LoadingContactToast;
 import static teckvillage.developer.khaled_pc.teckvillagetrue.FragMessageContact.allMessageContactInfos;
 import static teckvillage.developer.khaled_pc.teckvillagetrue.FragMessageContact.createContactsloader;
 import static teckvillage.developer.khaled_pc.teckvillagetrue.FragMessageOthers.allMessageOtherInfos;
@@ -159,6 +161,7 @@ public class Message_Fragment extends Fragment implements LoaderManager.LoaderCa
     public Loader<Cursor> onCreateLoader(int id, Bundle args) {
         if (id==1)
         {
+            LoadingContactToast(getActivity());
             String[] projection = new String[] { "address", "body", "date", "type","read"};
             CursorLoader cursorLoader=new CursorLoader(getActivity(), Uri.parse("content://sms/"),projection,null,null,"date desc");
             return cursorLoader;
@@ -226,6 +229,7 @@ public class Message_Fragment extends Fragment implements LoaderManager.LoaderCa
                 allMessageOtherInfos.add(messageInfos.get(i));
             }
         }
+        DismissLoadingContactToast();
         createOthersloader();
         createContactsloader();
     }

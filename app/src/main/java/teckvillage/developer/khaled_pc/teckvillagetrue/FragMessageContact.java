@@ -1,6 +1,8 @@
 package teckvillage.developer.khaled_pc.teckvillagetrue;
 
+import android.app.ProgressDialog;
 import android.content.ContentResolver;
+import android.content.Context;
 import android.content.Intent;
 import android.content.pm.PackageManager;
 import android.database.Cursor;
@@ -19,6 +21,8 @@ import android.view.ViewGroup;
 import android.widget.AbsListView;
 import android.widget.AdapterView;
 import android.widget.ListView;
+
+import net.steamcrafted.loadtoast.LoadToast;
 
 import java.util.ArrayList;
 import java.util.Calendar;
@@ -60,6 +64,7 @@ public class FragMessageContact extends Fragment {
     public void onViewCreated(@NonNull View view, @Nullable Bundle savedInstanceState) {
         super.onViewCreated(view, savedInstanceState);
 
+        //LoadingContactToast(getContext());
         get_user_contacts=new Get_User_Contacts(getActivity());
 
         smsListView = (ListView) view.findViewById(R.id.SMSList);
@@ -110,6 +115,21 @@ public class FragMessageContact extends Fragment {
 
     }
 
+    static ProgressDialog clt;
+    public static void LoadingContactToast(Context context)
+    {
+        clt = new ProgressDialog(context);
+        clt.setTitle("Loading SMS");
+        clt.show();
+    }
+    public static void DismissLoadingContactToast()
+    {
+        if(clt.isShowing()){
+        clt.dismiss();
+        }
+
+    }
+
     public static void createContactsloader()
     {
         if (!endContactsList)
@@ -130,6 +150,7 @@ public class FragMessageContact extends Fragment {
             {
                 endContactsList=true;
             }
+            clt.dismiss();
             customCotactsListViewAdapter.notifyDataSetChanged();
         }
     }
