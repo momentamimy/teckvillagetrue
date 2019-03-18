@@ -35,6 +35,7 @@ dependencies {
     implementation 'com.github.myinnos:AlphabetIndex-Fast-Scroll-RecyclerView:1.0.92'
     implementation 'com.googlecode.libphonenumber:libphonenumber:8.7.0'
     implementation 'com.sdsmdg.tastytoast:tastytoast:0.1.1'
+    //implementation 'com.github.Lucem-Anb:android-text-scanner:0.1.0'
 
     implementation 'com.google.android.gms:play-services-auth:11.8.0'
 

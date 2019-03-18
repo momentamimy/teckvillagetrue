@@ -4,28 +4,28 @@
     tools:showIn="navigation_view">
 
         <item
-            android:id="@+id/nav_gallery"
+            android:id="@+id/nav_Notifcation"
             android:icon="@drawable/ic_notifications_black_24dp"
             android:title="Notifications" />
         <item
-            android:id="@+id/nav_camera"
-            android:icon="@drawable/ic_menu_camera"
+            android:id="@+id/nav_camera_recognition"
+            android:icon="@drawable/ic_photo_camera_with_a_magnifier_tool"
             android:title="Camera" />
         <item
-            android:id="@+id/nav_slideshow"
+            android:id="@+id/nav_FAQ"
             android:icon="@drawable/ic_question_mark"
             android:title="FAQ" />
         <item
-            android:id="@+id/nav_manage"
+            android:id="@+id/nav_sendfeedback"
             android:icon="@drawable/ic_send_feedback"
             android:title="Send feedback" />
 
         <item
             android:id="@+id/nav_share"
-            android:icon="@drawable/gift"
-            android:title="Invite Friends" />
+            android:icon="@drawable/ic_share"
+            android:title="Share" />
         <item
-            android:id="@+id/nav_send"
+            android:id="@+id/nav_setting"
             android:icon="@drawable/ic_settings_black_24dp"
             android:title="Settings" />
 

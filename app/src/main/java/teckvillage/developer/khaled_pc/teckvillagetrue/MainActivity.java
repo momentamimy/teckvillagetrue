@@ -2,6 +2,7 @@ package teckvillage.developer.khaled_pc.teckvillagetrue;
 
 import android.content.ContentResolver;
 import android.content.Context;
+import android.content.Intent;
 import android.content.pm.PackageManager;
 import android.database.Cursor;
 import android.net.Uri;
@@ -12,6 +13,7 @@ import android.support.v4.app.FragmentManager;
 import android.support.v4.app.FragmentTransaction;
 import android.provider.ContactsContract;
 import android.support.annotation.NonNull;
+import android.support.v4.content.ContextCompat;
 import android.util.Log;
 import android.support.design.widget.NavigationView;
 import android.support.v4.view.GravityCompat;
@@ -35,6 +37,7 @@ public class MainActivity extends AppCompatActivity implements NavigationView.On
     public static FragmentManager fragmentManager;
     FrameLayout frameLayout;
     private static final String TAG_ANDROID_CONTACTS = "ANDROID_CONTACTS";
+    String Email ="work20188888@gmail.com";
 
     public BottomNavigationView navigationView2;
 
@@ -163,18 +166,43 @@ public class MainActivity extends AppCompatActivity implements NavigationView.On
         // Handle navigation view item clicks here.
         int id = item.getItemId();
 
-        if (id == R.id.nav_camera) {
+        if (id == R.id.nav_camera_recognition) {
             // Handle the camera action
-        } else if (id == R.id.nav_gallery) {
+            startActivity(new Intent(this,Camera_Recognition.class));
+        } else if (id == R.id.nav_Notifcation) {
+            startActivity(new Intent(this,Notifications.class));
+        } else if (id == R.id.nav_FAQ) {
+            startActivity(new Intent(this,FAQ.class));
 
-        } else if (id == R.id.nav_slideshow) {
-
-        } else if (id == R.id.nav_manage) {
+        } else if (id == R.id.nav_sendfeedback) {
+            //****************************send email************************************************
+            try {
+            Intent intent = new Intent(Intent.ACTION_SENDTO );
+            intent.setType("plain/text");
+            intent.setData(Uri.parse("mailto:"));
+            intent.putExtra(Intent.EXTRA_EMAIL, new String[] { Email });
+            intent.putExtra(Intent.EXTRA_SUBJECT, "Suggestion from application Who caller?");
+            intent.putExtra(Intent.EXTRA_TEXT, "Type your mail text here");
+            startActivity(Intent.createChooser(intent, "submit a suggestion or complaint"));
+            } catch(Exception e) {
+                //e.toString();
+            }
 
         } else if (id == R.id.nav_share) {
+           //Share App
+            try {
+                Intent i = new Intent(Intent.ACTION_SEND);
+                i.setType("text/plain");
+                i.putExtra(Intent.EXTRA_SUBJECT, "Who Caller?");
+                String sAux ="https://play.google.com/store/apps/details?id="+ getPackageName() +"\n\n";//link el prnamg 3ala playstore
+                i.putExtra(Intent.EXTRA_TEXT, sAux);
+                startActivity(Intent.createChooser(i, "Choose App"));
+            } catch(Exception e) {
+                //e.toString();
+            }
 
-        } else if (id == R.id.nav_send) {
-
+        } else if (id == R.id.nav_setting) {
+            startActivity(new Intent(this,setting.class));
         }
 
         DrawerLayout drawer = (DrawerLayout) findViewById(R.id.drawer_layout);
