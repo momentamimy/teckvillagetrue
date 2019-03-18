@@ -31,43 +31,54 @@
                 app:cardCornerRadius="3dp"
                 app:cardBackgroundColor="#FF019AD7">
 
-            <ImageView
-                android:layout_marginStart="12dp"
-                android:layout_marginLeft="12dp"
-                android:id="@+id/iconnnn"
-                android:layout_width="wrap_content"
-                android:layout_height="match_parent"
-                android:src="@drawable/ic_men"
-                />
-
-            <RelativeLayout
-                android:id="@+id/search_layout"
-                android:layout_width="match_parent"
-                android:layout_height="match_parent"
-               >
-
-
-                <TextView
-                    android:textColor="@android:color/white"
-                    android:textSize="17dp"
-                    android:layout_width="wrap_content"
-                    android:layout_height="wrap_content"
-                    android:text="Who Caller? Search"
-                    android:layout_centerInParent="true"
-                     />
-
-                <ImageView
-                    android:layout_marginStart="12dp"
-                    android:layout_marginLeft="12dp"
-                    android:id="@+id/threedots"
-                    android:layout_width="wrap_content"
+                <RelativeLayout
+                    android:layout_width="match_parent"
                     android:layout_height="match_parent"
-                    android:src="@drawable/ic_more"
-                    android:layout_alignParentEnd="true"
-                    android:layout_alignParentRight="true"
-                    android:layout_marginEnd="10dp"
-                    android:layout_marginRight="10dp" />
-            </RelativeLayout>
+                    >
+
+                    <ImageView
+                        android:layout_marginStart="12dp"
+                        android:layout_marginLeft="12dp"
+                        android:id="@+id/iconnnn"
+                        android:layout_width="wrap_content"
+                        android:layout_height="match_parent"
+                        android:src="@drawable/ic_men"
+                        />
+
+                    <RelativeLayout
+                        android:id="@+id/search_layout"
+                        android:layout_width="match_parent"
+                        android:layout_height="match_parent"
+                        android:layout_toRightOf="@+id/iconnnn"
+                        android:layout_toEndOf="@+id/iconnnn"
+                        android:layout_marginStart="5dp"
+                        android:layout_marginLeft="5dp"
+                       >
+
+
+                        <TextView
+                            android:textColor="@android:color/white"
+                            android:textSize="17dp"
+                            android:layout_width="wrap_content"
+                            android:layout_height="wrap_content"
+                            android:text="Who Caller? Search"
+                            android:layout_centerInParent="true"
+                             />
+
+                        <ImageView
+                            android:layout_marginStart="12dp"
+                            android:layout_marginLeft="12dp"
+                            android:id="@+id/threedots"
+                            android:layout_width="wrap_content"
+                            android:layout_height="match_parent"
+                            android:src="@drawable/ic_more"
+                            android:layout_alignParentEnd="true"
+                            android:layout_alignParentRight="true"
+                            android:layout_marginEnd="10dp"
+                            android:layout_marginRight="10dp" />
+                    </RelativeLayout>
+
+                </RelativeLayout>
 
 
 

@@ -7,22 +7,49 @@
 
 
     <RelativeLayout
+        android:layout_marginTop="20dp"
         android:layout_width="match_parent"
         android:layout_height="wrap_content">
+
         <ImageView
-            android:layout_margin="20dp"
+            android:layout_marginTop="20dp"
+            android:layout_marginBottom="20dp"
+            android:layout_marginStart="12dp"
+            android:layout_marginEnd="12dp"
             android:id="@+id/flag_icon"
-            android:layout_width="wrap_content"
-            android:layout_height="wrap_content"
-            android:src="@drawable/flag_eg"/>
+            android:layout_width="30dp"
+            android:layout_height="40dp"
+            android:src="@drawable/flag_eg"
+            android:layout_marginLeft="15dp"
+            android:layout_marginRight="10dp" />
 
         <EditText
+            android:id="@+id/editsearch"
             android:layout_centerVertical="true"
             android:layout_toEndOf="@+id/flag_icon"
             android:layout_width="match_parent"
-            android:layout_height="wrap_content"
+            android:layout_height="50dp"
+            android:layout_marginRight="10dp"
+            android:layout_marginEnd="10dp"
+            android:padding="15dp"
+            android:textSize="16sp"
+            android:background="@drawable/btn_style_search"
             android:layout_toRightOf="@+id/flag_icon"
-            android:hint="search"/>
+             />
+
+        <Button
+            android:id="@+id/btn_searchfor"
+            android:layout_width="wrap_content"
+            android:layout_height="50dp"
+            android:text="search"
+            android:layout_toEndOf="@+id/editsearch"
+            android:layout_toRightOf="@+id/editsearch"
+            android:layout_marginStart="-93dp"
+            android:layout_marginLeft="-93dp"
+            android:textColor="@android:color/white"
+            android:background="@drawable/btn_style_search2"
+            android:layout_centerVertical="true"/>
+
     </RelativeLayout>
 
 </FrameLayout>

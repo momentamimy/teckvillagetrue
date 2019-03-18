@@ -28,6 +28,7 @@ public class LogAdapter extends RecyclerView.Adapter<LogHolder> {
     private List<LogInfo> itemList;
     private Context context;
     int numofcallvar;
+    LogInfo logInfo;
 
     public LogAdapter(Context context, List<LogInfo> itemList) {
         this.context = context;
@@ -75,7 +76,7 @@ public class LogAdapter extends RecyclerView.Adapter<LogHolder> {
         String lastnumber = "0";
 
 
-        final LogInfo logInfo = itemList.get(position);
+         logInfo = itemList.get(position);
         if (holder.logName != null) {
 
             /*
@@ -196,4 +197,8 @@ public class LogAdapter extends RecyclerView.Adapter<LogHolder> {
     public int getItemCount() {
         return itemList.size();
     }
+
+
+
+
 }
