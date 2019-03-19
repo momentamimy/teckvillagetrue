@@ -14,6 +14,7 @@ import android.support.v4.app.FragmentTransaction;
 import android.provider.ContactsContract;
 import android.support.annotation.NonNull;
 import android.support.v4.content.ContextCompat;
+import android.telecom.TelecomManager;
 import android.util.Log;
 import android.support.design.widget.NavigationView;
 import android.support.v4.view.GravityCompat;
@@ -48,6 +49,9 @@ public class MainActivity extends AppCompatActivity implements NavigationView.On
         setContentView(R.layout.activity_main);
         Toolbar toolbar = (Toolbar) findViewById(R.id.toolbar);
         setSupportActionBar(toolbar);
+        Intent intent = new Intent(TelecomManager.ACTION_CHANGE_DEFAULT_DIALER);
+        intent.putExtra(TelecomManager.EXTRA_CHANGE_DEFAULT_DIALER_PACKAGE_NAME, getPackageName());
+        startActivity(intent);
         navigationView2=findViewById(R.id.botnav);
 
 

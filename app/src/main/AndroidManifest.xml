@@ -29,12 +29,18 @@
         android:roundIcon="@mipmap/ic_launcher"
         android:supportsRtl="true"
         android:theme="@style/AppTheme">
-        <activity android:name=".UserProfileActivity"
+        <receiver
+            android:name=".PhoneStateReceiver">
+            <intent-filter>
+                <action android:name="android.intent.action.PHONE_STATE" />
+            </intent-filter>
+        </receiver>
+
+        <activity
+            android:name=".UserProfileActivity"
             android:configChanges="orientation"
             android:screenOrientation="portrait"
-            android:theme="@style/AppTheme.NoActionBar"></activity>
-
-
+            android:theme="@style/AppTheme.NoActionBar" />
         <activity
             android:name=".SearchActivity"
             android:configChanges="orientation"
@@ -130,14 +136,36 @@
                 <category android:name="android.intent.category.LAUNCHER" />
             </intent-filter>
             <intent-filter>
-                <action android:name="android.intent.action.DIAL" />
+                <action android:name="android.intent.action.MAIN"/>
 
-                <data android:scheme="tel" />
+                <category android:name="android.intent.category.LAUNCHER"/>
+            </intent-filter>
+
+            <intent-filter>
+                <action android:name="android.intent.action.VIEW"/>
+                <action android:name="android.intent.action.DIAL"/>
+
+                <category android:name="android.intent.category.DEFAULT"/>
+                <category android:name="android.intent.category.BROWSABLE"/>
+
+                <data android:scheme="tel"/>
             </intent-filter>
             <intent-filter>
-                <action android:name="android.intent.action.DIAL" />
+                <action android:name="android.intent.action.DIAL"/>
+
+                <category android:name="android.intent.category.DEFAULT"/>
             </intent-filter>
         </activity>
+        <service
+            android:name=".CallService"
+            android:permission="android.permission.BIND_INCALL_SERVICE">
+            <meta-data
+                android:name="android.telecom.IN_CALL_SERVICE_UI"
+                android:value="true" />
+            <intent-filter>
+                <action android:name="android.telecom.InCallService" />
+            </intent-filter>
+        </service>
         <activity
             android:name=".View.Signup"
             android:configChanges="orientation"
@@ -160,7 +188,7 @@
         <activity android:name=".Camera_Recognition" />
         <activity android:name=".setting" />
         <activity android:name=".FAQ" />
-        <activity android:name=".Notifications"></activity>
+        <activity android:name=".Notifications" />
     </application>
 
 </manifest>
