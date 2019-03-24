@@ -1,0 +1,142 @@
+<?xml version="1.0" encoding="utf-8"?>
+<RelativeLayout xmlns:android="http://schemas.android.com/apk/res/android"
+    android:background="@android:color/white"
+    android:layout_width="match_parent" android:layout_height="wrap_content">
+
+    <RelativeLayout
+        android:id="@+id/headercamrecog"
+        android:layout_width="match_parent"
+        android:layout_height="85dp">
+
+    <de.hdodenhof.circleimageview.CircleImageView
+        android:id="@+id/contact_img_log_recycle"
+        android:layout_width="55dp"
+        android:layout_height="55dp"
+        android:layout_marginStart="20dp"
+        android:layout_marginEnd="10dp"
+        android:src="@drawable/ic_nurse"
+        android:layout_marginLeft="20dp"
+        android:layout_marginRight="10dp"
+        android:layout_centerVertical="true"
+       />
+
+    <TextView
+        android:id="@+id/name_call_num"
+        android:layout_toEndOf="@+id/contact_img_log_recycle"
+        android:layout_toRightOf="@+id/contact_img_log_recycle"
+        android:layout_marginStart="8dp"
+        android:layout_marginLeft="8dp"
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content"
+        android:text="01280945456"
+        android:textSize="17sp"
+        android:layout_centerVertical="true"
+        android:textDirection="ltr"
+        android:textColor="@android:color/black"
+        />
+    </RelativeLayout>
+
+
+    <RelativeLayout
+        android:layout_below="@id/headercamrecog"
+        android:layout_width="match_parent"
+        android:layout_height="wrap_content">
+
+        <View
+            android:layout_width="match_parent"
+            android:layout_height="1dp"
+            android:background="#B0BEC5"
+            />
+
+        <RelativeLayout
+            android:id="@+id/callphoneicon2"
+            android:layout_width="match_parent"
+            android:layout_height="55dp">
+
+        <ImageView
+            android:layout_marginTop="30dp"
+            android:id="@+id/callphoneicon"
+            android:layout_width="20dp"
+            android:layout_height="20dp"
+            android:layout_centerVertical="true"
+            android:src="@drawable/phone_call_primary"
+            android:layout_marginStart="28dp"
+            android:layout_marginLeft="28dp" />
+
+        <TextView
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:textColor="@android:color/black"
+            android:text="Call"
+            android:layout_centerVertical="true"
+            android:layout_toEndOf="@+id/callphoneicon"
+            android:layout_toRightOf="@+id/callphoneicon"
+            android:layout_alignBaseline="@+id/callphoneicon"
+            android:layout_marginStart="18dp"
+            android:layout_marginLeft="18dp"
+            android:textSize="18sp"/>
+
+        </RelativeLayout>
+
+
+        <RelativeLayout
+            android:layout_below="@+id/callphoneicon2"
+            android:id="@+id/messageiconsw2"
+            android:layout_width="match_parent"
+            android:layout_height="55dp">
+
+        <ImageView
+            android:layout_centerVertical="true"
+            android:id="@+id/messageiconsw"
+            android:layout_width="20dp"
+            android:layout_height="20dp"
+            android:layout_marginStart="30dp"
+            android:src="@drawable/chat2"
+            android:layout_marginLeft="30dp" />
+
+        <TextView
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:textColor="@android:color/black"
+            android:text="Send Message"
+            android:layout_centerVertical="true"
+            android:layout_toEndOf="@+id/messageiconsw"
+            android:layout_toRightOf="@+id/messageiconsw"
+            android:layout_alignBaseline="@+id/messageiconsw"
+            android:layout_marginStart="18dp"
+            android:layout_marginLeft="18dp"
+            android:textSize="18sp"/>
+        </RelativeLayout>
+
+        <RelativeLayout
+            android:layout_below="@+id/messageiconsw2"
+            android:id="@+id/scanagain"
+            android:layout_width="match_parent"
+            android:layout_height="55dp">
+
+            <ImageView
+                android:layout_centerVertical="true"
+                android:id="@+id/scanagainicon"
+                android:layout_width="30dp"
+                android:layout_height="35dp"
+                android:layout_marginStart="30dp"
+                android:src="@drawable/ic_photo_camera_with_a_magnifier_tool2"
+                android:layout_marginLeft="25dp" />
+
+            <TextView
+                android:layout_width="wrap_content"
+                android:layout_height="wrap_content"
+                android:textColor="@android:color/black"
+                android:text="Scan Again"
+                android:layout_centerVertical="true"
+                android:layout_toEndOf="@+id/scanagainicon"
+                android:layout_toRightOf="@+id/scanagainicon"
+                android:layout_alignBaseline="@+id/scanagainicon"
+                android:layout_marginStart="18dp"
+                android:layout_marginLeft="18dp"
+                android:textSize="18sp"/>
+        </RelativeLayout>
+
+    </RelativeLayout>
+
+</RelativeLayout>

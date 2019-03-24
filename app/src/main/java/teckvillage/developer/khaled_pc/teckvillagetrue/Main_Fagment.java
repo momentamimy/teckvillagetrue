@@ -557,7 +557,7 @@ public class Main_Fagment extends Fragment implements OnBackPressedListener , Lo
         logs.setItemAnimator(new DefaultItemAnimator());
         adapter1 = new LogAdapter(getActivity(),loglist103);
         logs.setAdapter(adapter1);
-        adapter1.notifyDataSetChanged();
+        //adapter1.notifyDataSetChanged();
 
 
 

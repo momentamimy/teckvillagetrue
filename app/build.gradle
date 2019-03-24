@@ -9,6 +9,9 @@ android {
         versionCode 1
         versionName "1.0"
         testInstrumentationRunner "android.support.test.runner.AndroidJUnitRunner"
+        ndk {
+            abiFilters 'armeabi' //自行选择添加
+        }
     }
     buildTypes {
         release {
@@ -35,9 +38,11 @@ dependencies {
     implementation 'com.github.myinnos:AlphabetIndex-Fast-Scroll-RecyclerView:1.0.92'
     implementation 'com.googlecode.libphonenumber:libphonenumber:8.7.0'
     implementation 'com.sdsmdg.tastytoast:tastytoast:0.1.1'
-    //implementation 'com.github.Lucem-Anb:android-text-scanner:0.1.0'
     implementation 'com.github.IntruderShanky:Squint:3.0.1'
     implementation 'net.steamcrafted:load-toast:1.0.12'
+    //Camera Recogition
+    implementation 'com.google.android.gms:play-services-vision:11.8.0'
+
 
     implementation 'com.google.android.gms:play-services-auth:11.8.0'
 

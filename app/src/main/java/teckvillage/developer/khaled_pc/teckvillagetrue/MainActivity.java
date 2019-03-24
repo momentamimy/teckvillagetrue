@@ -1,13 +1,20 @@
 package teckvillage.developer.khaled_pc.teckvillagetrue;
 
+import android.*;
+import android.app.Activity;
+import android.app.Dialog;
 import android.content.ContentResolver;
 import android.content.Context;
 import android.content.Intent;
 import android.content.pm.PackageManager;
 import android.database.Cursor;
+import android.graphics.Color;
+import android.graphics.drawable.ColorDrawable;
+import android.graphics.drawable.InsetDrawable;
 import android.net.Uri;
 import android.os.Bundle;
 import android.support.design.widget.BottomNavigationView;
+import android.support.v4.app.ActivityCompat;
 import android.support.v4.app.Fragment;
 import android.support.v4.app.FragmentManager;
 import android.support.v4.app.FragmentTransaction;
@@ -23,8 +30,13 @@ import android.support.v7.app.ActionBarDrawerToggle;
 import android.support.v7.app.AppCompatActivity;
 import android.support.v7.widget.Toolbar;
 import android.view.Gravity;
+import android.view.LayoutInflater;
 import android.view.MenuItem;
+import android.view.View;
+import android.view.Window;
 import android.widget.FrameLayout;
+import android.widget.RelativeLayout;
+import android.widget.TextView;
 import android.widget.Toast;
 import java.util.ArrayList;
 import java.util.List;
@@ -34,11 +46,14 @@ import java.util.HashSet;
 public class MainActivity extends AppCompatActivity implements NavigationView.OnNavigationItemSelectedListener {
 
     private static final String TAG ="fields" ;
+    private static final int STATIC_INTEGER_VALUE =221 ;
 
     public static FragmentManager fragmentManager;
     FrameLayout frameLayout;
     private static final String TAG_ANDROID_CONTACTS = "ANDROID_CONTACTS";
     String Email ="work20188888@gmail.com";
+    private static final int MY_CAMERA_REQUEST_CODE = 109;
+    private static final String PUBLIC_STATIC_STRING_IDENTIFIER = "com.techvillage";
 
     public BottomNavigationView navigationView2;
 
@@ -92,6 +107,8 @@ public class MainActivity extends AppCompatActivity implements NavigationView.On
                             Fragment f = getSupportFragmentManager().findFragmentById(R.id.fragment_container_main);
                             if (f instanceof Message_Fragment) {
                                 // Do something
+                                Log.w("slahh","slalalal");
+                                //fragmentTransaction.hide(f);
                             }
                             else
                             {
@@ -105,6 +122,7 @@ public class MainActivity extends AppCompatActivity implements NavigationView.On
                             Fragment f1 = getSupportFragmentManager().findFragmentById(R.id.fragment_container_main);
                             if (f1 instanceof Main_Fagment) {
                                 // Do something
+                               // fragmentTransaction.hide(f1);
                             }
                             else
                             {
@@ -117,6 +135,7 @@ public class MainActivity extends AppCompatActivity implements NavigationView.On
                             Fragment f2 = getSupportFragmentManager().findFragmentById(R.id.fragment_container_main);
                             if (f2 instanceof Contacts) {
                                 // Do something
+                               // fragmentTransaction.hide(f2);
                                }
                             else
                             {
@@ -172,7 +191,16 @@ public class MainActivity extends AppCompatActivity implements NavigationView.On
 
         if (id == R.id.nav_camera_recognition) {
             // Handle the camera action
-            startActivity(new Intent(this,Camera_Recognition.class));
+            if (ActivityCompat.checkSelfPermission(getApplicationContext(), android.Manifest.permission.CAMERA) != PackageManager.PERMISSION_GRANTED) {
+
+                ActivityCompat.requestPermissions(MainActivity.this, new String[]{android.Manifest.permission.CAMERA}, MY_CAMERA_REQUEST_CODE);
+
+            }else {
+               // startActivity(new Intent(this,Camera_Recognition.class));
+                Intent i = new Intent(this,Camera_Recognition.class);
+                startActivityForResult(i, STATIC_INTEGER_VALUE);
+            }
+
         } else if (id == R.id.nav_Notifcation) {
             startActivity(new Intent(this,Notifications.class));
         } else if (id == R.id.nav_FAQ) {
@@ -209,7 +237,6 @@ public class MainActivity extends AppCompatActivity implements NavigationView.On
             startActivity(new Intent(this,setting.class));
         }else if (id == R.id.nav_edit_profile) {
             startActivity(new Intent(getApplicationContext(),UserProfileActivity.class));
-
         }
 
         DrawerLayout drawer = (DrawerLayout) findViewById(R.id.drawer_layout);
@@ -320,7 +347,103 @@ public class MainActivity extends AppCompatActivity implements NavigationView.On
                     Toast.makeText(getApplicationContext(), "You must approve the permission", Toast.LENGTH_SHORT).show();
                 }
                 break;
+            case MY_CAMERA_REQUEST_CODE:
+                // If request is cancelled, the result arrays are empty.
+                if (grantResults.length > 0 && grantResults[0] == PackageManager.PERMISSION_GRANTED) {
+                    //granted
 
+                    //startActivity(new Intent(this,Camera_Recognition.class));
+                    Intent i = new Intent(this,Camera_Recognition.class);
+                    startActivityForResult(i, STATIC_INTEGER_VALUE);
+
+                }
+                else {
+
+                    Toast.makeText(getApplicationContext(), "You must approve the permission", Toast.LENGTH_SHORT).show();
+                }
+                break;
+
+        }
+    }
+
+    @Override
+    public void onActivityResult(int requestCode, int resultCode, Intent data) {
+        super.onActivityResult(requestCode, resultCode, data);
+        switch(requestCode) {
+            case (STATIC_INTEGER_VALUE) : {
+                if (resultCode == Activity.RESULT_OK) {
+                    final String newText = data.getStringExtra(PUBLIC_STATIC_STRING_IDENTIFIER);
+                    // TODO Update your TextView.
+                    Log.w("smaef",newText);
+                    //AlertDialog.Builder builder = new AlertDialog.Builder(this);
+                    LayoutInflater layoutInflater = (LayoutInflater) this.getSystemService(Context.LAYOUT_INFLATER_SERVICE);
+                    View row = layoutInflater.inflate(R.layout.result_dialog_text_recognition, null);
+
+
+                    final Dialog dialog = new Dialog(MainActivity.this);
+                    dialog.requestWindowFeature(Window.FEATURE_NO_TITLE);
+                    dialog.setContentView(row);
+
+                    //final AlertDialog dialog = builder.create();
+                    //dialog.requestWindowFeature(Window.FEATURE_NO_TITLE);
+                    ColorDrawable transparent = new ColorDrawable(Color.TRANSPARENT);
+                    InsetDrawable inset = new InsetDrawable(transparent, 30);//margin for Dilaog
+                    dialog.getWindow().setBackgroundDrawable(inset);
+                    dialog.show();
+
+                    final TextView number=row.findViewById(R.id.name_call_num);
+                    number.setText(newText);
+
+                    RelativeLayout call = row.findViewById(R.id.callphoneicon2);
+                    call.setOnClickListener(new View.OnClickListener() {
+                        @Override
+                        public void onClick(View v) {
+
+                            Intent intent = new Intent(Intent.ACTION_CALL);
+                            intent.setData(Uri.parse("tel:" + newText));
+                            if (ActivityCompat.checkSelfPermission(MainActivity.this, android.Manifest.permission.CALL_PHONE) != PackageManager.PERMISSION_GRANTED) {
+                                // TODO: Consider calling
+                                //    ActivityCompat#requestPermissions
+                                // here to request the missing permissions, and then overriding
+                                //   public void onRequestPermissionsResult(int requestCode, String[] permissions,
+                                //                                          int[] grantResults)
+                                // to handle the case where the user grants the permission. See the documentation
+                                // for ActivityCompat#requestPermissions for more details.
+                                return;
+                            }
+                            startActivity(intent);
+                        }
+                    });
+
+                    RelativeLayout message = row.findViewById(R.id.messageiconsw2);
+                    message.setOnClickListener(new View.OnClickListener() {
+                        @Override
+                        public void onClick(View v) {
+                            //newText
+                            dialog.dismiss();
+                            Intent intent = new Intent(MainActivity.this,SMS_MessagesChat.class);
+                            intent.putExtra("LogSMSName",newText);
+                            intent.putExtra("LogSMSAddress",newText);
+                            startActivity(intent);
+
+                        }
+                    });
+
+                    RelativeLayout scanagain = row.findViewById(R.id.scanagain);
+                    scanagain.setOnClickListener(new View.OnClickListener() {
+                        @Override
+                        public void onClick(View v) {
+
+                            dialog.dismiss();
+                            Intent i = new Intent(MainActivity.this,Camera_Recognition.class);
+                            startActivityForResult(i, STATIC_INTEGER_VALUE);
+
+                        }
+                    });
+
+                }
+                break;
+            }
         }
     }
 

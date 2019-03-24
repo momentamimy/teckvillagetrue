@@ -91,9 +91,12 @@ public class LogAdapter extends RecyclerView.Adapter<LogHolder> {
 
             numofcallvar=logInfo.getNumberofcall();
             Log.w("hwa feh", String.valueOf(numofcallvar));
+            Log.w("hwa feh", String.valueOf(logInfo.getNumber()));
             if(numofcallvar==1){
                 holder.numbersofcallinminte.setVisibility(View.GONE);
+                Log.w("hide", String.valueOf(numofcallvar));
             }else {
+                Log.w("hwa poppppp", String.valueOf(numofcallvar));
                 holder.numbersofcallinminte.setText("("+numofcallvar+")");
             }
 
