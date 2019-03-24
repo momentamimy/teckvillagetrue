@@ -33,21 +33,21 @@ public class UserProfileActivity extends AppCompatActivity {
         setContentView(R.layout.activity_user_profile);
         diagonalView=findViewById(R.id.diagonal);
         userPhoto=findViewById(R.id.UserPhoto);
-        if (Build.VERSION.SDK_INT >= Build.VERSION_CODES.JELLY_BEAN_MR1)
-        {
-            Bitmap resultBmp = BlurBuilder.blur(this, BitmapFactory.decodeResource(getResources(), R.drawable.tamimy));
+
+            BlurBuilder blurBuilder=new BlurBuilder();
+            Bitmap resultBmp = blurBuilder.blur(this, BitmapFactory.decodeResource(getResources(), R.drawable.tamimy));
             diagonalView.setImageBitmap(resultBmp);
-        }
+
 
     }
 
-    public static class BlurBuilder {
+    public class BlurBuilder {
 
         private static final float BITMAP_SCALE = 0.19f;
         private static final float BLUR_RADIUS = 15f;
 
 
-        public static Bitmap blur(Context context, Bitmap image) {
+        public Bitmap blur(Context context, Bitmap image) {
 
             if (Build.VERSION.SDK_INT >= Build.VERSION_CODES.JELLY_BEAN_MR1) {
                 int width = Math.round(image.getWidth() * BITMAP_SCALE);

@@ -2,12 +2,17 @@ package teckvillage.developer.khaled_pc.teckvillagetrue.model;
 
 import android.Manifest;
 import android.annotation.SuppressLint;
+import android.content.ContentResolver;
+import android.content.ContentUris;
 import android.content.Context;
 import android.database.Cursor;
+import android.graphics.Bitmap;
+import android.graphics.BitmapFactory;
 import android.net.Uri;
 import android.os.Build;
 import android.provider.CallLog;
 import android.provider.ContactsContract;
+import android.text.TextUtils;
 import android.util.Log;
 import android.widget.ListView;
 
@@ -15,6 +20,8 @@ import com.google.i18n.phonenumbers.NumberParseException;
 import com.google.i18n.phonenumbers.PhoneNumberUtil;
 import com.google.i18n.phonenumbers.Phonenumber;
 
+import java.io.IOException;
+import java.io.InputStream;
 import java.text.SimpleDateFormat;
 import java.util.ArrayList;
 import java.util.Collections;
@@ -30,6 +37,7 @@ import java.util.Locale;
 import java.util.Map;
 
 import teckvillage.developer.khaled_pc.teckvillagetrue.Permission;
+import teckvillage.developer.khaled_pc.teckvillagetrue.R;
 
 /**
  * Created by khaled-pc on 2/20/2019.
@@ -261,7 +269,7 @@ public class Get_Calls_Log {
     }
 
 
-    String getContactName(final String phoneNumber) {
+    public String getContactName(final String phoneNumber) {
         Uri uri = Uri.withAppendedPath(ContactsContract.PhoneLookup.CONTENT_FILTER_URI, Uri.encode(phoneNumber));
 
         String[] projection = new String[]{ContactsContract.PhoneLookup.DISPLAY_NAME};
@@ -285,6 +293,47 @@ public class Get_Calls_Log {
         }
         return contactName;
 
+    }
+
+    public  Bitmap retrieveContactPhoto(String number) {
+        ContentResolver contentResolver = context.getContentResolver();
+        String contactId = null;
+        Uri uri = Uri.withAppendedPath(ContactsContract.PhoneLookup.CONTENT_FILTER_URI, Uri.encode(number));
+
+        String[] projection = new String[]{ContactsContract.PhoneLookup.DISPLAY_NAME, ContactsContract.PhoneLookup._ID};
+
+        Cursor cursor =
+                contentResolver.query(
+                        uri,
+                        projection,
+                        null,
+                        null,
+                        null);
+
+        if (cursor != null) {
+            while (cursor.moveToNext()) {
+                contactId = cursor.getString(cursor.getColumnIndexOrThrow(ContactsContract.PhoneLookup._ID));
+            }
+            cursor.close();
+        }
+
+        Bitmap photo = null;
+        if (!TextUtils.isEmpty(contactId))
+        try {
+            InputStream inputStream = ContactsContract.Contacts.openContactPhotoInputStream(context.getContentResolver(),
+                    ContentUris.withAppendedId(ContactsContract.Contacts.CONTENT_URI, new Long(contactId)));
+
+            if (inputStream != null) {
+                photo = BitmapFactory.decodeStream(inputStream);
+            }
+
+            if (inputStream != null)
+            inputStream.close();
+
+        } catch (IOException e) {
+            e.printStackTrace();
+        }
+        return photo;
     }
 
     boolean contactExists(String number) {
