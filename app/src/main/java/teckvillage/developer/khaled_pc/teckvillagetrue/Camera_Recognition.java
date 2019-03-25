@@ -3,11 +3,14 @@ package teckvillage.developer.khaled_pc.teckvillagetrue;
 import android.app.Activity;
 import android.content.Intent;
 import android.content.pm.PackageManager;
+import android.graphics.Rect;
+import android.hardware.Camera;
 import android.support.v4.app.ActivityCompat;
 import android.support.v7.app.AppCompatActivity;
 import android.os.Bundle;
 import android.util.Log;
 import android.util.SparseArray;
+import android.view.MotionEvent;
 import android.view.SurfaceHolder;
 import android.view.SurfaceView;
 import android.widget.TextView;
@@ -16,9 +19,11 @@ import com.google.android.gms.vision.Detector;
 import com.google.android.gms.vision.text.TextBlock;
 import com.google.android.gms.vision.text.TextRecognizer;
 import java.io.IOException;
+import java.lang.reflect.Field;
+import java.util.ArrayList;
 
 
-public class Camera_Recognition extends AppCompatActivity {
+public class Camera_Recognition extends AppCompatActivity  {
 
     private static final int MY_CAMERA_REQUEST_CODE = 109;
     private static final String TAG ="true" ;
@@ -54,9 +59,9 @@ public class Camera_Recognition extends AppCompatActivity {
             //Initialize camerasource to use high resolution and set Autofocus on.
             mCameraSource = new CameraSource.Builder(getApplicationContext(), textRecognizer)
                     .setFacing(CameraSource.CAMERA_FACING_BACK)
-                    .setRequestedPreviewSize(700, 700)
+                    .setRequestedPreviewSize(550, 360)
                     .setAutoFocusEnabled(true)
-                    .setRequestedFps(1.0f)
+                    .setRequestedFps(10.0f)
                     .build();
 
             /**
@@ -85,6 +90,8 @@ public class Camera_Recognition extends AppCompatActivity {
                 public void surfaceChanged(SurfaceHolder holder, int format, int width, int height) {
                 }
 
+
+
                 /**
                  * Release resources for cameraSource
                  */
@@ -100,6 +107,9 @@ public class Camera_Recognition extends AppCompatActivity {
                 public void release() {
                 }
 
+
+
+
                 /**
                  * Detect all the text from camera using TextBlock and the values into a stringBuilder
                  * which will then be set to the textView.
@@ -108,7 +118,6 @@ public class Camera_Recognition extends AppCompatActivity {
                 public void receiveDetections(Detector.Detections<TextBlock> detections) {
                     final SparseArray<TextBlock> items = detections.getDetectedItems();
                     if (items.size() != 0 ){
-
 
                         mTextView.post(new Runnable() {
                             @Override
@@ -125,7 +134,7 @@ public class Camera_Recognition extends AppCompatActivity {
                                     }
 
                                 }
-                                if(stringBuilder.toString().length()>4){
+                                if(stringBuilder.toString().length()>3){
                                     Intent resultIntent = new Intent();
                                     resultIntent.putExtra(PUBLIC_STATIC_STRING_IDENTIFIER, stringBuilder.toString());
                                     setResult(Activity.RESULT_OK, resultIntent);
@@ -139,7 +148,11 @@ public class Camera_Recognition extends AppCompatActivity {
                 }
             });
         }
+
+
     }
+
+
 
     /**
      * Take care of popping the fragment back stack or finishing the activity
@@ -151,6 +164,8 @@ public class Camera_Recognition extends AppCompatActivity {
         finish();
 
     }
+
+
 
 
 }

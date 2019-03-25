@@ -86,7 +86,7 @@ public class MainActivity extends AppCompatActivity implements NavigationView.On
         //****************************************************Set HomeFragment as default*********************************************************
         navigationView2.setSelectedItemId(R.id.nav_phone);
         fragmentManager=getSupportFragmentManager();
-        final FragmentTransaction fragmentTransaction=fragmentManager.beginTransaction();
+        FragmentTransaction fragmentTransaction=fragmentManager.beginTransaction();
         if(findViewById(R.id.fragment_container_main) !=null){
             if(savedInstanceState !=null){
                 return;
@@ -107,7 +107,7 @@ public class MainActivity extends AppCompatActivity implements NavigationView.On
                             Fragment f = getSupportFragmentManager().findFragmentById(R.id.fragment_container_main);
                             if (f instanceof Message_Fragment) {
                                 // Do something
-                                Log.w("slahh","slalalal");
+                                Log.w("slahhmessage","slalalal");
                                 //fragmentTransaction.hide(f);
                             }
                             else
@@ -122,6 +122,7 @@ public class MainActivity extends AppCompatActivity implements NavigationView.On
                             Fragment f1 = getSupportFragmentManager().findFragmentById(R.id.fragment_container_main);
                             if (f1 instanceof Main_Fagment) {
                                 // Do something
+                                Log.w("slahhphone","slalalal");
                                // fragmentTransaction.hide(f1);
                             }
                             else
@@ -135,6 +136,7 @@ public class MainActivity extends AppCompatActivity implements NavigationView.On
                             Fragment f2 = getSupportFragmentManager().findFragmentById(R.id.fragment_container_main);
                             if (f2 instanceof Contacts) {
                                 // Do something
+                                Log.w("slahhcontacts","slalalal");
                                // fragmentTransaction.hide(f2);
                                }
                             else
@@ -374,7 +376,7 @@ public class MainActivity extends AppCompatActivity implements NavigationView.On
                 if (resultCode == Activity.RESULT_OK) {
                     final String newText = data.getStringExtra(PUBLIC_STATIC_STRING_IDENTIFIER);
                     // TODO Update your TextView.
-                    Log.w("smaef",newText);
+
                     //AlertDialog.Builder builder = new AlertDialog.Builder(this);
                     LayoutInflater layoutInflater = (LayoutInflater) this.getSystemService(Context.LAYOUT_INFLATER_SERVICE);
                     View row = layoutInflater.inflate(R.layout.result_dialog_text_recognition, null);
@@ -446,7 +448,6 @@ public class MainActivity extends AppCompatActivity implements NavigationView.On
             }
         }
     }
-
 
 
 

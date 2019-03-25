@@ -28,7 +28,7 @@ public class LogAdapter extends RecyclerView.Adapter<LogHolder> {
     private List<LogInfo> itemList;
     private Context context;
     int numofcallvar;
-    LogInfo logInfo;
+
 
     public LogAdapter(Context context, List<LogInfo> itemList) {
         this.context = context;
@@ -72,32 +72,22 @@ public class LogAdapter extends RecyclerView.Adapter<LogHolder> {
 
 
     @Override
-    public void onBindViewHolder(final LogHolder holder, int position) {
-        String lastnumber = "0";
+    public void onBindViewHolder(final LogHolder holder, final int position) {
 
 
-         logInfo = itemList.get(position);
+
         if (holder.logName != null) {
 
-            /*
-            if (logInfo.getNumber().contains(lastnumber))
-            {
-                numofcall++;
-            }
-            else {
-                lastnumber = logInfo.getNumber();
 
-            }*/
-
-            numofcallvar=logInfo.getNumberofcall();
-            Log.w("hwa feh", String.valueOf(numofcallvar));
-            Log.w("hwa feh", String.valueOf(logInfo.getNumber()));
-            if(numofcallvar==1){
+            numofcallvar=itemList.get(position).getNumberofcall();
+            if(itemList.get(position).getNumberofcall()==1){
                 holder.numbersofcallinminte.setVisibility(View.GONE);
-                Log.w("hide", String.valueOf(numofcallvar));
+
+
             }else {
-                Log.w("hwa poppppp", String.valueOf(numofcallvar));
-                holder.numbersofcallinminte.setText("("+numofcallvar+")");
+                holder.numbersofcallinminte.setVisibility(View.VISIBLE);
+                holder.numbersofcallinminte.setText("("+itemList.get(position).getNumberofcall()+")");
+
             }
 
 
@@ -106,7 +96,7 @@ public class LogAdapter extends RecyclerView.Adapter<LogHolder> {
                 public void onClick(View v) {
 
                         Intent intent = new Intent(Intent.ACTION_CALL);
-                        intent.setData(Uri.parse("tel:" + logInfo.getNumber()));
+                        intent.setData(Uri.parse("tel:" + itemList.get(position).getNumber()));
                         if (ActivityCompat.checkSelfPermission(context, Manifest.permission.CALL_PHONE) != PackageManager.PERMISSION_GRANTED) {
                             // TODO: Consider calling
                             //    ActivityCompat#requestPermissions
@@ -138,9 +128,9 @@ public class LogAdapter extends RecyclerView.Adapter<LogHolder> {
                 }
             });
 
-            if (logInfo.imageUrl != null) {
+            if (itemList.get(position).imageUrl != null) {
                 Picasso.with(context)
-                        .load(logInfo.imageUrl)
+                        .load(itemList.get(position).imageUrl)
                         .into(holder.logCircleImageView, new com.squareup.picasso.Callback() {
                             @Override
                             public void onSuccess() {
@@ -156,9 +146,9 @@ public class LogAdapter extends RecyclerView.Adapter<LogHolder> {
                             }
                         });
             }
-            holder.logName.setText(logInfo.logName);
-            if (!TextUtils.isEmpty(logInfo.logIcon)) {
-                switch (logInfo.logIcon) {
+            holder.logName.setText(itemList.get(position).logName);
+            if (!TextUtils.isEmpty(itemList.get(position).logIcon)) {
+                switch (itemList.get(position).logIcon) {
                     case "INCOMING":
                         holder.logIcon.setImageDrawable(context.getResources().getDrawable(R.drawable.ic_call_received_arrow));
                         break;
@@ -183,13 +173,13 @@ public class LogAdapter extends RecyclerView.Adapter<LogHolder> {
                 }
             }
 
-            holder.logDate.setText(logInfo.hour);
-            holder.callType.setText(logInfo.callType);
+            holder.logDate.setText(itemList.get(position).hour);
+            holder.callType.setText(itemList.get(position).callType);
 
         }
 
         if (holder.datesection != null) {
-            holder.datesection.setText(logInfo.getDateString());
+            holder.datesection.setText(itemList.get(position).getDateString());
         }
 
 

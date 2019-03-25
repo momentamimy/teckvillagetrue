@@ -59,6 +59,10 @@ import android.widget.ImageView;
 import android.widget.RelativeLayout;
 import android.widget.TextView;
 
+import com.google.i18n.phonenumbers.NumberParseException;
+import com.google.i18n.phonenumbers.PhoneNumberUtil;
+import com.google.i18n.phonenumbers.Phonenumber;
+
 import java.text.SimpleDateFormat;
 import java.util.ArrayList;
 import java.util.Collections;
@@ -1131,11 +1135,12 @@ public class Main_Fagment extends Fragment implements OnBackPressedListener , Lo
         Log.d("mesheyyyy", "onLoadFinished");
         //logInfos = new ArrayList<>();
         //ArrayList<LogInfo> loglist103 = new ArrayList<>();
-        //groupListByDate = new GroupListByDate();
+        groupListByDate = new GroupListByDate();
+        PhoneNumberUtil phoneUtil = PhoneNumberUtil.getInstance();
         loglist103.clear();
         logInfos.clear();
 
-        String phName, phNumber, callDate, callDuration, dateStringhour;
+        String phName, phNumber, callDate, callDuration, dateStringhour,houronly;
         String dir = null;
         String typephone = null;
         int phmobileType, callType;
@@ -1143,6 +1148,7 @@ public class Main_Fagment extends Fragment implements OnBackPressedListener , Lo
 
         //Date Format  "dd-MM-yyyy h:mm a"
         SimpleDateFormat formatter = new SimpleDateFormat("h:mm a", Locale.ENGLISH);
+        SimpleDateFormat formatter2 = new SimpleDateFormat("h a", Locale.ENGLISH);
 
 
         if (cursor.moveToNext() == false) Log.e("GOPAL", "Empty Cursor");
@@ -1160,6 +1166,7 @@ public class Main_Fagment extends Fragment implements OnBackPressedListener , Lo
 
                 //callDuration = managedCursor.getString(duration);
                 dateStringhour = formatter.format(new Date(Long.parseLong(callDate)));
+                houronly=formatter2.format(new Date(Long.parseLong(callDate)));
 
                 switch (callType) {
                     case CallLog.Calls.OUTGOING_TYPE:
@@ -1294,15 +1301,58 @@ public class Main_Fagment extends Fragment implements OnBackPressedListener , Lo
             } while (cursor.moveToNext());
 
 
+           /*
+        ___\ \________
+       |___\_\______  \   | |        ________
+        ___\_\____|   |  | |       / _______ \
+       / ____________/  | |  _   / /        \ \
+     __| \__\_\________| |_| |_/ /__________\ \
+   /___\ \____________________________________\
+        \ \
+         \ \____
+          \_____|
+                         Mo Salah Mo Salah
+        */
+
             for (int i = 0; i < logInfos.size() - 1; i++) {
 
                 String numString1 = logInfos.get(i).getNumber();
                 String num = logInfos.get(i + 1).getNumber();
 
+                //remove Country Code from first num
+                if(numString1.startsWith("+2")){
+                    numString1 = numString1.substring(2);
 
-                if (numString1.equals(num)) {
+                } else  if(numString1.startsWith("+")){
+
+                    try {
+                        // phone must begin with '+'
+                        Phonenumber.PhoneNumber numberProto = phoneUtil.parse(numString1, "");
+                        numString1 = String.valueOf(numberProto.getNationalNumber());
+
+                    } catch (NumberParseException e) {
+                        System.err.println("NumberParseException was thrown: " + e.toString());
+                    }
+                }
+
+                //remove Country Code from second num
+                if(num.startsWith("+2")){
+                    num = num.substring(2);
+
+                } else  if(num.startsWith("+")){
+
+                    try {
+                        // phone must begin with '+'
+                        Phonenumber.PhoneNumber numberProto = phoneUtil.parse(num, "");
+                        num = String.valueOf(numberProto.getNationalNumber());
+
+                    } catch (NumberParseException e) {
+                        System.err.println("NumberParseException was thrown: " + e.toString());
+                    }
+                }
+
+                if (numString1.equals(num)  && logInfos.get(i).logIcon.equals(logInfos.get(i + 1).logIcon)  && groupListByDate.getFormattedDate(logInfos.get(i).logDate.getTime()).equals(groupListByDate.getFormattedDate(logInfos.get(i+1).logDate.getTime()))   ) {
                     numbersofcall++;
-                    Log.w("plsssssssss", String.valueOf(numbersofcall));
 
                 } else {
 
@@ -1322,8 +1372,13 @@ public class Main_Fagment extends Fragment implements OnBackPressedListener , Lo
 
 
 
+
+
     @Override
     public void onLoaderReset(Loader loader) {
 
     }
+
+
+
 }
