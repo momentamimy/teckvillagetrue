@@ -1,26 +1,30 @@
-package teckvillage.developer.khaled_pc.teckvillagetrue;
+package teckvillage.developer.khaled_pc.teckvillagetrue.Camera_Recognition_package;
 
 import android.app.Activity;
 import android.content.Intent;
+import android.content.IntentFilter;
 import android.content.pm.PackageManager;
-import android.graphics.Rect;
-import android.hardware.Camera;
 import android.support.v4.app.ActivityCompat;
 import android.support.v7.app.AppCompatActivity;
 import android.os.Bundle;
 import android.util.Log;
 import android.util.SparseArray;
-import android.view.MotionEvent;
 import android.view.SurfaceHolder;
 import android.view.SurfaceView;
 import android.widget.TextView;
+import android.widget.Toast;
+
+
 import com.google.android.gms.vision.CameraSource;
 import com.google.android.gms.vision.Detector;
+import com.google.android.gms.vision.text.Text;
 import com.google.android.gms.vision.text.TextBlock;
 import com.google.android.gms.vision.text.TextRecognizer;
+
 import java.io.IOException;
-import java.lang.reflect.Field;
 import java.util.ArrayList;
+
+import teckvillage.developer.khaled_pc.teckvillagetrue.R;
 
 
 public class Camera_Recognition extends AppCompatActivity  {
@@ -31,7 +35,8 @@ public class Camera_Recognition extends AppCompatActivity  {
     CameraSource mCameraSource;
     TextView mTextView;
     private SurfaceView cameraView;
-    StringBuilder stringBuilder;
+    StringBuilder strBuilder;
+    ArrayList<String> intList = new ArrayList<>();
 
 
     @Override
@@ -41,9 +46,8 @@ public class Camera_Recognition extends AppCompatActivity  {
 
         mTextView=findViewById(R.id.text_view);
         cameraView = findViewById(R.id.surfaceViewCamera);
+
         startCameraSource();
-
-
 
     }
 
@@ -54,14 +58,24 @@ public class Camera_Recognition extends AppCompatActivity  {
 
         if (!textRecognizer.isOperational()) {
             Log.w(TAG, "Detector dependencies not loaded yet");
+            // Check for low storage.  If there is low storage, the native library will not be
+            // downloaded, so detection will not become operational.
+            IntentFilter lowstorageFilter = new IntentFilter(Intent.ACTION_DEVICE_STORAGE_LOW);
+            boolean hasLowStorage = registerReceiver(null, lowstorageFilter) != null;
+
+            if (hasLowStorage) {
+                Toast.makeText(this, R.string.low_storage_error, Toast.LENGTH_LONG).show();
+                Log.w(TAG, getString(R.string.low_storage_error));
+            }
+
         } else {
 
             //Initialize camerasource to use high resolution and set Autofocus on.
             mCameraSource = new CameraSource.Builder(getApplicationContext(), textRecognizer)
                     .setFacing(CameraSource.CAMERA_FACING_BACK)
-                    .setRequestedPreviewSize(550, 360)
+                    .setRequestedPreviewSize(500, 1024)
                     .setAutoFocusEnabled(true)
-                    .setRequestedFps(10.0f)
+                    .setRequestedFps(15.0f)
                     .build();
 
             /**
@@ -105,6 +119,7 @@ public class Camera_Recognition extends AppCompatActivity  {
             textRecognizer.setProcessor(new Detector.Processor<TextBlock>() {
                 @Override
                 public void release() {
+
                 }
 
 
@@ -116,42 +131,72 @@ public class Camera_Recognition extends AppCompatActivity  {
                  * */
                 @Override
                 public void receiveDetections(Detector.Detections<TextBlock> detections) {
-                    final SparseArray<TextBlock> items = detections.getDetectedItems();
-                    if (items.size() != 0 ){
+                    try {
+                        final SparseArray<TextBlock> items = detections.getDetectedItems();
+                        if (items.size() != 0) {
 
-                        mTextView.post(new Runnable() {
-                            @Override
-                            public void run() {
-                                 stringBuilder = new StringBuilder();
+                            mTextView.post(new Runnable() {
+                                @Override
+                                public void run() {
 
-                                TextBlock item = items.valueAt(0);
-                                for (int j = 0; j < item.getValue().length(); j++) {
+                                    strBuilder = new StringBuilder();
 
-                                    if (Character.isDigit(item.getValue().charAt(j))){
+                                    //TextBlock item2 = (TextBlock)items.valueAt(0);
+                                    // The following Process is used to show how to use lines & elements as well
+                                    for (int j = 0; j < items.size(); j++) {
+                                        TextBlock textBlock = (TextBlock) items.valueAt(j);
 
-                                        stringBuilder.append(item.getValue().charAt(j));
+                                        //for To Lines
+                                        for (Text line : textBlock.getComponents()) {
 
+                                            //extract scanned text of lines here
+                                            for (int k = 0; k < line.getValue().length(); k++) {
+
+                                                //Ensure That all Char is Number Only Not Character
+                                                if (Character.isDigit(line.getValue().charAt(k))) {
+
+                                                    strBuilder.append(line.getValue().charAt(k));
+
+                                                }
+
+                                            }
+
+                                            //Don't Add num If Size smaller than 7 Digit
+                                            if (strBuilder.length() > 7) {
+                                                Log.v("lines", strBuilder.toString());
+                                                intList.add(strBuilder.toString());
+                                            }
+
+                                            strBuilder.setLength(0);
+
+                                        }
                                     }
 
-                                }
-                                if(stringBuilder.toString().length()>3){
-                                    Intent resultIntent = new Intent();
-                                    resultIntent.putExtra(PUBLIC_STATIC_STRING_IDENTIFIER, stringBuilder.toString());
-                                    setResult(Activity.RESULT_OK, resultIntent);
-                                    finish();
-                                }
 
-                                mTextView.setText(stringBuilder.toString());
-                            }
-                        });
-                    }
+                                    //if ArrayList Not 0 Close this activity and Display result
+                                    if (intList.size() > 0) {
+                                        Log.w("Send", "send");
+                                        Intent resultIntent = new Intent();
+                                        resultIntent.putStringArrayListExtra(PUBLIC_STATIC_STRING_IDENTIFIER, intList);
+                                        setResult(Activity.RESULT_OK, resultIntent);
+                                        finish();
+                                    }
+
+                                    //mTextView.setText(strBuilder.toString());
+                                }
+                            });
+                        }
+
+
+                }catch (Exception e){
+                        e.printStackTrace();
                 }
-            });
+
+            }});
         }
 
 
     }
-
 
 
     /**

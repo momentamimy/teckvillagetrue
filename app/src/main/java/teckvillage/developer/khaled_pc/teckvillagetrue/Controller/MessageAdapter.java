@@ -7,7 +7,7 @@ import android.view.LayoutInflater;
 import android.view.View;
 import android.view.ViewGroup;
 
-import com.google.firebase.auth.FirebaseUser;
+
 
 import java.util.List;
 
@@ -18,7 +18,7 @@ import teckvillage.developer.khaled_pc.teckvillagetrue.model.MessageInfo;
 public class MessageAdapter extends RecyclerView.Adapter<SMSMessageHolder> {
     List<MessageInfo> itemList;
     Context mContext;
-    FirebaseUser user;
+
 
     public static final int MessageSend=0;
     public static final int MessageReceive=1;

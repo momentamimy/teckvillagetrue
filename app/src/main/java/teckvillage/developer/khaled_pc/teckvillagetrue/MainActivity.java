@@ -1,10 +1,10 @@
 package teckvillage.developer.khaled_pc.teckvillagetrue;
 
-import android.*;
 import android.app.Activity;
 import android.app.Dialog;
 import android.content.ContentResolver;
 import android.content.Context;
+import android.content.DialogInterface;
 import android.content.Intent;
 import android.content.pm.PackageManager;
 import android.database.Cursor;
@@ -20,7 +20,7 @@ import android.support.v4.app.FragmentManager;
 import android.support.v4.app.FragmentTransaction;
 import android.provider.ContactsContract;
 import android.support.annotation.NonNull;
-import android.support.v4.content.ContextCompat;
+import android.support.v7.app.AlertDialog;
 import android.telecom.TelecomManager;
 import android.util.Log;
 import android.support.design.widget.NavigationView;
@@ -42,12 +42,13 @@ import java.util.ArrayList;
 import java.util.List;
 import java.util.HashSet;
 
+import teckvillage.developer.khaled_pc.teckvillagetrue.Camera_Recognition_package.Camera_Recognition;
+
 
 public class MainActivity extends AppCompatActivity implements NavigationView.OnNavigationItemSelectedListener {
 
     private static final String TAG ="fields" ;
     private static final int STATIC_INTEGER_VALUE =221 ;
-
     public static FragmentManager fragmentManager;
     FrameLayout frameLayout;
     private static final String TAG_ANDROID_CONTACTS = "ANDROID_CONTACTS";
@@ -56,6 +57,7 @@ public class MainActivity extends AppCompatActivity implements NavigationView.On
     private static final String PUBLIC_STATIC_STRING_IDENTIFIER = "com.techvillage";
 
     public BottomNavigationView navigationView2;
+    ArrayList<String> PhoneNumberListCameraRecognition = new ArrayList<>();
 
 
     @Override
@@ -373,82 +375,118 @@ public class MainActivity extends AppCompatActivity implements NavigationView.On
         super.onActivityResult(requestCode, resultCode, data);
         switch(requestCode) {
             case (STATIC_INTEGER_VALUE) : {
+
                 if (resultCode == Activity.RESULT_OK) {
-                    final String newText = data.getStringExtra(PUBLIC_STATIC_STRING_IDENTIFIER);
-                    // TODO Update your TextView.
 
-                    //AlertDialog.Builder builder = new AlertDialog.Builder(this);
-                    LayoutInflater layoutInflater = (LayoutInflater) this.getSystemService(Context.LAYOUT_INFLATER_SERVICE);
-                    View row = layoutInflater.inflate(R.layout.result_dialog_text_recognition, null);
+                    // TODO Recieve Phone Numbers ArrayList From Camera Recogition Activity
+                    //String newText = data.getStringExtra(PUBLIC_STATIC_STRING_IDENTIFIER);
+                    PhoneNumberListCameraRecognition= data.getStringArrayListExtra(PUBLIC_STATIC_STRING_IDENTIFIER);
 
+                    if(PhoneNumberListCameraRecognition.size()==1){
+                        //Open Dialog With Phone Number That is Retrieved From Activity Recognition
+                        DisplayResultCameraRecognitionDialog(PhoneNumberListCameraRecognition.get(0));
+                    }else {
 
-                    final Dialog dialog = new Dialog(MainActivity.this);
-                    dialog.requestWindowFeature(Window.FEATURE_NO_TITLE);
-                    dialog.setContentView(row);
-
-                    //final AlertDialog dialog = builder.create();
-                    //dialog.requestWindowFeature(Window.FEATURE_NO_TITLE);
-                    ColorDrawable transparent = new ColorDrawable(Color.TRANSPARENT);
-                    InsetDrawable inset = new InsetDrawable(transparent, 30);//margin for Dilaog
-                    dialog.getWindow().setBackgroundDrawable(inset);
-                    dialog.show();
-
-                    final TextView number=row.findViewById(R.id.name_call_num);
-                    number.setText(newText);
-
-                    RelativeLayout call = row.findViewById(R.id.callphoneicon2);
-                    call.setOnClickListener(new View.OnClickListener() {
-                        @Override
-                        public void onClick(View v) {
-
-                            Intent intent = new Intent(Intent.ACTION_CALL);
-                            intent.setData(Uri.parse("tel:" + newText));
-                            if (ActivityCompat.checkSelfPermission(MainActivity.this, android.Manifest.permission.CALL_PHONE) != PackageManager.PERMISSION_GRANTED) {
-                                // TODO: Consider calling
-                                //    ActivityCompat#requestPermissions
-                                // here to request the missing permissions, and then overriding
-                                //   public void onRequestPermissionsResult(int requestCode, String[] permissions,
-                                //                                          int[] grantResults)
-                                // to handle the case where the user grants the permission. See the documentation
-                                // for ActivityCompat#requestPermissions for more details.
-                                return;
-                            }
-                            startActivity(intent);
-                        }
-                    });
-
-                    RelativeLayout message = row.findViewById(R.id.messageiconsw2);
-                    message.setOnClickListener(new View.OnClickListener() {
-                        @Override
-                        public void onClick(View v) {
-                            //newText
-                            dialog.dismiss();
-                            Intent intent = new Intent(MainActivity.this,SMS_MessagesChat.class);
-                            intent.putExtra("LogSMSName",newText);
-                            intent.putExtra("LogSMSAddress",newText);
-                            startActivity(intent);
-
-                        }
-                    });
-
-                    RelativeLayout scanagain = row.findViewById(R.id.scanagain);
-                    scanagain.setOnClickListener(new View.OnClickListener() {
-                        @Override
-                        public void onClick(View v) {
-
-                            dialog.dismiss();
-                            Intent i = new Intent(MainActivity.this,Camera_Recognition.class);
-                            startActivityForResult(i, STATIC_INTEGER_VALUE);
-
-                        }
-                    });
+                        //Display Dialog OnMultiChoice To Enable User Select One Of Result Phone numbers from Camera recogition
+                        DisplayArraylistResultCameraRecognitionDialog(PhoneNumberListCameraRecognition);
+                    }
 
                 }
                 break;
+
+
             }
         }
     }
 
+
+    void DisplayResultCameraRecognitionDialog(final String newText){
+
+        LayoutInflater layoutInflater = (LayoutInflater) this.getSystemService(Context.LAYOUT_INFLATER_SERVICE);
+        View row = layoutInflater.inflate(R.layout.result_dialog_text_recognition, null);
+
+        final Dialog dialog = new Dialog(MainActivity.this);
+        dialog.requestWindowFeature(Window.FEATURE_NO_TITLE);
+        dialog.setContentView(row);
+
+        ColorDrawable transparent = new ColorDrawable(Color.TRANSPARENT);
+        InsetDrawable inset = new InsetDrawable(transparent, 5);//margin for Dilaog
+        dialog.getWindow().setBackgroundDrawable(inset);
+        dialog.show();
+
+        final TextView number=row.findViewById(R.id.name_call_num);
+        number.setText(newText);
+
+        RelativeLayout call = row.findViewById(R.id.callphoneicon2);
+        call.setOnClickListener(new View.OnClickListener() {
+            @Override
+            public void onClick(View v) {
+
+                Intent intent = new Intent(Intent.ACTION_CALL);
+                intent.setData(Uri.parse("tel:" + newText));
+                if (ActivityCompat.checkSelfPermission(MainActivity.this, android.Manifest.permission.CALL_PHONE) != PackageManager.PERMISSION_GRANTED) {
+                    // TODO: Consider calling
+                    //    ActivityCompat#requestPermissions
+                    // here to request the missing permissions, and then overriding
+                    //   public void onRequestPermissionsResult(int requestCode, String[] permissions,
+                    //                                          int[] grantResults)
+                    // to handle the case where the user grants the permission. See the documentation
+                    // for ActivityCompat#requestPermissions for more details.
+                    return;
+                }
+                startActivity(intent);
+            }
+        });
+
+        //On Click Send Message
+        RelativeLayout message = row.findViewById(R.id.messageiconsw2);
+        message.setOnClickListener(new View.OnClickListener() {
+            @Override
+            public void onClick(View v) {
+                //newText
+                dialog.dismiss();
+                Intent intent = new Intent(MainActivity.this,SMS_MessagesChat.class);
+                intent.putExtra("LogSMSName",newText);
+                intent.putExtra("LogSMSAddress",newText);
+                startActivity(intent);
+
+            }
+        });
+
+        RelativeLayout scanagain = row.findViewById(R.id.scanagain);
+        scanagain.setOnClickListener(new View.OnClickListener() {
+            @Override
+            public void onClick(View v) {
+
+                dialog.dismiss();
+                Intent i = new Intent(MainActivity.this,Camera_Recognition.class);
+                startActivityForResult(i, STATIC_INTEGER_VALUE);
+
+            }
+        });
+    }
+
+
+    void DisplayArraylistResultCameraRecognitionDialog(ArrayList<String> phonenumbers){
+
+        //Create sequence of items
+        final CharSequence[] phonenums = phonenumbers.toArray(new String[phonenumbers.size()]);
+        AlertDialog.Builder dialogBuilder = new AlertDialog.Builder(this);
+        dialogBuilder.setTitle("Select Phone Number");
+        dialogBuilder.setItems(phonenums, new DialogInterface.OnClickListener() {
+            public void onClick(DialogInterface dialog, int item) {
+                //String selectedText = phonenums[item].toString();
+                //Selected item in listview
+                //Open Dialog With Phone Number That is Selected From This Dialog
+                DisplayResultCameraRecognitionDialog(phonenums[item].toString());
+            }
+        });
+        //Create alert dialog object via builder
+        AlertDialog alertDialogObject = dialogBuilder.create();
+        //Show the dialog
+        alertDialogObject.show();
+
+    }
 
 
     // Return all raw_contacts _id in a list.

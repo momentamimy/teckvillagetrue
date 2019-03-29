@@ -559,6 +559,7 @@ public class Main_Fagment extends Fragment implements OnBackPressedListener , Lo
 
         logs.setLayoutManager(lLayout1);
         logs.setItemAnimator(new DefaultItemAnimator());
+        logs.hasFixedSize();
         adapter1 = new LogAdapter(getActivity(),loglist103);
         logs.setAdapter(adapter1);
         //adapter1.notifyDataSetChanged();
@@ -1301,18 +1302,18 @@ public class Main_Fagment extends Fragment implements OnBackPressedListener , Lo
             } while (cursor.moveToNext());
 
 
-           /*
-        ___\ \________
-       |___\_\______  \   | |        ________
-        ___\_\____|   |  | |       / _______ \
-       / ____________/  | |  _   / /        \ \
-     __| \__\_\________| |_| |_/ /__________\ \
-   /___\ \____________________________________\
-        \ \
-         \ \____
-          \_____|
-                         Mo Salah Mo Salah
-        */
+                       /*
+                    ___\ \________
+                   |___\_\______  \   | |        ________
+                    ___\_\____|   |  | |       / _______ \
+                   / ____________/  | |  _   / /        \ \
+                 __| \__\_\________| |_| |_/ /__________\ \
+               /___\ \____________________________________\
+                    \ \
+                     \ \____
+                      \_____|
+                                     Mo Salah Mo Salah
+                    */
 
             for (int i = 0; i < logInfos.size() - 1; i++) {
 
