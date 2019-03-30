@@ -2,11 +2,13 @@ package teckvillage.developer.khaled_pc.teckvillagetrue;
 
 import android.support.v7.app.AppCompatActivity;
 import android.os.Bundle;
+import android.support.v7.widget.RecyclerView;
 import android.support.v7.widget.Toolbar;
 import android.view.MenuItem;
 
 public class Notifications extends AppCompatActivity {
 
+    RecyclerView NotificationRecyclerview;
 
     @Override
     protected void onCreate(Bundle savedInstanceState) {
@@ -14,9 +16,13 @@ public class Notifications extends AppCompatActivity {
         setContentView(R.layout.activity_notifications);
 
 
+
         getSupportActionBar().setTitle("Notification");
         getSupportActionBar().setDisplayShowHomeEnabled(true);   //back button on App Bar
         getSupportActionBar().setDisplayHomeAsUpEnabled(true);   //back button on App Bar
+
+
+        NotificationRecyclerview=findViewById(R.id.notificationRecyclerview);
 
     }
 

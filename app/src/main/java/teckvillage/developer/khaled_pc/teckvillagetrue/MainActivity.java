@@ -195,51 +195,29 @@ public class MainActivity extends AppCompatActivity implements NavigationView.On
 
         if (id == R.id.nav_camera_recognition) {
             // Handle the camera action
-            if (ActivityCompat.checkSelfPermission(getApplicationContext(), android.Manifest.permission.CAMERA) != PackageManager.PERMISSION_GRANTED) {
-
-                ActivityCompat.requestPermissions(MainActivity.this, new String[]{android.Manifest.permission.CAMERA}, MY_CAMERA_REQUEST_CODE);
-
-            }else {
-               // startActivity(new Intent(this,Camera_Recognition.class));
-                Intent i = new Intent(this,Camera_Recognition.class);
-                startActivityForResult(i, STATIC_INTEGER_VALUE);
-            }
+            CameraRecog();
 
         } else if (id == R.id.nav_Notifcation) {
+
             startActivity(new Intent(this,Notifications.class));
+
         } else if (id == R.id.nav_FAQ) {
+
             startActivity(new Intent(this,FAQ.class));
 
         } else if (id == R.id.nav_sendfeedback) {
             //****************************send email************************************************
-            try {
-            Intent intent = new Intent(Intent.ACTION_SENDTO );
-            intent.setType("plain/text");
-            intent.setData(Uri.parse("mailto:"));
-            intent.putExtra(Intent.EXTRA_EMAIL, new String[] { Email });
-            intent.putExtra(Intent.EXTRA_SUBJECT, "Suggestion from application Who caller?");
-            intent.putExtra(Intent.EXTRA_TEXT, "Type your mail text here");
-            startActivity(Intent.createChooser(intent, "submit a suggestion or complaint"));
-            } catch(Exception e) {
-                //e.toString();
-            }
+            SendEmail();
 
         } else if (id == R.id.nav_share) {
            //Share App
-            try {
-                Intent i = new Intent(Intent.ACTION_SEND);
-                i.setType("text/plain");
-                i.putExtra(Intent.EXTRA_SUBJECT, "Who Caller?");
-                String sAux ="https://play.google.com/store/apps/details?id="+ getPackageName() +"\n\n";//link el prnamg 3ala playstore
-                i.putExtra(Intent.EXTRA_TEXT, sAux);
-                startActivity(Intent.createChooser(i, "Choose App"));
-            } catch(Exception e) {
-                //e.toString();
-            }
+            ShareApp();
 
         } else if (id == R.id.nav_setting) {
+
             startActivity(new Intent(this,setting.class));
         }else if (id == R.id.nav_edit_profile) {
+
             startActivity(new Intent(getApplicationContext(),UserProfileActivity.class));
         }
 
@@ -520,6 +498,48 @@ public class MainActivity extends AppCompatActivity implements NavigationView.On
     public void openDrawer() {
         DrawerLayout drawer = (DrawerLayout) findViewById(R.id.drawer_layout);
         drawer.openDrawer(Gravity.START);
+    }
+
+
+    void ShareApp(){
+        try {
+            Intent i = new Intent(Intent.ACTION_SEND);
+            i.setType("text/plain");
+            i.putExtra(Intent.EXTRA_SUBJECT, "Who Caller?");
+            String sAux ="https://play.google.com/store/apps/details?id="+ getPackageName() +"\n\n";//link el prnamg 3ala playstore
+            i.putExtra(Intent.EXTRA_TEXT, sAux);
+            startActivity(Intent.createChooser(i, "Choose App"));
+        } catch(Exception e) {
+            e.printStackTrace();
+        }
+    }
+
+    void SendEmail(){
+        try {
+            Intent intent = new Intent(Intent.ACTION_SENDTO );
+            intent.setType("plain/text");
+            intent.setData(Uri.parse("mailto:"));
+            intent.putExtra(Intent.EXTRA_EMAIL, new String[] { Email });
+            intent.putExtra(Intent.EXTRA_SUBJECT, "Suggestion from application Who caller?");
+            intent.putExtra(Intent.EXTRA_TEXT, "Type your mail text here");
+            startActivity(Intent.createChooser(intent, "submit a suggestion or complaint"));
+        } catch(Exception e) {
+            e.printStackTrace();
+        }
+    }
+
+    void CameraRecog(){
+        //Check Permission Before Open Activity
+        if (ActivityCompat.checkSelfPermission(getApplicationContext(), android.Manifest.permission.CAMERA) != PackageManager.PERMISSION_GRANTED) {
+
+            ActivityCompat.requestPermissions(MainActivity.this, new String[]{android.Manifest.permission.CAMERA}, MY_CAMERA_REQUEST_CODE);
+
+        }else {
+            // startActivity(new Intent(this,Camera_Recognition.class));
+            Intent i = new Intent(this,Camera_Recognition.class);
+            startActivityForResult(i, STATIC_INTEGER_VALUE);
+        }
+
     }
 
 }

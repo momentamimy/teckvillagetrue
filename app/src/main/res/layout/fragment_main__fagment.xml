@@ -37,13 +37,15 @@
                     >
 
                     <ImageView
-                        android:layout_marginStart="12dp"
-                        android:layout_marginLeft="12dp"
+                        android:paddingStart="12dp"
+                        android:paddingLeft="12dp"
+                        android:paddingEnd="12dp"
+                        android:paddingRight="12dp"
                         android:id="@+id/iconnnn"
                         android:layout_width="wrap_content"
                         android:layout_height="match_parent"
                         android:src="@drawable/ic_men"
-                        />
+                         />
 
                     <RelativeLayout
                         android:id="@+id/search_layout"
@@ -51,9 +53,13 @@
                         android:layout_height="match_parent"
                         android:layout_toRightOf="@+id/iconnnn"
                         android:layout_toEndOf="@+id/iconnnn"
+                        android:layout_toStartOf="@+id/threedots"
+                        android:layout_toLeftOf="@+id/threedots"
                         android:layout_marginStart="5dp"
                         android:layout_marginLeft="5dp"
-                       >
+                        android:layout_marginEnd="5dp"
+                        android:layout_marginRight="5dp"
+                        >
 
 
                         <TextView
@@ -65,18 +71,21 @@
                             android:layout_centerInParent="true"
                              />
 
+                    </RelativeLayout>
+
                         <ImageView
-                            android:layout_marginStart="12dp"
-                            android:layout_marginLeft="12dp"
                             android:id="@+id/threedots"
                             android:layout_width="wrap_content"
                             android:layout_height="match_parent"
                             android:src="@drawable/ic_more"
                             android:layout_alignParentEnd="true"
                             android:layout_alignParentRight="true"
-                            android:layout_marginEnd="10dp"
-                            android:layout_marginRight="10dp" />
-                    </RelativeLayout>
+                            android:paddingEnd="11dp"
+                            android:paddingRight="11dp"
+                            android:paddingStart="11dp"
+                            android:paddingLeft="11dp"/>
+
+
 
                 </RelativeLayout>
 
@@ -87,17 +96,61 @@
 
         </android.support.v7.widget.Toolbar>
 
+   <RelativeLayout
+       android:id="@+id/container_contact_recycleview"
+       android:layout_width="match_parent"
+       android:layout_height="wrap_content"
+       android:layout_below="@+id/toolbar">
+
     <android.support.v7.widget.RecyclerView
-        android:layout_below="@+id/toolbar"
         android:id="@+id/contact_recycleview"
         android:layout_width="match_parent"
         android:layout_height="wrap_content"
         />
 
+       <ImageView
+           android:id="@+id/waitingimg_topten"
+           android:layout_width="45dp"
+           android:layout_height="45dp"
+           android:src="@drawable/ic_nurse"
+           android:layout_marginStart="20dp"
+           android:layout_marginLeft="20dp"
+           android:layout_marginTop="20dp"
+           android:layout_marginBottom="20dp"
+           />
+
+       <ImageView
+           android:id="@+id/waitingimg_topten2"
+           android:layout_width="22dp"
+           android:layout_height="22dp"
+           android:src="@drawable/ic_time"
+           android:layout_alignTop="@+id/waitingimg_topten"
+           android:layout_marginStart="52dp"
+           android:layout_marginLeft="52dp"
+           />
+
+       <TextView
+           android:id="@+id/textwaiting"
+           android:layout_width="wrap_content"
+           android:layout_height="wrap_content"
+           android:layout_toEndOf="@+id/waitingimg_topten2"
+           android:layout_toRightOf="@+id/waitingimg_topten2"
+           android:layout_centerVertical="true"
+           android:textColor="#aebcc2"
+           android:text="Your most called contacts will appear here for easy access"
+           android:layout_marginStart="15dp"
+           android:layout_marginLeft="15dp"
+           android:layout_marginEnd="15dp"
+
+           />
+
+
+
+   </RelativeLayout>
+
         <View
             android:id="@+id/sparater"
-            android:layout_marginTop="16dp"
-            android:layout_below="@+id/contact_recycleview"
+            android:layout_below="@+id/container_contact_recycleview"
             android:layout_width="match_parent"
             android:layout_height="1dp"
             android:background="#E6EBEF"
@@ -112,7 +165,7 @@
 
     </RelativeLayout>
 
-
+     <!-- ############################Other Fragment Hidden################################## !-->
     <RelativeLayout
 
         android:layout_width="match_parent"
@@ -161,19 +214,20 @@
                     </RelativeLayout>
                 </android.support.v7.widget.Toolbar>
             </android.support.design.widget.AppBarLayout>
+
+
             <android.support.v7.widget.RecyclerView
                 android:layout_below="@+id/Call_CardView"
                 android:background="#fff"
                 android:id="@+id/Search_Log_recycleview"
                 android:layout_width="match_parent"
                 android:layout_height="match_parent"
-                app:layout_behavior="@string/appbar_scrolling_view_behavior"></android.support.v7.widget.RecyclerView>
+                app:layout_behavior="@string/appbar_scrolling_view_behavior"/>
 
         </android.support.design.widget.CoordinatorLayout>
 
         <RelativeLayout
             android:layout_above="@+id/botnav"
-            android:layout_marginTop="0dp"
             android:id="@+id/pad_layout"
             android:layout_width="match_parent"
             android:layout_height="match_parent">
@@ -184,7 +238,7 @@
                 android:layout_height="4dp"
                 android:background="@drawable/shadow"
                 android:layout_above="@+id/dial_num_edt_rl"
-                ></View>
+                />
 
             <RelativeLayout
                 android:background="#fff"
@@ -249,7 +303,7 @@
                 android:background="@drawable/shadow"
                 android:layout_above="@+id/gridView1"
                 android:visibility="gone"
-                ></View>
+                />
 
             <GridView
                 android:background="#fff"
@@ -258,6 +312,7 @@
                 android:layout_height="wrap_content"
                 android:layout_above="@+id/dialpad_bottom_rl"
                 android:numColumns="3"
+
                 android:listSelector="#00000000"
                 >
 

@@ -41,7 +41,7 @@ import static teckvillage.developer.khaled_pc.teckvillagetrue.FragMessageOthers.
 import static teckvillage.developer.khaled_pc.teckvillagetrue.FragMessageOthers.createOthersloader;
 
 
-public class Message_Fragment extends Fragment implements LoaderManager.LoaderCallbacks<Cursor>{
+public class Message_Fragment extends Fragment implements LoaderManager.LoaderCallbacks<Cursor> , OnBackPressedListener{
 
     Get_User_Contacts get_user_contacts;
     FloatingActionButton fab;
@@ -236,6 +236,13 @@ public class Message_Fragment extends Fragment implements LoaderManager.LoaderCa
 
     @Override
     public void onLoaderReset(Loader<Cursor> loader) {
+
+    }
+
+    @Override
+    public void onBackPressed() {
+
+        getActivity().finish();
 
     }
 }

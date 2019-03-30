@@ -30,7 +30,7 @@ import teckvillage.developer.khaled_pc.teckvillagetrue.model.UserContactData;
 /**
  * A simple {@link Fragment} subclass.
  */
-public class Contacts extends Fragment {
+public class Contacts extends Fragment implements OnBackPressedListener  {
 
     private static final int PICK_CONTACT_REQUEST =2 ;
 
@@ -199,6 +199,12 @@ public class Contacts extends Fragment {
         return customList;
     }
 
+    @Override
+    public void onBackPressed() {
+
+           getActivity().finish();
+
+    }
 
 
 

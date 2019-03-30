@@ -37,8 +37,10 @@
                     >
 
                 <ImageView
-                    android:layout_marginStart="12dp"
-                    android:layout_marginLeft="12dp"
+                    android:paddingStart="12dp"
+                    android:paddingLeft="12dp"
+                    android:paddingEnd="12dp"
+                    android:paddingRight="12dp"
                     android:id="@+id/iconnnn"
                     android:layout_width="wrap_content"
                     android:layout_height="match_parent"
@@ -53,6 +55,10 @@
                     android:layout_height="match_parent"
                     android:layout_toRightOf="@+id/iconnnn"
                     android:layout_toEndOf="@+id/iconnnn"
+                    android:layout_toStartOf="@+id/threedots"
+                    android:layout_toLeftOf="@+id/threedots"
+                    android:layout_marginEnd="5dp"
+                    android:layout_marginRight="5dp"
                     >
 
 
@@ -65,18 +71,21 @@
                         android:layout_centerInParent="true"
                         />
 
+                </RelativeLayout>
+
                     <ImageView
-                        android:layout_marginStart="12dp"
-                        android:layout_marginLeft="12dp"
                         android:id="@+id/threedots"
                         android:layout_width="wrap_content"
                         android:layout_height="match_parent"
                         android:src="@drawable/ic_more"
                         android:layout_alignParentEnd="true"
                         android:layout_alignParentRight="true"
-                        android:layout_marginEnd="10dp"
-                        android:layout_marginRight="10dp" />
-                </RelativeLayout>
+                        android:paddingEnd="11dp"
+                        android:paddingRight="11dp"
+                        android:paddingStart="11dp"
+                        android:paddingLeft="11dp"
+                        android:contentDescription="Option" />
+
 
                 </RelativeLayout>
 

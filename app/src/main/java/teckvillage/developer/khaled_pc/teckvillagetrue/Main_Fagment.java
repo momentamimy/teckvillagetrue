@@ -5,6 +5,7 @@ import android.Manifest;
 import android.animation.AnimatorSet;
 import android.animation.ObjectAnimator;
 import android.app.Dialog;
+import android.app.ProgressDialog;
 import android.content.Context;
 import android.content.DialogInterface;
 import android.content.Intent;
@@ -17,6 +18,7 @@ import android.graphics.drawable.AnimationDrawable;
 import android.graphics.drawable.ColorDrawable;
 import android.graphics.drawable.Drawable;
 import android.net.Uri;
+import android.os.AsyncTask;
 import android.os.Build;
 import android.os.Bundle;
 import android.provider.CallLog;
@@ -147,6 +149,10 @@ public class Main_Fagment extends Fragment implements OnBackPressedListener , Lo
     CoordinatorLayout searchCallLayout;
     ImageView close_search;
     GroupListByDate groupListByDate;
+    ContactAdapter adaptertopten;
+    List<ContactInfo> contactInfos55;
+    ImageView firstimagwaiting,secimagwaiting;
+    TextView textwaiting;
 
     public Main_Fagment() {
         // Required empty public constructor
@@ -157,6 +163,10 @@ public class Main_Fagment extends Fragment implements OnBackPressedListener , Lo
     public View onCreateView(LayoutInflater inflater, ViewGroup container, Bundle savedInstanceState) {
         // Inflate the layout for this fragment
         View view = inflater.inflate(R.layout.fragment_main__fagment, container, false);
+
+        firstimagwaiting=view.findViewById(R.id.waitingimg_topten);
+        secimagwaiting=view.findViewById(R.id.waitingimg_topten2);
+        textwaiting=view.findViewById(R.id.textwaiting);
 
         getLoaderManager().initLoader(1, null, this);
 
@@ -504,19 +514,17 @@ public class Main_Fagment extends Fragment implements OnBackPressedListener , Lo
 
         lLayout2 = new LinearLayoutManager(getActivity());
 
-        List<ContactInfo> contactInfos = new ArrayList<>();
+        contactInfos55 = new ArrayList<>();
 
         if (get_calls_log.CheckPermission()) {
 
-            contactInfos = get_calls_log.getTopTenContacts();
-
+            //contactInfos = get_calls_log.getTopTenContacts();
+            LoadTopTenContactsSync();
         }
 
 
         contacts.setLayoutManager(lLayout);
         contacts.setItemAnimator(new DefaultItemAnimator());
-        ContactAdapter adapter = new ContactAdapter(getActivity(), contactInfos);
-        contacts.setAdapter(adapter);
 
 
         /*
@@ -593,17 +601,17 @@ public class Main_Fagment extends Fragment implements OnBackPressedListener , Lo
 
                 if (newState == AbsListView.OnScrollListener.SCROLL_STATE_FLING) {
                     // Do something
-                    Log.d("mememem:", "111111");
+                    //Log.d("mememem:", "111111");
                 } else if (newState == AbsListView.OnScrollListener.SCROLL_STATE_TOUCH_SCROLL) {
                     // Do something
-                    Log.d("mememem:", "222222");
+                    //Log.d("mememem:", "222222");
                     if (aBoolean == true) {
                         close_button(400);
                         aBoolean = false;
                     }
                 } else {
                     // Do something
-                    Log.d("mememem:", "333333");
+                    //Log.d("mememem:", "333333");
                 }
             }
         });
@@ -614,15 +622,15 @@ public class Main_Fagment extends Fragment implements OnBackPressedListener , Lo
 
                 if (newState == AbsListView.OnScrollListener.SCROLL_STATE_FLING) {
                     // Do something
-                    Log.d("mememem:", "111111");
+                    //Log.d("mememem:", "111111");
                 } else if (newState == AbsListView.OnScrollListener.SCROLL_STATE_TOUCH_SCROLL) {
                     // Do something
-                    Log.d("mememem:", "222222");
+                    //Log.d("mememem:", "222222");
                     if (!scroll)
                         scrollCloseAnim(400);
                 } else {
                     // Do something
-                    Log.d("mememem:", "333333");
+                    //Log.d("mememem:", "333333");
                 }
             }
         });
@@ -1379,6 +1387,49 @@ public class Main_Fagment extends Fragment implements OnBackPressedListener , Lo
     public void onLoaderReset(Loader loader) {
 
     }
+
+    void LoadTopTenContactsSync(){
+        ProgressDialog  pd;
+        new AsyncTask<Void, Void, Void>()
+        {
+            @Override
+            protected void onPreExecute()
+            {
+
+                //pd = ProgressDialog.show(getActivity(), "Loading..", "Please Wait", true, false);
+            }// End of onPreExecute method
+
+            @Override
+            protected Void doInBackground(Void... params)
+            {
+
+                contactInfos55=  get_calls_log.getTopTenContacts();
+
+                return null;
+            }// End of doInBackground method
+
+            @Override
+            protected void onPostExecute(Void result)
+            {
+               // pd.dismiss();
+                adaptertopten = new ContactAdapter(getActivity(), contactInfos55);
+                contacts.setAdapter(adaptertopten);
+                toggleEmptyCases();
+
+            }//End of onPostExecute method
+        }.execute();
+
+    }
+
+
+    private void toggleEmptyCases() {
+
+        firstimagwaiting.setVisibility(View.GONE);
+        secimagwaiting.setVisibility(View.GONE);
+        textwaiting.setVisibility(View.GONE);
+
+    }
+
 
 
 
