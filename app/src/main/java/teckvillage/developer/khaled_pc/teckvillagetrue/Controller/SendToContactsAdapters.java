@@ -20,19 +20,19 @@ import teckvillage.developer.khaled_pc.teckvillagetrue.SMS_MessagesChat;
 import teckvillage.developer.khaled_pc.teckvillagetrue.model.Get_User_Contacts;
 import teckvillage.developer.khaled_pc.teckvillagetrue.model.UserContactData;
 
+import static teckvillage.developer.khaled_pc.teckvillagetrue.SendToActivity.MultipleRecivers;
+import static teckvillage.developer.khaled_pc.teckvillagetrue.SendToActivity.addingMulipleUserContacts;
+
 
 /**
  * Created by khaled-pc on 2/13/2019.
  */
 
-public class SendToContactsAdapters extends RecyclerView.Adapter<SendToContactsAdapters.ViewHolder> implements SectionIndexer {
+public class SendToContactsAdapters extends RecyclerView.Adapter<SendToContactsAdapters.ViewHolder>  {
 
-    private static final int TYPE_LETTER =1 ;
-    private static final int TYPE_USER =2 ;
+
     Context context;
     private List<UserContactData> mDataArray;
-    private ArrayList<Integer> mSectionPositions;
-    private String mSections =Character.toString((char)0x2605)+ "#ABCDEFGHIJKLMNOPQRSTUVWXYZ";
     Get_User_Contacts get_user_contacts;
     public SendToContactsAdapters(Context context, List<UserContactData> mDataArray) {
         this.mDataArray=mDataArray;
@@ -40,89 +40,34 @@ public class SendToContactsAdapters extends RecyclerView.Adapter<SendToContactsA
         get_user_contacts=new Get_User_Contacts(context);
     }
 
-    public SendToContactsAdapters() {
-
-    }
-
-
-    @Override
-    public int getSectionForPosition(int position) {
-        return 0;
-    }
-
-    //Character Array
-    @Override
-    public Object[] getSections() {
-
-        String[] sections = new String[mSections.length()];
-
-        for (int i = 0; i < mSections.length(); i++)
-            sections[i] = String.valueOf(mSections.charAt(i));
-        return sections;
-
-    }
-
-
-    @Override
-    public int getItemViewType(int position) {
-        int viewType = 0;
-        if (mDataArray.get(position).getType() == TYPE_LETTER) {
-            viewType = TYPE_LETTER;
-        } else if (mDataArray.get(position).getType() == TYPE_USER) {
-            viewType = TYPE_USER;
-        }
-
-        return viewType;
-    }
-
-
-    @Override
-    public int getPositionForSection(int sectionIndex) {
-        // If there is no item for current section, previous section will be selected
-        for (int i = sectionIndex; i >= 0; i--) {
-            for (int j = 0; j < getItemCount(); j++) {
-                if (i == 0) {
-                    // For numeric section
-                    for (int k = 0; k <= 9; k++) {
-                        if (StringMatcher.match(String.valueOf(mDataArray.get(j).usercontacName.charAt(0)), String.valueOf(k)))
-                            return j;
-                    }
-                } else {
-                    if (StringMatcher.match(String.valueOf(mDataArray.get(j).usercontacName.charAt(0)), String.valueOf(mSections.charAt(i))))
-                        return j;
-                }
-            }
-        }
-        return 0;
-    }
-
     @Override
     public ViewHolder onCreateViewHolder(ViewGroup parent, int viewType) {
-       switch (viewType) {
-            case TYPE_LETTER:
-                View v = LayoutInflater.from(parent.getContext()).inflate(R.layout.letter_layout, parent, false);
-                return new ViewHolder(v);
-            case TYPE_USER:
+
                 View v2 = LayoutInflater.from(parent.getContext()).inflate(R.layout.user_contacts_row, parent, false);
                 return new ViewHolder(v2);
-            default:
-                View v3 = LayoutInflater.from(parent.getContext()).inflate(R.layout.user_contacts_row, parent, false);
-                return new ViewHolder(v3);
-        }
         }
 
     @Override
     public void onBindViewHolder(final ViewHolder holder, final int position) {
         if(holder.contactName2!=null){
+            final UserContactData data=mDataArray.get(position);
             final String name=mDataArray.get(position).usercontacName;
-            final String num=get_user_contacts.getPhoneNumber(mDataArray.get(position).usercontacName,context).replace(" ","");
             holder.itemView.setOnClickListener(new View.OnClickListener() {
                 @Override
                 public void onClick(View v) {
-                    Intent intent=new Intent(context, SMS_MessagesChat.class);
-                    intent.putExtra("LogSMSName",name);
-                    intent.putExtra("LogSMSAddress",num);
-                    context.startActivity(intent);
+                    if (MultipleRecivers==false)
+                    {
+                        final String num=get_user_contacts.getPhoneNumber(mDataArray.get(position).usercontacName,context).replace(" ","");
+                        Intent intent=new Intent(context, SMS_MessagesChat.class);
+                        intent.putExtra("LogSMSName",name);
+                        intent.putExtra("LogSMSAddress",num);
+                        context.startActivity(intent);
+
+                    }
+                    else if (MultipleRecivers=true)
+                    {
+                        addingMulipleUserContacts(context,data);
+                    }
                 }
             });
            holder.contactName2.setText(mDataArray.get(position).usercontacName);
@@ -138,18 +83,10 @@ public class SendToContactsAdapters extends RecyclerView.Adapter<SendToContactsA
             });
         }
 
-        if(holder.letter!=null){
-            //Log.w("letter",mDataArray.get(position).usercontacName);
-            holder.letter.setText(mDataArray.get(position).usercontacName);
-
-        }
-
     }
 
     @Override
     public int getItemCount() {
-        if (mDataArray == null)
-            return 0;
         return mDataArray.size();
     }
 
@@ -169,4 +106,5 @@ public class SendToContactsAdapters extends RecyclerView.Adapter<SendToContactsA
             sms=itemView.findViewById(R.id.chat_user_contact);
         }
     }
+
 }

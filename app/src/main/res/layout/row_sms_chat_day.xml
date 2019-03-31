@@ -4,7 +4,7 @@
     android:layout_width="match_parent"
     android:layout_height="wrap_content"
     xmlns:app="http://schemas.android.com/apk/res-auto"
-    android:padding="10dp">
+    android:paddingVertical="5dp">
 
     <TextView
         android:id="@+id/Day_Date"
@@ -14,46 +14,37 @@
         android:gravity="center"
         android:layout_centerHorizontal="true"
         android:background="@drawable/day_date_bgd"
-        android:visibility="gone"/>
+        android:visibility="visible"/>
 
     <RelativeLayout
         android:layout_width="match_parent"
         android:layout_height="wrap_content"
-        android:padding="10dp"
-        >
+        android:paddingVertical="5dp"
+        android:visibility="gone">
 
-        <com.intrusoft.squint.DiagonalView
-            android:layout_alignTop="@+id/Raw_card"
-            android:id="@+id/square"
-            android:layout_width="25dp"
-            android:layout_height="25dp"
-            app:diagonalDirection="right_to_left"
-            app:angle="43"
-            app:gravity="left"
-            android:src="@android:color/white" />
+        <android.support.v7.widget.CardView
+            android:layout_toEndOf="@+id/ChatUserImage"
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:layout_margin="10dp"
+            app:cardCornerRadius="10dp"
+            app:cardElevation="5dp"
+            android:layout_toRightOf="@+id/ChatUserImage">
 
             <RelativeLayout
-
-                android:id="@+id/Raw_card"
-                android:background="@drawable/rounded_corner"
+                android:background="#fff"
                 android:layout_width="wrap_content"
                 android:layout_height="wrap_content"
-                android:layout_marginStart="10dp"
-                android:layout_marginLeft="10dp"
-                android:layout_marginEnd="70dp"
-                android:layout_marginRight="70dp"
-                >
+                android:padding="5dp">
                 <TextView
                     android:id="@+id/message"
                     android:padding="5dp"
+                    android:paddingVertical="2dp"
                     android:layout_width="wrap_content"
                     android:layout_height="wrap_content"
                     android:text="hello"
-                    android:textSize="15dp"/>
+                    android:textSize="18dp"/>
                 <TextView
-                    android:layout_marginRight="2dp"
-                    android:layout_marginLeft="2dp"
-                    android:layout_marginBottom="2dp"
                     android:layout_below="@+id/message"
                     android:id="@+id/time"
                     android:layout_width="wrap_content"
@@ -61,10 +52,10 @@
                     android:text="6:30 pm"
                     android:textColor="#B1B1B1"
                     android:textSize="10dp"
-                    android:layout_alignEnd="@+id/message"
-                    android:layout_alignRight="@+id/message" />
+                    />
             </RelativeLayout>
 
+        </android.support.v7.widget.CardView>
 
 </RelativeLayout>
 </RelativeLayout>

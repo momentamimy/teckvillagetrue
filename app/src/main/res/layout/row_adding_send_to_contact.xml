@@ -1,0 +1,65 @@
+<?xml version="1.0" encoding="utf-8"?>
+<RelativeLayout
+    xmlns:android="http://schemas.android.com/apk/res/android"
+    xmlns:app="http://schemas.android.com/apk/res-auto"
+    android:layout_width="wrap_content" android:layout_height="85dp"
+    android:id="@+id/co_lay_most"
+    android:background="?android:attr/selectableItemBackground"
+    >
+
+
+    <ProgressBar
+        android:id="@+id/progress"
+        android:layout_width="65dp"
+        android:layout_height="65dp"
+        android:layout_centerHorizontal="true"
+        android:visibility="gone"
+        android:theme="@style/AppTheme.grayAccent"
+        />
+    <de.hdodenhof.circleimageview.CircleImageView
+        android:layout_marginTop="15dp"
+        android:id="@+id/progress_contact_img"
+        android:layout_width="45dp"
+        android:layout_height="45dp"
+        android:src="@drawable/ic_nurse"
+        android:layout_centerHorizontal="true"
+        android:visibility="gone"
+        />
+
+
+    <de.hdodenhof.circleimageview.CircleImageView
+        android:layout_marginTop="15dp"
+        android:id="@+id/contact_img"
+        android:layout_width="40dp"
+        android:layout_height="40dp"
+        android:src="@drawable/ic_nurse"
+        android:layout_centerHorizontal="true"
+        />
+
+    <me.grantland.widget.AutofitTextView
+        android:background="@color/colorPrimaryDark"
+        android:id="@+id/contact_name"
+        android:layout_below="@id/contact_img"
+        android:layout_marginTop="5dp"
+        android:layout_width="85dp"
+        android:layout_height="wrap_content"
+        android:singleLine="true"
+        android:maxLines="1"
+        app:minTextSize="10sp"
+        android:text="Momen El Tamimy"
+        android:textColor="@android:color/white"
+        android:layout_centerHorizontal="true"
+        android:gravity="center"
+        android:paddingLeft="2dp"
+        android:paddingRight="2dp"
+        />
+
+    <ImageView
+        android:id="@+id/remove_Contact"
+        android:padding="2dp"
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content"
+        android:src="@drawable/ic_close_black_24dp"
+        android:layout_toEndOf="@+id/contact_name"
+        android:layout_toRightOf="@+id/contact_name" />
+</RelativeLayout>

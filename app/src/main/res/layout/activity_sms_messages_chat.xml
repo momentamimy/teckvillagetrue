@@ -6,44 +6,81 @@
     android:layout_width="match_parent"
     android:layout_height="match_parent"
     tools:context=".SMS_MessagesChat"
-    android:background="@drawable/paper_bgd"
+    android:background="@drawable/paper_bgd_4"
     >
 
+    <RelativeLayout
+        android:layout_width="match_parent"
+        android:layout_height="match_parent"
+        android:background="#6BC9D8E9"></RelativeLayout>
     <android.support.design.widget.AppBarLayout
         android:id="@+id/appbar"
         android:layout_width="match_parent"
         android:layout_height="wrap_content"
-        android:padding="5dp"
+        android:padding="2dp"
         android:theme="@style/AppTheme.AppBarOverlay">
-
-        <android.support.v7.widget.Toolbar
+<RelativeLayout
+    android:layout_width="match_parent"
+    android:layout_height="wrap_content">
+        <LinearLayout
             android:id="@+id/toolbar"
             android:layout_width="match_parent"
-            android:layout_height="?attr/actionBarSize"
-            android:layout_weight="1"
+            android:layout_height="wrap_content"
             android:background="?attr/colorPrimary"
-            app:layout_scrollFlags="scroll|enterAlways"
-            app:popupTheme="@style/AppTheme.PopupOverlay"
+            android:padding="5dp"
             >
 
-            <de.hdodenhof.circleimageview.CircleImageView
-                android:id="@+id/UserImage"
-                android:layout_width="45dp"
-                android:layout_height="45dp"
-                android:src="@drawable/ic_nurse"/>
-            <TextView
-                android:id="@+id/UserName"
+            <ImageView
+                android:id="@+id/back_button"
+                android:layout_gravity="center"
                 android:layout_width="wrap_content"
+                android:layout_height="wrap_content"
+                android:src="@drawable/ic_arrow_back_white_24dp"
+                android:padding="5dp"/>
+            <de.hdodenhof.circleimageview.CircleImageView
+                android:layout_gravity="center"
+                android:layout_marginStart="10dp"
+                android:id="@+id/UserImage"
+                android:layout_width="40dp"
+                android:layout_height="40dp"
+                android:src="@drawable/ic_nurse"
+                android:layout_marginLeft="10dp" />
+            <TextView
+                android:gravity="left"
+                android:layout_gravity="center"
+                android:id="@+id/UserName"
+                android:layout_width="250dp"
+                android:singleLine="true"
+                android:maxLines="1"
                 android:layout_height="wrap_content"
                 android:text=""
                 android:textColor="#fff"
-                android:layout_gravity="center"
-                android:textSize="25dp"
-                android:layout_marginStart="20dp"
+                android:textSize="16dp"
+                android:layout_marginStart="10dp"
                 android:textStyle="bold"
-                android:layout_marginLeft="20dp" />
-        </android.support.v7.widget.Toolbar>
+                android:layout_marginLeft="10dp" />
+        </LinearLayout>
+        <ImageView
+            android:id="@+id/call_sms_chat"
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:src="@drawable/ic_phone_white_24dp"
+            android:layout_toStartOf="@+id/setting_sms_chat"
+            android:layout_toLeftOf="@+id/setting_sms_chat"
+            android:layout_margin="10dp"
+            android:layout_centerInParent="true"/>
+    <ImageView
+        android:id="@+id/setting_sms_chat"
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content"
+        android:src="@drawable/ic_menu"
+        android:layout_alignParentEnd="true"
+        android:layout_alignParentRight="true"
+        android:layout_margin="15dp"
+        android:layout_centerInParent="true"
+        />
 
+</RelativeLayout>
     </android.support.design.widget.AppBarLayout>
 
 

@@ -1,29 +1,52 @@
 <?xml version="1.0" encoding="utf-8"?>
 <RelativeLayout
-    xmlns:android="http://schemas.android.com/apk/res/android" android:layout_width="match_parent"
+    xmlns:android="http://schemas.android.com/apk/res/android"
+    android:layout_width="match_parent"
     android:layout_height="wrap_content"
     xmlns:app="http://schemas.android.com/apk/res-auto"
-    android:paddingVertical="5dp"
-    android:layoutDirection="rtl">
-
-    <de.hdodenhof.circleimageview.CircleImageView
-        android:id="@+id/ChatUserImage"
-        android:layout_width="40dp"
-        android:layout_height="40dp"
-        android:src="@mipmap/ic_launcher"
-        android:layout_margin="10dp"
-        android:visibility="gone"/>
-
-<android.support.v7.widget.CardView
+    android:padding="10dp"
+    >
+<TextView
+    android:id="@+id/Day_Date"
     android:layout_width="wrap_content"
     android:layout_height="wrap_content"
-    android:layout_margin="10dp"
-    app:cardCornerRadius="10dp"
-    app:cardElevation="5dp">
+    android:text="today"
+    android:gravity="center"
+    android:layout_centerHorizontal="true"
+    android:background="@drawable/day_date_bgd"
+    android:visibility="gone"/>
     <RelativeLayout
+        android:layout_below="@+id/Day_Date"
+        android:layout_width="match_parent"
+        android:layout_height="wrap_content"
+        android:padding="10dp"
+        >
+
+        <com.intrusoft.squint.DiagonalView
+            android:layout_alignParentEnd="true"
+            android:layout_alignTop="@+id/Raw_card"
+            android:id="@+id/square"
+            android:layout_width="25dp"
+            android:layout_height="25dp"
+            app:diagonalDirection="left_to_right"
+            app:angle="43"
+            android:src="@color/colorPrimary"
+            android:layout_alignParentRight="true"
+            android:elevation="4dp"/>
+
+    <RelativeLayout
+        android:layout_alignParentEnd="true"
+        android:id="@+id/Raw_card"
         android:layout_width="wrap_content"
         android:layout_height="wrap_content"
-        android:background="@color/colorPrimary">
+        android:background="@drawable/rounded_corner_primary"
+        android:layout_alignParentRight="true"
+        android:layout_marginRight="10dp"
+        android:layout_marginEnd="10dp"
+        android:layout_marginStart="70dp"
+        android:layout_marginLeft="70dp"
+        android:elevation="4dp">
+
     <TextView
         android:paddingHorizontal="5dp"
         android:paddingVertical="2dp"
@@ -32,14 +55,15 @@
         android:layout_height="wrap_content"
         android:text="hello"
         android:textColor="#fff"
-        android:textSize="18dp" />
+        android:textSize="15dp" />
     <LinearLayout
         android:layout_below="@+id/message"
         android:layout_width="wrap_content"
         android:layout_height="wrap_content"
         android:padding="5dp"
         android:orientation="horizontal"
-        >
+        android:layout_alignStart="@+id/message"
+        android:layout_alignLeft="@+id/message">
         <ImageView
             android:id="@+id/type_icon"
             android:layout_marginStart="3dp"
@@ -55,11 +79,35 @@
             android:layout_width="wrap_content"
             android:layout_height="wrap_content"
             android:text="6:30 pm"
-            android:textColor="#79FFFFFF"
+            android:textColor="#C3FFFFFF"
             android:textSize="10dp"
             android:layout_marginLeft="3dp"
             android:layout_gravity="bottom"/>
     </LinearLayout>
     </RelativeLayout>
-</android.support.v7.widget.CardView>
+        <LinearLayout
+            android:paddingTop="5dp"
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:orientation="horizontal"
+            android:id="@+id/warn_text"
+            android:layout_below="@+id/Raw_card"
+            android:layout_alignParentEnd="true"
+            android:layout_alignParentRight="true"
+            android:visibility="gone">
+            <ImageView
+                android:layout_width="wrap_content"
+                android:layout_height="wrap_content"
+                android:src="@drawable/ic_warning_black_24dp"/>
+            <TextView
+                android:layout_gravity="center"
+                android:layout_width="wrap_content"
+                android:layout_height="wrap_content"
+                android:text="can't send this message. tap to resend"
+                android:textSize="13dp"
+                android:textColor="#FF0000"
+                />
+        </LinearLayout>
+
+</RelativeLayout>
 </RelativeLayout>

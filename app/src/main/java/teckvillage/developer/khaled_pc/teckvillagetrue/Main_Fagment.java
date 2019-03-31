@@ -1189,7 +1189,12 @@ public class Main_Fagment extends Fragment implements OnBackPressedListener , Lo
         SimpleDateFormat formatter2 = new SimpleDateFormat("h a", Locale.ENGLISH);
 
 
-        if (cursor.moveToNext() == false) Log.e("GOPAL", "Empty Cursor");
+        if (cursor.moveToNext() == false)
+
+        {
+            Log.e("GOPAL", "Empty Cursor");
+            callLogInfos=get_calls_log.getCallDetails();
+        }
         else {
             do {
                 phName = cursor.getString(cursor.getColumnIndex(CallLog.Calls.CACHED_NAME));

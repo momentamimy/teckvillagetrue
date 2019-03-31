@@ -19,6 +19,7 @@ import android.support.v4.content.Loader;
 import android.support.v4.view.ViewPager;
 import android.support.v7.widget.PopupMenu;
 import android.text.TextUtils;
+import android.util.Log;
 import android.view.LayoutInflater;
 import android.view.MenuItem;
 import android.view.View;
@@ -43,6 +44,7 @@ import static teckvillage.developer.khaled_pc.teckvillagetrue.FragMessageOthers.
 
 public class Message_Fragment extends Fragment implements LoaderManager.LoaderCallbacks<Cursor> , OnBackPressedListener{
 
+    boolean DialogProgress=true;
     Get_User_Contacts get_user_contacts;
     FloatingActionButton fab;
     TabLayout tabs;
@@ -161,8 +163,14 @@ public class Message_Fragment extends Fragment implements LoaderManager.LoaderCa
     public Loader<Cursor> onCreateLoader(int id, Bundle args) {
         if (id==1)
         {
-            LoadingContactToast(getActivity());
-            String[] projection = new String[] { "address", "body", "date", "type","read"};
+            if (DialogProgress)
+            {
+                LoadingContactToast(getActivity());
+                DialogProgress=false;
+            }
+            getContext().getContentResolver().notifyChange(Uri.parse("content://sms/"), null);
+
+            String[] projection = new String[] { "address", "body", "date", "type","read,thread_id"};
             CursorLoader cursorLoader=new CursorLoader(getActivity(), Uri.parse("content://sms/"),projection,null,null,"date desc");
             return cursorLoader;
         }
@@ -171,26 +179,28 @@ public class Message_Fragment extends Fragment implements LoaderManager.LoaderCa
 
     @Override
     public void onLoadFinished(Loader<Cursor> loader, Cursor data) {
+        messageInfos.clear();
+        allMessageOtherInfos.clear();
+        allMessageContactInfos.clear();
         int indextype=data.getColumnIndex("type");
         int indexBody = data.getColumnIndex("body");
         int indexAddress = data.getColumnIndex("address");
         int dateColumn = data.getColumnIndex("date");
         int index_seen = data.getColumnIndex("read");
+        int threadId_index = data.getColumnIndex("thread_id");
 
         if (indexBody < 0 || !data.moveToFirst()) return;
         do {
-            if (!data.getString(indextype).equals("5")) {
+            if (!TextUtils.isEmpty(data.getString(indexAddress))) {
 
-                Calendar calendar = Calendar.getInstance();
                 Long timestamp = Long.parseLong(data.getString(dateColumn));
-                calendar.setTimeInMillis(timestamp);
-                String stringDate = String.valueOf(calendar.get(Calendar.DAY_OF_MONTH)) + "/" + String.valueOf(calendar.get(Calendar.MONTH) + 1) + "/" + String.valueOf(calendar.get(Calendar.YEAR));
 
-                MessageInfo info = new MessageInfo(null, data.getString(indexAddress), data.getString(indexBody), stringDate, data.getString(indexAddress),data.getString(index_seen));
+                MessageInfo info = new MessageInfo(null, data.getString(indexAddress), data.getString(indexBody), timestamp, data.getString(indexAddress),data.getString(index_seen),data.getString(threadId_index));
+                info.setType(data.getString(indextype));
                 boolean Add = true;
                 for (int i = 0; i < messageInfos.size(); i++) {
                     if (!TextUtils.isEmpty(messageInfos.get(i).logName))
-                        if (messageInfos.get(i).logAddress.equals(data.getString(indexAddress))) {
+                        if (messageInfos.get(i).thread_id.equals(data.getString(threadId_index))) {
                             Add = false;
                         }
                 }
@@ -237,6 +247,25 @@ public class Message_Fragment extends Fragment implements LoaderManager.LoaderCa
     @Override
     public void onLoaderReset(Loader<Cursor> loader) {
 
+    }
+
+    @Override
+    public void onResume() {
+        super.onResume();
+        Log.d("laPaleezLaPaleezLa", "onResume: ");
+        getLoaderManager().restartLoader(1,null,this);
+    }
+
+    @Override
+    public void onStart() {
+        super.onStart();
+        Log.d("laPaleezLaPaleezLa", "onStart: ");
+    }
+
+    @Override
+    public void onStop() {
+        super.onStop();
+        Log.d("laPaleezLaPaleezLa", "onStop: ");
     }
 
     @Override

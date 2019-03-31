@@ -1,6 +1,15 @@
 package teckvillage.developer.khaled_pc.teckvillagetrue;
 
 public class sms_messages_model  {
+    public boolean isShowDay() {
+        return showDay;
+    }
+
+    public void setShowDay(boolean showDay) {
+        this.showDay = showDay;
+    }
+
+    public boolean showDay=false;
     public String address;
     public long date;
     public String body;

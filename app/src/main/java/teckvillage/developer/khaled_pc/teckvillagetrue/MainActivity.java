@@ -44,13 +44,15 @@ import java.util.HashSet;
 
 import teckvillage.developer.khaled_pc.teckvillagetrue.Camera_Recognition_package.Camera_Recognition;
 
+import teckvillage.developer.khaled_pc.teckvillagetrue.View.ChatFragment;
+
 
 public class MainActivity extends AppCompatActivity implements NavigationView.OnNavigationItemSelectedListener {
 
     private static final String TAG ="fields" ;
     private static final int STATIC_INTEGER_VALUE =221 ;
     public static FragmentManager fragmentManager;
-    FrameLayout frameLayout;
+    FrameLayout mainframeLayout,messageframeLayout,contactframeLayout,chatframeLayout;
     private static final String TAG_ANDROID_CONTACTS = "ANDROID_CONTACTS";
     String Email ="work20188888@gmail.com";
     private static final int MY_CAMERA_REQUEST_CODE = 109;
@@ -61,7 +63,7 @@ public class MainActivity extends AppCompatActivity implements NavigationView.On
 
 
     @Override
-    protected void onCreate(Bundle savedInstanceState) {
+    protected void onCreate(final Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
         setContentView(R.layout.activity_main);
         Toolbar toolbar = (Toolbar) findViewById(R.id.toolbar);
@@ -72,7 +74,10 @@ public class MainActivity extends AppCompatActivity implements NavigationView.On
         navigationView2=findViewById(R.id.botnav);
 
 
-        frameLayout=(FrameLayout) findViewById(R.id.fragment_container_main);//connect Framelayout
+        messageframeLayout=(FrameLayout) findViewById(R.id.fragment_container_message);//connect Framelayout
+        mainframeLayout=(FrameLayout) findViewById(R.id.fragment_container_main);//connect Framelayout
+        contactframeLayout=(FrameLayout) findViewById(R.id.fragment_container_contact);//connect Framelayout
+        chatframeLayout=(FrameLayout) findViewById(R.id.fragment_container_chat);//connect Framelayout
 
 
 
@@ -89,7 +94,7 @@ public class MainActivity extends AppCompatActivity implements NavigationView.On
         navigationView2.setSelectedItemId(R.id.nav_phone);
         fragmentManager=getSupportFragmentManager();
         FragmentTransaction fragmentTransaction=fragmentManager.beginTransaction();
-        if(findViewById(R.id.fragment_container_main) !=null){
+        if(mainframeLayout !=null){
             if(savedInstanceState !=null){
                 return;
             }
@@ -101,11 +106,11 @@ public class MainActivity extends AppCompatActivity implements NavigationView.On
         navigationView2.setOnNavigationItemSelectedListener(new BottomNavigationView.OnNavigationItemSelectedListener() {
             @Override
             public boolean onNavigationItemSelected(@NonNull MenuItem item) {
-                Fragment selectedFragment = null;
+                //Fragment selectedFragment = null;
                 switch (item.getItemId())
                 {
                     case R.id.nav_message:
-                        selectedFragment = new Message_Fragment();
+                        /*selectedFragment = new Message_Fragment();
                             Fragment f = getSupportFragmentManager().findFragmentById(R.id.fragment_container_main);
                             if (f instanceof Message_Fragment) {
                                 // Do something
@@ -117,10 +122,32 @@ public class MainActivity extends AppCompatActivity implements NavigationView.On
                                 getSupportFragmentManager().beginTransaction().replace(R.id.fragment_container_main,
                                         selectedFragment).commit();
 
+                            }*/
+                        Fragment f = getSupportFragmentManager().findFragmentById(R.id.fragment_container_message);
+                        if (f instanceof Message_Fragment) {
+                            // Do something
+                            Log.w("slahh","slalalal");
+                            //fragmentTransaction.hide(f);
+                        }
+                        else
+                        {
+                        FragmentTransaction fragmentTransaction1=fragmentManager.beginTransaction();
+                        if(messageframeLayout !=null){
+                            if(savedInstanceState !=null){
+                                break;
                             }
+                            Message_Fragment fragment_1=new Message_Fragment();
+                            fragmentTransaction1.add(R.id.fragment_container_message,fragment_1,null);
+                            fragmentTransaction1.commit();
+                        }
+                        }
+                        messageframeLayout.setVisibility(View.VISIBLE);
+                        mainframeLayout.setVisibility(View.GONE);
+                        contactframeLayout.setVisibility(View.GONE);
+                        chatframeLayout.setVisibility(View.GONE);
                         break;
                     case R.id.nav_phone:
-                            selectedFragment=new Main_Fagment();
+                            /*selectedFragment=new Main_Fagment();
                             Fragment f1 = getSupportFragmentManager().findFragmentById(R.id.fragment_container_main);
                             if (f1 instanceof Main_Fagment) {
                                 // Do something
@@ -131,10 +158,32 @@ public class MainActivity extends AppCompatActivity implements NavigationView.On
                             {
                                 getSupportFragmentManager().beginTransaction().replace(R.id.fragment_container_main,
                                         selectedFragment).commit();
+                            }*/
+                        Fragment f1 = getSupportFragmentManager().findFragmentById(R.id.fragment_container_main);
+                        if (f1 instanceof Main_Fagment) {
+                            // Do something
+                            Log.w("slahh","slalalal");
+                            //fragmentTransaction.hide(f);
+                        }
+                        else
+                        {
+                        FragmentTransaction fragmentTransaction=fragmentManager.beginTransaction();
+                        if(mainframeLayout !=null){
+                            if(savedInstanceState !=null){
+                                break;
                             }
+                            Main_Fagment fragment_1=new Main_Fagment();
+                            fragmentTransaction.add(R.id.fragment_container_main,fragment_1,null);
+                            fragmentTransaction.commit();
+                        }
+                        }
+                        messageframeLayout.setVisibility(View.GONE);
+                        mainframeLayout.setVisibility(View.VISIBLE);
+                        contactframeLayout.setVisibility(View.GONE);
+                        chatframeLayout.setVisibility(View.GONE);
                         break;
                     case R.id.nav_contacts:
-                        selectedFragment=new Contacts();
+                        /*selectedFragment=new Contacts();
                             Fragment f2 = getSupportFragmentManager().findFragmentById(R.id.fragment_container_main);
                             if (f2 instanceof Contacts) {
                                 // Do something
@@ -145,7 +194,62 @@ public class MainActivity extends AppCompatActivity implements NavigationView.On
                             {
                                 getSupportFragmentManager().beginTransaction().replace(R.id.fragment_container_main,
                                         selectedFragment).commit();
+                            }*/
+                        Fragment f2 = getSupportFragmentManager().findFragmentById(R.id.fragment_container_contact);
+                        if (f2 instanceof Contacts) {
+                            // Do something
+                            Log.w("slahh","slalalal");
+                            //fragmentTransaction.hide(f);
+                        }
+                        else {
+                            FragmentTransaction fragmentTransaction2 = fragmentManager.beginTransaction();
+                            if (contactframeLayout != null) {
+                                if (savedInstanceState != null) {
+                                    break;
+                                }
+                                Contacts fragment_1 = new Contacts();
+                                fragmentTransaction2.add(R.id.fragment_container_contact, fragment_1, null);
+                                fragmentTransaction2.commit();
                             }
+                        }
+                        messageframeLayout.setVisibility(View.GONE);
+                        mainframeLayout.setVisibility(View.GONE);
+                        contactframeLayout.setVisibility(View.VISIBLE);
+                        chatframeLayout.setVisibility(View.GONE);
+                        break;
+                    case R.id.nav_chat:
+                        /*selectedFragment=new Contacts();
+                        Fragment f3 = getSupportFragmentManager().findFragmentById(R.id.fragment_container_main);
+                        if (f3 instanceof Contacts) {
+                            // Do something
+                            // fragmentTransaction.hide(f2);
+                        }
+                        else
+                        {
+                            getSupportFragmentManager().beginTransaction().replace(R.id.fragment_container_main,
+                                    selectedFragment).commit();
+                        }*/
+                        Fragment f3 = getSupportFragmentManager().findFragmentById(R.id.fragment_container_chat);
+                        if (f3 instanceof ChatFragment) {
+                            // Do something
+                            Log.w("slahh","slalalal");
+                            //fragmentTransaction.hide(f);
+                        }
+                        else {
+                            FragmentTransaction fragmentTransaction3 = fragmentManager.beginTransaction();
+                            if (chatframeLayout != null) {
+                                if (savedInstanceState != null) {
+                                    break;
+                                }
+                                ChatFragment fragment_1 = new ChatFragment();
+                                fragmentTransaction3.add(R.id.fragment_container_chat, fragment_1, null);
+                                fragmentTransaction3.commit();
+                            }
+                        }
+                        messageframeLayout.setVisibility(View.GONE);
+                        mainframeLayout.setVisibility(View.GONE);
+                        contactframeLayout.setVisibility(View.GONE);
+                        chatframeLayout.setVisibility(View.VISIBLE);
                         break;
                 }
 

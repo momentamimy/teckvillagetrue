@@ -18,4 +18,9 @@
         android:title="Contacts"
         />
 
+    <item
+        android:id="@+id/nav_chat"
+        android:icon="@drawable/ic_chat_sms_on_whocaller"
+        android:title="Chat"
+        />
 </menu>

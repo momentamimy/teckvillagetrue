@@ -134,8 +134,8 @@
                     android:layout_alignParentLeft="true">
                     <ImageView
                         android:id="@+id/Call_Icon"
-                        android:layout_width="wrap_content"
-                        android:layout_height="wrap_content"
+                        android:layout_width="24dp"
+                        android:layout_height="24dp"
                         android:src="@drawable/ic_phone_primary_24dp"
                         />
                     <TextView
@@ -158,8 +158,8 @@
                     android:layout_toRightOf="@+id/Call_Icon_Layout">
                     <ImageView
                         android:id="@+id/Message_Icon"
-                        android:layout_width="wrap_content"
-                        android:layout_height="wrap_content"
+                        android:layout_width="24dp"
+                        android:layout_height="24dp"
                         android:src="@drawable/ic_chat_primary"
                         android:layout_centerHorizontal="true"
                         />
@@ -183,8 +183,8 @@
                     android:layout_toRightOf="@+id/Message_Icon_Layout">
                     <ImageView
                         android:id="@+id/Save_Icon"
-                        android:layout_width="wrap_content"
-                        android:layout_height="wrap_content"
+                        android:layout_width="24dp"
+                        android:layout_height="24dp"
                         android:src="@drawable/primary_add_user_contacts"
                         android:layout_centerHorizontal="true"
                         />
@@ -208,8 +208,8 @@
                     android:layout_toRightOf="@+id/Save_Icon_Layout">
                     <ImageView
                         android:id="@+id/Block_Icon"
-                        android:layout_width="wrap_content"
-                        android:layout_height="wrap_content"
+                        android:layout_width="24dp"
+                        android:layout_height="24dp"
                         android:src="@drawable/ic_block_primary_24dp"
                         android:layout_centerHorizontal="true"
                         />

@@ -32,13 +32,26 @@
             android:layout_marginLeft="15dp"
             android:layout_marginRight="10dp" />
 
-        <TextView
-            android:id="@+id/name_of_log"
+        <ImageView
+            android:id="@+id/DOT"
+            android:layout_width="10dp"
+            android:layout_height="10dp"
+            android:src="@drawable/ic_dot2"
             android:layout_toEndOf="@+id/contact_img_log_recycle"
             android:layout_toRightOf="@+id/contact_img_log_recycle"
-            android:layout_marginTop="10dp"
+            android:layout_marginTop="14dp"
             android:layout_marginStart="8dp"
             android:layout_marginLeft="8dp"
+            android:visibility="gone"
+            />
+
+        <TextView
+            android:id="@+id/name_of_log"
+            android:layout_toEndOf="@+id/DOT"
+            android:layout_toRightOf="@+id/DOT"
+            android:layout_marginTop="10dp"
+            android:layout_marginStart="2dp"
+            android:layout_marginLeft="2dp"
             android:layout_width="wrap_content"
             android:layout_height="wrap_content"
             android:text="Abdalla Kamash"
@@ -75,4 +88,15 @@
             android:layout_margin="10dp"
             android:layout_alignParentEnd="true"
             android:layout_alignParentRight="true" />
+
+    <ImageView
+        android:layout_margin="10dp"
+        android:id="@+id/NotSent_Icon"
+        android:layout_below="@id/date_sms_message"
+        android:layout_width="15dp"
+        android:layout_height="15dp"
+        android:src="@drawable/ic_error_black_24dp"
+        android:layout_alignParentEnd="true"
+        android:layout_alignParentRight="true"
+        android:visibility="gone"/>
     </RelativeLayout>

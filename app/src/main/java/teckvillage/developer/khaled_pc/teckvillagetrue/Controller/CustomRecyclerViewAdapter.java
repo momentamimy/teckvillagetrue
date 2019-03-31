@@ -40,7 +40,7 @@ public class CustomRecyclerViewAdapter extends RecyclerView.Adapter<CustomRecycl
         MessageInfo dataModel =dataSet.get(position);
         holder.logName.setText(dataModel.logName);
         holder.textMessage.setText(dataModel.logMessage);
-        holder.messageDate.setText(dataModel.logDate);
+        //holder.messageDate.setText(dataModel.logDate);
         Log.d("dada5wqeqe", dataModel.read);
         if (dataModel.read.equals("1")) {
             Log.d("dada5wqeqe", "true");

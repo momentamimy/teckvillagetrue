@@ -14,20 +14,18 @@ import android.database.Cursor;
 import android.database.sqlite.SQLiteException;
 import android.net.Uri;
 import android.os.Build;
+import android.os.Bundle;
 import android.provider.Telephony;
 import android.support.design.widget.FloatingActionButton;
 import android.support.v4.app.ActivityCompat;
 import android.support.v4.content.ContextCompat;
 import android.support.v7.app.AppCompatActivity;
-import android.os.Bundle;
 import android.support.v7.widget.LinearLayoutManager;
-import android.support.v7.widget.PopupMenu;
 import android.support.v7.widget.RecyclerView;
 import android.support.v7.widget.Toolbar;
 import android.telephony.SmsManager;
 import android.text.TextUtils;
 import android.util.Log;
-import android.view.MenuItem;
 import android.view.View;
 import android.widget.EditText;
 import android.widget.ImageView;
@@ -45,7 +43,7 @@ import java.util.List;
 import de.hdodenhof.circleimageview.CircleImageView;
 import teckvillage.developer.khaled_pc.teckvillagetrue.Controller.Receiver;
 
-public class SMS_MessagesChat extends AppCompatActivity {
+public class SMS_MessagesChat_MultipleContacts extends AppCompatActivity {
 
     RecyclerView chat_RecyclerView;
     LinearLayoutManager lLayout;
@@ -61,32 +59,30 @@ public class SMS_MessagesChat extends AppCompatActivity {
     EditText messageSend;
     FloatingActionButton send;
 
-    String name, address;
+    ArrayList<String> name,address;
 
-    ImageView callIcon, settingIcon;
+    private static final int MY_PERMISSIONS_REQUEST_SEND_SMS =0;
 
-    private static final int MY_PERMISSIONS_REQUEST_SEND_SMS = 0;
+    private static SMS_MessagesChat_MultipleContacts inst;
 
-    private static SMS_MessagesChat inst;
-
+    ArrayList<Long> updateMessageInfos;
     @Override
     public void onStart() {
         super.onStart();
         inst = this;
     }
-
-    public static SMS_MessagesChat instance() {
+    public static SMS_MessagesChat_MultipleContacts instance() {
         return inst;
     }
-
     @Override
     protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
         setContentView(R.layout.activity_sms_messages_chat);
+        updateMessageInfos=new ArrayList<>();
 
 
         LinearLayout toolbar = findViewById(R.id.toolbar);
-        ImageView backButton = findViewById(R.id.back_button);
+        ImageView backButton=findViewById(R.id.back_button);
         backButton.setOnClickListener(new View.OnClickListener() {
             @Override
             public void onClick(View v) {
@@ -94,90 +90,45 @@ public class SMS_MessagesChat extends AppCompatActivity {
             }
         });
 
-        Cant_Replay_Layout = findViewById(R.id.Cant_Replay_Layout);
-        Message_Container = findViewById(R.id.messageContainer);
+        Cant_Replay_Layout=findViewById(R.id.Cant_Replay_Layout);
+        Message_Container=findViewById(R.id.messageContainer);
 
-        callIcon = findViewById(R.id.call_sms_chat);
-        settingIcon = findViewById(R.id.setting_sms_chat);
 
-        userName = findViewById(R.id.UserName);
-        userImg = findViewById(R.id.UserImage);
+        userName=findViewById(R.id.UserName);
+        userImg=findViewById(R.id.UserImage);
 
-        name = getIntent().getStringExtra("LogSMSName");
-        address = getIntent().getStringExtra("LogSMSAddress");
-        Log.d("Address::::", address);
-        String regex = "\\d+";
-        address = address.replaceAll("\\s", "");
-        address = address.replace("-", "");
-        String s=address.replace("+","");
-        if (!s.matches(regex))
+        name=getIntent().getStringArrayListExtra("LogSMSName");
+        address=getIntent().getStringArrayListExtra("LogSMSAddress");
+
+        Cant_Replay_Layout.setVisibility(View.GONE);
+        Message_Container.setVisibility(View.VISIBLE);
+
+        String allNames="";
+        for (int i=0;i<name.size();i++)
         {
-            Cant_Replay_Layout.setVisibility(View.VISIBLE);
-            Message_Container.setVisibility(View.GONE);
-        } else {
-            Cant_Replay_Layout.setVisibility(View.GONE);
-            Message_Container.setVisibility(View.VISIBLE);
+            if (allNames.equals(""))
+                allNames=allNames+name.get(i);
+            else
+                allNames=allNames+","+name.get(i);
         }
+        userName.setText(allNames);
 
-        userName.setText(name);
 
-        messageSend = findViewById(R.id.Message_Send);
-        send = findViewById(R.id.fab);
 
         lLayout = new LinearLayoutManager(getApplicationContext());
-        chat_RecyclerView = findViewById(R.id.chat_SMS_messages);
+        chat_RecyclerView=findViewById(R.id.chat_SMS_messages);
         lLayout.setStackFromEnd(true);
         chat_RecyclerView.setLayoutManager(lLayout);
-        messageInfos = new ArrayList<>();
-        adapter = new messages_list_adapter(this, messageInfos, messageSend, chat_RecyclerView, address);
+        messageInfos=new ArrayList<>();
+        adapter=new messages_list_adapter(this,messageInfos);
         chat_RecyclerView.setAdapter(adapter);
 
         //getmessages();
 
 
-        callIcon.setOnClickListener(new View.OnClickListener() {
-            @Override
-            public void onClick(View v) {
-                Intent intent = new Intent(Intent.ACTION_CALL);
-                intent.setData(Uri.parse("tel:" + address));
-                if (ActivityCompat.checkSelfPermission(getApplicationContext(), Manifest.permission.CALL_PHONE) == PackageManager.PERMISSION_GRANTED) {
-                    startActivity(intent);
-                }
-            }
-        });
-        settingIcon.setOnClickListener(new View.OnClickListener() {
-            @Override
-            public void onClick(View v) {
-                final PopupMenu popupMenu = new PopupMenu(SMS_MessagesChat.this, settingIcon);
 
-                popupMenu.setOnMenuItemClickListener(new PopupMenu.OnMenuItemClickListener() {
-                    public boolean onMenuItemClick(MenuItem item) {
-
-                        switch (item.getItemId()) {
-                            case R.id.Block_Spam:
-                                // item one clicked
-                                return true;
-                            case R.id.delete_conversation:
-                                for (int i=0;i<messageInfos.size();i++)
-                                {
-                                    if (!messageInfos.get(i).strthread_id.equals(""))
-                                    {
-                                        delete_sms(Long.parseLong(messageInfos.get(i).strthread_id));
-                                        break;
-                                    }
-                                }
-                                messageInfos.clear();
-                                adapter.notifyDataSetChanged();
-                                return true;
-                        }
-                        return false;
-                    }
-                });
-                popupMenu.inflate(R.menu.sms_chat_menu);
-                popupMenu.show();
-            }
-        });
-
+        messageSend=findViewById(R.id.Message_Send);
+        send=findViewById(R.id.fab);
         send.setOnClickListener(new View.OnClickListener() {
             @Override
             public void onClick(View v) {
@@ -189,41 +140,32 @@ public class SMS_MessagesChat extends AppCompatActivity {
                         intent.putExtra(Telephony.Sms.Intents.EXTRA_PACKAGE_NAME,
                                 myPackageName);
                         startActivity(intent);
+
                     }
                     else {
-                        String phoneNo = address;
+
                         String message = messageSend.getText().toString();
-                        if (phoneNo.length()>0 && message.length()>0)
+                        if (message.length()>0)
                         {
-                            messageSend.setText("");
-                            sendSMS(phoneNo,message);
+                            messageInfos.add(new sms_messages_model(0,"",0,message,5,"",0,"",31));
+                            adapter.notifyDataSetChanged();
+                            for (int i=0;i<address.size();i++)
+                            {
+                                String phoneNo = address.get(i);
+                                messageSend.setText("");
+                                sendSMS(phoneNo,message,i);
+
+                            }
 
                         }
 
                         else
                             Toast.makeText(getBaseContext(),
-                                    "Please enter both phone number and message.",
+                                    "Please write your message.",
                                     Toast.LENGTH_SHORT).show();
 
                     }
                 }
-                else {
-                    String phoneNo = address;
-                    String message = messageSend.getText().toString();
-                    if (phoneNo.length()>0 && message.length()>0)
-                    {
-                        messageSend.setText("");
-                        sendSMS(phoneNo,message);
-
-                    }
-
-                    else
-                        Toast.makeText(getBaseContext(),
-                                "Please enter both phone number and message.",
-                                Toast.LENGTH_SHORT).show();
-
-                }
-
             }
         });
 
@@ -253,7 +195,7 @@ public class SMS_MessagesChat extends AppCompatActivity {
             }
         } else {
             // Permission has already been granted
-            get_delivered_messages();
+
         }
     }
 
@@ -315,7 +257,6 @@ public class SMS_MessagesChat extends AppCompatActivity {
         values.put("type",5);
         values.put("status",31);//in progress
         getContentResolver().insert(Uri.parse("content://sms/sent"), values);
-        refresh();
     }
 
     private void update_sms_sent(long l) {
@@ -326,7 +267,8 @@ public class SMS_MessagesChat extends AppCompatActivity {
         values.put("type",2);
         values.put("status",0);//sent
         getContentResolver().update(Uri.parse("content://sms/"), values, "date=?", new String[] {String.valueOf(l)});
-        refresh();
+        messageInfos.clear();
+        adapter.notifyDataSetChanged();
     }
 
     public void update_sms_not_sent(long l) {
@@ -337,7 +279,8 @@ public class SMS_MessagesChat extends AppCompatActivity {
         values.put("type",5);
         values.put("status",32);//not sent
         getContentResolver().update(Uri.parse("content://sms/"), values, "date=?", new String[] {String.valueOf(l)});
-        refresh();
+        messageInfos.clear();
+        adapter.notifyDataSetChanged();
     }
 
     public void update_unread(long id)
@@ -349,159 +292,19 @@ public class SMS_MessagesChat extends AppCompatActivity {
         getContentResolver().update(Uri.parse("content://sms/inbox"), values, "_id="+id, null);
     }
 
-    private void delete_sms(long ID) {
-        getContentResolver().delete(Uri.parse("content://sms/"),"thread_id=?", new String[] {String.valueOf(ID)});
-        refresh();
-    }
-    public void refresh(){
-        messageInfos.clear();
-        get_delivered_messages();
-    }
-    private void get_delivered_messages(){
-
-        final String SMS_URI_INBOX = "content://sms/inbox";
-        final String SMS_URI_ALL = "content://sms/";
-        try {
-            Uri uri = Uri.parse(SMS_URI_INBOX);
-            String[] projection = new String[] { "_id", "address", "person", "body", "date", "type","read","date_sent","thread_id","status"};
-            Cursor cur = getContentResolver().query(uri, projection, null, null, "date desc");
-            if (cur.moveToFirst()) {
-                int index_id = cur.getColumnIndex("_id");
-                int index_Address = cur.getColumnIndex("address");
-                int index_Person = cur.getColumnIndex("person");
-                int index_Body = cur.getColumnIndex("body");
-                int index_Date = cur.getColumnIndex("date");
-                int index_Type = cur.getColumnIndex("type");
-                int index_seen = cur.getColumnIndex("read");
-                int index_date_sent = cur.getColumnIndex("date_sent");
-                int index_thread_id = cur.getColumnIndex("thread_id");
-                int index_status = cur.getColumnIndex("status");
-
-                do {
-                    long id = cur.getLong(index_id);
-                    String strAddress = cur.getString(index_Address);
-                    int intPerson = cur.getInt(index_Person);
-                    String strbody = cur.getString(index_Body);
-                    long longDate = cur.getLong(index_Date);
-                    int int_Type = cur.getInt(index_Type);
-                    String strseen = cur.getString(index_seen);
-                    long date_sent = cur.getInt(index_date_sent);
-                    String strthread_id = cur.getString(index_thread_id);
-                    int int_status = cur.getInt(index_status);
-
-                    if (strAddress.contains(address)) {
-                        messageInfos.add(new sms_messages_model(id,strAddress, longDate, strbody,int_Type,strseen,date_sent,strthread_id,int_status));
-                        if (!strseen.equals("1"))
-                        {
-                            update_unread(id);
-                        }
-                    }
-                } while (cur.moveToNext());
-
-                if (!cur.isClosed()) {
-                    cur.close();
-                    cur = null;
-                }
-                get_sent_messages();
-            }
-
-        } catch (SQLiteException ex) {
-            Log.d("SQLiteException", ex.getMessage());
-        }
-    }
-    private void get_sent_messages(){
-
-        final String SMS_URI_INBOX = "content://sms/";
-        final String SMS_URI_ALL = "content://sms/";
-        try {
-            Uri uri = Uri.parse(SMS_URI_INBOX);
-            String[] projection = new String[] { "_id", "address", "person", "body", "date", "type","seen","date_sent","thread_id","status"};
-            Cursor cur = getContentResolver().query(uri, projection, null, null, "date desc");
-            if (cur.moveToFirst()) {
-                int index_id = cur.getColumnIndex("_id");
-                int index_Address = cur.getColumnIndex("address");
-                int index_Person = cur.getColumnIndex("person");
-                int index_Body = cur.getColumnIndex("body");
-                int index_Date = cur.getColumnIndex("date");
-                int index_Type = cur.getColumnIndex("type");
-                int index_seen = cur.getColumnIndex("seen");
-                int index_date_sent = cur.getColumnIndex("date_sent");
-                int index_thread_id = cur.getColumnIndex("thread_id");
-                int index_status = cur.getColumnIndex("status");
-
-                do {
-                    long id = cur.getLong(index_id);
-                    String strAddress = cur.getString(index_Address);
-                    int intPerson = cur.getInt(index_Person);
-                    String strbody = cur.getString(index_Body);
-                    long longDate = cur.getLong(index_Date);
-                    int int_Type = cur.getInt(index_Type);
-                    String strseen = cur.getString(index_seen);
-                    long date_sent = cur.getInt(index_date_sent);
-                    String strthread_id = cur.getString(index_thread_id);
-                    int int_status = cur.getInt(index_status);
-
-                    if (!TextUtils.isEmpty(strAddress))
-                        if (int_Type!=1)
-                        if (strAddress.contains(address)) {
-                            messageInfos.add(new sms_messages_model(id,getSharedPreferences("logged_in",MODE_PRIVATE).getString("phone",""), longDate, strbody,int_Type,strseen,date_sent,strthread_id,int_status));
-
-                        }
-                } while (cur.moveToNext());
-
-                if (!cur.isClosed()) {
-                    cur.close();
-                    cur = null;
-                }
-                sort_messages(messageInfos);
-            }
-        } catch (SQLiteException ex) {
-            Log.d("SQLiteException", ex.getMessage());
-        }
-    }
-
-    private void sort_messages(List<sms_messages_model>list){
-        Collections.sort(list, new Comparator<sms_messages_model>(){
-            public int compare(sms_messages_model o1, sms_messages_model o2){
-                if(o1.date == o2.date)
-                    return 0;
-                return o1.date < o2.date ? -1 : 1;
-            }
-        });
-        long myDateDay=0;
-        for (int i=0;i<messageInfos.size();i++)
-        {
-            sms_messages_model model=messageInfos.get(i);
-            Calendar calendar=Calendar.getInstance();
-            calendar.setTimeInMillis(model.date);
-            Calendar calendar1=Calendar.getInstance();
-            calendar1.setTimeInMillis(myDateDay);
-            Log.d("tmtmtmtmtmtmtmtm2", myDateDay+" : "+model.date);
-            if (calendar.get(Calendar.DAY_OF_YEAR) != calendar1.get(Calendar.DAY_OF_YEAR))
-            {
-                Log.d("tmtmtmtmtmtmtmtm1", myDateDay+" : "+model.date);
-                myDateDay=model.date;
-                sms_messages_model newmodel=new sms_messages_model(0,"",model.date,"",0,"",model.date,"",0);
-                newmodel.setShowDay(true);
-                messageInfos.add(i,newmodel);
-            }
-
-        }
 
 
-        adapter.notifyDataSetChanged();
-        if (messageInfos.size()>2){
-            chat_RecyclerView.smoothScrollToPosition(messageInfos.size() - 1);
-        }
-    }
+
+
     /*-------------------------------------------------------------------------------------------------------------------------------
      * -------------------------------------------------------------------------------------------------------------------------------
      * -------------------------------------------------------------------------------------------------------------------------------*/
 
 
-    private void sendSMS(String phoneNumber, String message)
+    private void sendSMS(String phoneNumber, String message,int i)
     {
-        final long l=System.currentTimeMillis();
+        final long l=System.currentTimeMillis()+i;
+        updateMessageInfos.add(l);
         chat_RecyclerView.setAdapter(adapter);
         String SENT = "SMS_SENT"+l; String DELIVERED = "SMS_DELIVERED"+l;
         PendingIntent sentPI = PendingIntent.getBroadcast(this, 0,
@@ -623,6 +426,5 @@ public class SMS_MessagesChat extends AppCompatActivity {
         calendar.add(Calendar.MINUTE,1);
         alarmManager.set(AlarmManager.RTC_WAKEUP,calendar.getTimeInMillis(),amPI);
     }
-
 }
 

@@ -25,19 +25,29 @@ public class MessageInfo {
         this.logMessage = logMessage;
     }
 
-    public String getLogDate() {
+    public long getLogDate() {
         return logDate;
     }
 
-    public void setLogDate(String logDate) {
+    public void setLogDate(long logDate) {
         this.logDate = logDate;
     }
 
     public String imageUrl;
     public String logName;
     public String logMessage;
-    public String logDate;
+    public long logDate;
     public String logAddress;
+
+    public String getType() {
+        return type;
+    }
+
+    public void setType(String type) {
+        this.type = type;
+    }
+
+    public String type;
 
     public String getTypeMessage() {
         return typeMessage;
@@ -66,13 +76,27 @@ public class MessageInfo {
     }
 
     public String read;
-    public MessageInfo(String imageUrl, String logName, String logMessage, String logDate, String logAddress, String  read) {
+
+    public String thread_id;
+    public MessageInfo(String imageUrl, String logName, String logMessage, long logDate, String logAddress, String  read) {
         this.imageUrl = imageUrl;
         this.logName = logName;
         this.logMessage = logMessage;
         this.logDate = logDate;
         this.logAddress = logAddress;
         this.read = read;
+
+    }
+
+    public MessageInfo(String imageUrl, String logName, String logMessage, long logDate, String logAddress, String  read,String thread_id) {
+        this.imageUrl = imageUrl;
+        this.logName = logName;
+        this.logMessage = logMessage;
+        this.logDate = logDate;
+        this.logAddress = logAddress;
+        this.read = read;
+        this.thread_id = thread_id;
+
     }
 
 }

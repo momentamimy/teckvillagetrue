@@ -6,6 +6,7 @@ import android.content.BroadcastReceiver;
 import android.content.Context;
 import android.content.DialogInterface;
 import android.content.Intent;
+import android.content.SharedPreferences;
 import android.graphics.Bitmap;
 import android.graphics.BitmapFactory;
 import android.graphics.Color;
@@ -37,23 +38,36 @@ import android.widget.Toast;
 
 import teckvillage.developer.khaled_pc.teckvillagetrue.model.Get_Calls_Log;
 
+import static android.content.Context.MODE_PRIVATE;
+
 public class PhoneStateReceiver extends BroadcastReceiver {
 
     public static WindowManager wm=null;
     private WindowManager.LayoutParams params1;
     public static View view1;
     Get_Calls_Log get_calls_log;
+
+    SharedPreferences preferences;
     @Override
     public void onReceive(Context context, Intent intent) {
 
         String state= intent.getStringExtra(TelephonyManager.EXTRA_STATE);
+        preferences=context.getSharedPreferences("PopUp_Dialog",MODE_PRIVATE);
+        boolean swithcOutgoing=preferences.getBoolean("SwitchOutgoing",true);
+        boolean swithcincomgoing=preferences.getBoolean("switchIncoming",true);
         String number=intent.getStringExtra(TelephonyManager.EXTRA_INCOMING_NUMBER);
 
         // Adds a view on top of the dialer app when it launches.
         //Toast.makeText(context,"Num : "+number+"State : "+state,Toast.LENGTH_LONG).show();
+        Toast.makeText(context,"Num : "+number+"State : ",Toast.LENGTH_LONG).show();
         Log.d("hlaclaclclclclclclc","Num : "+number+"State : "+state);
 
         if (state.equals(TelephonyManager.EXTRA_STATE_OFFHOOK)|| state.equals(TelephonyManager.EXTRA_STATE_RINGING))
+        if (state.equals(TelephonyManager.EXTRA_STATE_OFFHOOK)&&swithcOutgoing)
+        {
+            DisplayDialogOverApps(context,number);
+        }
+        else if (state.equals(TelephonyManager.EXTRA_STATE_RINGING)&&swithcincomgoing)
         {
             DisplayDialogOverApps(context,number);
         }
@@ -125,13 +139,24 @@ public class PhoneStateReceiver extends BroadcastReceiver {
             }
         });
 
-
+        String dialogPosition=preferences.getString("DialogPosition","Center");
         params1.height = dpToPx(150,context);
         params1.width = metrics.widthPixels-40;
         params1.x = 0;
-        params1.y = -metrics.heightPixels/2;
         params1.format = PixelFormat.TRANSLUCENT;
 
+        if (dialogPosition.equals("Top"))
+        {
+            params1.y = -metrics.heightPixels/2;
+        }
+        else if (dialogPosition.equals("Center"))
+        {
+            params1.y = 0;
+        }
+        else if (dialogPosition.equals("Bottom"))
+        {
+            params1.y = metrics.heightPixels/2;
+        }
         wm.addView(view1, params1);
     }
 
