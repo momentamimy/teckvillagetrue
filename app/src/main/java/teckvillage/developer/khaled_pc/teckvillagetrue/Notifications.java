@@ -6,16 +6,31 @@ import android.support.v7.widget.RecyclerView;
 import android.support.v7.widget.Toolbar;
 import android.view.MenuItem;
 
+import java.util.ArrayList;
+
+import teckvillage.developer.khaled_pc.teckvillagetrue.Controller.CustomNotificationRecyclerViewAdapter;
+import teckvillage.developer.khaled_pc.teckvillagetrue.model.MessageInfo;
+
 public class Notifications extends AppCompatActivity {
 
     RecyclerView NotificationRecyclerview;
 
+    ArrayList<MessageInfo> messageInfos;
+    CustomNotificationRecyclerViewAdapter customNotificationRecyclerViewAdapter;
     @Override
     protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
         setContentView(R.layout.activity_notifications);
 
+        messageInfos=new ArrayList<>();
 
+
+        MessageInfo info=new MessageInfo("","WhoCaller","you can send SMS messages to multiple Contacts");
+        MessageInfo info1=new MessageInfo("","WhoCaller","you can modify position of Caller Dialog");
+
+
+        messageInfos.add(info);
+        messageInfos.add(info1);
 
         getSupportActionBar().setTitle("Notification");
         getSupportActionBar().setDisplayShowHomeEnabled(true);   //back button on App Bar
@@ -23,7 +38,11 @@ public class Notifications extends AppCompatActivity {
 
 
         NotificationRecyclerview=findViewById(R.id.notificationRecyclerview);
+        customNotificationRecyclerViewAdapter=new CustomNotificationRecyclerViewAdapter(messageInfos,getApplicationContext());
 
+
+        NotificationRecyclerview.setAdapter(customNotificationRecyclerViewAdapter);
+        customNotificationRecyclerViewAdapter.notifyDataSetChanged();
     }
 
     @Override

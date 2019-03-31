@@ -3,7 +3,10 @@
         xmlns:android="http://schemas.android.com/apk/res/android"
         xmlns:tools="http://schemas.android.com/tools"
         android:layout_width="match_parent"
-        android:layout_height="wrap_content">
+        android:layout_height="wrap_content"
+    android:paddingTop="5dp"
+    android:paddingBottom="5dp"
+    >
 
         <ProgressBar
             android:id="@+id/progress"
@@ -23,8 +26,8 @@
 
         <de.hdodenhof.circleimageview.CircleImageView
             android:id="@+id/contact_img_log_recycle"
-            android:layout_width="45dp"
-            android:layout_height="45dp"
+            android:layout_width="50dp"
+            android:layout_height="50dp"
             android:layout_marginStart="20dp"
             android:layout_marginEnd="10dp"
             android:layout_marginVertical="10dp"
@@ -55,8 +58,8 @@
             android:layout_width="wrap_content"
             android:layout_height="wrap_content"
             android:text="Abdalla Kamash"
+            android:textStyle="bold"
             android:textSize="16sp"
-
             android:textColor="@android:color/black"
             />
 
@@ -78,22 +81,6 @@
             android:layout_toRightOf="@+id/contact_img_log_recycle"
             />
 
-    <TextView
-        android:id="@+id/report"
-        android:layout_width="wrap_content"
-        android:layout_height="wrap_content"
-        android:text="0 report"
-        android:textSize="12sp"
-        android:textColor="@color/redColor"
-        android:maxLines="1"
-        android:layout_marginTop="1dp"
-        android:layout_marginStart="10dp"
-        android:layout_marginLeft="10dp"
-        android:layout_marginEnd="10dp"
-        android:layout_below="@+id/text_sms_message"
-        android:layout_toEndOf="@+id/contact_img_log_recycle"
-        android:layout_toRightOf="@+id/contact_img_log_recycle"
-        android:visibility="gone"/>
 
         <TextView
             android:id="@+id/date_sms_message"

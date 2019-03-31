@@ -40,6 +40,8 @@ import static teckvillage.developer.khaled_pc.teckvillagetrue.FragMessageContact
 import static teckvillage.developer.khaled_pc.teckvillagetrue.FragMessageContact.createContactsloader;
 import static teckvillage.developer.khaled_pc.teckvillagetrue.FragMessageOthers.allMessageOtherInfos;
 import static teckvillage.developer.khaled_pc.teckvillagetrue.FragMessageOthers.createOthersloader;
+import static teckvillage.developer.khaled_pc.teckvillagetrue.FragMessageSpam.allMessageSpamInfos;
+import static teckvillage.developer.khaled_pc.teckvillagetrue.FragMessageSpam.createSpamloader;
 
 
 public class Message_Fragment extends Fragment implements LoaderManager.LoaderCallbacks<Cursor> , OnBackPressedListener{
@@ -182,6 +184,7 @@ public class Message_Fragment extends Fragment implements LoaderManager.LoaderCa
         messageInfos.clear();
         allMessageOtherInfos.clear();
         allMessageContactInfos.clear();
+        allMessageSpamInfos.clear();
         int indextype=data.getColumnIndex("type");
         int indexBody = data.getColumnIndex("body");
         int indexAddress = data.getColumnIndex("address");
@@ -220,7 +223,14 @@ public class Message_Fragment extends Fragment implements LoaderManager.LoaderCa
                         }
                         else
                         {
-                            info.setTypeMessage("others");//ohters or spanm :to be continue
+                            if (info.logAddress.matches(regex)&&info.logAddress.length()<6)
+                            {
+                                info.setTypeMessage("spam");//ohters or spanm :to be continue
+                            }
+                            else
+                            {
+                                info.setTypeMessage("others");//ohters or spanm :to be continue
+                            }
                         }
                         messageInfos.add(info);
                     }
@@ -238,10 +248,15 @@ public class Message_Fragment extends Fragment implements LoaderManager.LoaderCa
             {
                 allMessageOtherInfos.add(messageInfos.get(i));
             }
+            else if (messageInfos.get(i).getTypeMessage().equals("spam"))
+            {
+                allMessageSpamInfos.add(messageInfos.get(i));
+            }
         }
         DismissLoadingContactToast();
         createOthersloader();
         createContactsloader();
+//        createSpamloader();
     }
 
     @Override

@@ -99,4 +99,8 @@ public class MessageInfo {
 
     }
 
+    public MessageInfo(String imageUrl,String logName,String logMessage)
+    {
+
+    }
 }

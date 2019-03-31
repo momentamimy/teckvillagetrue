@@ -39,7 +39,6 @@ public class FragMessageContact extends Fragment {
     ArrayList<UserContactData> userContactData;
 
     private static FragMessageOthers inst;
-    ArrayList<String> smsMessagesList = new ArrayList<String>();
     static ArrayList<MessageInfo> contactMessageInfos=new ArrayList<>();
     static ArrayList<MessageInfo> allMessageContactInfos=new ArrayList<>();
     ListView smsListView;
@@ -78,6 +77,11 @@ public class FragMessageContact extends Fragment {
                 intent.putExtra("LogSMSName",contactMessageInfos.get(position).logName);
                 intent.putExtra("LogSMSAddress",contactMessageInfos.get(position).logAddress);
                 startActivity(intent);
+
+                MessageInfo info=contactMessageInfos.get(position);
+                info.setRead("true");
+                contactMessageInfos.set(position,info);
+                customCotactsListViewAdapter.notifyDataSetChanged();
             }
         });
         smsListView.setOnScrollListener(new AbsListView.OnScrollListener() {

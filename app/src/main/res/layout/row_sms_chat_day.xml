@@ -4,7 +4,8 @@
     android:layout_width="match_parent"
     android:layout_height="wrap_content"
     xmlns:app="http://schemas.android.com/apk/res-auto"
-    android:paddingVertical="5dp">
+    android:paddingTop="5dp"
+    android:paddingBottom="5dp">
 
     <TextView
         android:id="@+id/Day_Date"
@@ -14,7 +15,10 @@
         android:gravity="center"
         android:layout_centerHorizontal="true"
         android:background="@drawable/day_date_bgd"
-        android:visibility="visible"/>
+        android:visibility="visible"
+        android:textSize="12dp"
+        android:paddingRight="15dp"
+        android:paddingLeft="15dp" />
 
     <RelativeLayout
         android:layout_width="match_parent"

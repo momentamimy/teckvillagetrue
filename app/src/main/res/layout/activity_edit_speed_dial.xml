@@ -76,6 +76,5 @@
         android:layout_below="@+id/Voice_Mail_Layout"
         android:layout_width="wrap_content"
         android:layout_height="wrap_content"
-        android:divider="@null"
-        android:dividerHeight="0dp"></ListView>
+        android:divider="@null"></ListView>
 </RelativeLayout>

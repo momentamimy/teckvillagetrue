@@ -18,16 +18,15 @@ import java.util.Calendar;
 import teckvillage.developer.khaled_pc.teckvillagetrue.R;
 import teckvillage.developer.khaled_pc.teckvillagetrue.model.MessageInfo;
 
-public class CustomListViewAdapter extends ArrayAdapter<MessageInfo> {
+public class CustomListViewChatAdapter extends ArrayAdapter<MessageInfo> {
 
     private ArrayList<MessageInfo> dataSet;
     Context mContext;
 
-    public CustomListViewAdapter(ArrayList<MessageInfo> data, Context context) {
+    public CustomListViewChatAdapter(ArrayList<MessageInfo> data, Context context) {
         super(context, R.layout.row_message, data);
         this.dataSet = data;
         this.mContext = context;
-
     }
 
     private int lastPosition = -1;
@@ -40,12 +39,9 @@ public class CustomListViewAdapter extends ArrayAdapter<MessageInfo> {
 
         final View result;
 
-
-
             LayoutInflater inflater = LayoutInflater.from(getContext());
-            convertView = inflater.inflate(R.layout.row_message, parent, false);
+            convertView = inflater.inflate(R.layout.row_message_chat, parent, false);
 
-            ImageView contactPhoto=convertView.findViewById(R.id.contact_img_log_recycle);
             ImageView dot=convertView.findViewById(R.id.DOT);
             TextView logName = (TextView) convertView.findViewById(R.id.name_of_log);
             TextView textMessage = convertView.findViewById(R.id.text_sms_message);
@@ -84,7 +80,6 @@ public class CustomListViewAdapter extends ArrayAdapter<MessageInfo> {
 
             logName.setText(dataModel.logName);
             textMessage.setText(dataModel.logMessage);
-        Log.d("paaaaalleeeeeeez",dataModel.typeMessage);
             if (dataModel.type.equals("5"))
             {
                 notSentIcon.setVisibility(View.VISIBLE);
@@ -94,7 +89,6 @@ public class CustomListViewAdapter extends ArrayAdapter<MessageInfo> {
             if (dataModel.read.equals("1"))
             {
                 Log.d("dada5wqeqe","true");
-                logName.setTypeface(logName.getTypeface(), Typeface.NORMAL);
                 textMessage.setTypeface(textMessage.getTypeface(), Typeface.NORMAL);
                 messageDate.setTypeface(messageDate.getTypeface(), Typeface.NORMAL);
                 dot.setVisibility(View.GONE);
@@ -102,21 +96,9 @@ public class CustomListViewAdapter extends ArrayAdapter<MessageInfo> {
             else if (dataModel.read.equals("0"))
             {
                 Log.d("dada5wqeqe","false");
-                logName.setTypeface(logName.getTypeface(), Typeface.BOLD);
                 textMessage.setTypeface(textMessage.getTypeface(), Typeface.BOLD);
                 messageDate.setTypeface(messageDate.getTypeface(), Typeface.BOLD);
                 dot.setVisibility(View.VISIBLE);
-            }
-
-
-            if (dataModel.getTypeMessage().equals("spam"))
-            {
-                int num=0;
-                TextView report=convertView.findViewById(R.id.report);
-                //report.setVisibility(View.VISIBLE);
-                report.setText(num+" report");
-
-                contactPhoto.setImageResource(R.drawable.ic_nurse_red);
             }
             // Return the completed view to render on screen
             return convertView;
