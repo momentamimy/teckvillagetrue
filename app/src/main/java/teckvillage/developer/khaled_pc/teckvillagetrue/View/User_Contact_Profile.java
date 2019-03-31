@@ -19,10 +19,14 @@ import android.widget.LinearLayout;
 import android.widget.TextView;
 import android.widget.Toast;
 
+import java.util.ArrayList;
+import java.util.List;
+
 import de.hdodenhof.circleimageview.CircleImageView;
 import teckvillage.developer.khaled_pc.teckvillagetrue.R;
 import teckvillage.developer.khaled_pc.teckvillagetrue.SMS_MessagesChat;
 import teckvillage.developer.khaled_pc.teckvillagetrue.model.database.Database_Helper;
+import teckvillage.developer.khaled_pc.teckvillagetrue.model.database.tables.block;
 
 public class User_Contact_Profile extends AppCompatActivity {
 
@@ -34,6 +38,7 @@ public class User_Contact_Profile extends AppCompatActivity {
     Database_Helper db;
     ImageView blockimagemake;
     TextView blockred;
+    List<block> BlockInfo;
 
 
     @Override
@@ -54,6 +59,9 @@ public class User_Contact_Profile extends AppCompatActivity {
         blockred=findViewById(R.id.blocktextred);
         db=new Database_Helper(this);
 
+        BlockInfo=new ArrayList<block>();
+
+
         id=getIntent().getLongExtra("ContactID",0);
 
         if(id==0){
@@ -63,6 +71,18 @@ public class User_Contact_Profile extends AppCompatActivity {
             getContactDetails(id);
 
         }
+
+
+        BlockInfo=db.getAllBlocklist();
+
+        for(int i=0;i < BlockInfo.size();i++){
+
+            if(phonenumee.getText().toString().equalsIgnoreCase(BlockInfo.get(i).getNumber())){
+                blockimagemake.setImageResource(R.drawable.ic_rejected_call);
+                blockred.setTextColor(Color.parseColor("#f53131"));
+            }
+        }
+
 
 
         backarrow.setOnClickListener(new View.OnClickListener() {

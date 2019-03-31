@@ -4,6 +4,7 @@ import android.Manifest;
 import android.content.Intent;
 import android.content.pm.PackageManager;
 import android.database.Cursor;
+import android.graphics.Color;
 import android.net.Uri;
 import android.os.Bundle;
 import android.provider.ContactsContract;
@@ -11,14 +12,20 @@ import android.support.v4.app.ActivityCompat;
 import android.support.v7.app.AppCompatActivity;
 import android.util.Log;
 import android.view.View;
+import android.widget.ImageView;
 import android.widget.LinearLayout;
 import android.widget.TextView;
 import android.widget.Toast;
+
+import java.util.ArrayList;
+import java.util.List;
 
 import de.hdodenhof.circleimageview.CircleImageView;
 import teckvillage.developer.khaled_pc.teckvillagetrue.R;
 import teckvillage.developer.khaled_pc.teckvillagetrue.SMS_MessagesChat;
 import teckvillage.developer.khaled_pc.teckvillagetrue.model.Get_Calls_Log;
+import teckvillage.developer.khaled_pc.teckvillagetrue.model.database.Database_Helper;
+import teckvillage.developer.khaled_pc.teckvillagetrue.model.database.tables.block;
 
 public class User_Contact_Profile_From_log_list extends AppCompatActivity {
 
@@ -27,7 +34,10 @@ public class User_Contact_Profile_From_log_list extends AppCompatActivity {
     LinearLayout makecall,sendmessage,makeblock;
     View backarrow,moreoption;
     String number;
-
+    ImageView blockimagemake;
+    TextView blockred;
+    Database_Helper db;
+    List<block> BlockInfo;
 
     @Override
     protected void onCreate(Bundle savedInstanceState) {
@@ -44,6 +54,10 @@ public class User_Contact_Profile_From_log_list extends AppCompatActivity {
         backarrow=findViewById(R.id.backarrow);
         moreoption=findViewById(R.id.moreoptionusercontact);
         phonenumee=findViewById(R.id.contactuserphonenumber);
+        blockimagemake=findViewById(R.id.blockimagered);
+        blockred=findViewById(R.id.blocktextred);
+        db=new Database_Helper(this);
+        BlockInfo=new ArrayList<block>();
 
         number=getIntent().getStringExtra("ContactNUm");
 
@@ -62,6 +76,17 @@ public class User_Contact_Profile_From_log_list extends AppCompatActivity {
 
 
 
+        }
+
+
+        BlockInfo=db.getAllBlocklist();
+
+        for(int i=0;i < BlockInfo.size();i++){
+
+            if(phonenumee.getText().toString().equalsIgnoreCase(BlockInfo.get(i).getNumber())){
+                blockimagemake.setImageResource(R.drawable.ic_rejected_call);
+                blockred.setTextColor(Color.parseColor("#f53131"));
+            }
         }
 
 
@@ -111,6 +136,26 @@ public class User_Contact_Profile_From_log_list extends AppCompatActivity {
                 }
             }
         });
+
+
+        makeblock.setOnClickListener(new View.OnClickListener() {
+            @Override
+            public void onClick(View v) {
+
+                String num=phonenumee.getText().toString();
+                String name=nameofcontact.getText().toString();
+                if(num != null&& !num.isEmpty()){
+                    db.insertBlock(name,num);
+                    blockimagemake.setImageResource(R.drawable.ic_rejected_call);
+                    blockred.setTextColor(Color.parseColor("#f53131"));
+                }
+
+
+
+
+            }
+        });
+
 
 
     }
