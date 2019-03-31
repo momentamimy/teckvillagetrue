@@ -48,8 +48,8 @@ public class Get_Calls_Log {
     Context context;
     Permission permission;
     ArrayList<LogInfo> loglist;
-    String contactsName = "";
-    int TypeOfNumph;
+    public String contactsName = "";
+    public  int TypeOfNumph;
 
     ListView list_view2;
     ArrayList<Integer> listdata2;
@@ -336,7 +336,7 @@ public class Get_Calls_Log {
         return photo;
     }
 
-    boolean contactExists(String number) {
+    public  boolean contactExists(String number) {
         // number is the phone number
         Uri lookupUri = Uri.withAppendedPath(ContactsContract.PhoneLookup.CONTENT_FILTER_URI, Uri.encode(number));
         String[] mPhoneNumberProjection = {ContactsContract.PhoneLookup.NUMBER, ContactsContract.PhoneLookup.DISPLAY_NAME,ContactsContract.PhoneLookup.TYPE};

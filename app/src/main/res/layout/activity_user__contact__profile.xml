@@ -110,8 +110,8 @@
                 android:orientation="vertical">
 
                 <ImageView
-                    android:layout_width="28dp"
-                    android:layout_height="25dp"
+                    android:layout_width="24dp"
+                    android:layout_height="22dp"
                     android:gravity="center"
                     android:src="@drawable/phone_call_primary"
                     />
@@ -141,8 +141,8 @@
                 android:orientation="vertical">
 
                 <ImageView
-                    android:layout_width="26dp"
-                    android:layout_height="25dp"
+                    android:layout_width="24dp"
+                    android:layout_height="22dp"
                     android:gravity="center"
                     android:src="@drawable/ic_chat_primary"
                     />
@@ -173,8 +173,8 @@
                 android:orientation="vertical">
 
                 <ImageView
-                    android:layout_width="28dp"
-                    android:layout_height="25dp"
+                    android:layout_width="25dp"
+                    android:layout_height="22dp"
                     android:gravity="center"
                     android:src="@drawable/ic_block_primary_24dp"
                     />

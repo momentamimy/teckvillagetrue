@@ -44,6 +44,7 @@ import java.util.HashSet;
 
 import teckvillage.developer.khaled_pc.teckvillagetrue.Camera_Recognition_package.Camera_Recognition;
 
+import teckvillage.developer.khaled_pc.teckvillagetrue.View.BlockList;
 import teckvillage.developer.khaled_pc.teckvillagetrue.View.ChatFragment;
 
 
@@ -323,7 +324,12 @@ public class MainActivity extends AppCompatActivity implements NavigationView.On
         }else if (id == R.id.nav_edit_profile) {
 
             startActivity(new Intent(getApplicationContext(),UserProfileActivity.class));
+
+        }else if (id == R.id.nav_blocklist) {
+
+            startActivity(new Intent(getApplicationContext(),BlockList.class));
         }
+
 
         DrawerLayout drawer = (DrawerLayout) findViewById(R.id.drawer_layout);
         drawer.closeDrawer(GravityCompat.START);

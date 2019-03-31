@@ -3,14 +3,12 @@ package teckvillage.developer.khaled_pc.teckvillagetrue.View;
 import android.Manifest;
 import android.content.Intent;
 import android.content.pm.PackageManager;
-import android.content.res.Resources;
 import android.database.Cursor;
-import android.graphics.drawable.Drawable;
 import android.net.Uri;
+import android.os.Bundle;
 import android.provider.ContactsContract;
 import android.support.v4.app.ActivityCompat;
 import android.support.v7.app.AppCompatActivity;
-import android.os.Bundle;
 import android.util.Log;
 import android.view.View;
 import android.widget.LinearLayout;
@@ -20,14 +18,15 @@ import android.widget.Toast;
 import de.hdodenhof.circleimageview.CircleImageView;
 import teckvillage.developer.khaled_pc.teckvillagetrue.R;
 import teckvillage.developer.khaled_pc.teckvillagetrue.SMS_MessagesChat;
+import teckvillage.developer.khaled_pc.teckvillagetrue.model.Get_Calls_Log;
 
-public class User_Contact_Profile extends AppCompatActivity {
+public class User_Contact_Profile_From_log_list extends AppCompatActivity {
 
     TextView nameofcontact,tag,phonenumee;
     CircleImageView profile_pic;
     LinearLayout makecall,sendmessage,makeblock;
     View backarrow,moreoption;
-    long id;
+    String number;
 
 
     @Override
@@ -35,6 +34,7 @@ public class User_Contact_Profile extends AppCompatActivity {
         super.onCreate(savedInstanceState);
         setContentView(R.layout.activity_user__contact__profile);
 
+        Get_Calls_Log get_calls_log=new Get_Calls_Log(this);
         nameofcontact=findViewById(R.id.name);
         profile_pic=findViewById(R.id.profilepic);
         tag=findViewById(R.id.tag);
@@ -45,13 +45,22 @@ public class User_Contact_Profile extends AppCompatActivity {
         moreoption=findViewById(R.id.moreoptionusercontact);
         phonenumee=findViewById(R.id.contactuserphonenumber);
 
-        id=getIntent().getLongExtra("ContactID",0);
+        number=getIntent().getStringExtra("ContactNUm");
 
-        if(id==0){
+        if(number==null){
             Toast.makeText(this, "Error Loading", Toast.LENGTH_LONG).show();
         }else {
 
-            getContactDetails(id);
+            //getContactDetails(id);
+            if(get_calls_log.contactExists(number)){
+                nameofcontact.setText(get_calls_log.contactsName);
+                phonenumee.setText(number);
+            }else {
+                nameofcontact.setText(number);
+                phonenumee.setText(number);
+            }
+
+
 
         }
 
@@ -69,7 +78,7 @@ public class User_Contact_Profile extends AppCompatActivity {
                 Intent intent = new Intent(Intent.ACTION_CALL);
                 if(phonenumee.getText().toString()!=null&&phonenumee.getText().toString().length()>0){
                     intent.setData(Uri.parse("tel:" + phonenumee.getText().toString()));
-                    if (ActivityCompat.checkSelfPermission(User_Contact_Profile.this, Manifest.permission.CALL_PHONE) != PackageManager.PERMISSION_GRANTED) {
+                    if (ActivityCompat.checkSelfPermission(User_Contact_Profile_From_log_list.this, Manifest.permission.CALL_PHONE) != PackageManager.PERMISSION_GRANTED) {
                         // TODO: Consider calling
                         //    ActivityCompat#requestPermissions
                         // here to request the missing permissions, and then overriding
@@ -91,25 +100,18 @@ public class User_Contact_Profile extends AppCompatActivity {
         sendmessage.setOnClickListener(new View.OnClickListener() {
             @Override
             public void onClick(View v) {
-                Intent intent = new Intent(User_Contact_Profile.this,SMS_MessagesChat.class);
+                Intent intent = new Intent(User_Contact_Profile_From_log_list.this,SMS_MessagesChat.class);
                 intent.putExtra("LogSMSName",nameofcontact.getText().toString());
                 String num=phonenumee.getText().toString();
                 if(num != null&& !num.isEmpty()){
                     intent.putExtra("LogSMSAddress",num);
                     startActivity(intent);
                 }else {
-                    Toast.makeText(User_Contact_Profile.this, "Can't send message to this number", Toast.LENGTH_LONG).show();
+                    Toast.makeText(User_Contact_Profile_From_log_list.this, "Can't send message to this number", Toast.LENGTH_LONG).show();
                 }
             }
         });
 
-
-        makeblock.setOnClickListener(new View.OnClickListener() {
-            @Override
-            public void onClick(View v) {
-
-            }
-        });
 
     }
 

@@ -23,6 +23,7 @@ import teckvillage.developer.khaled_pc.teckvillagetrue.R;
 import teckvillage.developer.khaled_pc.teckvillagetrue.SMS_MessagesChat;
 import teckvillage.developer.khaled_pc.teckvillagetrue.View.LogHolder;
 import teckvillage.developer.khaled_pc.teckvillagetrue.View.User_Contact_Profile;
+import teckvillage.developer.khaled_pc.teckvillagetrue.View.User_Contact_Profile_From_log_list;
 import teckvillage.developer.khaled_pc.teckvillagetrue.model.LogInfo;
 
 public class LogAdapter extends RecyclerView.Adapter<LogHolder> {
@@ -139,9 +140,14 @@ public class LogAdapter extends RecyclerView.Adapter<LogHolder> {
                 @Override
                 public void onClick(View v) {
                    // Toast.makeText(context, "You Click me", Toast.LENGTH_LONG).show();
-                    //Intent intent = new Intent(context,User_Contact_Profile.class);
-                    //intent.putExtra("LogSMSName",itemList.get(position).logName);
-                    //context.startActivity(intent);
+                    Intent intent = new Intent(context,User_Contact_Profile_From_log_list.class);
+                    String num=itemList.get(position).getNumber();
+                    if(num != null&& !num.isEmpty()){
+                        intent.putExtra("ContactNUm",num);
+                        context.startActivity(intent);
+                    }else {
+                        Toast.makeText(context, "Can't open profile to this number", Toast.LENGTH_LONG).show();
+                    }
                 }
             });
 

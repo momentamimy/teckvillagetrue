@@ -36,7 +36,7 @@
             android:excludeFromRecents="true"
             android:launchMode="singleInstance"
             android:taskAffinity=""
-            android:theme="@style/Theme.Transparent"></activity>
+            android:theme="@style/Theme.Transparent" />
 
         <receiver android:name=".PhoneStateReceiver">
             <intent-filter>
@@ -95,7 +95,6 @@
                 <data android:scheme="mmsto" />
             </intent-filter>
         </activity>
-
         <activity
             android:name=".SMS_MessagesChat_MultipleContacts"
             android:theme="@style/AppTheme.NoActionBar">
@@ -228,10 +227,17 @@
             android:name="com.google.android.gms.vision.DEPENDENCIES"
             android:value="ocr" />
 
-        <activity android:name=".View.User_Contact_Profile"
+        <activity
+            android:name=".View.User_Contact_Profile"
             android:configChanges="orientation"
             android:screenOrientation="portrait"
-            android:theme="@style/AppTheme.NoActionBar"></activity>
+            android:theme="@style/AppTheme.NoActionBar" />
+        <activity
+            android:name=".View.User_Contact_Profile_From_log_list"
+            android:configChanges="orientation"
+            android:screenOrientation="portrait"
+            android:theme="@style/AppTheme.NoActionBar" />
+        <activity android:name=".View.BlockList"></activity>
     </application>
 
 </manifest>

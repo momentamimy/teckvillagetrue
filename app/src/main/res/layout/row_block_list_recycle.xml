@@ -1,0 +1,91 @@
+<?xml version="1.0" encoding="utf-8"?>
+<RelativeLayout
+    xmlns:android="http://schemas.android.com/apk/res/android"
+    android:layout_width="match_parent"
+    android:layout_height="match_parent">
+
+
+    <LinearLayout
+        xmlns:android="http://schemas.android.com/apk/res/android"
+        android:orientation="horizontal"
+        android:layout_width="match_parent"
+        android:layout_height="wrap_content"
+        android:background="?android:attr/selectableItemBackground"
+        >
+
+
+        <de.hdodenhof.circleimageview.CircleImageView
+            android:id="@+id/contact_img_log_recycle"
+            android:layout_width="45dp"
+            android:layout_height="45dp"
+            android:layout_marginStart="20dp"
+            android:layout_marginEnd="10dp"
+            android:layout_marginVertical="15dp"
+            android:src="@drawable/ic_nurse_red"
+            android:layout_marginLeft="15dp"
+            android:layout_marginRight="10dp" />
+
+        <RelativeLayout
+            android:id="@+id/firstl"
+            android:layout_width="0dp"
+            android:layout_weight="5"
+            android:layout_marginTop="18dp"
+            android:layout_height="wrap_content">
+
+            <TextView
+                android:id="@+id/name_of_blocklist"
+                android:layout_marginStart="8dp"
+                android:layout_marginLeft="8dp"
+                android:layout_width="wrap_content"
+                android:layout_height="wrap_content"
+                android:text="Abdalla Kamash"
+                android:textSize="16sp"
+                android:paddingEnd="10dp"
+                android:paddingRight="10dp"
+                android:textDirection="ltr"
+                android:textColor="@android:color/black"
+                />
+
+
+
+
+            <TextView
+                android:id="@+id/num_blocklist"
+                android:layout_width="wrap_content"
+                android:layout_height="wrap_content"
+                android:text="01280945456"
+                android:textSize="14sp"
+                android:layout_marginTop="1dp"
+                android:layout_marginStart="8dp"
+                android:layout_marginLeft="8dp"
+                android:layout_below="@+id/name_of_blocklist"
+                />
+
+
+        </RelativeLayout>
+
+
+
+        <RelativeLayout
+            android:id="@+id/Removefromblock"
+            android:layout_width="0dp"
+            android:layout_weight="1.2"
+            android:layout_height="match_parent"
+            android:background="?android:attr/selectableItemBackground"
+            >
+
+            <ImageView
+                android:layout_width="20dp"
+                android:layout_height="wrap_content"
+                android:layout_centerInParent="true"
+                android:src="@drawable/ic_negative_sign_button"
+                android:adjustViewBounds="true"
+                />
+
+        </RelativeLayout>
+
+
+
+    </LinearLayout>
+
+</RelativeLayout>
