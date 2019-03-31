@@ -13,6 +13,7 @@ import android.view.LayoutInflater;
 import android.view.View;
 import android.view.ViewGroup;
 import android.widget.ImageView;
+import android.widget.RelativeLayout;
 import android.widget.SectionIndexer;
 import android.widget.TextView;
 import android.widget.Toast;
@@ -23,6 +24,7 @@ import de.hdodenhof.circleimageview.CircleImageView;
 import in.myinnos.alphabetsindexfastscrollrecycler.utilities_fs.StringMatcher;
 import teckvillage.developer.khaled_pc.teckvillagetrue.R;
 import teckvillage.developer.khaled_pc.teckvillagetrue.SMS_MessagesChat;
+import teckvillage.developer.khaled_pc.teckvillagetrue.View.User_Contact_Profile;
 import teckvillage.developer.khaled_pc.teckvillagetrue.model.UserContactData;
 
 
@@ -130,7 +132,7 @@ public class UserContactsAdapters extends RecyclerView.Adapter<UserContactsAdapt
                 }
             });
 
-           holder.chaticon.setOnClickListener(new View.OnClickListener() {
+           holder.container_chaticon.setOnClickListener(new View.OnClickListener() {
                @Override
                public void onClick(View v) {
                    intent = new Intent(context,SMS_MessagesChat.class);
@@ -150,6 +152,17 @@ public class UserContactsAdapters extends RecyclerView.Adapter<UserContactsAdapt
                        DisplayArraylistOfPhonenumberDialog(phones);
 
                    }
+
+
+           holder.openProfile.setOnClickListener(new View.OnClickListener() {
+               @Override
+               public void onClick(View v) {
+                   Intent intent2 = new Intent(context,User_Contact_Profile.class);
+                   intent2.putExtra("ContactID",mDataArray.get(position).getId());
+                   context.startActivity(intent2);
+                   Log.w("ssf","asf");
+               }
+           });
 
 
 
@@ -179,6 +192,7 @@ public class UserContactsAdapters extends RecyclerView.Adapter<UserContactsAdapt
         TextView country2;
         TextView letter;
         ImageView chaticon;
+        RelativeLayout container_chaticon,openProfile;
 
           ViewHolder(View itemView) {
             super(itemView);
@@ -187,6 +201,8 @@ public class UserContactsAdapters extends RecyclerView.Adapter<UserContactsAdapt
             country2=itemView.findViewById(R.id.country);
             letter=itemView.findViewById(R.id.letter);
             chaticon=itemView.findViewById(R.id.chat_user_contact);
+            container_chaticon=itemView.findViewById(R.id.container_lay_chat_user_contact);
+              openProfile=itemView.findViewById(R.id.fir_layCon);
 
         }
     }

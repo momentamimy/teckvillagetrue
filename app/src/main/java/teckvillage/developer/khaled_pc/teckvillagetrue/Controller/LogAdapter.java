@@ -22,6 +22,7 @@ import teckvillage.developer.khaled_pc.teckvillagetrue.MainActivity;
 import teckvillage.developer.khaled_pc.teckvillagetrue.R;
 import teckvillage.developer.khaled_pc.teckvillagetrue.SMS_MessagesChat;
 import teckvillage.developer.khaled_pc.teckvillagetrue.View.LogHolder;
+import teckvillage.developer.khaled_pc.teckvillagetrue.View.User_Contact_Profile;
 import teckvillage.developer.khaled_pc.teckvillagetrue.model.LogInfo;
 
 public class LogAdapter extends RecyclerView.Adapter<LogHolder> {
@@ -137,7 +138,10 @@ public class LogAdapter extends RecyclerView.Adapter<LogHolder> {
             holder.infoicon.setOnClickListener(new View.OnClickListener() {
                 @Override
                 public void onClick(View v) {
-                    Toast.makeText(context, "You Click me", Toast.LENGTH_LONG).show();
+                   // Toast.makeText(context, "You Click me", Toast.LENGTH_LONG).show();
+                    //Intent intent = new Intent(context,User_Contact_Profile.class);
+                    //intent.putExtra("LogSMSName",itemList.get(position).logName);
+                    //context.startActivity(intent);
                 }
             });
 

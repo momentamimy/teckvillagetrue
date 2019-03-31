@@ -15,6 +15,7 @@
         android:id="@+id/layoutPictures"
         android:layout_width="wrap_content"
         android:layout_height="wrap_content">
+
         <com.intrusoft.squint.DiagonalView
             android:id="@+id/diagonal"
             android:layout_width="match_parent"
@@ -24,6 +25,7 @@
             app:diagonalDirection="left_to_right"
             app:angle="12"
             app:gravity="right" />
+
         <de.hdodenhof.circleimageview.CircleImageView
             android:id="@+id/UserPhoto"
             android:layout_width="120dp"
