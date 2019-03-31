@@ -62,7 +62,8 @@ public class Block_Adapter extends RecyclerView.Adapter<Block_List_Holder> {
               @Override
               public void onClick(View v) {
 
-                  onDeleteClick(context, itemList.get(position).getNumber(),itemList.get(position).getId());
+                  onDeleteClick(context, itemList.get(position).getNumber(),itemList.get(position).getId(), position);
+
               }
           });
         }
@@ -74,7 +75,7 @@ public class Block_Adapter extends RecyclerView.Adapter<Block_List_Holder> {
     }
 
 
-    public void onDeleteClick(final Context context, String number, final int id) {
+    public void onDeleteClick(final Context context, String number, final int id, final int position) {
 
         final AlertDialog.Builder alert = new AlertDialog.Builder(context);
         alert.setMessage("Unblock"+"'"+number+"' ?");
@@ -84,6 +85,8 @@ public class Block_Adapter extends RecyclerView.Adapter<Block_List_Holder> {
             public void onClick(DialogInterface dialog, int which) {
                 db=new Database_Helper(context);
                 db.deleteBlockByID(id);
+                itemList.remove(position);
+                notifyDataSetChanged();
                 dialog.dismiss();
             }
         });

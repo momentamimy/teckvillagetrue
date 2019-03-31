@@ -129,6 +129,13 @@ public class Database_Helper extends SQLiteOpenHelper {
         db.close();
     }
 
+    public void deleteBlockByNumber(String number) {
+        SQLiteDatabase db = this.getWritableDatabase();
+        db.delete(block.TABLE_NAME, block.COLUMN_NUMBER + " = ?",
+                new String[]{String.valueOf(number)});
+        db.close();
+    }
+
 
     public int updateblocksbyID(int id,String name,String city) {
         SQLiteDatabase db = this.getWritableDatabase();

@@ -39,6 +39,7 @@ public class User_Contact_Profile extends AppCompatActivity {
     ImageView blockimagemake;
     TextView blockred;
     List<block> BlockInfo;
+    boolean Bloceduser=false;
 
 
     @Override
@@ -80,6 +81,7 @@ public class User_Contact_Profile extends AppCompatActivity {
             if(phonenumee.getText().toString().equalsIgnoreCase(BlockInfo.get(i).getNumber())){
                 blockimagemake.setImageResource(R.drawable.ic_rejected_call);
                 blockred.setTextColor(Color.parseColor("#f53131"));
+                Bloceduser=true;
             }
         }
 
@@ -137,15 +139,22 @@ public class User_Contact_Profile extends AppCompatActivity {
             @Override
             public void onClick(View v) {
 
-                String num=phonenumee.getText().toString();
-                String name=nameofcontact.getText().toString();
-                if(num != null&& !num.isEmpty()){
-                    db.insertBlock(name,num);
-                    blockimagemake.setImageResource(R.drawable.ic_rejected_call);
-                    blockred.setTextColor(Color.parseColor("#f53131"));
-                }
+                    if(Bloceduser){
+                        db.deleteBlockByID((int) id);
+                        blockimagemake.setImageResource(R.drawable.ic_block_primary_24dp);
+                        blockred.setTextColor(Color.parseColor("#0089c0"));
+                        Bloceduser=false;
 
+                    }else {
+                        String num=phonenumee.getText().toString();
+                        String name=nameofcontact.getText().toString();
+                        if(num != null&& !num.isEmpty()){
+                            db.insertBlock(name,num);
+                            blockimagemake.setImageResource(R.drawable.ic_rejected_call);
+                            blockred.setTextColor(Color.parseColor("#f53131"));
+                        }
 
+                    }
 
 
             }
