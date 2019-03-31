@@ -23,6 +23,8 @@ import android.os.Build;
 import android.os.Bundle;
 import android.provider.CallLog;
 import android.provider.ContactsContract;
+import android.provider.Settings;
+import android.provider.VoicemailContract;
 import android.support.annotation.NonNull;
 import android.support.annotation.Nullable;
 import android.support.design.widget.CoordinatorLayout;
@@ -60,6 +62,7 @@ import android.widget.GridView;
 import android.widget.ImageView;
 import android.widget.RelativeLayout;
 import android.widget.TextView;
+import android.widget.Toast;
 
 import com.google.i18n.phonenumbers.NumberParseException;
 import com.google.i18n.phonenumbers.PhoneNumberUtil;
@@ -334,6 +337,8 @@ public class Main_Fagment extends Fragment implements OnBackPressedListener , Lo
         //make padlayout invisable
         callAnimDefault();
 
+
+
         fab.setOnClickListener(new View.OnClickListener() {
             @Override
             public void onClick(View v) {
@@ -371,10 +376,33 @@ public class Main_Fagment extends Fragment implements OnBackPressedListener , Lo
                         // for ActivityCompat#requestPermissions for more details.
                         return true;
                     }
-                    String num = tel.getVoiceMailNumber();
-                    Intent intent = new Intent(Intent.ACTION_CALL);
-                    intent.setData(Uri.parse("tel:" + num));
-                    startActivity(intent);
+                    String num = null;
+                    if (tel != null) {
+                        num = tel.getVoiceMailNumber();
+                    }
+                    if(num==null){
+
+                        AlertDialog.Builder builder = new AlertDialog.Builder(getActivity());
+                        builder.setMessage("Voicemail number not configured." +
+                                "Go to Call Settings to set the voicemail number.")
+                                .setCancelable(false)
+                                .setPositiveButton("OK", new DialogInterface.OnClickListener() {
+                                    public void onClick(DialogInterface dialog, int id) {
+                                        //do things
+                                        dialog.dismiss();
+                                    }
+                                });
+                        AlertDialog alert = builder.create();
+                        alert.show();
+
+                    }else {
+                        Intent intent = new Intent(Intent.ACTION_CALL);
+                        intent.setData(Uri.parse("voicemail:" + num));
+                        if (intent.resolveActivity(getActivity().getPackageManager()) != null) {
+                            startActivity(intent);
+                        }
+                    }
+
 
 
                 } else if (grid_num_tv.getText().toString().equals("0")) {
@@ -429,6 +457,7 @@ public class Main_Fagment extends Fragment implements OnBackPressedListener , Lo
                 return true;
             }
         });
+
         gridView.setOnItemClickListener(new AdapterView.OnItemClickListener() {
             @Override
             public void onItemClick(AdapterView<?> parent, View view, int position, long id) {
@@ -1230,7 +1259,7 @@ public class Main_Fagment extends Fragment implements OnBackPressedListener , Lo
                         typephone = "Pager";
                         break;
                     case ContactsContract.CommonDataKinds.Phone.TYPE_CUSTOM:
-                        typephone = "Custom";
+                        typephone = "Other";//Custom
                         break;
                     case ContactsContract.CommonDataKinds.Phone.TYPE_OTHER:
                         typephone = "Other";
@@ -1390,8 +1419,7 @@ public class Main_Fagment extends Fragment implements OnBackPressedListener , Lo
 
     void LoadTopTenContactsSync(){
         ProgressDialog  pd;
-        new AsyncTask<Void, Void, Void>()
-        {
+        new AsyncTask<Void, Void, List<ContactInfo>>() {
             @Override
             protected void onPreExecute()
             {
@@ -1400,19 +1428,19 @@ public class Main_Fagment extends Fragment implements OnBackPressedListener , Lo
             }// End of onPreExecute method
 
             @Override
-            protected Void doInBackground(Void... params)
+            protected List<ContactInfo>  doInBackground(Void... params)
             {
 
-                contactInfos55=  get_calls_log.getTopTenContacts();
+                contactInfos55 =  get_calls_log.getTopTenContacts();
 
-                return null;
+                return contactInfos55;
             }// End of doInBackground method
 
             @Override
-            protected void onPostExecute(Void result)
+            protected void onPostExecute(List<ContactInfo> result)
             {
                // pd.dismiss();
-                adaptertopten = new ContactAdapter(getActivity(), contactInfos55);
+                adaptertopten = new ContactAdapter(getActivity(), result);
                 contacts.setAdapter(adaptertopten);
                 toggleEmptyCases();
 

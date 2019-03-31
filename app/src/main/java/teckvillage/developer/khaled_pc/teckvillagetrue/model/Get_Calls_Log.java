@@ -692,7 +692,7 @@ public class Get_Calls_Log {
                 }
             }
 
-            loglist.add(new LogInfo(null, phName, dir, callDayTime, typephone, dateStringhour, phNumber,0));
+            loglist.add(new LogInfo(null, phName, dir, callDayTime, typephone, dateStringhour, phNumber,1));
         }
 
         managedCursor.close();

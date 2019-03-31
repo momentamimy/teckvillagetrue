@@ -1,17 +1,28 @@
 package teckvillage.developer.khaled_pc.teckvillagetrue.Controller;
 
+import android.content.ContentResolver;
 import android.content.Context;
+import android.content.DialogInterface;
+import android.content.Intent;
+import android.database.Cursor;
+import android.provider.ContactsContract;
+import android.support.v7.app.AlertDialog;
 import android.support.v7.widget.RecyclerView;
+import android.util.Log;
 import android.view.LayoutInflater;
 import android.view.View;
 import android.view.ViewGroup;
+import android.widget.ImageView;
 import android.widget.SectionIndexer;
 import android.widget.TextView;
+import android.widget.Toast;
+
 import java.util.ArrayList;
 import java.util.List;
 import de.hdodenhof.circleimageview.CircleImageView;
 import in.myinnos.alphabetsindexfastscrollrecycler.utilities_fs.StringMatcher;
 import teckvillage.developer.khaled_pc.teckvillagetrue.R;
+import teckvillage.developer.khaled_pc.teckvillagetrue.SMS_MessagesChat;
 import teckvillage.developer.khaled_pc.teckvillagetrue.model.UserContactData;
 
 
@@ -27,6 +38,7 @@ public class UserContactsAdapters extends RecyclerView.Adapter<UserContactsAdapt
     private List<UserContactData> mDataArray;
     private ArrayList<Integer> mSectionPositions;
     private String mSections =Character.toString((char)0x2605)+ "#ABCDEFGHIJKLMNOPQRSTUVWXYZ";
+    Intent intent;
 
     public UserContactsAdapters(Context context,List<UserContactData> mDataArray) {
         this.mDataArray=mDataArray;
@@ -105,7 +117,7 @@ public class UserContactsAdapters extends RecyclerView.Adapter<UserContactsAdapt
         }
 
     @Override
-    public void onBindViewHolder(final ViewHolder holder, int position) {
+    public void onBindViewHolder(final ViewHolder holder, final int position) {
         if(holder.contactName2!=null){
 
 
@@ -113,9 +125,36 @@ public class UserContactsAdapters extends RecyclerView.Adapter<UserContactsAdapt
            holder.contactCircleImageView2.setOnClickListener(new View.OnClickListener() {
                 @Override
                 public void onClick(View v) {
+
                    
                 }
             });
+
+           holder.chaticon.setOnClickListener(new View.OnClickListener() {
+               @Override
+               public void onClick(View v) {
+                   intent = new Intent(context,SMS_MessagesChat.class);
+                   intent.putExtra("LogSMSName",mDataArray.get(position).usercontacName);
+                   Log.w("gda",mDataArray.get(position).usercontacName);
+                   ArrayList<String> phones = new ArrayList<String>();
+                   phones= getphonenumberfromcontactID(mDataArray.get(position).getId());
+                   if(phones.size()==1){
+                       if(phones.get(0) != null&& !phones.get(0).isEmpty()){
+                           intent.putExtra("LogSMSAddress",phones.get(0));
+                           context.startActivity(intent);
+                       }else {
+                           Toast.makeText(context, "Can't send message to this number", Toast.LENGTH_LONG).show();
+                       }
+                   }else if(phones.size()>1){
+
+                       DisplayArraylistOfPhonenumberDialog(phones);
+
+                   }
+
+
+
+               }
+           });
         }
 
         if(holder.letter!=null){
@@ -139,6 +178,7 @@ public class UserContactsAdapters extends RecyclerView.Adapter<UserContactsAdapt
         TextView contactName2;
         TextView country2;
         TextView letter;
+        ImageView chaticon;
 
           ViewHolder(View itemView) {
             super(itemView);
@@ -146,7 +186,51 @@ public class UserContactsAdapters extends RecyclerView.Adapter<UserContactsAdapt
             contactName2=itemView.findViewById(R.id.nameofcontacts);
             country2=itemView.findViewById(R.id.country);
             letter=itemView.findViewById(R.id.letter);
+            chaticon=itemView.findViewById(R.id.chat_user_contact);
 
         }
+    }
+
+    public ArrayList<String> getphonenumberfromcontactID(long id){
+        ArrayList<String> phones = new ArrayList<String>();
+
+        ContentResolver cr = context.getContentResolver();
+        Cursor cursor = cr.query(
+                ContactsContract.CommonDataKinds.Phone.CONTENT_URI,
+                new String[] {  ContactsContract.CommonDataKinds.Phone.NUMBER},
+                ContactsContract.CommonDataKinds.Phone.CONTACT_ID +" = ?",
+                new String[]{String.valueOf(id)}, null);
+
+        while (cursor.moveToNext())
+        {
+            phones.add(cursor.getString(cursor.getColumnIndex(ContactsContract.CommonDataKinds.Phone.NUMBER)));
+        }
+
+        cursor.close();
+        return(phones);
+    }
+
+
+    void DisplayArraylistOfPhonenumberDialog(ArrayList<String> phonenumbers){
+
+        //Create sequence of items
+        final CharSequence[] phonenums = phonenumbers.toArray(new String[phonenumbers.size()]);
+        AlertDialog.Builder dialogBuilder = new AlertDialog.Builder(context);
+        dialogBuilder.setTitle("Select Phone Number");
+        dialogBuilder.setItems(phonenums, new DialogInterface.OnClickListener() {
+            public void onClick(DialogInterface dialog, int item) {
+                //String selectedText = phonenums[item].toString();
+                //Selected item in listview
+                //Open Dialog With Phone Number That is Selected From This Dialog
+                intent.putExtra("LogSMSAddress",phonenums[item].toString());
+                context.startActivity(intent);
+
+            }
+        });
+        //Create alert dialog object via builder
+        AlertDialog alertDialogObject = dialogBuilder.create();
+        //Show the dialog
+        alertDialogObject.show();
+
     }
 }

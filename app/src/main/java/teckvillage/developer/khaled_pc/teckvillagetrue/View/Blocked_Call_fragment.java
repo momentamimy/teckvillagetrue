@@ -36,6 +36,7 @@ public class Blocked_Call_fragment extends Fragment {
     LinearLayoutManager lLayout2;
     ArrayList<LogInfo> logInfos;
     LogAdapter adapter1;
+    TextView emptyrecycle;
 
     public Blocked_Call_fragment() {
         // Required empty public constructor
@@ -51,6 +52,8 @@ public class Blocked_Call_fragment extends Fragment {
          //Title
         TextView Activitytitle=view.findViewById(R.id.titleoffragment);
         Activitytitle.setText("Blocked");
+
+        emptyrecycle=view.findViewById(R.id.textifempty);
 
         get_outgoing_list=new Get_list_from_logCall_depend_selection(getActivity());
         get_calls_log=new Get_Calls_Log(getActivity());
@@ -87,7 +90,7 @@ public class Blocked_Call_fragment extends Fragment {
             searchLogs.setItemAnimator(new DefaultItemAnimator());
             adapter1=new LogAdapter(getActivity(),groupListByDate.groupListByDate(logInfos));
             searchLogs.setAdapter(adapter1);
-
+            toggleEmptyCases(logInfos);
 
         }else {
             //empty recycleview
@@ -96,6 +99,7 @@ public class Blocked_Call_fragment extends Fragment {
             searchLogs.setItemAnimator(new DefaultItemAnimator());
             adapter1=new LogAdapter(getActivity(),logInfos);
             searchLogs.setAdapter(adapter1);
+            toggleEmptyCases(logInfos);
 
         }
 
@@ -109,5 +113,16 @@ public class Blocked_Call_fragment extends Fragment {
     }
 
 
+    private void toggleEmptyCases(ArrayList<LogInfo> logInfosemp) {
+
+         if (logInfosemp.size() > 0) {
+
+            emptyrecycle.setVisibility(View.GONE);
+
+        } else {
+            emptyrecycle.setVisibility(View.VISIBLE);
+
+        }
+    }
 
 }

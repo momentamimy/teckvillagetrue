@@ -18,7 +18,9 @@ import com.squareup.picasso.Picasso;
 
 import java.util.List;
 
+import teckvillage.developer.khaled_pc.teckvillagetrue.MainActivity;
 import teckvillage.developer.khaled_pc.teckvillagetrue.R;
+import teckvillage.developer.khaled_pc.teckvillagetrue.SMS_MessagesChat;
 import teckvillage.developer.khaled_pc.teckvillagetrue.View.LogHolder;
 import teckvillage.developer.khaled_pc.teckvillagetrue.model.LogInfo;
 
@@ -107,7 +109,10 @@ public class LogAdapter extends RecyclerView.Adapter<LogHolder> {
                             // for ActivityCompat#requestPermissions for more details.
                             return;
                         }
+
                        context.startActivity(intent);
+
+
                 }
             });
 
@@ -115,7 +120,16 @@ public class LogAdapter extends RecyclerView.Adapter<LogHolder> {
             holder.chaticon.setOnClickListener(new View.OnClickListener() {
                 @Override
                 public void onClick(View v) {
-                    Toast.makeText(context, "You Click me", Toast.LENGTH_LONG).show();
+                   // Toast.makeText(context, "You Click me", Toast.LENGTH_LONG).show();
+                    Intent intent = new Intent(context,SMS_MessagesChat.class);
+                    intent.putExtra("LogSMSName",itemList.get(position).logName);
+                    String num=itemList.get(position).getNumber();
+                    if(num != null&& !num.isEmpty()){
+                        intent.putExtra("LogSMSAddress",num);
+                        context.startActivity(intent);
+                    }else {
+                        Toast.makeText(context, "Can't send message to this number", Toast.LENGTH_LONG).show();
+                    }
 
                 }
             });
@@ -124,7 +138,6 @@ public class LogAdapter extends RecyclerView.Adapter<LogHolder> {
                 @Override
                 public void onClick(View v) {
                     Toast.makeText(context, "You Click me", Toast.LENGTH_LONG).show();
-
                 }
             });
 

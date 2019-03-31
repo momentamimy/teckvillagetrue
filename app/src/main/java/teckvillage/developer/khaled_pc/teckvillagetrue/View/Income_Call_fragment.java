@@ -36,6 +36,7 @@ public class Income_Call_fragment extends Fragment {
     LinearLayoutManager lLayout2;
     ArrayList<LogInfo> logInfos;
     LogAdapter adapter1;
+    TextView emptyrecycle;
 
     public Income_Call_fragment() {
         // Required empty public constructor
@@ -51,6 +52,8 @@ public class Income_Call_fragment extends Fragment {
          //Title
         TextView Activitytitle=view.findViewById(R.id.titleoffragment);
         Activitytitle.setText("Income");
+
+        emptyrecycle=view.findViewById(R.id.textifempty);
 
         get_outgoing_list=new Get_list_from_logCall_depend_selection(getActivity());
         get_calls_log=new Get_Calls_Log(getActivity());
@@ -78,19 +81,32 @@ public class Income_Call_fragment extends Fragment {
 
         }
 
+        if(logInfos.size()>0) {
+            Collections.sort(logInfos, LogInfo.BY_DATE);
 
-        Collections.sort(logInfos, LogInfo.BY_DATE);
-
-        lLayout2 = new LinearLayoutManager(getActivity());
-        searchLogs.setLayoutManager(lLayout2);
-        searchLogs.setItemAnimator(new DefaultItemAnimator());
-        adapter1=new LogAdapter(getActivity(),groupListByDate.groupListByDate(logInfos));
-        searchLogs.setAdapter(adapter1);
-
-
+            lLayout2 = new LinearLayoutManager(getActivity());
+            searchLogs.setLayoutManager(lLayout2);
+            searchLogs.setItemAnimator(new DefaultItemAnimator());
+            adapter1 = new LogAdapter(getActivity(), groupListByDate.groupListByDate(logInfos));
+            searchLogs.setAdapter(adapter1);
+            toggleEmptyCases(logInfos);
+        }
 
 
         return view;
+    }
+
+    private void toggleEmptyCases(ArrayList<LogInfo> logInfosemp) {
+        // you can check casessList.size() > 0
+
+        if (logInfosemp.size() > 0) {
+
+            emptyrecycle.setVisibility(View.GONE);
+
+        } else {
+            emptyrecycle.setVisibility(View.VISIBLE);
+
+        }
     }
 
 

@@ -46,30 +46,33 @@ public class PhoneStateReceiver extends BroadcastReceiver {
     @Override
     public void onReceive(Context context, Intent intent) {
 
-        String state=intent.getStringExtra(TelephonyManager.EXTRA_STATE);
+        String state= intent.getStringExtra(TelephonyManager.EXTRA_STATE);
         String number=intent.getStringExtra(TelephonyManager.EXTRA_INCOMING_NUMBER);
+
         // Adds a view on top of the dialer app when it launches.
-        Toast.makeText(context,"Num : "+number+"State : "+state,Toast.LENGTH_LONG).show();
+        //Toast.makeText(context,"Num : "+number+"State : "+state,Toast.LENGTH_LONG).show();
         Log.d("hlaclaclclclclclclc","Num : "+number+"State : "+state);
-        if (state.equals(TelephonyManager.EXTRA_STATE_OFFHOOK)||
-                state.equals(TelephonyManager.EXTRA_STATE_RINGING))
+
+        if (state.equals(TelephonyManager.EXTRA_STATE_OFFHOOK)|| state.equals(TelephonyManager.EXTRA_STATE_RINGING))
         {
             DisplayDialogOverApps(context,number);
         }
-        else if (state.equals(TelephonyManager.EXTRA_STATE_IDLE))
-        {
+
+        else if (state.equals(TelephonyManager.EXTRA_STATE_IDLE)) {
             if (wm!=null)
             {
                 wm.removeViewImmediate(view1);
             }
+
             Intent intent1=new Intent(context,PopupDialogActivity.class);
             intent1.putExtra("Number",number);
+            intent1.setFlags(Intent.FLAG_ACTIVITY_NEW_TASK);
             context.startActivity(intent1);
         }
     }
 
-    public void DisplayDialogOverApps(Context context,String Number)
-    {
+    public void DisplayDialogOverApps(Context context,String Number) {
+
         get_calls_log=new Get_Calls_Log(context);
         String contactName= (String) get_calls_log.getContactName(Number);
         Bitmap contactPhoto=  get_calls_log.retrieveContactPhoto(Number);
@@ -86,9 +89,9 @@ public class PhoneStateReceiver extends BroadcastReceiver {
         }
         params1 = new WindowManager.LayoutParams(
                 LinearLayout.LayoutParams.MATCH_PARENT,
-                LinearLayout.LayoutParams.MATCH_PARENT, LAYOUT_FLAG,
-                WindowManager.LayoutParams.FLAG_NOT_TOUCH_MODAL |
-                        WindowManager.LayoutParams.FLAG_NOT_FOCUSABLE,
+                LinearLayout.LayoutParams.MATCH_PARENT,
+                LAYOUT_FLAG,
+                WindowManager.LayoutParams.FLAG_NOT_TOUCH_MODAL | WindowManager.LayoutParams.FLAG_NOT_FOCUSABLE,
                 PixelFormat.TRANSPARENT);
 
         DisplayMetrics metrics = context.getResources().getDisplayMetrics();

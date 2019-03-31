@@ -120,7 +120,7 @@ public class Get_list_from_logCall_depend_selection {
                     typephone = "Pager";
                     break;
                 case ContactsContract.CommonDataKinds.Phone.TYPE_CUSTOM:
-                    typephone = "Custom";
+                    typephone = "Other";
                     break;
                 case ContactsContract.CommonDataKinds.Phone.TYPE_OTHER:
                     typephone = "Other";
@@ -193,7 +193,7 @@ public class Get_list_from_logCall_depend_selection {
                 }
             }
 
-            loglist.add(new LogInfo(null, phName, dir, callDayTime, typephone, dateStringhour, phNumber,0));
+            loglist.add(new LogInfo(null, phName, dir, callDayTime, typephone, dateStringhour, phNumber,1));
         }
 
         managedCursor.close();

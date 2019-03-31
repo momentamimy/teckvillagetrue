@@ -102,6 +102,8 @@ public class SMS_MessagesChat extends AppCompatActivity {
         address=getIntent().getStringExtra("LogSMSAddress");
         Log.d("Address::::", address);
         String regex = "\\d+";
+        address = address.replaceAll("\\s", "");
+        address = address.replace("-", "");
         String s=address.replace("+","");
         if (!s.matches(regex))
         {
