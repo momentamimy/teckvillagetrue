@@ -152,22 +152,18 @@ public class UserContactsAdapters extends RecyclerView.Adapter<UserContactsAdapt
                        DisplayArraylistOfPhonenumberDialog(phones);
 
                    }
-
-
-           holder.openProfile.setOnClickListener(new View.OnClickListener() {
-               @Override
-               public void onClick(View v) {
-                   Intent intent2 = new Intent(context,User_Contact_Profile.class);
-                   intent2.putExtra("ContactID",mDataArray.get(position).getId());
-                   context.startActivity(intent2);
-                   Log.w("ssf","asf");
                }
            });
 
+            holder.openProfile.setOnClickListener(new View.OnClickListener() {
+                @Override
+                public void onClick(View v) {
+                    Intent intent2 = new Intent(context,User_Contact_Profile.class);
+                    intent2.putExtra("ContactID",mDataArray.get(position).getId());
+                    context.startActivity(intent2);
+                }
+            });
 
-
-               }
-           });
         }
 
         if(holder.letter!=null){
