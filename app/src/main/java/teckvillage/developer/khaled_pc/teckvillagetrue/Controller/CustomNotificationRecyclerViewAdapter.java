@@ -51,7 +51,6 @@ public class CustomNotificationRecyclerViewAdapter extends RecyclerView.Adapter<
         TextView textMessage;
         ImageView contact_img_log_recycle;
 
-
         ViewHolder(View itemView) {
             super(itemView);
             logName=itemView.findViewById(R.id.name_of_log);
