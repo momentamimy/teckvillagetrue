@@ -5,6 +5,7 @@ import android.content.Intent;
 import android.content.pm.PackageManager;
 import android.content.res.Resources;
 import android.database.Cursor;
+import android.graphics.Color;
 import android.graphics.drawable.Drawable;
 import android.net.Uri;
 import android.provider.ContactsContract;
@@ -13,6 +14,7 @@ import android.support.v7.app.AppCompatActivity;
 import android.os.Bundle;
 import android.util.Log;
 import android.view.View;
+import android.widget.ImageView;
 import android.widget.LinearLayout;
 import android.widget.TextView;
 import android.widget.Toast;
@@ -20,6 +22,7 @@ import android.widget.Toast;
 import de.hdodenhof.circleimageview.CircleImageView;
 import teckvillage.developer.khaled_pc.teckvillagetrue.R;
 import teckvillage.developer.khaled_pc.teckvillagetrue.SMS_MessagesChat;
+import teckvillage.developer.khaled_pc.teckvillagetrue.model.database.Database_Helper;
 
 public class User_Contact_Profile extends AppCompatActivity {
 
@@ -28,6 +31,9 @@ public class User_Contact_Profile extends AppCompatActivity {
     LinearLayout makecall,sendmessage,makeblock;
     View backarrow,moreoption;
     long id;
+    Database_Helper db;
+    ImageView blockimagemake;
+    TextView blockred;
 
 
     @Override
@@ -44,6 +50,9 @@ public class User_Contact_Profile extends AppCompatActivity {
         backarrow=findViewById(R.id.backarrow);
         moreoption=findViewById(R.id.moreoptionusercontact);
         phonenumee=findViewById(R.id.contactuserphonenumber);
+        blockimagemake=findViewById(R.id.blockimagered);
+        blockred=findViewById(R.id.blocktextred);
+        db=new Database_Helper(this);
 
         id=getIntent().getLongExtra("ContactID",0);
 
@@ -107,6 +116,17 @@ public class User_Contact_Profile extends AppCompatActivity {
         makeblock.setOnClickListener(new View.OnClickListener() {
             @Override
             public void onClick(View v) {
+
+                String num=phonenumee.getText().toString();
+                String name=nameofcontact.getText().toString();
+                if(num != null&& !num.isEmpty()){
+                    db.insertBlock(name,num);
+                    blockimagemake.setImageResource(R.drawable.ic_rejected_call);
+                    blockred.setTextColor(Color.parseColor("#f53131"));
+                }
+
+
+
 
             }
         });
