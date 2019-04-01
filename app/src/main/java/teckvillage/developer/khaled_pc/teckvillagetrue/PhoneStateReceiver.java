@@ -247,7 +247,7 @@ public class PhoneStateReceiver extends BroadcastReceiver {
 
 
                 for(int i=0;i<BlockNumbers.size();i++){
-                    if ((BlockNumbers.get(i) != null) &&BlockNumbers.get(i).equalsIgnoreCase(phonenumber)) {
+                    if ((BlockNumbers.get(i) != null) &&BlockNumbers.get(i).equalsIgnoreCase("+20"+phonenumber)) {
                         //telephonyService.silenceRinger();//Security exception problem
                         telephonyService = (ITelephony) method.invoke(telephonyManager);
                         telephonyService.silenceRinger();
