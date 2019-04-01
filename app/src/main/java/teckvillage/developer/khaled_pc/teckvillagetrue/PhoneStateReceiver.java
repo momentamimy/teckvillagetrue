@@ -65,7 +65,10 @@ public class PhoneStateReceiver extends BroadcastReceiver {
 
         if (state.equals(TelephonyManager.EXTRA_STATE_OFFHOOK)&&swithcOutgoing)
         {
-            DisplayDialogOverApps(context,number);
+            if (!viewIsAdded)
+            {
+                DisplayDialogOverApps(context,number);
+            }
         }
         else if (state.equals(TelephonyManager.EXTRA_STATE_RINGING)&&swithcincomgoing)
         {
