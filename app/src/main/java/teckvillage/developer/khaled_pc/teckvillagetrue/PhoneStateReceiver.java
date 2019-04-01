@@ -221,44 +221,50 @@ public class PhoneStateReceiver extends BroadcastReceiver {
         //Block List Phone numbers
         BlockNumbers=RetreiveAllNumberInBlockList(context);
 
-        AudioManager audioManager = (AudioManager) context.getSystemService(Context.AUDIO_SERVICE);
-        //Turn ON the mute
-        if (audioManager != null) {
-            audioManager.setStreamMute(AudioManager.STREAM_RING, true);
-        }
-        TelephonyManager telephonyManager = (TelephonyManager) context.getSystemService(Context.TELEPHONY_SERVICE);
-        try {
-            //Toast.makeText(context, "in"+block_number, Toast.LENGTH_LONG).show();
-            Class clazz = null;
-            if (telephonyManager != null) {
-                clazz = Class.forName(telephonyManager.getClass().getName());
+        if(BlockNumbers.size()>0){
+
+            AudioManager audioManager = (AudioManager) context.getSystemService(Context.AUDIO_SERVICE);
+            //Turn ON the mute
+            if (audioManager != null) {
+                audioManager.setStreamMute(AudioManager.STREAM_RING, true);
             }
-
-            Method method = null;
-            if (clazz != null) {
-                method = clazz.getDeclaredMethod("getITelephony");
-            }
-            method.setAccessible(true);
-            ITelephony telephonyService = (ITelephony) method.invoke(telephonyManager);
-            //Checking incoming call number
-           //System.out.println("Call "+block_number);
-
-
-            for(int i=0;i<BlockNumbers.size();i++){
-                if (BlockNumbers.get(i).equalsIgnoreCase(phonenumber)) {
-                    //telephonyService.silenceRinger();//Security exception problem
-                    telephonyService = (ITelephony) method.invoke(telephonyManager);
-                    telephonyService.silenceRinger();
-                    telephonyService.endCall();
+            TelephonyManager telephonyManager = (TelephonyManager) context.getSystemService(Context.TELEPHONY_SERVICE);
+            try {
+                //Toast.makeText(context, "in"+block_number, Toast.LENGTH_LONG).show();
+                Class clazz = null;
+                if (telephonyManager != null) {
+                    clazz = Class.forName(telephonyManager.getClass().getName());
                 }
+
+                Method method = null;
+                if (clazz != null) {
+                    method = clazz.getDeclaredMethod("getITelephony");
+                }
+                method.setAccessible(true);
+                ITelephony telephonyService = (ITelephony) method.invoke(telephonyManager);
+                //Checking incoming call number
+                //System.out.println("Call "+block_number);
+
+
+                for(int i=0;i<BlockNumbers.size();i++){
+                    if ((BlockNumbers.get(i) != null) &&BlockNumbers.get(i).equalsIgnoreCase(phonenumber)) {
+                        //telephonyService.silenceRinger();//Security exception problem
+                        telephonyService = (ITelephony) method.invoke(telephonyManager);
+                        telephonyService.silenceRinger();
+                        telephonyService.endCall();
+                    }
+                }
+
+
+            } catch (Exception e) {
+                Toast.makeText(context, e.toString(), Toast.LENGTH_LONG).show();
             }
+            //Turn OFF the mute
+            audioManager.setStreamMute(AudioManager.STREAM_RING, false);
 
-
-        } catch (Exception e) {
-            Toast.makeText(context, e.toString(), Toast.LENGTH_LONG).show();
         }
-        //Turn OFF the mute
-        audioManager.setStreamMute(AudioManager.STREAM_RING, false);
+
+
 
     }
 
