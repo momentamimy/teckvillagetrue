@@ -40,7 +40,6 @@ public class CustomNotificationRecyclerViewAdapter extends RecyclerView.Adapter<
         holder.textMessage.setText(dataModel.logMessage);
     }
 
-
     @Override
     public int getItemCount() {
         return dataSet.size();

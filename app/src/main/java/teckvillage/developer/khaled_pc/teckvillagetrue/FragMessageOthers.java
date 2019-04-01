@@ -93,13 +93,16 @@ public class FragMessageOthers extends Fragment implements LoaderManager.LoaderC
                 Intent intent=new Intent(getContext(),SMS_MessagesChat.class);
                 intent.putExtra("LogSMSName",ohterMessageInfos.get(position).logName);
                 intent.putExtra("LogSMSAddress",ohterMessageInfos.get(position).logAddress);
+                intent.putExtra("LogSMSThreadID",ohterMessageInfos.get(position).thread_id);
+                intent.putExtra("LogSMSPosition",position);
+                intent.putExtra("TYPE","Other");
                 startActivity(intent);
 
-                MessageInfo info=ohterMessageInfos.get(position);
+                /*MessageInfo info=ohterMessageInfos.get(position);
                 info.setRead("true");
                 ohterMessageInfos.set(position,info);
                 customOhtersListViewAdapter.notifyDataSetChanged();
-            }
+            */}
         });
         smsListView.setOnScrollListener(new AbsListView.OnScrollListener() {
             @Override

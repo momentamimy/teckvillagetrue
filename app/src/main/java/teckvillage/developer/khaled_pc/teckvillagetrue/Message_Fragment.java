@@ -268,7 +268,7 @@ public class Message_Fragment extends Fragment implements LoaderManager.LoaderCa
     public void onResume() {
         super.onResume();
         Log.d("laPaleezLaPaleezLa", "onResume: ");
-        getLoaderManager().restartLoader(1,null,this);
+        //getLoaderManager().restartLoader(1,null,this);
     }
 
     @Override

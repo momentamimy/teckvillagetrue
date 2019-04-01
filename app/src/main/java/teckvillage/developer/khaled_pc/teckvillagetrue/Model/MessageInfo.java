@@ -101,6 +101,8 @@ public class MessageInfo {
 
     public MessageInfo(String imageUrl,String logName,String logMessage)
     {
-
+        this.imageUrl = imageUrl;
+        this.logName = logName;
+        this.logMessage = logMessage;
     }
 }

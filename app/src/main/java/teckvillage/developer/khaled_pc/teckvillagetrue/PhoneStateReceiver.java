@@ -45,6 +45,7 @@ public class PhoneStateReceiver extends BroadcastReceiver {
     public static WindowManager wm=null;
     private WindowManager.LayoutParams params1;
     public static View view1;
+    static boolean viewIsAdded=false;
     Get_Calls_Log get_calls_log;
 
     SharedPreferences preferences;
@@ -62,18 +63,19 @@ public class PhoneStateReceiver extends BroadcastReceiver {
         Toast.makeText(context,"Num : "+number+"State : ",Toast.LENGTH_LONG).show();
         Log.d("hlaclaclclclclclclc","Num : "+number+"State : "+state);
 
-        if (state.equals(TelephonyManager.EXTRA_STATE_OFFHOOK)|| state.equals(TelephonyManager.EXTRA_STATE_RINGING)) {
-
-            if (state.equals(TelephonyManager.EXTRA_STATE_OFFHOOK)&&swithcOutgoing){
-                DisplayDialogOverApps(context,number);
+        if (state.equals(TelephonyManager.EXTRA_STATE_OFFHOOK)&&swithcOutgoing)
+        {
+            DisplayDialogOverApps(context,number);
+        }
+        else if (state.equals(TelephonyManager.EXTRA_STATE_RINGING)&&swithcincomgoing)
+        {
+            DisplayDialogOverApps(context,number);
+        }
+        else if (state.equals(TelephonyManager.EXTRA_STATE_IDLE)) {
+            if (wm!=null&&viewIsAdded==true)
+            {
+                wm.removeViewImmediate(view1);
             }
-            else if (state.equals(TelephonyManager.EXTRA_STATE_RINGING)&&swithcincomgoing) {
-                DisplayDialogOverApps(context,number);
-            } else if (state.equals(TelephonyManager.EXTRA_STATE_IDLE)) {
-                if (wm!=null)
-                {
-                    wm.removeViewImmediate(view1);
-                }
 
                 Intent intent1=new Intent(context,PopupDialogActivity.class);
                 intent1.putExtra("Number",number);
@@ -82,7 +84,7 @@ public class PhoneStateReceiver extends BroadcastReceiver {
             }
 
         }
-    }
+
 
     public void DisplayDialogOverApps(Context context,String Number) {
 
@@ -134,7 +136,8 @@ public class PhoneStateReceiver extends BroadcastReceiver {
         CloseDialog.setOnClickListener(new View.OnClickListener() {
             @Override
             public void onClick(View v) {
-                wm.removeViewImmediate(view1);
+                wm.removeView(view1);
+                viewIsAdded=false;
             }
         });
 
@@ -157,6 +160,7 @@ public class PhoneStateReceiver extends BroadcastReceiver {
             params1.y = metrics.heightPixels/2;
         }
         wm.addView(view1, params1);
+        viewIsAdded=true;
     }
 
     public int dpToPx(float dp, Context context) {

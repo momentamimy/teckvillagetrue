@@ -44,6 +44,14 @@ import java.util.List;
 
 import de.hdodenhof.circleimageview.CircleImageView;
 import teckvillage.developer.khaled_pc.teckvillagetrue.Controller.Receiver;
+import teckvillage.developer.khaled_pc.teckvillagetrue.model.MessageInfo;
+
+import static teckvillage.developer.khaled_pc.teckvillagetrue.FragMessageContact.contactMessageInfos;
+import static teckvillage.developer.khaled_pc.teckvillagetrue.FragMessageContact.customCotactsListViewAdapter;
+import static teckvillage.developer.khaled_pc.teckvillagetrue.FragMessageOthers.customOhtersListViewAdapter;
+import static teckvillage.developer.khaled_pc.teckvillagetrue.FragMessageOthers.ohterMessageInfos;
+import static teckvillage.developer.khaled_pc.teckvillagetrue.FragMessageSpam.customSpamListViewAdapter;
+import static teckvillage.developer.khaled_pc.teckvillagetrue.FragMessageSpam.spamMessageInfos;
 
 public class SMS_MessagesChat extends AppCompatActivity {
 
@@ -61,7 +69,7 @@ public class SMS_MessagesChat extends AppCompatActivity {
     EditText messageSend;
     FloatingActionButton send;
 
-    String name, address;
+    String name, address,threadID;
 
     ImageView callIcon, settingIcon;
 
@@ -84,7 +92,6 @@ public class SMS_MessagesChat extends AppCompatActivity {
         super.onCreate(savedInstanceState);
         setContentView(R.layout.activity_sms_messages_chat);
 
-
         LinearLayout toolbar = findViewById(R.id.toolbar);
         ImageView backButton = findViewById(R.id.back_button);
         backButton.setOnClickListener(new View.OnClickListener() {
@@ -105,6 +112,44 @@ public class SMS_MessagesChat extends AppCompatActivity {
 
         name = getIntent().getStringExtra("LogSMSName");
         address = getIntent().getStringExtra("LogSMSAddress");
+        threadID = getIntent().getStringExtra("LogSMSThreadID");
+        int position= (int) getIntent().getIntExtra("LogSMSPosition",-1);
+        String type=getIntent().getStringExtra("TYPE");
+
+        if (position!=-1&&!TextUtils.isEmpty(type))
+        {
+            Log.d("paleez","ya 3m");
+
+            if (type.equals("Contact"))
+            {
+                MessageInfo info=contactMessageInfos.get(position);
+                info.setRead("true");
+                contactMessageInfos.set(position,info);
+                customCotactsListViewAdapter.notifyDataSetChanged();
+            }
+
+
+            if (type.equals("Other"))
+            {
+                MessageInfo info1=ohterMessageInfos.get(position);
+                info1.setRead("true");
+                ohterMessageInfos.set(position,info1);
+                customOhtersListViewAdapter.notifyDataSetChanged();
+            }
+
+
+            if (type.equals("Spam"))
+            {
+                MessageInfo info2=spamMessageInfos.get(position);
+                info2.setRead("true");
+                spamMessageInfos.set(position,info2);
+                customSpamListViewAdapter.notifyDataSetChanged();
+            }
+
+        }
+
+
+
         Log.d("Address::::", address);
         String regex = "\\d+";
         address = address.replaceAll("\\s", "");
@@ -388,12 +433,25 @@ public class SMS_MessagesChat extends AppCompatActivity {
                     long date_sent = cur.getInt(index_date_sent);
                     String strthread_id = cur.getString(index_thread_id);
                     int int_status = cur.getInt(index_status);
-
-                    if (strAddress.contains(address)) {
-                        messageInfos.add(new sms_messages_model(id,strAddress, longDate, strbody,int_Type,strseen,date_sent,strthread_id,int_status));
-                        if (!strseen.equals("1"))
+                    if (TextUtils.isEmpty(threadID))
+                    {
+                        if (strAddress.contains(address)) {
+                            messageInfos.add(new sms_messages_model(id,strAddress, longDate, strbody,int_Type,strseen,date_sent,strthread_id,int_status));
+                            if (!strseen.equals("1"))
+                            {
+                                update_unread(id);
+                            }
+                        }
+                    }
+                    else
+                    {
+                        if (strthread_id.equals(threadID))
                         {
-                            update_unread(id);
+                            messageInfos.add(new sms_messages_model(id,strAddress, longDate, strbody,int_Type,strseen,date_sent,strthread_id,int_status));
+                            if (!strseen.equals("1"))
+                            {
+                                update_unread(id);
+                            }
                         }
                     }
                 } while (cur.moveToNext());
@@ -440,13 +498,23 @@ public class SMS_MessagesChat extends AppCompatActivity {
                     long date_sent = cur.getInt(index_date_sent);
                     String strthread_id = cur.getString(index_thread_id);
                     int int_status = cur.getInt(index_status);
+                    if (TextUtils.isEmpty(threadID))
+                    {
+                        if (!TextUtils.isEmpty(strAddress))
+                            if (int_Type!=1)
+                                if (strAddress.contains(address)) {
+                                    messageInfos.add(new sms_messages_model(id,getSharedPreferences("logged_in",MODE_PRIVATE).getString("phone",""), longDate, strbody,int_Type,strseen,date_sent,strthread_id,int_status));
 
-                    if (!TextUtils.isEmpty(strAddress))
-                        if (int_Type!=1)
-                        if (strAddress.contains(address)) {
-                            messageInfos.add(new sms_messages_model(id,getSharedPreferences("logged_in",MODE_PRIVATE).getString("phone",""), longDate, strbody,int_Type,strseen,date_sent,strthread_id,int_status));
-
-                        }
+                                }
+                    }
+                    else
+                    {
+                        if (!TextUtils.isEmpty(strthread_id))
+                            if (int_Type!=1)
+                                if (strthread_id.equals(threadID)) {
+                                    messageInfos.add(new sms_messages_model(id,getSharedPreferences("logged_in",MODE_PRIVATE).getString("phone",""), longDate, strbody,int_Type,strseen,date_sent,strthread_id,int_status));
+                                }
+                    }
                 } while (cur.moveToNext());
 
                 if (!cur.isClosed()) {

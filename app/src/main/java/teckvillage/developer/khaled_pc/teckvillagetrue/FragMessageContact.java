@@ -76,12 +76,16 @@ public class FragMessageContact extends Fragment {
                 Intent intent=new Intent(getContext(),SMS_MessagesChat.class);
                 intent.putExtra("LogSMSName",contactMessageInfos.get(position).logName);
                 intent.putExtra("LogSMSAddress",contactMessageInfos.get(position).logAddress);
+                intent.putExtra("LogSMSThreadID",contactMessageInfos.get(position).thread_id);
+                intent.putExtra("LogSMSPosition",position);
+                intent.putExtra("TYPE","Contact");
                 startActivity(intent);
 
-                MessageInfo info=contactMessageInfos.get(position);
+                /*MessageInfo info=contactMessageInfos.get(position);
                 info.setRead("true");
                 contactMessageInfos.set(position,info);
                 customCotactsListViewAdapter.notifyDataSetChanged();
+           */
             }
         });
         smsListView.setOnScrollListener(new AbsListView.OnScrollListener() {

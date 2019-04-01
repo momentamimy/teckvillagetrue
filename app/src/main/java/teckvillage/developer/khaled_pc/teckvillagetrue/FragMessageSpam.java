@@ -74,13 +74,16 @@ public class FragMessageSpam extends Fragment implements LoaderManager.LoaderCal
                 Intent intent=new Intent(getContext(),SMS_MessagesChat.class);
                 intent.putExtra("LogSMSName",spamMessageInfos.get(position).logName);
                 intent.putExtra("LogSMSAddress",spamMessageInfos.get(position).logAddress);
+                intent.putExtra("LogSMSThreadID",spamMessageInfos.get(position).thread_id);
+                intent.putExtra("LogSMSPosition",position);
+                intent.putExtra("TYPE","Spam");
                 startActivity(intent);
 
-                MessageInfo info=spamMessageInfos.get(position);
+                /*MessageInfo info=spamMessageInfos.get(position);
                 info.setRead("true");
                 spamMessageInfos.set(position,info);
                 customSpamListViewAdapter.notifyDataSetChanged();
-            }
+            */}
         });
         smsListView.setOnScrollListener(new AbsListView.OnScrollListener() {
             @Override
