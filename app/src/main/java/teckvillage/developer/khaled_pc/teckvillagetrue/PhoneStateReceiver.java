@@ -41,7 +41,7 @@ import java.lang.reflect.Method;
 import java.util.ArrayList;
 import java.util.List;
 
-import teckvillage.developer.khaled_pc.teckvillagetrue.View.ITelephony;
+
 import teckvillage.developer.khaled_pc.teckvillagetrue.model.Get_Calls_Log;
 import teckvillage.developer.khaled_pc.teckvillagetrue.model.database.Database_Helper;
 import teckvillage.developer.khaled_pc.teckvillagetrue.model.database.tables.block;
@@ -240,15 +240,14 @@ public class PhoneStateReceiver extends BroadcastReceiver {
                 Method method = clazz.getDeclaredMethod("getITelephony");
 
                 method.setAccessible(true);
-                ITelephony telephonyService = (ITelephony) method.invoke(telephonyManager);
+                com.android.internal.telephony.ITelephony telephonyService = (com.android.internal.telephony.ITelephony) method.invoke(telephonyManager);
                 //Checking incoming call number
                 //System.out.println("Call "+block_number);
-
 
                 for(int i=0;i<BlockNumbers.size();i++){
                     if ((BlockNumbers.get(i) != null) &&BlockNumbers.get(i).equalsIgnoreCase("+20"+phonenumber)) {
                         //telephonyService.silenceRinger();//Security exception problem
-                        telephonyService = (ITelephony) method.invoke(telephonyManager);
+                        telephonyService = (com.android.internal.telephony.ITelephony) method.invoke(telephonyManager);
                         telephonyService.silenceRinger();
                         telephonyService.endCall();
                     }
