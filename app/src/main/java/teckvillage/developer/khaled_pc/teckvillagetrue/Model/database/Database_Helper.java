@@ -79,7 +79,7 @@ public class Database_Helper extends SQLiteOpenHelper {
         // Select All Query
         String selectQuery = "SELECT  * FROM " + block.TABLE_NAME;
 
-        SQLiteDatabase db = this.getWritableDatabase();
+        SQLiteDatabase db = this.getReadableDatabase();
         Cursor cursor = db.rawQuery(selectQuery, null);
 
         // looping through all rows and adding to list
@@ -100,6 +100,40 @@ public class Database_Helper extends SQLiteOpenHelper {
         // return Court list
         return courtsList;
     }
+
+
+    public List<String> getAllBlocklistNumbers() {
+        List<String> courtsList = new ArrayList<>();
+
+        // Select All Query
+        String selectQuery = "SELECT  "+block.COLUMN_NUMBER +" FROM " + block.TABLE_NAME;
+
+        SQLiteDatabase db = this.getReadableDatabase();
+        Cursor cursor = db.rawQuery(selectQuery, null);
+
+
+       /* Cursor cursor = db.query(block.TABLE_NAME, new String[]{block.COLUMN_ID, block.COLUMN_NUMBER},
+                block.COLUMN_ID + "=?",
+                new String[]{}, null, null, null, null);
+                */
+
+        // looping through all rows and adding to list
+        if (cursor.moveToFirst()) {
+            do {
+                String num=cursor.getString(cursor.getColumnIndex(block.COLUMN_NUMBER));
+
+                courtsList.add(num);
+            } while (cursor.moveToNext());
+        }
+
+        // close db connection
+        db.close();
+
+        // return Court list
+        return courtsList;
+    }
+
+
 
 
     public int getblockCount() {

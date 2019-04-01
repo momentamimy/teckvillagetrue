@@ -13,6 +13,7 @@ import android.graphics.Color;
 import android.graphics.PixelFormat;
 import android.graphics.drawable.BitmapDrawable;
 import android.graphics.drawable.ColorDrawable;
+import android.media.AudioManager;
 import android.net.Uri;
 import android.os.Build;
 import android.renderscript.Allocation;
@@ -36,7 +37,14 @@ import android.widget.RelativeLayout;
 import android.widget.TextView;
 import android.widget.Toast;
 
+import java.lang.reflect.Method;
+import java.util.ArrayList;
+import java.util.List;
+
+import teckvillage.developer.khaled_pc.teckvillagetrue.View.ITelephony;
 import teckvillage.developer.khaled_pc.teckvillagetrue.model.Get_Calls_Log;
+import teckvillage.developer.khaled_pc.teckvillagetrue.model.database.Database_Helper;
+import teckvillage.developer.khaled_pc.teckvillagetrue.model.database.tables.block;
 
 import static android.content.Context.MODE_PRIVATE;
 
@@ -47,6 +55,8 @@ public class PhoneStateReceiver extends BroadcastReceiver {
     public static View view1;
     static boolean viewIsAdded=false;
     Get_Calls_Log get_calls_log;
+    Database_Helper db;
+    List<String> BlockNumbers;
 
     SharedPreferences preferences;
     @Override
@@ -73,6 +83,7 @@ public class PhoneStateReceiver extends BroadcastReceiver {
         else if (state.equals(TelephonyManager.EXTRA_STATE_RINGING)&&swithcincomgoing)
         {
             DisplayDialogOverApps(context,number);
+            BlockNumberWhenRing(context,number);
         }
         else if (state.equals(TelephonyManager.EXTRA_STATE_IDLE)) {
             if (wm!=null&&viewIsAdded==true)
@@ -203,4 +214,65 @@ public class PhoneStateReceiver extends BroadcastReceiver {
         }
 
     }
+
+
+    void BlockNumberWhenRing(Context context,String phonenumber){
+
+        //Block List Phone numbers
+        BlockNumbers=RetreiveAllNumberInBlockList(context);
+
+        AudioManager audioManager = (AudioManager) context.getSystemService(Context.AUDIO_SERVICE);
+        //Turn ON the mute
+        if (audioManager != null) {
+            audioManager.setStreamMute(AudioManager.STREAM_RING, true);
+        }
+        TelephonyManager telephonyManager = (TelephonyManager) context.getSystemService(Context.TELEPHONY_SERVICE);
+        try {
+            //Toast.makeText(context, "in"+block_number, Toast.LENGTH_LONG).show();
+            Class clazz = null;
+            if (telephonyManager != null) {
+                clazz = Class.forName(telephonyManager.getClass().getName());
+            }
+
+            Method method = null;
+            if (clazz != null) {
+                method = clazz.getDeclaredMethod("getITelephony");
+            }
+            method.setAccessible(true);
+            ITelephony telephonyService = (ITelephony) method.invoke(telephonyManager);
+            //Checking incoming call number
+           //System.out.println("Call "+block_number);
+
+
+            for(int i=0;i<BlockNumbers.size();i++){
+                if (BlockNumbers.get(i).equalsIgnoreCase(phonenumber)) {
+                    //telephonyService.silenceRinger();//Security exception problem
+                    telephonyService = (ITelephony) method.invoke(telephonyManager);
+                    telephonyService.silenceRinger();
+                    telephonyService.endCall();
+                }
+            }
+
+
+        } catch (Exception e) {
+            Toast.makeText(context, e.toString(), Toast.LENGTH_LONG).show();
+        }
+        //Turn OFF the mute
+        audioManager.setStreamMute(AudioManager.STREAM_RING, false);
+
+    }
+
+
+   public List<String> RetreiveAllNumberInBlockList(Context context){
+
+       List<String> BlockNumbersH=new ArrayList<String>();
+       db=new Database_Helper(context);
+       BlockNumbersH=db.getAllBlocklistNumbers();
+
+       return BlockNumbersH;
+
+   }
+
+
+
 }

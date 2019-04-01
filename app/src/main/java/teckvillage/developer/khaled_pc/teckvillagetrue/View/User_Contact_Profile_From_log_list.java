@@ -90,6 +90,7 @@ public class User_Contact_Profile_From_log_list extends AppCompatActivity {
         }
 
 
+
         BlockInfo=db.getAllBlocklist();
 
         for(int i=0;i < BlockInfo.size();i++){
