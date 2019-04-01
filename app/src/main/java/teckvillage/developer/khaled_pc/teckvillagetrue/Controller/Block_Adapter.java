@@ -1,6 +1,7 @@
 package teckvillage.developer.khaled_pc.teckvillagetrue.Controller;
 
 import android.Manifest;
+import android.app.Activity;
 import android.content.Context;
 import android.content.DialogInterface;
 import android.content.Intent;
@@ -13,12 +14,14 @@ import android.util.Log;
 import android.view.LayoutInflater;
 import android.view.View;
 import android.view.ViewGroup;
+import android.widget.TextView;
 
 import com.squareup.picasso.Picasso;
 
 import java.util.List;
 
 import teckvillage.developer.khaled_pc.teckvillagetrue.R;
+import teckvillage.developer.khaled_pc.teckvillagetrue.View.BlockList;
 import teckvillage.developer.khaled_pc.teckvillagetrue.View.Block_List_Holder;
 import teckvillage.developer.khaled_pc.teckvillagetrue.View.ContactHolder;
 import teckvillage.developer.khaled_pc.teckvillagetrue.model.ContactInfo;
@@ -62,7 +65,7 @@ public class Block_Adapter extends RecyclerView.Adapter<Block_List_Holder> {
               @Override
               public void onClick(View v) {
 
-                  onDeleteClick(context, itemList.get(position).getNumber(),itemList.get(position).getId(), position);
+                  onDeleteClick(context, itemList.get(position).getName(),itemList.get(position).getId(), position);
 
               }
           });
@@ -87,6 +90,7 @@ public class Block_Adapter extends RecyclerView.Adapter<Block_List_Holder> {
                 db.deleteBlockByID(id);
                 itemList.remove(position);
                 notifyDataSetChanged();
+                Update(itemList.size());
                 dialog.dismiss();
             }
         });
@@ -100,6 +104,16 @@ public class Block_Adapter extends RecyclerView.Adapter<Block_List_Holder> {
         });
 
         alert.show();
+    }
+
+    public void Update(int size){
+        TextView txtView = (TextView) ((BlockList)context).findViewById(R.id.emtyrecycleblocklist);
+        if (size <= 0) {
+
+            txtView.setVisibility(View.VISIBLE);
+
+        }
+
     }
 
 }

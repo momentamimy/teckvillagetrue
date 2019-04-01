@@ -18,7 +18,7 @@ import teckvillage.developer.khaled_pc.teckvillagetrue.model.database.tables.blo
 public class Database_Helper extends SQLiteOpenHelper {
 
     // Database Version
-    private static final int DATABASE_VERSION = 1;
+    private static final int DATABASE_VERSION = 2;
 
     // Database Name
     public static final String DATABASE_NAME = "WhoCaller_db";
@@ -52,7 +52,7 @@ public class Database_Helper extends SQLiteOpenHelper {
 
     //TODO:#####################################################3/31/2019  block Operation  ########################################################
 
-    public long insertBlock(String name,String number) {
+    public long insertBlock(String name,String number,String type) {
         // get writable database as we want to write data
         SQLiteDatabase db = this.getWritableDatabase();
 
@@ -61,7 +61,7 @@ public class Database_Helper extends SQLiteOpenHelper {
         // no need to add them
         values.put(block.COLUMN_NAME, name);
         values.put(block.COLUMN_NUMBER, number);
-
+        values.put(block.COLUMN_TYPE, type);
         // insert row
         long id = db.insert(block.TABLE_NAME, null, values);
 

@@ -62,26 +62,25 @@ public class PhoneStateReceiver extends BroadcastReceiver {
         Toast.makeText(context,"Num : "+number+"State : ",Toast.LENGTH_LONG).show();
         Log.d("hlaclaclclclclclclc","Num : "+number+"State : "+state);
 
-        if (state.equals(TelephonyManager.EXTRA_STATE_OFFHOOK)|| state.equals(TelephonyManager.EXTRA_STATE_RINGING))
-        if (state.equals(TelephonyManager.EXTRA_STATE_OFFHOOK)&&swithcOutgoing)
-        {
-            DisplayDialogOverApps(context,number);
-        }
-        else if (state.equals(TelephonyManager.EXTRA_STATE_RINGING)&&swithcincomgoing)
-        {
-            DisplayDialogOverApps(context,number);
-        }
+        if (state.equals(TelephonyManager.EXTRA_STATE_OFFHOOK)|| state.equals(TelephonyManager.EXTRA_STATE_RINGING)) {
 
-        else if (state.equals(TelephonyManager.EXTRA_STATE_IDLE)) {
-            if (wm!=null)
-            {
-                wm.removeViewImmediate(view1);
+            if (state.equals(TelephonyManager.EXTRA_STATE_OFFHOOK)&&swithcOutgoing){
+                DisplayDialogOverApps(context,number);
+            }
+            else if (state.equals(TelephonyManager.EXTRA_STATE_RINGING)&&swithcincomgoing) {
+                DisplayDialogOverApps(context,number);
+            } else if (state.equals(TelephonyManager.EXTRA_STATE_IDLE)) {
+                if (wm!=null)
+                {
+                    wm.removeViewImmediate(view1);
+                }
+
+                Intent intent1=new Intent(context,PopupDialogActivity.class);
+                intent1.putExtra("Number",number);
+                intent1.setFlags(Intent.FLAG_ACTIVITY_NEW_TASK);
+                context.startActivity(intent1);
             }
 
-            Intent intent1=new Intent(context,PopupDialogActivity.class);
-            intent1.putExtra("Number",number);
-            intent1.setFlags(Intent.FLAG_ACTIVITY_NEW_TASK);
-            context.startActivity(intent1);
         }
     }
 

@@ -1,6 +1,7 @@
 package teckvillage.developer.khaled_pc.teckvillagetrue.View;
 
 import android.Manifest;
+import android.content.DialogInterface;
 import android.content.Intent;
 import android.content.pm.PackageManager;
 import android.content.res.Resources;
@@ -10,6 +11,7 @@ import android.graphics.drawable.Drawable;
 import android.net.Uri;
 import android.provider.ContactsContract;
 import android.support.v4.app.ActivityCompat;
+import android.support.v7.app.AlertDialog;
 import android.support.v7.app.AppCompatActivity;
 import android.os.Bundle;
 import android.util.Log;
@@ -140,20 +142,12 @@ public class User_Contact_Profile extends AppCompatActivity {
             public void onClick(View v) {
 
                     if(Bloceduser){
-                        db.deleteBlockByID((int) id);
-                        blockimagemake.setImageResource(R.drawable.ic_block_primary_24dp);
-                        blockred.setTextColor(Color.parseColor("#0089c0"));
-                        Bloceduser=false;
+
+                        Dialog_Ensure_Delete_From_Block();
 
                     }else {
-                        String num=phonenumee.getText().toString();
-                        String name=nameofcontact.getText().toString();
-                        if(num != null&& !num.isEmpty()){
-                            db.insertBlock(name,num);
-                            blockimagemake.setImageResource(R.drawable.ic_rejected_call);
-                            blockred.setTextColor(Color.parseColor("#f53131"));
-                        }
 
+                        Dialog_Block(nameofcontact.getText().toString());
                     }
 
 
@@ -227,4 +221,76 @@ public class User_Contact_Profile extends AppCompatActivity {
         }
 
     }
+
+
+    void Dialog_Ensure_Delete_From_Block(){
+
+        final AlertDialog.Builder builder = new AlertDialog.Builder(User_Contact_Profile.this);
+        builder.setMessage("Are you sure you want to unblock this number?")
+                .setCancelable(false)
+                .setPositiveButton("UNBLOCK", new DialogInterface.OnClickListener() {
+                    public void onClick(DialogInterface dialog, int id) {
+
+                        Delete_Number_From_BlockListhere();
+
+                    }
+                })
+                .setNegativeButton("CANCEL", new DialogInterface.OnClickListener() {
+                    @Override
+                    public void onClick(DialogInterface dialogInterface, int i) {
+                        dialogInterface.cancel();
+                    }
+                });
+
+        AlertDialog alert = builder.create();
+        alert.show();
+
+    }
+
+    private void Delete_Number_From_BlockListhere() {
+        db.deleteBlockByID((int) id);
+        blockimagemake.setImageResource(R.drawable.ic_block_primary_24dp);
+        blockred.setTextColor(Color.parseColor("#0089c0"));
+        Bloceduser=false;
+        Toast.makeText(User_Contact_Profile.this, "Number removed from your block list", Toast.LENGTH_SHORT).show();
+
+    }
+
+    void Insert_Number_To_Blocklist(){
+
+        String num=phonenumee.getText().toString();
+        String name=nameofcontact.getText().toString();
+        if(num != null&& !num.isEmpty()){
+            db.insertBlock(name,num,"Person");
+            blockimagemake.setImageResource(R.drawable.ic_rejected_call);
+            blockred.setTextColor(Color.parseColor("#f53131"));
+            Bloceduser=true;
+        }
+
+    }
+
+
+    void Dialog_Block(String Contactname){
+
+        final AlertDialog.Builder builder = new AlertDialog.Builder(User_Contact_Profile.this);
+        builder.setMessage("Are you sure you want to block "+Contactname+"?")
+                .setCancelable(false)
+                .setPositiveButton("BLOCK", new DialogInterface.OnClickListener() {
+                    public void onClick(DialogInterface dialog, int id) {
+
+                        Insert_Number_To_Blocklist();
+
+                    }
+                })
+                .setNegativeButton("CANCEL", new DialogInterface.OnClickListener() {
+                    @Override
+                    public void onClick(DialogInterface dialogInterface, int i) {
+                        dialogInterface.cancel();
+                    }
+                });
+
+        AlertDialog alert = builder.create();
+        alert.show();
+    }
+
 }

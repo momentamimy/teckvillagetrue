@@ -52,13 +52,13 @@ public class BlockList extends AppCompatActivity {
         Blocklist.setItemAnimator(new DefaultItemAnimator());
         adapter = new Block_Adapter(BlockList.this,BlockInfo);
         Blocklist.setAdapter(adapter);
-        toggleEmptyCases(BlockInfo);
+        toggleEmptyCases(BlockInfo.size());
     }
 
 
-    private void toggleEmptyCases(List<block> BlockInfosemp) {
+    public void toggleEmptyCases(int size) {
 
-        if (BlockInfosemp.size() > 0) {
+        if (size > 0) {
 
             emptyrecyc.setVisibility(View.GONE);
 
