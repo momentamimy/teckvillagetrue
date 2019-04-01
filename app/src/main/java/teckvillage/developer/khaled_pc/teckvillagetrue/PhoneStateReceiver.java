@@ -236,10 +236,9 @@ public class PhoneStateReceiver extends BroadcastReceiver {
                     clazz = Class.forName(telephonyManager.getClass().getName());
                 }
 
-                Method method = null;
-                if (clazz != null) {
-                    method = clazz.getDeclaredMethod("getITelephony");
-                }
+
+                Method method = clazz.getDeclaredMethod("getITelephony");
+
                 method.setAccessible(true);
                 ITelephony telephonyService = (ITelephony) method.invoke(telephonyManager);
                 //Checking incoming call number
