@@ -62,11 +62,11 @@
         android:id="@+id/type_of_call"
         android:layout_width="10dp"
         android:layout_height="10dp"
-        android:layout_marginTop="6dp"
+        android:layout_marginTop="5.5dp"
         android:layout_below="@+id/name_of_log"
         android:layout_marginStart="8dp"
         android:layout_marginLeft="8dp"
-        android:src="@drawable/ic_arrow_right_up"
+        android:src="@drawable/ic_blocked"
         android:contentDescription="arrow" />
 
     <TextView
@@ -76,8 +76,8 @@
         android:text="6:13 p.m"
         android:textSize="13sp"
         android:layout_marginTop="1dp"
-        android:layout_marginStart="10dp"
-        android:layout_marginLeft="10dp"
+        android:layout_marginStart="5dp"
+        android:layout_marginLeft="5dp"
         android:layout_below="@+id/name_of_log"
         android:layout_toEndOf="@+id/type_of_call"
         android:layout_toRightOf="@+id/type_of_call"

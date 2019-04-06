@@ -16,6 +16,7 @@ public class Block_List_Holder extends RecyclerView.ViewHolder {
     public CircleImageView logCircleImageView;
     public TextView blocklistphonename,phonenumber_block;
     public RelativeLayout removefromblock;
+    public LinearLayout layoutcontainer;
 
 
     public Block_List_Holder(View itemView) {
@@ -24,6 +25,7 @@ public class Block_List_Holder extends RecyclerView.ViewHolder {
         blocklistphonename=itemView.findViewById(R.id.name_of_blocklist);
         phonenumber_block=itemView.findViewById(R.id.num_blocklist);
         removefromblock=itemView.findViewById(R.id.Removefromblock);
+        layoutcontainer=itemView.findViewById(R.id.onclicklayout);
 
     }
 }

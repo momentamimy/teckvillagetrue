@@ -7,6 +7,7 @@ import android.support.v4.app.Fragment;
 import android.support.v7.widget.DefaultItemAnimator;
 import android.support.v7.widget.LinearLayoutManager;
 import android.support.v7.widget.RecyclerView;
+import android.util.Log;
 import android.view.LayoutInflater;
 import android.view.View;
 import android.view.ViewGroup;
@@ -15,6 +16,7 @@ import android.widget.TextView;
 
 import java.util.ArrayList;
 import java.util.Collections;
+import java.util.List;
 
 import teckvillage.developer.khaled_pc.teckvillagetrue.Controller.LogAdapter;
 import teckvillage.developer.khaled_pc.teckvillagetrue.R;
@@ -22,6 +24,8 @@ import teckvillage.developer.khaled_pc.teckvillagetrue.model.Get_Calls_Log;
 import teckvillage.developer.khaled_pc.teckvillagetrue.model.Get_list_from_logCall_depend_selection;
 import teckvillage.developer.khaled_pc.teckvillagetrue.model.GroupListByDate;
 import teckvillage.developer.khaled_pc.teckvillagetrue.model.LogInfo;
+import teckvillage.developer.khaled_pc.teckvillagetrue.model.database.Database_Helper;
+import teckvillage.developer.khaled_pc.teckvillagetrue.model.database.tables.BlockListHistory;
 
 /**
  * A simple {@link Fragment} subclass.
@@ -37,6 +41,9 @@ public class Blocked_Call_fragment extends Fragment {
     ArrayList<LogInfo> logInfos;
     LogAdapter adapter1;
     TextView emptyrecycle;
+    Database_Helper db;
+    List<Long> BlockInfoHistory=new ArrayList<Long>();
+    LogInfo logInfo;
 
     public Blocked_Call_fragment() {
         // Required empty public constructor
@@ -55,7 +62,7 @@ public class Blocked_Call_fragment extends Fragment {
 
         emptyrecycle=view.findViewById(R.id.textifempty);
 
-        get_outgoing_list=new Get_list_from_logCall_depend_selection(getActivity());
+        //get_outgoing_list=new Get_list_from_logCall_depend_selection(getActivity());
         get_calls_log=new Get_Calls_Log(getActivity());
 
         groupListByDate=new GroupListByDate();
@@ -75,12 +82,37 @@ public class Blocked_Call_fragment extends Fragment {
 
         //**********************Log List******************************
         logInfos=new ArrayList<>();
-        if(get_calls_log.CheckPermission()){
 
-            logInfos=get_outgoing_list.get_Outgoing_list(CallLog.Calls.TYPE + "=" + CallLog.Calls.BLOCKED_TYPE);
+
+        db=new Database_Helper(getActivity());
+        BlockInfoHistory=db.getAllBlocklistHistoryCallLogIDCOLUMN();//retreive all ID of call Log
+
+        //IF NO Log Call history
+        if(BlockInfoHistory.size()>0){
+
+            if(get_calls_log.CheckPermission()) {
+
+                for (int i = 0; i < BlockInfoHistory.size(); i++) {
+                    Log.w("showIdOfLogCall", String.valueOf(BlockInfoHistory.get(i)));
+
+                    logInfo=new LogInfo();
+                    logInfo=Get_Calls_Log.getCalllogByID(getActivity(), BlockInfoHistory.get(i));//Get Log call Details from Call Log Table
+                    if(logInfo != null){
+                        logInfos.add(logInfo);
+                    }
+
+                }
+
+            }
 
 
         }
+
+        /*
+        if(get_calls_log.CheckPermission()){
+            logInfos=get_outgoing_list.get_Outgoing_list(CallLog.Calls.TYPE + "=" + CallLog.Calls.BLOCKED_TYPE);
+        }*/
+
 
         if(logInfos.size()>0){
 

@@ -1,5 +1,6 @@
 package teckvillage.developer.khaled_pc.teckvillagetrue;
 
+import android.Manifest;
 import android.app.AlertDialog;
 import android.app.Dialog;
 import android.content.BroadcastReceiver;
@@ -7,6 +8,8 @@ import android.content.Context;
 import android.content.DialogInterface;
 import android.content.Intent;
 import android.content.SharedPreferences;
+import android.content.pm.PackageManager;
+import android.database.Cursor;
 import android.graphics.Bitmap;
 import android.graphics.BitmapFactory;
 import android.graphics.Color;
@@ -16,12 +19,16 @@ import android.graphics.drawable.ColorDrawable;
 import android.media.AudioManager;
 import android.net.Uri;
 import android.os.Build;
+import android.provider.CallLog;
 import android.renderscript.Allocation;
 import android.renderscript.Element;
 import android.renderscript.RenderScript;
 import android.renderscript.ScriptIntrinsicBlur;
+import android.support.annotation.NonNull;
+import android.support.v4.app.ActivityCompat;
 import android.support.v7.widget.CardView;
 import android.support.v7.widget.Toolbar;
+import android.telecom.TelecomManager;
 import android.telephony.TelephonyManager;
 import android.text.TextUtils;
 import android.util.DisplayMetrics;
@@ -37,12 +44,18 @@ import android.widget.RelativeLayout;
 import android.widget.TextView;
 import android.widget.Toast;
 
+
+
 import java.lang.reflect.Method;
+import java.security.Permissions;
 import java.util.ArrayList;
+import java.util.Date;
 import java.util.List;
+import java.util.regex.Pattern;
 
 
 import teckvillage.developer.khaled_pc.teckvillagetrue.model.Get_Calls_Log;
+import teckvillage.developer.khaled_pc.teckvillagetrue.model.LogInfo;
 import teckvillage.developer.khaled_pc.teckvillagetrue.model.database.Database_Helper;
 import teckvillage.developer.khaled_pc.teckvillagetrue.model.database.tables.block;
 
@@ -57,10 +70,50 @@ public class PhoneStateReceiver extends BroadcastReceiver {
     Get_Calls_Log get_calls_log;
     Database_Helper db;
     List<String> BlockNumbers;
+    private static final Uri URI_CONTENT_CALLS = Uri.parse("content://call_log/calls");
+    // For the sake of performance we don't use comprehensive phone number pattern.
+    // We just want to detect whether a phone number is digital but not symbolic.
+    private static final Pattern digitalPhoneNumberPattern = Pattern.compile("[+]?[0-9-() ]+");
+    // Is used for normalizing a phone number, removing from it brackets, dashes and spaces.
+    private static final Pattern normalizePhoneNumberPattern = Pattern.compile("[-() ]");
+
+    private static int lastState = TelephonyManager.CALL_STATE_IDLE;
+    private static Date callStartTime;
+    private static boolean isIncoming;
+    private static String savedNumber;  //because the passed incoming is only valid in ringing
+
 
     SharedPreferences preferences;
+
     @Override
     public void onReceive(Context context, Intent intent) {
+
+        //We listen to two intents.  The new outgoing call only tells us of an outgoing call.  We use it to get the number.
+        if (intent.getAction().equals("android.intent.action.NEW_OUTGOING_CALL")) {
+            savedNumber = intent.getExtras().getString("android.intent.extra.PHONE_NUMBER");
+        }
+        else{
+            String stateStr = intent.getExtras().getString(TelephonyManager.EXTRA_STATE);
+            String number = intent.getExtras().getString(TelephonyManager.EXTRA_INCOMING_NUMBER);
+            int state = 0;
+            if(stateStr.equals(TelephonyManager.EXTRA_STATE_IDLE)){
+                state = TelephonyManager.CALL_STATE_IDLE;
+            }
+            else if(stateStr.equals(TelephonyManager.EXTRA_STATE_OFFHOOK)){
+                state = TelephonyManager.CALL_STATE_OFFHOOK;
+            }
+            else if(stateStr.equals(TelephonyManager.EXTRA_STATE_RINGING)){
+                state = TelephonyManager.CALL_STATE_RINGING;
+            }
+
+
+            onCallStateChanged(context, state, number);
+        }
+
+     //********************************************************************************************************************************************
+     //*************************************************Old Code***************************************************************************************
+        try {
+
 
         String state= intent.getStringExtra(TelephonyManager.EXTRA_STATE);
         preferences=context.getSharedPreferences("PopUp_Dialog",MODE_PRIVATE);
@@ -86,18 +139,32 @@ public class PhoneStateReceiver extends BroadcastReceiver {
             BlockNumberWhenRing(context,number);
         }
         else if (state.equals(TelephonyManager.EXTRA_STATE_IDLE)) {
+          try {
+
             if (wm!=null&&viewIsAdded==true)
             {
-                wm.removeViewImmediate(view1);
+                wm.removeViewImmediate(view1);//error
             }
 
                 Intent intent1=new Intent(context,PopupDialogActivity.class);
                 intent1.putExtra("Number",number);
                 intent1.setFlags(Intent.FLAG_ACTIVITY_NEW_TASK);
                 context.startActivity(intent1);
-            }
+
+          }catch (Exception e){
+              e.printStackTrace();
+          }
 
         }
+
+        }catch (Exception e){
+            e.printStackTrace();
+        }
+
+    }
+
+
+
 
 
     public void DisplayDialogOverApps(Context context,String Number) {
@@ -228,37 +295,42 @@ public class PhoneStateReceiver extends BroadcastReceiver {
             if (audioManager != null) {
                 audioManager.setStreamMute(AudioManager.STREAM_RING, true);
             }
-            TelephonyManager telephonyManager = (TelephonyManager) context.getSystemService(Context.TELEPHONY_SERVICE);
+
             try {
-                //Toast.makeText(context, "in"+block_number, Toast.LENGTH_LONG).show();
-                Class clazz = null;
-                if (telephonyManager != null) {
-                    clazz = Class.forName(telephonyManager.getClass().getName());
-                }
 
 
-                Method method = clazz.getDeclaredMethod("getITelephony");
+                TelephonyManager tm = (TelephonyManager) context.getSystemService(Context.TELEPHONY_SERVICE);
 
-                method.setAccessible(true);
-                com.android.internal.telephony.ITelephony telephonyService = (com.android.internal.telephony.ITelephony) method.invoke(telephonyManager);
-                //Checking incoming call number
-                //System.out.println("Call "+block_number);
+                Class c = Class.forName(tm.getClass().getName());
+                Method m = c.getDeclaredMethod("getITelephony");
+                m.setAccessible(true);
+                Object telephonyService = m.invoke(tm); // Get the internal ITelephony object
+                c = Class.forName(telephonyService.getClass().getName()); // Get its class
+                //Method m2 = c.getDeclaredMethod("silenceRinger");
+                m = c.getDeclaredMethod("endCall"); // Get the "endCall()" method
+                m.setAccessible(true); // Make it accessible
+
 
                 for(int i=0;i<BlockNumbers.size();i++){
-                    if ((BlockNumbers.get(i) != null) &&BlockNumbers.get(i).equalsIgnoreCase("+20"+phonenumber)) {
-                        //telephonyService.silenceRinger();//Security exception problem
-                        telephonyService = (com.android.internal.telephony.ITelephony) method.invoke(telephonyManager);
-                        telephonyService.silenceRinger();
-                        telephonyService.endCall();
+                    if ((BlockNumbers.get(i) != null) &&BlockNumbers.get(i).equalsIgnoreCase(phonenumber)) {
+                       // m2.invoke(telephonyService); //silenceRinger
+                        m.invoke(telephonyService); // invoke endCall()
+                        m.setAccessible(true); // Make it accessible
+
+                        //addFromCallLog(context,phonenumber);//Add to block list history
+                        ADDphoneNumberBlockListHistory(context,addFromCallLog(context,phonenumber),BlockNumbers.get(i));
                     }
                 }
 
 
             } catch (Exception e) {
                 Toast.makeText(context, e.toString(), Toast.LENGTH_LONG).show();
+
             }
             //Turn OFF the mute
-            audioManager.setStreamMute(AudioManager.STREAM_RING, false);
+            if (audioManager != null) {
+                audioManager.setStreamMute(AudioManager.STREAM_RING, false);
+            }
 
         }
 
@@ -269,7 +341,7 @@ public class PhoneStateReceiver extends BroadcastReceiver {
 
    public List<String> RetreiveAllNumberInBlockList(Context context){
 
-       List<String> BlockNumbersH=new ArrayList<String>();
+       List<String> BlockNumbersH;
        db=new Database_Helper(context);
        BlockNumbersH=db.getAllBlocklistNumbers();
 
@@ -277,6 +349,145 @@ public class PhoneStateReceiver extends BroadcastReceiver {
 
    }
 
+    public String ADDphoneNumberBlockListHistory(Context context,long ID,String num){
 
+
+        db=new Database_Helper(context);
+        long id=db.insertBlockListHistory(ID,num);
+
+        if(id!=-1){
+            return "Success";
+        }else {
+            return "Failed";
+
+        }
+
+    }
+
+    // ADD passed number from the Call log to Blocklist History
+    private long addFromCallLog(Context context, String number) {
+        // wait for the call be written to the Call log
+        try {
+            Thread.sleep(2000);
+        } catch (InterruptedException ignored) {
+        }
+        // and then ADD it
+       return getLastRecordIdFromCallLog(context, number, 10000);
+    }
+
+    // Returns last call record from the Call log that was written since "duration" time
+    private long getLastRecordIdFromCallLog(Context context, String number, long duration) {
+        if (!Permission.isGranted(context, Permission.READ_CALL_LOG)) {
+            return -1;
+        }
+
+        // We should not search call just by number because it can be not normalized.
+        // Therefore select all records have been written since passed time duration,
+        // normalize every number and then compare.
+        long time = System.currentTimeMillis() - duration;
+
+        Cursor cursor = context.getContentResolver().query(
+                URI_CONTENT_CALLS,
+                new String[]{CallLog.Calls._ID, CallLog.Calls.NUMBER},
+                CallLog.Calls.DATE + " > ? ",
+                new String[]{String.valueOf(time)},
+                CallLog.Calls.DATE + " DESC");
+
+        long id = -1;
+        if (validate(cursor)) {
+            cursor.moveToFirst();
+            final int ID = cursor.getColumnIndex(CallLog.Calls._ID);
+            final int NUMBER = cursor.getColumnIndex(CallLog.Calls.NUMBER);
+
+            // get the first equal
+            do {
+                String _number = cursor.getString(NUMBER);
+
+                // searching for normal number
+                if (_number != null) {
+                        _number = normalizePhoneNumber(_number);
+                        if (_number.equals(number)) {
+                            id = cursor.getLong(ID);
+                            Log.w("Loglastcalldetails","ID= " +String.valueOf(id)+"  $$  " +"Number=  "+_number);
+                            break;
+                        }
+                    }
+
+            } while (cursor.moveToNext());
+            cursor.close();
+        }
+
+        return id;
+    }
+
+
+    private boolean validate(Cursor cursor) {
+        if (cursor == null || cursor.isClosed()) return false;
+        if (cursor.getCount() == 0) {
+            cursor.close();
+            return false;
+        }
+        return true;
+    }
+
+    /**
+     * If passed phone number is digital and not symbolic then normalizes
+     * it, removing brackets, dashes and spaces.
+     */
+    public static String normalizePhoneNumber(@NonNull String number) {
+        number = number.trim();
+        if (digitalPhoneNumberPattern.matcher(number).matches()) {
+            number = normalizePhoneNumberPattern.matcher(number).replaceAll("");
+        }
+        return number;
+    }
+
+    //Derived classes should override these to respond to specific events of interest
+    protected void onIncomingCallStarted(Context ctx, String number, Date start){Log.w("NewState","onIncomingCallStarted"+" %%PhoneNumber= "+number);}
+    protected void onOutgoingCallStarted(Context ctx, String number, Date start){Log.w("NewState","onOutgoingCallStarted"+" %%PhoneNumber= "+number);}
+    protected void onIncomingCallEnded(Context ctx, String number, Date start, Date end){Log.w("NewState","onIncomingCallEnded"+" %%PhoneNumber= "+number);}//When user Answer income call and close call
+    protected void onOutgoingCallEnded(Context ctx, String number, Date start, Date end){Log.w("NewState","onOutgoingCallEnded"+" %%PhoneNumber= "+number);}
+    protected void onMissedCall(Context ctx, String number, Date start){Log.w("NewState","onMissedCall"+" %%PhoneNumber= "+number);}//Occur when Income call -> Ring until End (No answer) Or User Cancel(phone number Blocked)
+
+
+
+    //Incoming call-  goes from IDLE to RINGING when it rings, to OFFHOOK when it's answered, to IDLE when its hung up
+    //Outgoing call-  goes from IDLE to OFFHOOK when it dials out, to IDLE when hung up
+    public void onCallStateChanged(Context context, int state, String number) {
+        if(lastState == state){
+            //No change, debounce extras
+            return;
+        }
+        switch (state) {
+            case TelephonyManager.CALL_STATE_RINGING:
+                isIncoming = true;
+                callStartTime = new Date();
+                savedNumber = number;
+                onIncomingCallStarted(context, number, callStartTime);
+                break;
+            case TelephonyManager.CALL_STATE_OFFHOOK:
+                //Transition of ringing->offhook are pickups of incoming calls.  Nothing done on them
+                if(lastState != TelephonyManager.CALL_STATE_RINGING){
+                    isIncoming = false;
+                    callStartTime = new Date();
+                    onOutgoingCallStarted(context, savedNumber, callStartTime);
+                }
+                break;
+            case TelephonyManager.CALL_STATE_IDLE:
+                //Went to idle-  this is the end of a call.  What type depends on previous state(s)
+                if(lastState == TelephonyManager.CALL_STATE_RINGING){
+                    //Ring but no pickup-  a miss
+                    onMissedCall(context, savedNumber, callStartTime);
+                }
+                else if(isIncoming){
+                    onIncomingCallEnded(context, savedNumber, callStartTime, new Date());
+                }
+                else{
+                    onOutgoingCallEnded(context, savedNumber, callStartTime, new Date());
+                }
+                break;
+        }
+        lastState = state;
+    }
 
 }

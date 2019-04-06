@@ -84,9 +84,9 @@ public class LogAdapter extends RecyclerView.Adapter<LogHolder> {
 
 
             numofcallvar=itemList.get(position).getNumberofcall();
+
             if(itemList.get(position).getNumberofcall()==1){
                 holder.numbersofcallinminte.setVisibility(View.GONE);
-
 
             }else {
                 holder.numbersofcallinminte.setVisibility(View.VISIBLE);
@@ -188,7 +188,7 @@ public class LogAdapter extends RecyclerView.Adapter<LogHolder> {
                         holder.logIcon.setImageDrawable(context.getResources().getDrawable(R.drawable.ic_voicemail));
                         break;
                     case "BLOCKED":
-                        holder.logIcon.setImageDrawable(context.getResources().getDrawable(R.drawable.ic_rejected_call));
+                        holder.logIcon.setImageDrawable(context.getResources().getDrawable(R.drawable.ic_blocked));
                         break;
                     case "ANSWERED":
                         holder.logIcon.setImageDrawable(context.getResources().getDrawable(R.drawable.ic_call_received_arrow));
@@ -197,7 +197,7 @@ public class LogAdapter extends RecyclerView.Adapter<LogHolder> {
             }
 
             holder.logDate.setText(itemList.get(position).hour);
-            holder.callType.setText(itemList.get(position).callType);
+            holder.callType.setText(itemList.get(position).getNumberType());
 
         }
 

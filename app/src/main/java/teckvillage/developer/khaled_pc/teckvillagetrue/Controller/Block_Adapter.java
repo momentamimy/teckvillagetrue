@@ -15,6 +15,7 @@ import android.view.LayoutInflater;
 import android.view.View;
 import android.view.ViewGroup;
 import android.widget.TextView;
+import android.widget.Toast;
 
 import com.squareup.picasso.Picasso;
 
@@ -24,6 +25,7 @@ import teckvillage.developer.khaled_pc.teckvillagetrue.R;
 import teckvillage.developer.khaled_pc.teckvillagetrue.View.BlockList;
 import teckvillage.developer.khaled_pc.teckvillagetrue.View.Block_List_Holder;
 import teckvillage.developer.khaled_pc.teckvillagetrue.View.ContactHolder;
+import teckvillage.developer.khaled_pc.teckvillagetrue.View.User_Contact_Profile_From_log_list;
 import teckvillage.developer.khaled_pc.teckvillagetrue.model.ContactInfo;
 import teckvillage.developer.khaled_pc.teckvillagetrue.model.DataItems_Block;
 import teckvillage.developer.khaled_pc.teckvillagetrue.model.database.Database_Helper;
@@ -69,6 +71,21 @@ public class Block_Adapter extends RecyclerView.Adapter<Block_List_Holder> {
 
               }
           });
+
+          holder.layoutcontainer.setOnClickListener(new View.OnClickListener() {
+              @Override
+              public void onClick(View v) {
+                  Intent intent = new Intent(context,User_Contact_Profile_From_log_list.class);
+                  String num=itemList.get(position).getNumber();
+                  if(num != null&& !num.isEmpty()){
+                      intent.putExtra("ContactNUm",num);
+                      context.startActivity(intent);
+                  }else {
+                      Toast.makeText(context, "Can't open profile to this number", Toast.LENGTH_LONG).show();
+                  }
+              }
+          });
+
         }
 
 

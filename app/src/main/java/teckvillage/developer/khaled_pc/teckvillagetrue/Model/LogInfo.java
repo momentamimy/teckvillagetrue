@@ -8,7 +8,7 @@ public class LogInfo {
     public String logName;
     public String logIcon;
     public Date logDate;
-    public String callType;
+    public String numberType;
     public String hour;
     String dateString;
     String number;
@@ -16,24 +16,36 @@ public class LogInfo {
     int numberofcall;
 
 
-    public LogInfo(String imageUrl,String logName,String logIcon,Date logDate,String callType,String hour,String number,int numberofcall)
+    public LogInfo(String imageUrl,String logName,String logIcon,Date logDate,String numberType,String hour,String number,int numberofcall)
     {
         this.imageUrl=imageUrl;
         this.logName=logName;
         this.logIcon=logIcon;
         this.logDate=logDate;
-        this.callType=callType;
+        this.numberType=numberType;
         this.hour=hour;
         this.number=number;
         this.numberofcall=numberofcall;
     }
 
+    public LogInfo(String logName,String logIcon,Date logDate,String numberType,String hour,String number)
+    {
 
+        this.logName=logName;
+        this.logIcon=logIcon;
+        this.logDate=logDate;
+        this.numberType=numberType;
+        this.hour=hour;
+        this.number=number;
+
+    }
 
     public LogInfo()
     {
 
     }
+
+
 
     public static final Comparator<LogInfo> BY_DATE = new Comparator<LogInfo>() {
         @Override
@@ -42,6 +54,56 @@ public class LogInfo {
             return t1.logDate.compareTo(cases.logDate);
         }
     };
+
+
+
+    public String getImageUrl() {
+        return imageUrl;
+    }
+
+    public void setImageUrl(String imageUrl) {
+        this.imageUrl = imageUrl;
+    }
+
+    public String getLogName() {
+        return logName;
+    }
+
+    public void setLogName(String logName) {
+        this.logName = logName;
+    }
+
+    public String getLogIcon() {
+        return logIcon;
+    }
+
+    public void setLogIcon(String logIcon) {
+        this.logIcon = logIcon;
+    }
+
+    public Date getLogDate() {
+        return logDate;
+    }
+
+    public void setLogDate(Date logDate) {
+        this.logDate = logDate;
+    }
+
+    public String getNumberType() {
+        return numberType;
+    }
+
+    public void setNumberType(String numberType) {
+        this.numberType = numberType;
+    }
+
+    public String getHour() {
+        return hour;
+    }
+
+    public void setHour(String hour) {
+        this.hour = hour;
+    }
 
     public int getNumberofcall() {
         return numberofcall;

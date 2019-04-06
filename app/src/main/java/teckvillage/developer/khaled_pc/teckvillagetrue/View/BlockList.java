@@ -5,6 +5,8 @@ import android.os.Bundle;
 import android.support.v7.widget.DefaultItemAnimator;
 import android.support.v7.widget.LinearLayoutManager;
 import android.support.v7.widget.RecyclerView;
+import android.util.Log;
+import android.view.MenuItem;
 import android.view.View;
 import android.widget.TextView;
 
@@ -17,6 +19,7 @@ import teckvillage.developer.khaled_pc.teckvillagetrue.R;
 import teckvillage.developer.khaled_pc.teckvillagetrue.model.DataItems_Block;
 import teckvillage.developer.khaled_pc.teckvillagetrue.model.LogInfo;
 import teckvillage.developer.khaled_pc.teckvillagetrue.model.database.Database_Helper;
+import teckvillage.developer.khaled_pc.teckvillagetrue.model.database.tables.BlockListHistory;
 import teckvillage.developer.khaled_pc.teckvillagetrue.model.database.tables.block;
 
 public class BlockList extends AppCompatActivity {
@@ -25,8 +28,10 @@ public class BlockList extends AppCompatActivity {
     LinearLayoutManager lLayout1;
     Block_Adapter adapter;
     TextView emptyrecyc;
-    List<block> BlockInfo;
+    List<block> BlockInfo=new ArrayList<block>();
     Database_Helper db;
+    boolean shouldExecuteOnResume;
+
     @Override
     protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
@@ -36,15 +41,13 @@ public class BlockList extends AppCompatActivity {
         getSupportActionBar().setDisplayShowHomeEnabled(true);   //back button on App Bar
         getSupportActionBar().setDisplayHomeAsUpEnabled(true);   //back button on App Bar
 
+        shouldExecuteOnResume = false;
 
         Blocklist=findViewById(R.id.blocklistRecycle);
         emptyrecyc=findViewById(R.id.emtyrecycleblocklist);
 
-        BlockInfo=new ArrayList<block>();
         db=new Database_Helper(this);
         BlockInfo=db.getAllBlocklist();
-
-
 
 
         lLayout1 = new LinearLayoutManager(BlockList.this);
@@ -53,6 +56,7 @@ public class BlockList extends AppCompatActivity {
         adapter = new Block_Adapter(BlockList.this,BlockInfo);
         Blocklist.setAdapter(adapter);
         toggleEmptyCases(BlockInfo.size());
+
     }
 
 
@@ -66,5 +70,34 @@ public class BlockList extends AppCompatActivity {
             emptyrecyc.setVisibility(View.VISIBLE);
 
         }
+    }
+
+    public boolean onOptionsItemSelected(MenuItem item) {
+        // Handle action bar item clicks here. The action bar will
+        // automatically handle clicks on the Home/Up button, so long
+        // as you specify a parent activity in AndroidManifest.xml.
+        int id = item.getItemId();
+
+        if (id == android.R.id.home) {
+            finish();
+        }
+
+        return super.onOptionsItemSelected(item);
+    }
+
+
+    @Override
+    public void onResume() {
+        super.onResume();
+        if (shouldExecuteOnResume) {
+
+            BlockInfo.clear();
+            BlockInfo.addAll(db.getAllBlocklist());
+            adapter.notifyDataSetChanged();
+            toggleEmptyCases(BlockInfo.size());
+        }else{
+            shouldExecuteOnResume = true;
+        }
+
     }
 }

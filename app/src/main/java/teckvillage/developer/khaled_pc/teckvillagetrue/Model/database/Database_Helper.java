@@ -9,6 +9,8 @@ import android.database.sqlite.SQLiteOpenHelper;
 import java.util.ArrayList;
 import java.util.List;
 
+import teckvillage.developer.khaled_pc.teckvillagetrue.View.BlockList;
+import teckvillage.developer.khaled_pc.teckvillagetrue.model.database.tables.BlockListHistory;
 import teckvillage.developer.khaled_pc.teckvillagetrue.model.database.tables.block;
 
 /**
@@ -18,7 +20,7 @@ import teckvillage.developer.khaled_pc.teckvillagetrue.model.database.tables.blo
 public class Database_Helper extends SQLiteOpenHelper {
 
     // Database Version
-    private static final int DATABASE_VERSION = 2;
+    private static final int DATABASE_VERSION = 3;
 
     // Database Name
     public static final String DATABASE_NAME = "WhoCaller_db";
@@ -34,8 +36,9 @@ public class Database_Helper extends SQLiteOpenHelper {
 
         // create Block table
         db.execSQL(block.CREATE_TABLE);
-        // create Case table
-       // db.execSQL(Cases.CREATE_TABLE);
+        // create Block List History table
+        db.execSQL(BlockListHistory.CREATE_TABLE);
+
 
     }
 
@@ -44,7 +47,7 @@ public class Database_Helper extends SQLiteOpenHelper {
     public void onUpgrade(SQLiteDatabase db, int oldVersion, int newVersion) {
         // Drop older table if existed
         db.execSQL("DROP TABLE IF EXISTS " + block.TABLE_NAME);
-        //db.execSQL("DROP TABLE IF EXISTS " + Cases.TABLE_NAME);
+        db.execSQL("DROP TABLE IF EXISTS " + BlockListHistory.TABLE_NAME);
 
         // Create tables again
         onCreate(db);
@@ -112,11 +115,6 @@ public class Database_Helper extends SQLiteOpenHelper {
         Cursor cursor = db.rawQuery(selectQuery, null);
 
 
-       /* Cursor cursor = db.query(block.TABLE_NAME, new String[]{block.COLUMN_ID, block.COLUMN_NUMBER},
-                block.COLUMN_ID + "=?",
-                new String[]{}, null, null, null, null);
-                */
-
         // looping through all rows and adding to list
         if (cursor.moveToFirst()) {
             do {
@@ -183,6 +181,93 @@ public class Database_Helper extends SQLiteOpenHelper {
         return db.update(block.TABLE_NAME, values, block.COLUMN_ID + " = ?",
                 new String[]{String.valueOf(id)});
     }
+
+    //TODO:#####################################################3/31/2019  block List History Operation  ########################################################
+
+    public long insertBlockListHistory(long ID,String number) {
+        // get writable database as we want to write data
+        SQLiteDatabase db = this.getWritableDatabase();
+
+        ContentValues values = new ContentValues();
+        // `id`  will be inserted automatically.
+        // no need to add them
+        values.put(BlockListHistory.COLUMN_CALLLOGID, ID);
+        values.put(BlockListHistory.COLUMN_NUMBER, number);
+
+        // insert row
+        long id = db.insert(BlockListHistory.TABLE_NAME, null, values);
+
+        // close db connection
+        db.close();
+
+        // return newly inserted row id
+        return id;
+    }
+
+
+
+    public List<BlockListHistory> getAllBlocklistHistory() {
+        List<BlockListHistory> courtsList = new ArrayList<>();
+
+        // Select All Query
+        String selectQuery = "SELECT  * FROM " + BlockListHistory.TABLE_NAME;
+
+        SQLiteDatabase db = this.getReadableDatabase();
+        Cursor cursor = db.rawQuery(selectQuery, null);
+
+        // looping through all rows and adding to list
+        if (cursor.moveToFirst()) {
+            do {
+                BlockListHistory block1 = new BlockListHistory();
+                block1.setId(cursor.getInt(cursor.getColumnIndex(BlockListHistory.COLUMN_ID)));
+                block1.setCallLogID(cursor.getLong(cursor.getColumnIndex(BlockListHistory.COLUMN_CALLLOGID)));
+                block1.setNumber(cursor.getString(cursor.getColumnIndex(BlockListHistory.COLUMN_NUMBER)));
+
+                courtsList.add(block1);
+            } while (cursor.moveToNext());
+        }
+
+        // close db connection
+        db.close();
+
+        // return Court list
+        return courtsList;
+    }
+
+    public List<Long> getAllBlocklistHistoryCallLogIDCOLUMN() {
+        List<Long> courtsList = new ArrayList<>();
+
+        // Select All Query
+        String selectQuery = "SELECT  "+BlockListHistory.COLUMN_CALLLOGID +" FROM " + BlockListHistory.TABLE_NAME;
+
+        SQLiteDatabase db = this.getReadableDatabase();
+        Cursor cursor = db.rawQuery(selectQuery, null);
+
+
+        // looping through all rows and adding to list
+        if (cursor.moveToFirst()) {
+            do {
+                Long CalllogID=cursor.getLong(cursor.getColumnIndex(BlockListHistory.COLUMN_CALLLOGID));
+
+                courtsList.add(CalllogID);
+            } while (cursor.moveToNext());
+        }
+
+        // close db connection
+        db.close();
+
+        // return Court list
+        return courtsList;
+    }
+
+    public boolean deleteLogCallIDFromHistory(long ID) {
+        SQLiteDatabase db = this.getWritableDatabase();
+        int del=db.delete(BlockListHistory.TABLE_NAME, BlockListHistory.COLUMN_CALLLOGID + " = ?",
+                new String[]{String.valueOf(ID)});
+        db.close();
+        return del>0;
+    }
+
 
 
 }

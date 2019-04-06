@@ -167,6 +167,8 @@ public class Main_Fagment extends Fragment implements OnBackPressedListener , Lo
         // Inflate the layout for this fragment
         View view = inflater.inflate(R.layout.fragment_main__fagment, container, false);
 
+        shouldExecuteOnResume = false;
+
         firstimagwaiting=view.findViewById(R.id.waitingimg_topten);
         secimagwaiting=view.findViewById(R.id.waitingimg_topten2);
         textwaiting=view.findViewById(R.id.textwaiting);
@@ -975,11 +977,13 @@ public class Main_Fagment extends Fragment implements OnBackPressedListener , Lo
         if (shouldExecuteOnResume) {
             Log.d("mesheyyyy", "onresume");
 
-            //loglist103.clear();
+            loglist103.clear();
             //Uri CONTACT_URI =CallLog.Calls.CONTENT_URI;
             //getLoaderManager().restartLoader(0, null, this);
             //getContext().getContentResolver().notifyChange(CONTACT_URI, null);
             adapter1.notifyDataSetChanged();
+        } else{
+           shouldExecuteOnResume = true;
         }
         /*
         if (shouldExecuteOnResume) {
@@ -1190,10 +1194,9 @@ public class Main_Fagment extends Fragment implements OnBackPressedListener , Lo
 
 
         if (cursor.moveToNext() == false)
-
         {
             Log.e("GOPAL", "Empty Cursor");
-            callLogInfos=get_calls_log.getCallDetails();
+            //callLogInfos=get_calls_log.getCallDetails();
         }
         else {
             do {
@@ -1399,7 +1402,7 @@ public class Main_Fagment extends Fragment implements OnBackPressedListener , Lo
 
                 } else {
 
-                    loglist103.add(new LogInfo(null, logInfos.get(i).logName, logInfos.get(i).logIcon, logInfos.get(i).logDate, logInfos.get(i).callType, logInfos.get(i).hour, logInfos.get(i).getNumber(), numbersofcall));
+                    loglist103.add(new LogInfo(null, logInfos.get(i).logName, logInfos.get(i).logIcon, logInfos.get(i).logDate, logInfos.get(i).getNumberType(), logInfos.get(i).hour, logInfos.get(i).getNumber(), numbersofcall));
                     numbersofcall = 1;
                 }
             }

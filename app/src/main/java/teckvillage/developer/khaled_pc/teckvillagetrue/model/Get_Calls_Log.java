@@ -38,6 +38,7 @@ import java.util.Map;
 
 import teckvillage.developer.khaled_pc.teckvillagetrue.Permission;
 import teckvillage.developer.khaled_pc.teckvillagetrue.R;
+import teckvillage.developer.khaled_pc.teckvillagetrue.model.database.Database_Helper;
 
 /**
  * Created by khaled-pc on 2/20/2019.
@@ -700,6 +701,122 @@ public class Get_Calls_Log {
 
     }
 
+   static public  LogInfo getCalllogByID(Context context,long LogCallID) {
+
+        LogInfo logInfo=new LogInfo();
+
+        String[] projection = {
+                CallLog.Calls.CACHED_NAME,
+                CallLog.Calls.CACHED_NUMBER_TYPE,
+                CallLog.Calls.NUMBER,
+                CallLog.Calls.DATE,
+        };
+
+        @SuppressLint("MissingPermission") Cursor managedCursor = context.getContentResolver().query(CallLog.Calls.CONTENT_URI, projection, CallLog.Calls._ID + "=" + LogCallID, null, null);
+
+        String phName, phNumber, callDate,  dateStringhour;
+        String typephone = null;
+        int phmobileType;
+        Date callDayTime;
+
+        //Date Format  "dd-MM-yyyy h:mm a"
+        SimpleDateFormat formatter = new SimpleDateFormat("h:mm a", Locale.ENGLISH);
 
 
-}
+        if((managedCursor == null|| managedCursor.getCount() <=0) ) {
+
+            Log.e("GOPAL", "Empty Cursor");
+            Database_Helper db=new Database_Helper(context);
+            if(db.deleteLogCallIDFromHistory(LogCallID)){
+                Log.w("Rowhistory","Deleted");
+            }else {
+                Log.w("Rowhistory","NotDeleted");
+            }
+            return null;
+
+        } else {
+                managedCursor.moveToFirst();
+            do {
+
+                    phName = managedCursor.getString(managedCursor.getColumnIndex(CallLog.Calls.CACHED_NAME));
+                    phmobileType = managedCursor.getInt(managedCursor.getColumnIndex(CallLog.Calls.CACHED_NUMBER_TYPE));
+                    phNumber = managedCursor.getString(managedCursor.getColumnIndex(CallLog.Calls.NUMBER));
+                    callDate = managedCursor.getString(managedCursor.getColumnIndex(CallLog.Calls.DATE));
+                    callDayTime = new Date(Long.valueOf(callDate));
+
+
+                    // do what ever you want here
+
+                    //callDuration = managedCursor.getString(duration);
+                    dateStringhour = formatter.format(new Date(Long.parseLong(callDate)));
+
+
+                    switch (phmobileType) {
+                        case ContactsContract.CommonDataKinds.Phone.TYPE_MOBILE:
+                            typephone = "Mobile";
+                            break;
+                        case ContactsContract.CommonDataKinds.Phone.TYPE_HOME:
+                            typephone = "Home";
+                            break;
+                        case ContactsContract.CommonDataKinds.Phone.TYPE_WORK:
+                            typephone = "Work";
+                            break;
+                        case ContactsContract.CommonDataKinds.Phone.TYPE_FAX_WORK:
+                            typephone = "Work Fax";
+                            break;
+                        case ContactsContract.CommonDataKinds.Phone.TYPE_FAX_HOME:
+                            typephone = "Home Fax";
+                            break;
+                        case ContactsContract.CommonDataKinds.Phone.TYPE_MAIN:
+                            typephone = "Main";
+                            break;
+                        case ContactsContract.CommonDataKinds.Phone.TYPE_PAGER:
+                            typephone = "Pager";
+                            break;
+                        case ContactsContract.CommonDataKinds.Phone.TYPE_CUSTOM:
+                            typephone = "Other";//Custom
+                            break;
+                        case ContactsContract.CommonDataKinds.Phone.TYPE_OTHER:
+                            typephone = "Other";
+                            break;
+                        default:
+                            break;
+                    }
+
+                    if (phName == null || phName.equals("")) {
+                        if (phNumber != null) {
+
+                            if (phNumber.equals("")) {
+
+                                phName = "Unknown";
+
+                            } else {
+
+                                phName = phNumber;
+                            }
+
+                        } else {
+                            phName = "Unknown Number";
+                        }
+                    }
+
+
+                    logInfo.setImageUrl(null);
+                    logInfo.setLogName(phName);
+                    logInfo.setLogIcon("BLOCKED");
+                    logInfo.setLogDate(callDayTime);
+                    logInfo.setNumberType(typephone);
+                    logInfo.setHour(dateStringhour);
+                    logInfo.setNumber(phNumber);
+                    logInfo.setNumberofcall(1);
+
+                }while (managedCursor.moveToNext());
+            }
+
+
+
+
+        return logInfo;
+    }
+
+  }
