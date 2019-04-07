@@ -3,6 +3,7 @@
     xmlns:tools="http://schemas.android.com/tools"
     package="teckvillage.developer.khaled_pc.teckvillagetrue">
 
+    <uses-permission android:name="android.permission.ACCESS_NETWORK_STATE" />
     <uses-permission android:name="android.permission.ACTION_MANAGE_OVERLAY_PERMISSION" />
     <uses-permission android:name="android.permission.SYSTEM_ALERT_WINDOW" />
     <uses-permission android:name="android.permission.INTERNET" />
@@ -142,10 +143,24 @@
             </intent-filter>
         </service>
 
-        <activity android:name=".verification" />
+        <activity android:name=".verification"
+            android:configChanges="orientation"
+            android:screenOrientation="portrait"/>
+
         <activity
             android:name=".View.SplashScreen"
-            android:theme="@style/AppTheme.NoActionBar" />
+            android:configChanges="orientation"
+            android:screenOrientation="portrait"
+            android:theme="@style/AppTheme.NoActionBar" >
+
+            <intent-filter>
+                <action android:name="android.intent.action.MAIN" />
+
+                <category android:name="android.intent.category.LAUNCHER" />
+            </intent-filter>
+
+        </activity>
+
         <activity
             android:name=".View.LoginActivity"
             android:configChanges="orientation"
@@ -158,11 +173,7 @@
             android:screenOrientation="portrait"
             android:theme="@style/AppTheme.NoActionBar"
             android:windowSoftInputMode="stateAlwaysHidden">
-            <intent-filter>
-                <action android:name="android.intent.action.MAIN" />
 
-                <category android:name="android.intent.category.LAUNCHER" />
-            </intent-filter>
             <intent-filter>
                 <action android:name="android.intent.action.VIEW" />
                 <action android:name="android.intent.action.DIAL" />
@@ -241,7 +252,11 @@
             android:configChanges="orientation"
             android:screenOrientation="portrait"
             android:theme="@style/AppTheme.NoActionBar" />
-        <activity android:name=".View.BlockList"></activity>
+
+        <activity android:name=".View.BlockList"
+            android:configChanges="orientation"
+            android:screenOrientation="portrait"/>
+
     </application>
 
 </manifest>

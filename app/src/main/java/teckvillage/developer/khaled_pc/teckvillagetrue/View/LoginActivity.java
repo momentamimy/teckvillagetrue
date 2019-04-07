@@ -1,11 +1,14 @@
 package teckvillage.developer.khaled_pc.teckvillagetrue.View;
 
+import android.content.Context;
 import android.content.Intent;
+import android.content.SharedPreferences;
 import android.support.v7.app.AppCompatActivity;
 import android.os.Bundle;
 import android.text.Editable;
 import android.text.TextUtils;
 import android.text.TextWatcher;
+import android.util.Log;
 import android.view.View;
 import android.widget.EditText;
 import android.widget.TextView;
@@ -25,7 +28,10 @@ public class LoginActivity extends AppCompatActivity implements TextWatcher {
     EditText phoneNumber;
     TextView continu;
     Country myCountry=null;
-
+    boolean PhoneNumberValid;
+    SharedPreferences sharedPreferences;
+    boolean IsPhoneNumberMissed_Call_VerificationHappen;
+    String  countrycodee,phnum;
 
 
     @Override
@@ -38,6 +44,19 @@ public class LoginActivity extends AppCompatActivity implements TextWatcher {
         codeCountry=findViewById(R.id.CodeCountry);
         continu=findViewById(R.id.continu);
 
+        sharedPreferences = getSharedPreferences("WhoCaller?", Context.MODE_PRIVATE);
+        IsPhoneNumberMissed_Call_VerificationHappen= sharedPreferences.getBoolean("IsPhoneNumberMissedCallVerification", false);
+        countrycodee = sharedPreferences.getString("Countrycode","false");
+        phnum = sharedPreferences.getString("PhoneNumVerified","false");
+
+        //Close This Activity If Phone number Verified and Open Signup ACtivity
+        if(IsPhoneNumberMissed_Call_VerificationHappen){
+            Intent intent = new Intent(getApplicationContext(), Signup.class);
+            intent.putExtra("countrycode",countrycodee);
+            intent.putExtra("phonenumber",phnum);
+            startActivity(intent);
+            finish();
+        }
 
         codeCountry.setOnClickListener(new View.OnClickListener() {
             @Override
@@ -46,8 +65,7 @@ public class LoginActivity extends AppCompatActivity implements TextWatcher {
             }
         });
 
-        countryPicker = new CountryPicker.Builder().with(this)
-                        .listener(new OnCountryPickerListener() {
+        countryPicker = new CountryPicker.Builder().with(this).listener(new OnCountryPickerListener() {
                             @Override
                             public void onSelectCountry(Country country) {
                                 myCountry=country;
@@ -56,17 +74,30 @@ public class LoginActivity extends AppCompatActivity implements TextWatcher {
                                 codeCountry.setCompoundDrawablesWithIntrinsicBounds(0, 0, R.drawable.ic_tick, 0);
                             }
                         }).build();
+
+        //On Click continue btn
         continu.setOnClickListener(new View.OnClickListener() {
             @Override
             public void onClick(View v) {
                 if (myCountry==null)
                 {
-                    Toast.makeText(getApplicationContext(),"you shold select your country",Toast.LENGTH_LONG).show();
+                    Toast.makeText(getApplicationContext(),"You Should Select Your Country",Toast.LENGTH_LONG).show();
+                    return;
+                }else if(!PhoneNumberValid){
+                    Toast.makeText(getApplicationContext(),"You Should Enter Correct Phone Number",Toast.LENGTH_LONG).show();
+                    return;
+                }else if(myCountry.getName().equals("Egypt")&&phoneNumber.getText().toString().trim().length()<11||phoneNumber.getText().toString().trim().length()>11){
+
+                    Toast.makeText(getApplicationContext(),"You Should Enter Correct Phone Number",Toast.LENGTH_LONG).show();
                     return;
                 }
-                String number=myCountry.getDialCode()+phoneNumber.getText().toString();
+
+                //Toast.makeText(getApplicationContext(),myCountry.getDialCode().toString(),Toast.LENGTH_LONG).show();
+                String number=myCountry.getDialCode()+phoneNumber.getText().toString().trim();
+                String councode=myCountry.getDialCode();
                 Intent intent=new Intent(getApplicationContext(), Missed_Call_Verification.class);
                 intent.putExtra("num",number);
+                intent.putExtra("codenum",councode);
                 startActivity(intent);
                 finish();
             }
@@ -90,13 +121,15 @@ public class LoginActivity extends AppCompatActivity implements TextWatcher {
         if(phoneNumber.getText().toString().trim().length()==0){
             phoneNumber.setCompoundDrawablesWithIntrinsicBounds(0, 0, 0, 0);
         }
+
         if(setcross(phoneNumber.getText().toString().trim())){
             phoneNumber.setCompoundDrawablesWithIntrinsicBounds(0, 0, R.drawable.ic_close, 0);
+            PhoneNumberValid=false;
         }
 
         if(isValidPhoneNumber(phoneNumber.getText().toString().trim())){
             phoneNumber.setCompoundDrawablesWithIntrinsicBounds(0, 0, R.drawable.ic_tick, 0);
-
+            PhoneNumberValid=true;
         }
     }
 

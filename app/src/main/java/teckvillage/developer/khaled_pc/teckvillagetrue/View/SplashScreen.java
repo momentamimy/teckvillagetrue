@@ -3,6 +3,7 @@ package teckvillage.developer.khaled_pc.teckvillagetrue.View;
 import android.Manifest;
 import android.content.Context;
 import android.content.Intent;
+import android.content.SharedPreferences;
 import android.net.Uri;
 import android.os.Build;
 import android.provider.Settings;
@@ -20,12 +21,14 @@ import java.util.List;
 import pub.devrel.easypermissions.AfterPermissionGranted;
 import pub.devrel.easypermissions.AppSettingsDialog;
 import pub.devrel.easypermissions.EasyPermissions;
+import teckvillage.developer.khaled_pc.teckvillagetrue.MainActivity;
 import teckvillage.developer.khaled_pc.teckvillagetrue.R;
 
 public class SplashScreen extends AppCompatActivity implements EasyPermissions.PermissionCallbacks  {
 
     public final static int Request_Code=999;
-
+    SharedPreferences sharedPreferences;
+    boolean IsLogin;
     TextView proceed;
     @Override
     protected void onCreate(Bundle savedInstanceState) {
@@ -45,12 +48,33 @@ public class SplashScreen extends AppCompatActivity implements EasyPermissions.P
                 Manifest.permission.CAMERA
         };
 
+        sharedPreferences = getSharedPreferences("WhoCaller?", Context.MODE_PRIVATE);
+        IsLogin = sharedPreferences.getBoolean("UserLogin", false);
+
+
+        /*
+         //when Login Success
+         SharedPreferences sharedPref = mContext.getSharedPreferences("WhoCaller?", MODE_PRIVATE);
+                        SharedPreferences.Editor editor = sharedPref.edit();
+                        editor.putBoolean("UserLogin", IsLogin);
+                        editor.putString("User_API_token", userAPItoken);
+                        editor.commit();*/
+
         if (EasyPermissions.hasPermissions(getApplicationContext(),perms))
         {
             //Toast.makeText(getApplicationContext(),"Granted",Toast.LENGTH_LONG).show();
-            Intent intent=new Intent(this,LoginActivity.class);
-            startActivity(intent);
-            finish();
+            if(IsLogin){
+                Intent intent=new Intent(this,MainActivity.class);
+                startActivity(intent);
+                finish();
+            }else {
+                Intent intent=new Intent(this,Signup.class);//LoginActivity
+                intent.putExtra("countrycode","+20");//remove
+                intent.putExtra("phonenumber","01200000000");//remove
+                startActivity(intent);
+                finish();
+            }
+
         }
 
         proceed=findViewById(R.id.proceed);
@@ -92,8 +116,17 @@ public class SplashScreen extends AppCompatActivity implements EasyPermissions.P
         if (EasyPermissions.hasPermissions(getApplicationContext(),perms))
         {
             //Toast.makeText(getApplicationContext(),"Granted",Toast.LENGTH_LONG).show();
-            Intent intent=new Intent(this,LoginActivity.class);
-            startActivity(intent);
+            if(IsLogin){
+                Intent intent=new Intent(this,MainActivity.class);
+                startActivity(intent);
+                finish();
+            }else {
+                Intent intent=new Intent(this,Signup.class);//LoginActivity
+                intent.putExtra("countrycode","+20");//remove
+                intent.putExtra("phonenumber","01280945456");//remove
+                startActivity(intent);
+                finish();
+            }
         }
         else
         {

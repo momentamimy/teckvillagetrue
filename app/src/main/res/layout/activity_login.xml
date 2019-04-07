@@ -157,7 +157,7 @@
                 android:layout_height="wrap_content"
                 android:inputType="number"
                 android:textColor="#fff"
-                android:maxLength="11"
+                android:maxLength="15"
                 />
         </android.support.design.widget.TextInputLayout>
 
