@@ -3,6 +3,11 @@ package teckvillage.developer.khaled_pc.teckvillagetrue;
 import android.Manifest;
 import android.app.AlertDialog;
 import android.app.Dialog;
+import android.app.Notification;
+import android.app.NotificationChannel;
+import android.app.NotificationManager;
+import android.app.PendingIntent;
+import android.app.TaskStackBuilder;
 import android.content.BroadcastReceiver;
 import android.content.Context;
 import android.content.DialogInterface;
@@ -17,6 +22,7 @@ import android.graphics.PixelFormat;
 import android.graphics.drawable.BitmapDrawable;
 import android.graphics.drawable.ColorDrawable;
 import android.media.AudioManager;
+import android.media.RingtoneManager;
 import android.net.Uri;
 import android.os.Build;
 import android.provider.CallLog;
@@ -26,6 +32,7 @@ import android.renderscript.RenderScript;
 import android.renderscript.ScriptIntrinsicBlur;
 import android.support.annotation.NonNull;
 import android.support.v4.app.ActivityCompat;
+import android.support.v4.app.NotificationCompat;
 import android.support.v7.widget.CardView;
 import android.support.v7.widget.Toolbar;
 import android.telecom.TelecomManager;
@@ -124,6 +131,8 @@ public class PhoneStateReceiver extends BroadcastReceiver {
         //Toast.makeText(context,"Num : "+number+"State : "+state,Toast.LENGTH_LONG).show();
         Toast.makeText(context,"Num : "+number+"State : ",Toast.LENGTH_LONG).show();
         Log.d("hlaclaclclclclclclc","Num : "+number+"State : "+state);
+    try {
+
 
         if (state.equals(TelephonyManager.EXTRA_STATE_OFFHOOK)&&swithcOutgoing)
         {
@@ -163,6 +172,10 @@ public class PhoneStateReceiver extends BroadcastReceiver {
 
             }
         }
+    }catch (Exception e)
+    {
+
+    }
     }
 
 
@@ -319,6 +332,7 @@ public class PhoneStateReceiver extends BroadcastReceiver {
                         m.invoke(telephonyService); // invoke endCall()
                         m.setAccessible(true); // Make it accessible
 
+                        BloackNotification(BlockNumbers.get(i),context);
                         //addFromCallLog(context,phonenumber);//Add to block list history
                         ADDphoneNumberBlockListHistory(context,addFromCallLog(context,phonenumber),BlockNumbers.get(i));
                     }
@@ -492,4 +506,88 @@ public class PhoneStateReceiver extends BroadcastReceiver {
         lastState = state;
     }
 
+
+    private NotificationManager notifManager;
+    private NotificationChannel mChannel;
+    public void BloackNotification(String number,Context context)
+    {
+        String message="";
+        String ContactName= get_calls_log.getContactName(number);
+        if (TextUtils.isEmpty(ContactName))
+        {
+            message="("+number+")";
+        }
+        else
+        {
+            message="("+number+")"+ContactName;
+        }
+
+        Intent intent;
+        PendingIntent pendingIntent;
+        NotificationCompat.Builder builder;
+        if (notifManager == null) {
+            notifManager = (NotificationManager) context.getSystemService
+                    (Context.NOTIFICATION_SERVICE);
+        }
+
+        intent = new Intent (context, MainActivity.class);
+        intent.putExtra("NOTIFICATION",true);
+        if (Build.VERSION.SDK_INT >= Build.VERSION_CODES.O) {
+            int importance = NotificationManager.IMPORTANCE_HIGH;
+            if (mChannel == null) {
+                NotificationChannel mChannel = new NotificationChannel
+                        ("0",number,importance);
+                mChannel.setDescription (message);
+                mChannel.enableVibration (true);
+                mChannel.setVibrationPattern (new long[]
+                        {100, 200, 300, 400, 500, 400, 300, 200, 400});
+                notifManager.createNotificationChannel (mChannel);
+            }
+            builder = new NotificationCompat.Builder (context,"0");
+
+            intent.setFlags (Intent.FLAG_ACTIVITY_CLEAR_TOP |
+                    Intent.FLAG_ACTIVITY_SINGLE_TOP);
+            pendingIntent = PendingIntent.getActivity (context, 0, intent, 0);
+            builder.setContentTitle ("Call Blocked by Whocaller")  // flare_icon_30
+                    .setSmallIcon (R.drawable.logo_notification) // required
+                    .setContentText (message)  // required
+                    .setDefaults (Notification.DEFAULT_ALL)
+                    .setAutoCancel (true)
+                    .setColor((context.getResources().getColor(R.color.colorPrimary)))
+                    .setContentIntent (pendingIntent)
+                    .setSound (RingtoneManager.getDefaultUri
+                            (RingtoneManager.TYPE_NOTIFICATION))
+                    .setVibrate (new long[]{100, 200, 300, 400,
+                            500, 400, 300, 200, 400});
+        } else {
+
+            builder = new NotificationCompat.Builder (context);
+
+
+            Uri sound= RingtoneManager.getDefaultUri(RingtoneManager.TYPE_NOTIFICATION);
+            builder.setSmallIcon(R.drawable.logo);
+            builder.setContentTitle("Call Blocked by Whocaller");
+            builder.setContentText(message);
+            builder.setColor((context.getResources().getColor(R.color.colorPrimary)));
+            builder.setSound(sound);
+            builder.setVibrate (new long[]{100, 200, 300, 400,
+                    500, 400, 300, 200, 400});
+
+            if (android.os.Build.VERSION.SDK_INT >= android.os.Build.VERSION_CODES.JELLY_BEAN) {
+                Intent resultIntent = new Intent(context, MainActivity.class);
+                resultIntent.putExtra("NOTIFICATION",true);
+                TaskStackBuilder stackBuilder = null;
+                stackBuilder = TaskStackBuilder.create(context);
+                stackBuilder.addParentStack(MainActivity.class);
+                stackBuilder.addNextIntent(resultIntent);
+                PendingIntent resultPendingIntent = null;
+                resultPendingIntent = stackBuilder.getPendingIntent(0, PendingIntent.FLAG_UPDATE_CURRENT);
+                builder.setContentIntent(resultPendingIntent);
+            }
+
+        }
+        Notification notification = builder.build ();
+        int id = (int) System.currentTimeMillis();
+        notifManager.notify (id, notification);
+    }
 }
