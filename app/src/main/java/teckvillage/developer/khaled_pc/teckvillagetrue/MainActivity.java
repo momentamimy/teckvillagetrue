@@ -63,6 +63,7 @@ public class MainActivity extends AppCompatActivity implements NavigationView.On
     ArrayList<String> PhoneNumberListCameraRecognition = new ArrayList<>();
 
 
+    boolean SMSNotification=false;
     @Override
     protected void onCreate(final Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
@@ -72,6 +73,10 @@ public class MainActivity extends AppCompatActivity implements NavigationView.On
         Intent intent = new Intent(TelecomManager.ACTION_CHANGE_DEFAULT_DIALER);
         intent.putExtra(TelecomManager.EXTRA_CHANGE_DEFAULT_DIALER_PACKAGE_NAME, getPackageName());
         startActivity(intent);
+
+        
+        SMSNotification=getIntent().getBooleanExtra("NOTIFICATION",false);
+
         navigationView2=findViewById(R.id.botnav);
 
 
@@ -257,6 +262,11 @@ public class MainActivity extends AppCompatActivity implements NavigationView.On
                 return true;
             }
         });
+
+        if (SMSNotification)
+        {
+            navigationView2.setSelectedItemId(R.id.nav_message);
+        }
 
         }
 

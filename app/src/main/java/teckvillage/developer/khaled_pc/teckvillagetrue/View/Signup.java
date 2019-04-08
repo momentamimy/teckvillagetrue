@@ -375,9 +375,9 @@ public class Signup extends AppCompatActivity {
                                         mProgressDialog.dismiss();
 
                                     Log.w("onFailure", t.toString());
-                                    //Toast.makeText(getApplicationContext(), "Failure,Please try again", Toast.LENGTH_SHORT).show();
-                                    View parentLayout = findViewById(android.R.id.content);
-                                    Snackbar.make(parentLayout, "Failure,Please try again", Snackbar.LENGTH_LONG);
+                                    Toast.makeText(getApplicationContext(), "Failure,Please try again", Toast.LENGTH_SHORT).show();
+                                    //View parentLayout = findViewById(R.id.layoutsignuo);
+                                    //Snackbar.make(parentLayout, "Failure,Please try again", Snackbar.LENGTH_LONG);
                                 }
                             });
 

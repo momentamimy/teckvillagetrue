@@ -13,6 +13,8 @@ import android.support.v4.app.Fragment;
 import android.support.v4.app.LoaderManager;
 import android.support.v4.content.ContextCompat;
 import android.support.v4.content.Loader;
+import android.support.v7.widget.LinearLayoutManager;
+import android.support.v7.widget.RecyclerView;
 import android.util.Log;
 import android.view.LayoutInflater;
 import android.view.View;
@@ -24,6 +26,7 @@ import android.widget.ListView;
 import java.util.ArrayList;
 
 import teckvillage.developer.khaled_pc.teckvillagetrue.Controller.CustomListViewAdapter;
+import teckvillage.developer.khaled_pc.teckvillagetrue.Controller.CustomRecyclerViewAdapter;
 import teckvillage.developer.khaled_pc.teckvillagetrue.model.Get_User_Contacts;
 import teckvillage.developer.khaled_pc.teckvillagetrue.model.MessageInfo;
 
@@ -33,11 +36,11 @@ public class FragMessageSpam extends Fragment implements LoaderManager.LoaderCal
     Get_User_Contacts get_user_contacts;
 
     private static FragMessageSpam inst;
-    static ArrayList<MessageInfo> spamMessageInfos=new ArrayList<>();
     static ArrayList<MessageInfo> allMessageSpamInfos=new ArrayList<>();
-    ListView smsListView;
-    static CustomListViewAdapter customSpamListViewAdapter;
-    static boolean endSpamList=false;
+
+    static CustomRecyclerViewAdapter customSpamRecyclerViewAdapter=null;
+
+    static RecyclerView smsRecyclerView;
 
     public static FragMessageSpam instance() {
         return inst;
@@ -63,45 +66,13 @@ public class FragMessageSpam extends Fragment implements LoaderManager.LoaderCal
         super.onViewCreated(view, savedInstanceState);
         get_user_contacts=new Get_User_Contacts(getActivity());
 
-        smsListView = (ListView) view.findViewById(R.id.SMSList);
 
-        customSpamListViewAdapter=new CustomListViewAdapter(spamMessageInfos,getActivity());
-        smsListView.setAdapter(customSpamListViewAdapter);
-        smsListView.setOnItemClickListener(new AdapterView.OnItemClickListener() {
-            @Override
-            public void onItemClick(AdapterView<?> parent, View view, int position, long id) {
 
-                Intent intent=new Intent(getContext(),SMS_MessagesChat.class);
-                intent.putExtra("LogSMSName",spamMessageInfos.get(position).logName);
-                intent.putExtra("LogSMSAddress",spamMessageInfos.get(position).logAddress);
-                intent.putExtra("LogSMSThreadID",spamMessageInfos.get(position).thread_id);
-                intent.putExtra("LogSMSPosition",position);
-                intent.putExtra("TYPE","Spam");
-                startActivity(intent);
-
-                /*MessageInfo info=spamMessageInfos.get(position);
-                info.setRead("true");
-                spamMessageInfos.set(position,info);
-                customSpamListViewAdapter.notifyDataSetChanged();
-            */}
-        });
-        smsListView.setOnScrollListener(new AbsListView.OnScrollListener() {
-            @Override
-            public void onScrollStateChanged(AbsListView view, int scrollState) {
-                Log.d("2a5er_position", String.valueOf(smsListView.getLastVisiblePosition()));
-                if (smsListView.getLastVisiblePosition()>=spamMessageInfos.size()-1&&!endSpamList)
-                {
-                    // getLoaderManager().initLoader(1,null,FragMessageOthers.this);
-                    createSpamloader();
-                }
-            }
-
-            @Override
-            public void onScroll(AbsListView view, int firstVisibleItem, int visibleItemCount, int totalItemCount) {
-
-            }
-        });
-
+        smsRecyclerView=view.findViewById(R.id.SMSRecycler);
+        LinearLayoutManager lLayout=new LinearLayoutManager(getContext());
+        customSpamRecyclerViewAdapter=new CustomRecyclerViewAdapter(allMessageSpamInfos,getContext(),"Spam");
+        smsRecyclerView.setLayoutManager(lLayout);
+        smsRecyclerView.setAdapter(customSpamRecyclerViewAdapter);
         // Add SMS Read Permision At Runtime
         // Todo : If Permission Is Not GRANTED
         if(ContextCompat.checkSelfPermission(getActivity().getBaseContext(), "android.permission.READ_SMS") == PackageManager.PERMISSION_GRANTED) {
@@ -121,27 +92,8 @@ public class FragMessageSpam extends Fragment implements LoaderManager.LoaderCal
 
     public static void createSpamloader()
     {
-        if (!endSpamList)
-        {
-            int count=0;
-            int i=0;
-            for (i=spamMessageInfos.size();i<allMessageSpamInfos.size();i++)
-            {
-
-                if (count>20)
-                {
-                    break;
-                }
-                spamMessageInfos.add(allMessageSpamInfos.get(i));
-                count++;
-            }
-            if (i==allMessageSpamInfos.size())
-            {
-                endSpamList=true;
-            }
-
-            customSpamListViewAdapter.notifyDataSetChanged();
-        }
+        if (customSpamRecyclerViewAdapter!=null)
+            customSpamRecyclerViewAdapter.notifyDataSetChanged();
     }
 
 
@@ -153,7 +105,7 @@ public class FragMessageSpam extends Fragment implements LoaderManager.LoaderCal
     @Override
     public void onLoadFinished(Loader<Cursor> loader, Cursor data) {
 
-        customSpamListViewAdapter.notifyDataSetChanged();
+        customSpamRecyclerViewAdapter.notifyDataSetChanged();
     }
 
     @Override

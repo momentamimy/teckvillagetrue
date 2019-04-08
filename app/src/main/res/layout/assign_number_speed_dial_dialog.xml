@@ -63,6 +63,7 @@
                 android:layout_marginBottom="5dp">
 
                 <TextView
+                    android:background="?android:attr/selectableItemBackground"
                     android:padding="5dp"
                     android:id="@+id/btn_submit"
                     android:layout_width="70dp"
@@ -75,6 +76,7 @@
                     android:layout_toRightOf="@+id/btn_close" />
 
                 <TextView
+                    android:background="?android:attr/selectableItemBackground"
                     android:padding="5dp"
                     android:id="@+id/btn_close"
                     android:layout_width="wrap_content"

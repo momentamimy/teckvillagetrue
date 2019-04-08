@@ -9,6 +9,7 @@ import android.content.ContentValues;
 import android.content.Context;
 import android.content.Intent;
 import android.content.IntentFilter;
+import android.content.SharedPreferences;
 import android.content.pm.PackageManager;
 import android.database.Cursor;
 import android.database.sqlite.SQLiteException;
@@ -24,6 +25,8 @@ import android.support.v7.widget.LinearLayoutManager;
 import android.support.v7.widget.RecyclerView;
 import android.support.v7.widget.Toolbar;
 import android.telephony.SmsManager;
+import android.telephony.SubscriptionInfo;
+import android.telephony.SubscriptionManager;
 import android.text.TextUtils;
 import android.util.Log;
 import android.view.View;
@@ -57,6 +60,7 @@ public class SMS_MessagesChat_MultipleContacts extends AppCompatActivity {
 
     RelativeLayout Message_Container;
     EditText messageSend;
+    ImageView dualSims;
     FloatingActionButton send;
 
     ArrayList<String> name,address;
@@ -79,6 +83,8 @@ public class SMS_MessagesChat_MultipleContacts extends AppCompatActivity {
         super.onCreate(savedInstanceState);
         setContentView(R.layout.activity_sms_messages_chat);
         updateMessageInfos=new ArrayList<>();
+
+        dualSims = findViewById(R.id.Dual_Sim);
 
 
         LinearLayout toolbar = findViewById(R.id.toolbar);
@@ -125,6 +131,51 @@ public class SMS_MessagesChat_MultipleContacts extends AppCompatActivity {
 
         //getmessages();
 
+
+        final TelephonyInfo telephonyInfo = TelephonyInfo.getInstance(SMS_MessagesChat_MultipleContacts.this);
+        final boolean isSIM1Ready = telephonyInfo.isSIM1Ready();
+        final boolean isSIM2Ready = telephonyInfo.isSIM2Ready();
+        final boolean isDualSIM = telephonyInfo.isDualSIM();
+
+        if (isDualSIM) {
+            if (isSIM1Ready && isSIM2Ready) { }
+            else { dualSims.setVisibility(View.GONE); }
+        }
+        else { dualSims.setVisibility(View.GONE); }
+
+        SharedPreferences preferences=getSharedPreferences("DUAL_SIM",MODE_PRIVATE);
+        String SIM=preferences.getString("SIM","0");
+
+        if (SIM.equals("0"))
+        {
+            dualSims.setImageResource(R.drawable.ic_one);
+        }
+        else if (SIM.equals("1"))
+        {
+            dualSims.setImageResource(R.drawable.ic_two);
+        }
+
+        dualSims.setOnClickListener(new View.OnClickListener() {
+            @Override
+            public void onClick(View v) {
+                SharedPreferences preferences=getSharedPreferences("DUAL_SIM",MODE_PRIVATE);
+                String SIM=preferences.getString("SIM","0");
+                if (SIM.equals("0"))
+                {
+                    dualSims.setImageResource(R.drawable.ic_two);
+                    SharedPreferences.Editor editor=preferences.edit();
+                    editor.putString("SIM","1");
+                    editor.commit();
+                }
+                else if (SIM.equals("1"))
+                {
+                    dualSims.setImageResource(R.drawable.ic_one);
+                    SharedPreferences.Editor editor=preferences.edit();
+                    editor.putString("SIM","0");
+                    editor.commit();
+                }
+            }
+        });
 
 
         messageSend=findViewById(R.id.Message_Send);
@@ -414,7 +465,52 @@ public class SMS_MessagesChat_MultipleContacts extends AppCompatActivity {
             }
         }, new IntentFilter(DELIVERED));
 
-        SmsManager sms = SmsManager.getDefault();
+        SmsManager sms = null;
+
+        final TelephonyInfo telephonyInfo = TelephonyInfo.getInstance(SMS_MessagesChat_MultipleContacts.this);
+        final boolean isSIM1Ready = telephonyInfo.isSIM1Ready();
+        final boolean isSIM2Ready = telephonyInfo.isSIM2Ready();
+        final boolean isDualSIM = telephonyInfo.isDualSIM();
+
+        if (android.os.Build.VERSION.SDK_INT >= android.os.Build.VERSION_CODES.LOLLIPOP_MR1) {
+            if (isDualSIM) {
+                if (isSIM1Ready && isSIM2Ready) {
+                    final ArrayList<Integer> simCardList = new ArrayList<>();
+                    SubscriptionManager subscriptionManager;
+                    subscriptionManager = SubscriptionManager.from(SMS_MessagesChat_MultipleContacts.this);
+
+                    if (ActivityCompat.checkSelfPermission
+                            (this, Manifest.permission.READ_PHONE_STATE)
+                            != PackageManager.PERMISSION_GRANTED) {
+                        return;
+                    }
+
+                    final List<SubscriptionInfo> subscriptionInfoList = subscriptionManager.getActiveSubscriptionInfoList();
+                    for (SubscriptionInfo subscriptionInfo : subscriptionInfoList) {
+                        int subscriptionId = subscriptionInfo.getSubscriptionId();
+                        simCardList.add(subscriptionId);
+                    }
+                    final SharedPreferences preferences = getSharedPreferences("DUAL_SIM", MODE_PRIVATE);
+                    final String SIM = preferences.getString("SIM", "0");
+                    if (SIM.equals("0")) {
+                        sms = SmsManager.getSmsManagerForSubscriptionId(simCardList.get(0));
+                    } else if (SIM.equals("1")) {
+                        sms = SmsManager.getSmsManagerForSubscriptionId(simCardList.get(1));
+                    }
+                }
+                else
+                {
+                    sms=SmsManager.getDefault();
+                }
+            }
+            else
+            {
+                sms=SmsManager.getDefault();
+            }
+        }else {
+            sms=SmsManager.getDefault();
+        }
+
         sms.sendTextMessage(phoneNumber, null, message, sentPI, deliveredPI);
         insert_sms_to_sent(phoneNumber,message,l);
         AlarmManager alarmManager= (AlarmManager) getSystemService(ALARM_SERVICE);

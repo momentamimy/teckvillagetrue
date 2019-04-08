@@ -72,7 +72,7 @@ public class SendToActivity extends AppCompatActivity {
         mRecyclerViewMutilpleContacts.setAdapter(addingSendToContactsAdapters);
 
         userContactsData=new LetterComparator().sortList(get_user_contacts.getContactListContactsRecycleview());
-        sendToContactsAdapters=new SendToContactsAdapters(this,userContactsData);
+        sendToContactsAdapters=new SendToContactsAdapters(this,orderSendToContactArray(userContactsData));
         mRecyclerView.setLayoutManager(new LinearLayoutManager(this));
         mRecyclerView.setAdapter(sendToContactsAdapters);
 
@@ -213,5 +213,16 @@ public class SendToActivity extends AppCompatActivity {
         sendToContactsAdapters=new SendToContactsAdapters(getApplicationContext(),infos);
         mRecyclerView.setAdapter(sendToContactsAdapters);
         return infos;
+    }
+
+    public ArrayList<UserContactData> orderSendToContactArray(ArrayList<UserContactData> contactData)
+    {
+        UserContactData data=new UserContactData("","","", (long) -1);
+        data.setType(3);
+        contactData.set(0,data);
+        UserContactData data1=new UserContactData("","","", (long) -1);
+        data1.setType(2);
+        contactData.set(1,data1);
+        return contactData;
     }
 }

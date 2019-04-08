@@ -41,48 +41,74 @@ public class SendToContactsAdapters extends RecyclerView.Adapter<SendToContactsA
     }
 
     @Override
-    public ViewHolder onCreateViewHolder(ViewGroup parent, int viewType) {
+    public int getItemViewType(int position) {
+        if (mDataArray.get(position).getType()==2)
+        {
+            return 2;
+        }
+        else if (mDataArray.get(position).getType()==3)
+        {
+            return 3;
+        }
+        return 0;
+    }
 
-                View v2 = LayoutInflater.from(parent.getContext()).inflate(R.layout.user_contacts_row, parent, false);
-                return new ViewHolder(v2);
+    @Override
+    public ViewHolder onCreateViewHolder(ViewGroup parent, int viewType) {
+                if (viewType==3)
+                {
+                    View v2 = LayoutInflater.from(parent.getContext()).inflate(R.layout.row_contact_on_whocaller, parent, false);
+                    return new ViewHolder(v2);
+                }
+                else if (viewType==2)
+                {
+                    View v2 = LayoutInflater.from(parent.getContext()).inflate(R.layout.row_contact_not_on_whocaller, parent, false);
+                    return new ViewHolder(v2);
+                }
+                else
+                {
+                    View v2 = LayoutInflater.from(parent.getContext()).inflate(R.layout.user_contacts_row, parent, false);
+                    return new ViewHolder(v2);
+                }
         }
 
     @Override
     public void onBindViewHolder(final ViewHolder holder, final int position) {
-        if(holder.contactName2!=null){
-            final UserContactData data=mDataArray.get(position);
-            final String name=mDataArray.get(position).usercontacName;
-            holder.itemView.setOnClickListener(new View.OnClickListener() {
-                @Override
-                public void onClick(View v) {
-                    if (MultipleRecivers==false)
-                    {
-                        final String num=get_user_contacts.getPhoneNumber(mDataArray.get(position).usercontacName,context).replace(" ","");
-                        Intent intent=new Intent(context, SMS_MessagesChat.class);
-                        intent.putExtra("LogSMSName",name);
-                        intent.putExtra("LogSMSAddress",num);
-                        context.startActivity(intent);
+        if (holder.getItemViewType()==2||holder.getItemViewType()==3){
 
+        }
+        else {
+            if (holder.contactName2 != null) {
+                final UserContactData data = mDataArray.get(position);
+                final String name = mDataArray.get(position).usercontacName;
+                holder.itemView.setOnClickListener(new View.OnClickListener() {
+                    @Override
+                    public void onClick(View v) {
+                        if (MultipleRecivers == false) {
+                            final String num = get_user_contacts.getPhoneNumber(mDataArray.get(position).usercontacName, context).replace(" ", "");
+                            Intent intent = new Intent(context, SMS_MessagesChat.class);
+                            intent.putExtra("LogSMSName", name);
+                            intent.putExtra("LogSMSAddress", num);
+                            context.startActivity(intent);
+
+                        } else if (MultipleRecivers = true) {
+                            addingMulipleUserContacts(context, data);
+                        }
                     }
-                    else if (MultipleRecivers=true)
-                    {
-                        addingMulipleUserContacts(context,data);
-                    }
-                }
-            });
-           holder.contactName2.setText(mDataArray.get(position).usercontacName);
-           holder.sms.setVisibility(View.INVISIBLE);
-           holder.contactCircleImageView2.setOnClickListener(new View.OnClickListener() {
-                @Override
-                public void onClick(View v) {
+                });
+                holder.contactName2.setText(mDataArray.get(position).usercontacName);
+                holder.sms.setVisibility(View.INVISIBLE);
+                holder.contactCircleImageView2.setOnClickListener(new View.OnClickListener() {
+                    @Override
+                    public void onClick(View v) {
                     /*
                     mDataArray.remove(holder.getAdapterPosition());
                     notifyDataSetChanged();
                     */
-                }
-            });
+                    }
+                });
+            }
         }
-
     }
 
     @Override

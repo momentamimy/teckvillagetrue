@@ -6,6 +6,8 @@ import android.os.Bundle;
 import android.support.annotation.NonNull;
 import android.support.annotation.Nullable;
 import android.support.v4.app.Fragment;
+import android.support.v7.widget.LinearLayoutManager;
+import android.support.v7.widget.RecyclerView;
 import android.util.Log;
 import android.view.LayoutInflater;
 import android.view.View;
@@ -16,8 +18,10 @@ import android.widget.ListView;
 
 import java.util.ArrayList;
 
+import teckvillage.developer.khaled_pc.teckvillagetrue.Chat_MessagesChat;
 import teckvillage.developer.khaled_pc.teckvillagetrue.Controller.CustomListViewAdapter;
 import teckvillage.developer.khaled_pc.teckvillagetrue.Controller.CustomListViewChatAdapter;
+import teckvillage.developer.khaled_pc.teckvillagetrue.Controller.CustomRecyclerViewChatAdapter;
 import teckvillage.developer.khaled_pc.teckvillagetrue.FragMessageOthers;
 import teckvillage.developer.khaled_pc.teckvillagetrue.R;
 import teckvillage.developer.khaled_pc.teckvillagetrue.SMS_MessagesChat;
@@ -31,8 +35,10 @@ public class ChatFragment extends Fragment {
     ArrayList<MessageInfo> chatMessageInfos=new ArrayList<>();
     ArrayList<MessageInfo> allMessageChatInfos=new ArrayList<>();
     ListView chatListView;
+    RecyclerView chatRecyclerView;
     // ArrayAdapter arrayAdapter;
     CustomListViewChatAdapter customListViewChatAdapter;
+    CustomRecyclerViewChatAdapter customRecyclerViewChatAdapter;
     boolean endChatsList=false;
 
     public ChatFragment() {
@@ -63,13 +69,18 @@ public class ChatFragment extends Fragment {
         chatMessageInfos.add(info2);
 
         chatListView = (ListView) view.findViewById(R.id.ChatList);
-        customListViewChatAdapter =new CustomListViewChatAdapter(chatMessageInfos,getActivity());
+        chatRecyclerView=view.findViewById(R.id.ChatRecycler);
 
+        customListViewChatAdapter =new CustomListViewChatAdapter(chatMessageInfos,getActivity());
+        customRecyclerViewChatAdapter=new CustomRecyclerViewChatAdapter(chatMessageInfos,getActivity());
+
+        chatRecyclerView.setLayoutManager(new LinearLayoutManager(getActivity()));
+        chatRecyclerView.setAdapter(customRecyclerViewChatAdapter);
         chatListView.setAdapter(customListViewChatAdapter);
         chatListView.setOnItemClickListener(new AdapterView.OnItemClickListener() {
             @Override
             public void onItemClick(AdapterView<?> parent, View view, int position, long id) {
-                Intent intent=new Intent(getContext(), SMS_MessagesChat.class);
+                Intent intent=new Intent(getContext(), Chat_MessagesChat.class);
                 intent.putExtra("LogSMSName",chatMessageInfos.get(position).logName);
                 intent.putExtra("LogSMSAddress",chatMessageInfos.get(position).logAddress);
                 startActivity(intent);

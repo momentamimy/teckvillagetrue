@@ -99,10 +99,11 @@ public class MessageInfo {
 
     }
 
-    public MessageInfo(String imageUrl,String logName,String logMessage)
+    public MessageInfo(String imageUrl,String logName,String logMessage,long logDate)
     {
         this.imageUrl = imageUrl;
         this.logName = logName;
         this.logMessage = logMessage;
+        this.logDate=logDate;
     }
 }

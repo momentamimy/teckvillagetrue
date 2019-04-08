@@ -3,64 +3,44 @@
         xmlns:android="http://schemas.android.com/apk/res/android"
         xmlns:tools="http://schemas.android.com/tools"
         android:layout_width="match_parent"
-        android:layout_height="wrap_content">
-
-        <ProgressBar
-            android:id="@+id/progress"
-            android:layout_width="65dp"
-            android:layout_height="65dp"
-            android:visibility="gone"
-            android:theme="@style/AppTheme.grayAccent"
-            />
-        <de.hdodenhof.circleimageview.CircleImageView
-            android:id="@+id/progress_contact_img"
-            android:layout_width="45dp"
-            android:layout_height="45dp"
-            android:layout_margin="10dp"
-            android:src="@drawable/ic_nurse"
-            android:visibility="gone"
-            />
-
-        <de.hdodenhof.circleimageview.CircleImageView
-            android:id="@+id/contact_img_log_recycle"
-            android:layout_width="45dp"
-            android:layout_height="45dp"
-            android:layout_marginStart="20dp"
-            android:layout_marginEnd="10dp"
-            android:layout_marginVertical="10dp"
-            android:src="@drawable/ic_nurse"
-            android:layout_marginLeft="15dp"
-            android:layout_marginRight="10dp" />
-
+        android:layout_height="wrap_content"
+    android:padding="15dp">
 
     <TextView
+        android:layout_marginStart="20dp"
+        android:layout_marginEnd="10dp"
+        android:layout_marginLeft="20dp"
+        android:layout_marginRight="10dp"
         android:id="@+id/name_of_log"
-        android:layout_width="wrap_content"
+        android:layout_width="match_parent"
         android:layout_height="wrap_content"
-        android:layout_marginStart="2dp"
-        android:layout_marginLeft="2dp"
-        android:layout_marginTop="10dp"
-        android:layout_toEndOf="@+id/contact_img_log_recycle"
-        android:layout_toRightOf="@+id/contact_img_log_recycle"
-        android:text="Abdalla Kamash"
+        android:text="Video Call!"
         android:textColor="@android:color/black"
-        android:textSize="16sp" />
+        android:textSize="18sp"
+        android:background="?android:attr/selectableItemBackground"
+        android:layout_toStartOf="@+id/date_notifcation_message"
+        android:layout_toLeftOf="@+id/date_notifcation_message" />
 
 
         <TextView
+            android:layout_marginTop="2dp"
             android:id="@+id/text_sms_message"
-            android:layout_width="wrap_content"
+            android:layout_width="match_parent"
             android:layout_height="wrap_content"
             android:text="please call me"
-            android:textSize="12sp"
-            android:maxLines="1"
-            android:layout_marginTop="1dp"
-            android:layout_marginStart="10dp"
-            android:layout_marginLeft="10dp"
-            android:layout_marginEnd="10dp"
+            android:textSize="16sp"
+            android:layout_marginStart="20dp"
+            android:layout_marginEnd="20dp"
+            android:layout_marginLeft="20dp"
             android:layout_below="@+id/name_of_log"
-            android:layout_toEndOf="@+id/contact_img_log_recycle"
-            android:layout_toRightOf="@+id/contact_img_log_recycle"
-            />
+            android:textColor="@color/Tomyacolor" />
 
+
+    <TextView
+        android:id="@+id/date_notifcation_message"
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content"
+        android:text="02:00 AM"
+        android:layout_alignParentEnd="true"
+        android:layout_alignParentRight="true" />
     </RelativeLayout>

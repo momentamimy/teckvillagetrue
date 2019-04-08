@@ -18,46 +18,46 @@
             android:orientation="vertical">
             <TextView
                 android:background="@color/colorPrimary"
-                android:id="@+id/speed_dial_title"
+                android:id="@+id/Gender_title"
                 android:layout_width="match_parent"
                 android:layout_height="wrap_content"
                 android:textColor="@android:color/white"
                 android:textSize="20dp"
                 android:textStyle="bold"
                 android:padding="15dp"
-                android:text="Speed dial #6"/>
+                android:text="Gender"/>
             <TextView
+                android:layout_marginTop="10dp"
+                android:padding="20dp"
                 android:background="?android:attr/selectableItemBackground"
-                android:layout_below="@+id/speed_dial_title"
-                android:id="@+id/assign_contact"
+                android:layout_below="@+id/Gender_title"
+                android:id="@+id/Prefer_not_to_say"
                 android:layout_width="match_parent"
                 android:layout_height="wrap_content"
-                android:textColor="@color/colorPrimary"
-                android:textSize="16dp"
-                android:paddingVertical="10dp"
-                android:paddingHorizontal="20dp"
-                android:text="ASSIGN CONTACT"/>
+                android:textColor="@color/Tomyacolor"
+                android:textSize="18dp"
+                android:text="Prefer_not_to_say"/>
             <TextView
+                android:layout_marginTop="10dp"
+                android:padding="20dp"
                 android:background="?android:attr/selectableItemBackground"
-                android:layout_below="@+id/assign_contact"
-                android:id="@+id/assign_phone_number"
+                android:layout_below="@+id/Prefer_not_to_say"
+                android:id="@+id/Male"
                 android:layout_width="match_parent"
                 android:layout_height="wrap_content"
-                android:textColor="@color/colorPrimary"
-                android:textSize="16dp"
-                android:paddingVertical="10dp"
-                android:paddingHorizontal="20dp"
-                android:text="ASSIGN PHONE NUMBER"/>
+                android:textColor="@color/Tomyacolor"
+                android:textSize="18dp"
+                android:text="Male"/>
             <TextView
+                android:layout_marginTop="10dp"
+                android:padding="20dp"
                 android:background="?android:attr/selectableItemBackground"
-                android:layout_below="@+id/assign_phone_number"
-                android:id="@+id/edit_speed_dial"
+                android:layout_below="@+id/Male"
+                android:id="@+id/Female"
                 android:layout_width="match_parent"
                 android:layout_height="wrap_content"
-                android:textColor="@color/colorPrimary"
-                android:textSize="16dp"
-                android:paddingVertical="10dp"
-                android:paddingHorizontal="20dp"
-                android:text="Edit"/>
+                android:textColor="@color/Tomyacolor"
+                android:textSize="18dp"
+                android:text="Female"/>
         </RelativeLayout>
     </android.support.v7.widget.CardView>

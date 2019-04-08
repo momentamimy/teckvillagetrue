@@ -1,5 +1,6 @@
 package teckvillage.developer.khaled_pc.teckvillagetrue;
 
+import android.Manifest;
 import android.app.Activity;
 import android.app.AlarmManager;
 import android.app.Dialog;
@@ -9,6 +10,8 @@ import android.content.ContentValues;
 import android.content.Context;
 import android.content.Intent;
 import android.content.IntentFilter;
+import android.content.SharedPreferences;
+import android.content.pm.PackageManager;
 import android.database.Cursor;
 import android.database.sqlite.SQLiteException;
 import android.graphics.Color;
@@ -17,9 +20,12 @@ import android.graphics.drawable.Drawable;
 import android.net.Uri;
 import android.os.Build;
 import android.provider.Telephony;
+import android.support.v4.app.ActivityCompat;
 import android.support.v7.widget.RecyclerView;
 import android.support.v7.widget.Toolbar;
 import android.telephony.SmsManager;
+import android.telephony.SubscriptionInfo;
+import android.telephony.SubscriptionManager;
 import android.text.TextUtils;
 import android.util.Log;
 import android.view.LayoutInflater;
@@ -34,6 +40,7 @@ import android.widget.Toast;
 
 
 import java.text.SimpleDateFormat;
+import java.util.ArrayList;
 import java.util.Calendar;
 import java.util.Collections;
 import java.util.Comparator;
@@ -44,6 +51,7 @@ import teckvillage.developer.khaled_pc.teckvillagetrue.Controller.Receiver;
 
 import static android.content.Context.ALARM_SERVICE;
 import static android.content.Context.MODE_PRIVATE;
+import static teckvillage.developer.khaled_pc.teckvillagetrue.Message_Fragment.SMSCHANGE;
 
 /**
  * Created by gaber on 12/08/2018.
@@ -285,6 +293,7 @@ public class messages_list_adapter extends RecyclerView.Adapter<messages_list_ad
     }
 
     private void sendSMS(String phoneNumber, String message) {
+
         final long l = System.currentTimeMillis();
         String SENT = "SMS_SENT" + l;
         String DELIVERED = "SMS_DELIVERED" + l;
@@ -299,6 +308,8 @@ public class messages_list_adapter extends RecyclerView.Adapter<messages_list_ad
 
             @Override
             public void onReceive(Context arg0, Intent arg1) {
+
+
                 switch (getResultCode()) {
                     case Activity.RESULT_OK:
                         Log.d("dsadadadadadad", "meshyyyyy");
@@ -375,7 +386,7 @@ public class messages_list_adapter extends RecyclerView.Adapter<messages_list_ad
         }, new IntentFilter(SENT));
 
 //---when the SMS has been delivered---
-        context.getApplicationContext().registerReceiver(new BroadcastReceiver() {
+        context.registerReceiver(new BroadcastReceiver() {
             @Override
             public void onReceive(Context arg0, Intent arg1) {
                 switch (getResultCode()) {
@@ -391,17 +402,62 @@ public class messages_list_adapter extends RecyclerView.Adapter<messages_list_ad
             }
         }, new IntentFilter(DELIVERED));
 
-        SmsManager sms = SmsManager.getDefault();
+
+        SmsManager sms = null;
+
+        final TelephonyInfo telephonyInfo = TelephonyInfo.getInstance(context);
+        final boolean isSIM1Ready = telephonyInfo.isSIM1Ready();
+        final boolean isSIM2Ready = telephonyInfo.isSIM2Ready();
+        final boolean isDualSIM = telephonyInfo.isDualSIM();
+
+        if (android.os.Build.VERSION.SDK_INT >= android.os.Build.VERSION_CODES.LOLLIPOP_MR1) {
+            if (isDualSIM) {
+                if (isSIM1Ready && isSIM2Ready) {
+                    final ArrayList<Integer> simCardList = new ArrayList<>();
+                    SubscriptionManager subscriptionManager;
+                    subscriptionManager = SubscriptionManager.from(context);
+
+                    if (ActivityCompat.checkSelfPermission
+                            (context, Manifest.permission.READ_PHONE_STATE)
+                            != PackageManager.PERMISSION_GRANTED) {
+                        return;
+                    }
+
+                    final List<SubscriptionInfo> subscriptionInfoList = subscriptionManager.getActiveSubscriptionInfoList();
+                    for (SubscriptionInfo subscriptionInfo : subscriptionInfoList) {
+                        int subscriptionId = subscriptionInfo.getSubscriptionId();
+                        simCardList.add(subscriptionId);
+                    }
+                    final SharedPreferences preferences = context.getSharedPreferences("DUAL_SIM", MODE_PRIVATE);
+                    final String SIM = preferences.getString("SIM", "0");
+                    if (SIM.equals("0")) {
+                        sms = SmsManager.getSmsManagerForSubscriptionId(simCardList.get(0));
+                    } else if (SIM.equals("1")) {
+                        sms = SmsManager.getSmsManagerForSubscriptionId(simCardList.get(1));
+                    }
+                }
+                else
+                {
+                    sms=SmsManager.getDefault();
+                }
+            }
+            else
+            {
+                sms=SmsManager.getDefault();
+            }
+        }else {
+            sms=SmsManager.getDefault();
+        }
         sms.sendTextMessage(phoneNumber, null, message, sentPI, deliveredPI);
-        insert_sms_to_sent(phoneNumber, message, l);
-        AlarmManager alarmManager = (AlarmManager) context.getSystemService(ALARM_SERVICE);
-        Intent myIntent = new Intent(context, Receiver.class);
-        myIntent.putExtra("time", l);
+        insert_sms_to_sent(phoneNumber,message,l);
+        AlarmManager alarmManager= (AlarmManager) context.getSystemService(ALARM_SERVICE);
+        Intent myIntent=new Intent(context, Receiver.class);
+        myIntent.putExtra("time",l);
         PendingIntent amPI = PendingIntent.getBroadcast(context, (int) l,
                 myIntent, 0);
-        Calendar calendar = Calendar.getInstance();
-        calendar.add(Calendar.MINUTE, 1);
-        alarmManager.set(AlarmManager.RTC_WAKEUP, calendar.getTimeInMillis(), amPI);
+        Calendar calendar=Calendar.getInstance();
+        calendar.add(Calendar.MINUTE,1);
+        alarmManager.set(AlarmManager.RTC_WAKEUP,calendar.getTimeInMillis(),amPI);
     }
 
 
@@ -416,6 +472,7 @@ public class messages_list_adapter extends RecyclerView.Adapter<messages_list_ad
         values.put("status", 31);//in progress
         context.getContentResolver().insert(Uri.parse("content://sms/sent"), values);
         refresh();
+        SMSCHANGE=true;
     }
 
     private void update_sms_sent(long l) {
@@ -438,6 +495,7 @@ public class messages_list_adapter extends RecyclerView.Adapter<messages_list_ad
         values.put("status", 32);//not sent
         context.getContentResolver().update(Uri.parse("content://sms/"), values, "date=?", new String[]{String.valueOf(l)});
         refresh();
+        SMSCHANGE=true;
     }
 
     public void update_unread(long id)
@@ -447,11 +505,13 @@ public class messages_list_adapter extends RecyclerView.Adapter<messages_list_ad
         values.put("seen", true);
         values.put("read", true);
         context.getContentResolver().update(Uri.parse("content://sms/inbox"), values, "_id="+id, null);
+        SMSCHANGE=true;
     }
 
     private void delete_sms(long ID) {
         context.getContentResolver().delete(Uri.parse("content://sms/"),"_id=?", new String[] {String.valueOf(ID)});
         refresh();
+        SMSCHANGE=true;
     }
 
 

@@ -27,8 +27,8 @@ public class Notifications extends AppCompatActivity {
         messageInfos=new ArrayList<>();
 
 
-        MessageInfo info=new MessageInfo("","WhoCaller","you can send SMS messages to multiple Contacts");
-        MessageInfo info1=new MessageInfo("","WhoCaller","you can modify position of Caller Dialog");
+        MessageInfo info=new MessageInfo("","WhoCaller","you can send SMS messages to multiple Contacts",System.currentTimeMillis());
+        MessageInfo info1=new MessageInfo("","WhoCaller","you can modify position of Caller Dialoghkhkhkh khkhkhkhkhkh khkhkhkhkhkh khkhkhkhkhkhkh bkgjgjgjgjgjgjgjgjgjgjgj",System.currentTimeMillis());
 
 
         messageInfos.add(info);

@@ -8,29 +8,25 @@ import android.util.Log;
 import android.view.LayoutInflater;
 import android.view.View;
 import android.view.ViewGroup;
-import android.view.animation.Animation;
-import android.view.animation.AnimationUtils;
-import android.widget.ArrayAdapter;
 import android.widget.ImageView;
 import android.widget.TextView;
 
 import java.util.ArrayList;
 import java.util.Calendar;
 
+import teckvillage.developer.khaled_pc.teckvillagetrue.Chat_MessagesChat;
 import teckvillage.developer.khaled_pc.teckvillagetrue.R;
 import teckvillage.developer.khaled_pc.teckvillagetrue.SMS_MessagesChat;
 import teckvillage.developer.khaled_pc.teckvillagetrue.model.MessageInfo;
 
-public class CustomRecyclerViewAdapter extends RecyclerView.Adapter<CustomRecyclerViewAdapter.ViewHolder>{
+public class CustomRecyclerViewChatAdapter extends RecyclerView.Adapter<CustomRecyclerViewChatAdapter.ViewHolder>{
 
     private ArrayList<MessageInfo> dataSet;
     Context mContext;
-    String TYPE;
 
-    public CustomRecyclerViewAdapter(ArrayList<MessageInfo> data, Context context,String TYPE) {
+    public CustomRecyclerViewChatAdapter(ArrayList<MessageInfo> data, Context context) {
         this.dataSet = data;
         this.mContext = context;
-        this.TYPE = TYPE;
     }
 
     @Override
@@ -100,20 +96,12 @@ public class CustomRecyclerViewAdapter extends RecyclerView.Adapter<CustomRecycl
             holder.notSentIcon.setVisibility(View.VISIBLE);
         }
 
-        if (TYPE.equals("Spam"))
-        {
-            int num=0;
-            TextView report=holder.itemView.findViewById(R.id.report);
-            //report.setVisibility(View.VISIBLE);
-            report.setText(num+" report");
 
-            holder.contactPhoto.setImageResource(R.drawable.ic_nurse_red);
-        }
 
         holder.itemView.setOnClickListener(new View.OnClickListener() {
             @Override
             public void onClick(View v) {
-                Intent intent=new Intent(mContext, SMS_MessagesChat.class);
+                Intent intent=new Intent(mContext, Chat_MessagesChat.class);
                 intent.putExtra("LogSMSName",dataSet.get(position).logName);
                 intent.putExtra("LogSMSAddress",dataSet.get(position).logAddress);
                 intent.putExtra("LogSMSThreadID",dataSet.get(position).thread_id);

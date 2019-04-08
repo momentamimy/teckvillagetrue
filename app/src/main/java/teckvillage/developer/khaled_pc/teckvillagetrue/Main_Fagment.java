@@ -98,8 +98,8 @@ import static android.app.Activity.RESULT_OK;
  */
 public class Main_Fagment extends Fragment implements OnBackPressedListener , LoaderManager.LoaderCallbacks<Cursor> {
 
-    String lastnum="0";
-    int numbersofcall=1;
+    String lastnum = "0";
+    int numbersofcall = 1;
     List<LogInfo> consolidatedList = new ArrayList<>();
     /*--------------------------------------dial_pad_layout------------------------------------------*/
     public RelativeLayout padLayout;
@@ -111,7 +111,8 @@ public class Main_Fagment extends Fragment implements OnBackPressedListener , Lo
     public RelativeLayout textLayout;
     public ImageView back_space;
     ArrayList<LogInfo> loglist102 = new ArrayList<>();
-    ArrayList<LogInfo> loglist103 = new ArrayList<>(); ;
+    ArrayList<LogInfo> loglist103 = new ArrayList<>();
+    ;
     public ImageView add_contact;
 
     static final String[] GRID_NUM = new String[]{
@@ -143,7 +144,8 @@ public class Main_Fagment extends Fragment implements OnBackPressedListener , Lo
     LinearLayoutManager lLayout1;
     LinearLayoutManager lLayout2;
     ArrayList<LogInfo> callLogInfos = new ArrayList<>();
-    ArrayList<LogInfo> logInfos = new ArrayList<>();;
+    ArrayList<LogInfo> logInfos = new ArrayList<>();
+    ;
     ArrayList<LogInfo> loguinfoupdate;
     LogAdapter adapter1;
     Get_Calls_Log get_calls_log;
@@ -154,7 +156,7 @@ public class Main_Fagment extends Fragment implements OnBackPressedListener , Lo
     GroupListByDate groupListByDate;
     ContactAdapter adaptertopten;
     List<ContactInfo> contactInfos55;
-    ImageView firstimagwaiting,secimagwaiting;
+    ImageView firstimagwaiting, secimagwaiting;
     TextView textwaiting;
 
     public Main_Fagment() {
@@ -200,11 +202,11 @@ public class Main_Fagment extends Fragment implements OnBackPressedListener , Lo
         contacts = view.findViewById(R.id.contact_recycleview);
 
         searchLogs = view.findViewById(R.id.Search_Log_recycleview);
-        searchLayout=view.findViewById(R.id.search_layout);
+        searchLayout = view.findViewById(R.id.search_layout);
         searchLayout.setOnClickListener(new View.OnClickListener() {
             @Override
             public void onClick(View v) {
-                startActivity(new Intent(getContext(),SearchActivity.class));
+                startActivity(new Intent(getContext(), SearchActivity.class));
             }
         });
 
@@ -339,19 +341,39 @@ public class Main_Fagment extends Fragment implements OnBackPressedListener , Lo
         //make padlayout invisable
         callAnimDefault();
 
+        final TelephonyInfo telephonyInfo = TelephonyInfo.getInstance(getActivity());
+
+        String imeiSIM1 = telephonyInfo.getImsiSIM1();
+        String imeiSIM2 = telephonyInfo.getImsiSIM2();
+
+        final boolean isSIM1Ready = telephonyInfo.isSIM1Ready();
+        final boolean isSIM2Ready = telephonyInfo.isSIM2Ready();
+
+        final boolean isDualSIM = telephonyInfo.isDualSIM();
 
 
         fab.setOnClickListener(new View.OnClickListener() {
             @Override
             public void onClick(View v) {
                 if (phone_num_edt.getText().length() == 0) {
-                    callButtonAnim();
+                    callButtonAnim(400);
                 } else if (scroll == true) {
                     scrollOpenAnim(400);
                 } else {
-                    Intent intent = new Intent(Intent.ACTION_CALL);
-                    intent.setData(Uri.parse("tel:" + phone_num_edt.getText().toString()));
-                    startActivity(intent);
+                    if (isDualSIM) {
+                        if (isSIM1Ready&&isSIM2Ready)
+                        {
+                            MyCustomDualSimDialog(phone_num_edt.getText().toString(),telephonyInfo);
+                        } else {
+                            Intent intent = new Intent(Intent.ACTION_CALL);
+                            intent.setData(Uri.parse("tel:" + phone_num_edt.getText().toString()));
+                            startActivity(intent);
+                        }
+                    } else {
+                        Intent intent = new Intent(Intent.ACTION_CALL);
+                        intent.setData(Uri.parse("tel:" + phone_num_edt.getText().toString()));
+                        startActivity(intent);
+                    }
                 }
             }
         });
@@ -382,7 +404,7 @@ public class Main_Fagment extends Fragment implements OnBackPressedListener , Lo
                     if (tel != null) {
                         num = tel.getVoiceMailNumber();
                     }
-                    if(num==null){
+                    if (num == null) {
 
                         AlertDialog.Builder builder = new AlertDialog.Builder(getActivity());
                         builder.setMessage("Voicemail number not configured." +
@@ -397,14 +419,13 @@ public class Main_Fagment extends Fragment implements OnBackPressedListener , Lo
                         AlertDialog alert = builder.create();
                         alert.show();
 
-                    }else {
+                    } else {
                         Intent intent = new Intent(Intent.ACTION_CALL);
                         intent.setData(Uri.parse("voicemail:" + num));
                         if (intent.resolveActivity(getActivity().getPackageManager()) != null) {
                             startActivity(intent);
                         }
                     }
-
 
 
                 } else if (grid_num_tv.getText().toString().equals("0")) {
@@ -451,9 +472,20 @@ public class Main_Fagment extends Fragment implements OnBackPressedListener , Lo
                     if (choosenNum.equals("")) {
                         MyCustomSpeedDialog(grid_num_tv.getText().toString());
                     } else {
-                        Intent intent = new Intent(Intent.ACTION_CALL);
-                        intent.setData(Uri.parse("tel:" + choosenNum));
-                        startActivity(intent);
+                        if (isDualSIM) {
+                            if (isSIM1Ready&&isSIM2Ready)
+                            {
+                                MyCustomDualSimDialog(choosenNum,telephonyInfo);
+                            } else {
+                                Intent intent = new Intent(Intent.ACTION_CALL);
+                                intent.setData(Uri.parse("tel:" + choosenNum));
+                                startActivity(intent);
+                            }
+                        } else {
+                            Intent intent = new Intent(Intent.ACTION_CALL);
+                            intent.setData(Uri.parse("tel:" + choosenNum));
+                            startActivity(intent);
+                        }
                     }
                 }
                 return true;
@@ -465,23 +497,17 @@ public class Main_Fagment extends Fragment implements OnBackPressedListener , Lo
             public void onItemClick(AdapterView<?> parent, View view, int position, long id) {
                 grid_num_tv = (TextView) view.findViewById(R.id.grid_num_textView);
 
-                    //Toast.makeText(getApplicationContext(), grid_num_tv.getText(), Toast.LENGTH_SHORT).show();
-                if (CursorVisibility)
-                {
-                    insertSelection(phone_num_edt,grid_num_tv.getText().toString());
+                //Toast.makeText(getApplicationContext(), grid_num_tv.getText(), Toast.LENGTH_SHORT).show();
+                if (CursorVisibility) {
+                    insertSelection(phone_num_edt, grid_num_tv.getText().toString());
+                } else {
+                    phone_num_edt.setText(phone_num_edt.getText().toString() + grid_num_tv.getText());
+                    phone_num_edt.setSelection(phone_num_edt.length() - 1);
                 }
-                else
-                {
-                    phone_num_edt.setText(phone_num_edt.getText().toString()+grid_num_tv.getText());
-                    phone_num_edt.setSelection(phone_num_edt.length()-1);
-                }
-                if (firstclick)
-                {
+                if (firstclick) {
                     writeAnim(300);
-                    firstclick=false;
-                }
-                else
-                {
+                    firstclick = false;
+                } else {
                     SortSearchCallList(phone_num_edt.getText().toString());
                 }
             }
@@ -490,21 +516,17 @@ public class Main_Fagment extends Fragment implements OnBackPressedListener , Lo
         back_space.setOnClickListener(new View.OnClickListener() {
             @Override
             public void onClick(View v) {
-                String num=phone_num_edt.getText().toString();
+                String num = phone_num_edt.getText().toString();
 
-                if (CursorVisibility)
-                {
+                if (CursorVisibility) {
                     removeSelection(phone_num_edt);
-                }
-                else
-                {
+                } else {
                     phone_num_edt.setText(removeChar(num));
                 }
 
-                if (phone_num_edt.getText().length()==0)
-                {
+                if (phone_num_edt.getText().length() == 0) {
                     deleteAnim(300);
-                    firstclick=true;
+                    firstclick = true;
                 }
                 SortSearchCallList(phone_num_edt.getText().toString());
             }
@@ -514,7 +536,7 @@ public class Main_Fagment extends Fragment implements OnBackPressedListener , Lo
             public boolean onLongClick(View v) {
                 phone_num_edt.setText("");
                 deleteAnim(300);
-                firstclick=true;
+                firstclick = true;
                 return true;
             }
         });
@@ -593,18 +615,14 @@ public class Main_Fagment extends Fragment implements OnBackPressedListener , Lo
         }*/
 
 
-
         lLayout1 = new LinearLayoutManager(getActivity());
 
         logs.setLayoutManager(lLayout1);
         logs.setItemAnimator(new DefaultItemAnimator());
         logs.hasFixedSize();
-        adapter1 = new LogAdapter(getActivity(),loglist103);
+        adapter1 = new LogAdapter(getActivity(), loglist103);
         logs.setAdapter(adapter1);
         //adapter1.notifyDataSetChanged();
-
-
-
 
 
         searchLogs.setLayoutManager(lLayout2);
@@ -771,15 +789,27 @@ public class Main_Fagment extends Fragment implements OnBackPressedListener , Lo
 
     }
 
-    public void callButtonAnim() {
+    public void callButtonAnim(int dur) {
         if (!aBoolean) {
-            open_button(400);
+            open_button(dur);
             aBoolean = true;
         } else {
-            close_button(400);
+            close_button(dur);
             aBoolean = false;
         }
 
+    }
+
+    public void open_button(int duration, boolean myBoolean) {
+        ObjectAnimator callLayoutAnim = callLayoutAnim(!myBoolean, 400);
+        DisplayMetrics metrics = getResources().getDisplayMetrics();
+        ObjectAnimator translationX = ObjectAnimator.ofFloat(fab, "x", metrics.widthPixels / 2 - fab.getWidth() / 2); // metrics.heightPixels or root.getHeight()
+        ObjectAnimator rotate = ObjectAnimator.ofFloat(fab, "rotation", 360);
+        rotate.setDuration(duration);
+        translationX.setDuration(duration);
+        AnimatorSet animatorSet = new AnimatorSet();
+        animatorSet.playTogether(callLayoutAnim, rotate, translationX);
+        animatorSet.start();
     }
 
     public void open_button(int duration) {
@@ -963,10 +993,10 @@ public class Main_Fagment extends Fragment implements OnBackPressedListener , Lo
     public void close_search_anim_button(final int duration) {
         deleteAnim(duration);
         phone_num_edt.setText("");
-        aBoolean=false;
-        scroll=false;
-        CursorVisibility=false;
-        firstclick=true;
+        aBoolean = false;
+        scroll = false;
+        CursorVisibility = false;
+        firstclick = true;
 
     }
     /*-------------------------------------------dial_pad_layout--------------------------------------------------*/
@@ -1024,8 +1054,6 @@ public class Main_Fagment extends Fragment implements OnBackPressedListener , Lo
         }*/
 
     }
-
-
 
 
     private CharSequence menuIconWithText(Drawable r, String title) {
@@ -1158,7 +1186,7 @@ public class Main_Fagment extends Fragment implements OnBackPressedListener , Lo
 
     @Override
     public Loader onCreateLoader(int id, Bundle args) {
-        Uri CONTACT_URI =CallLog.Calls.CONTENT_URI;
+        Uri CONTACT_URI = CallLog.Calls.CONTENT_URI;
         String[] projection = {
                 CallLog.Calls.CACHED_NAME,
                 CallLog.Calls.CACHED_NUMBER_TYPE,
@@ -1174,6 +1202,12 @@ public class Main_Fagment extends Fragment implements OnBackPressedListener , Lo
 
     @Override
     public void onLoadFinished(Loader<Cursor> loader, Cursor cursor) {
+        if (phone_num_edt.getText().length() != 0) {
+            writeAnim(0);
+            open_button(0, false);
+            SortSearchCallList(phone_num_edt.getText().toString());
+            firstclick = false;
+        }
         Log.d("mesheyyyy", "onLoadFinished");
         //logInfos = new ArrayList<>();
         //ArrayList<LogInfo> loglist103 = new ArrayList<>();
@@ -1182,7 +1216,7 @@ public class Main_Fagment extends Fragment implements OnBackPressedListener , Lo
         loglist103.clear();
         logInfos.clear();
 
-        String phName, phNumber, callDate, callDuration, dateStringhour,houronly;
+        String phName, phNumber, callDate, callDuration, dateStringhour, houronly;
         String dir = null;
         String typephone = null;
         int phmobileType, callType;
@@ -1212,7 +1246,7 @@ public class Main_Fagment extends Fragment implements OnBackPressedListener , Lo
 
                 //callDuration = managedCursor.getString(duration);
                 dateStringhour = formatter.format(new Date(Long.parseLong(callDate)));
-                houronly=formatter2.format(new Date(Long.parseLong(callDate)));
+                houronly = formatter2.format(new Date(Long.parseLong(callDate)));
 
                 switch (callType) {
                     case CallLog.Calls.OUTGOING_TYPE:
@@ -1340,7 +1374,6 @@ public class Main_Fagment extends Fragment implements OnBackPressedListener , Lo
                 }
 
 
-
                 logInfos.add(new LogInfo(null, phName, dir, callDayTime, typephone, dateStringhour, phNumber, numbersofcall));
 
 
@@ -1366,10 +1399,10 @@ public class Main_Fagment extends Fragment implements OnBackPressedListener , Lo
                 String num = logInfos.get(i + 1).getNumber();
 
                 //remove Country Code from first num
-                if(numString1.startsWith("+2")){
+                if (numString1.startsWith("+2")) {
                     numString1 = numString1.substring(2);
 
-                } else  if(numString1.startsWith("+")){
+                } else if (numString1.startsWith("+")) {
 
                     try {
                         // phone must begin with '+'
@@ -1382,10 +1415,10 @@ public class Main_Fagment extends Fragment implements OnBackPressedListener , Lo
                 }
 
                 //remove Country Code from second num
-                if(num.startsWith("+2")){
+                if (num.startsWith("+2")) {
                     num = num.substring(2);
 
-                } else  if(num.startsWith("+")){
+                } else if (num.startsWith("+")) {
 
                     try {
                         // phone must begin with '+'
@@ -1397,7 +1430,7 @@ public class Main_Fagment extends Fragment implements OnBackPressedListener , Lo
                     }
                 }
 
-                if (numString1.equals(num)  && logInfos.get(i).logIcon.equals(logInfos.get(i + 1).logIcon)  && groupListByDate.getFormattedDate(logInfos.get(i).logDate.getTime()).equals(groupListByDate.getFormattedDate(logInfos.get(i+1).logDate.getTime()))   ) {
+                if (numString1.equals(num) && logInfos.get(i).logIcon.equals(logInfos.get(i + 1).logIcon) && groupListByDate.getFormattedDate(logInfos.get(i).logDate.getTime()).equals(groupListByDate.getFormattedDate(logInfos.get(i + 1).logDate.getTime()))) {
                     numbersofcall++;
 
                 } else {
@@ -1406,10 +1439,10 @@ public class Main_Fagment extends Fragment implements OnBackPressedListener , Lo
                     numbersofcall = 1;
                 }
             }
-            callLogInfos=loglist103;
+            callLogInfos = loglist103;
 
             Log.d("size", String.valueOf(loglist103.size()));
-            adapter1 = new LogAdapter(getActivity(),groupListByDate.groupListByDate(loglist103));
+            adapter1 = new LogAdapter(getActivity(), groupListByDate.groupListByDate(loglist103));
             logs.setAdapter(adapter1);
             adapter1.notifyDataSetChanged();
 
@@ -1417,37 +1450,31 @@ public class Main_Fagment extends Fragment implements OnBackPressedListener , Lo
     }
 
 
-
-
-
     @Override
     public void onLoaderReset(Loader loader) {
 
     }
 
-    void LoadTopTenContactsSync(){
-        ProgressDialog  pd;
+    void LoadTopTenContactsSync() {
+        ProgressDialog pd;
         new AsyncTask<Void, Void, List<ContactInfo>>() {
             @Override
-            protected void onPreExecute()
-            {
+            protected void onPreExecute() {
 
                 //pd = ProgressDialog.show(getActivity(), "Loading..", "Please Wait", true, false);
             }// End of onPreExecute method
 
             @Override
-            protected List<ContactInfo>  doInBackground(Void... params)
-            {
+            protected List<ContactInfo> doInBackground(Void... params) {
 
-                contactInfos55 =  get_calls_log.getTopTenContacts();
+                contactInfos55 = get_calls_log.getTopTenContacts();
 
                 return contactInfos55;
             }// End of doInBackground method
 
             @Override
-            protected void onPostExecute(List<ContactInfo> result)
-            {
-               // pd.dismiss();
+            protected void onPostExecute(List<ContactInfo> result) {
+                // pd.dismiss();
                 adaptertopten = new ContactAdapter(getActivity(), result);
                 contacts.setAdapter(adaptertopten);
                 toggleEmptyCases();
@@ -1467,6 +1494,64 @@ public class Main_Fagment extends Fragment implements OnBackPressedListener , Lo
     }
 
 
+    Dialog MyDialogDualSim;
 
+    public void MyCustomDualSimDialog(final String Number,TelephonyInfo telephonyInfo) {
+        MyDialogDualSim = new Dialog(getContext());
+        MyDialogDualSim.requestWindowFeature(Window.FEATURE_NO_TITLE);
+        MyDialogDualSim.setContentView(R.layout.dual_sim_dialog);
+        Window window = MyDialogDualSim.getWindow();
+        window.setLayout(Toolbar.LayoutParams.WRAP_CONTENT, Toolbar.LayoutParams.WRAP_CONTENT);
+        MyDialogDualSim.getWindow().setBackgroundDrawable(new ColorDrawable(Color.TRANSPARENT));
 
+        String ContactName=get_calls_log.getContactName(Number);
+
+        TextView Title=MyDialogDualSim.findViewById(R.id.Dual_Sim_Titel);
+        if (!TextUtils.isEmpty(ContactName))
+        {
+            Title.setText("Call "+ContactName+" from");
+        }
+        else
+        {
+            Title.setText("Call "+Number+" from");
+        }
+
+        List<String>SIM_NAMES=telephonyInfo.getNetworkOperator(getActivity());
+        TextView sim_name_one=MyDialogDualSim.findViewById(R.id.SIM_Name_One);
+        TextView sim_name_two=MyDialogDualSim.findViewById(R.id.SIM_Name_Two);
+
+        if (SIM_NAMES.size()>=2)
+        {
+            sim_name_one.setText(SIM_NAMES.get(0));
+            sim_name_two.setText(SIM_NAMES.get(1));
+        }
+
+        RelativeLayout sim_one_layout=MyDialogDualSim.findViewById(R.id.SIM_One_Layout);
+        RelativeLayout sim_two_layout=MyDialogDualSim.findViewById(R.id.SIM_Two_Layout);
+
+        sim_one_layout.setOnClickListener(new View.OnClickListener() {
+            @Override
+            public void onClick(View v) {
+                Intent intent = new Intent(Intent.ACTION_CALL);
+                intent.putExtra("com.android.phone.extra.slot", 0); //For sim 1
+                //intent.putExtra("simSlot", 0); //For sim 1
+                intent.setData(Uri.parse("tel:" + Number));
+                startActivity(intent);
+                MyDialogDualSim.dismiss();
+            }
+        });
+
+        sim_two_layout.setOnClickListener(new View.OnClickListener() {
+            @Override
+            public void onClick(View v) {
+                Intent intent = new Intent(Intent.ACTION_CALL);
+                intent.putExtra("simSlot", 1); //For sim 2
+                //intent.putExtra("com.android.phone.extra.slot", 1); //For sim 2
+                intent.setData(Uri.parse("tel:" + Number));
+                startActivity(intent);
+                MyDialogDualSim.dismiss();
+            }
+        });
+    MyDialogDualSim.show();
+    }
 }

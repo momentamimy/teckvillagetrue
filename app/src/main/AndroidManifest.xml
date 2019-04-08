@@ -34,6 +34,12 @@
         android:supportsRtl="true"
         android:theme="@style/AppTheme">
         <activity
+            android:name=".Chat_MessagesChat"
+            android:configChanges="orientation"
+            android:screenOrientation="portrait"
+            android:theme="@style/AppTheme.NoActionBar"/>
+
+        <activity
             android:name=".PopupDialogActivity"
             android:excludeFromRecents="true"
             android:launchMode="singleInstance"

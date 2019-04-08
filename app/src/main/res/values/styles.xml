@@ -36,6 +36,14 @@
         <item name="colorControlActivated">@color/colorPrimary</item>
     </style>
 
+    <style name="TextLabe3" parent="Widget.Design.TextInputLayout">
+        <!-- Hint color and label color in FALSE state -->
+        <!-- Label color in TRUE state and bar color FALSE and TRUE State -->
+        <item name="colorAccent">@color/colorPrimary</item>
+        <item name="colorControlNormal">@color/colorPrimary</item>
+        <item name="colorControlActivated">@color/colorPrimary</item>
+    </style>
+
     <style name="WelcomeErrorAppearance" parent="@android:style/TextAppearance">
         <item name="android:textColor">#cc0000</item>  <!--  #cc0000 -->
         <item name="android:textSize">11sp</item>

@@ -181,7 +181,16 @@
             android:background="#00000000"
             android:id="@+id/Message_Send"
             android:layout_width="match_parent"
-            android:layout_height="wrap_content" />
+            android:layout_height="wrap_content"
+            android:layout_toStartOf="@+id/Dual_Sim"
+            android:layout_toLeftOf="@+id/Dual_Sim" />
+        <ImageView
+            android:id="@+id/Dual_Sim"
+            android:layout_alignParentEnd="true"
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:src="@drawable/ic_one"
+            android:layout_alignParentRight="true" />
     </RelativeLayout>
 
 </android.support.v7.widget.CardView>

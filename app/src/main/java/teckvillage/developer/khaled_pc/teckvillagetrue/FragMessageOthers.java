@@ -48,12 +48,11 @@ public class FragMessageOthers extends Fragment implements LoaderManager.LoaderC
     Get_User_Contacts get_user_contacts;
 
     private static FragMessageOthers inst;
-    ArrayList<String> smsMessagesList = new ArrayList<String>();
-    static ArrayList<MessageInfo> ohterMessageInfos=new ArrayList<>();
     static ArrayList<MessageInfo> allMessageOtherInfos=new ArrayList<>();
-    ListView smsListView;
-    static CustomListViewAdapter customOhtersListViewAdapter;
-    static boolean endOhtersList=false;
+
+    static CustomRecyclerViewAdapter customOtherRecyclerViewAdapter;
+
+    static RecyclerView smsRecyclerView;
 
     public static FragMessageOthers instance() {
         return inst;
@@ -82,44 +81,11 @@ public class FragMessageOthers extends Fragment implements LoaderManager.LoaderC
 
         get_user_contacts=new Get_User_Contacts(getActivity());
 
-        smsListView = (ListView) view.findViewById(R.id.SMSList);
-
-        customOhtersListViewAdapter=new CustomListViewAdapter(ohterMessageInfos,getActivity());
-        smsListView.setAdapter(customOhtersListViewAdapter);
-        smsListView.setOnItemClickListener(new AdapterView.OnItemClickListener() {
-            @Override
-            public void onItemClick(AdapterView<?> parent, View view, int position, long id) {
-
-                Intent intent=new Intent(getContext(),SMS_MessagesChat.class);
-                intent.putExtra("LogSMSName",ohterMessageInfos.get(position).logName);
-                intent.putExtra("LogSMSAddress",ohterMessageInfos.get(position).logAddress);
-                intent.putExtra("LogSMSThreadID",ohterMessageInfos.get(position).thread_id);
-                intent.putExtra("LogSMSPosition",position);
-                intent.putExtra("TYPE","Other");
-                startActivity(intent);
-
-                /*MessageInfo info=ohterMessageInfos.get(position);
-                info.setRead("true");
-                ohterMessageInfos.set(position,info);
-                customOhtersListViewAdapter.notifyDataSetChanged();
-            */}
-        });
-        smsListView.setOnScrollListener(new AbsListView.OnScrollListener() {
-            @Override
-            public void onScrollStateChanged(AbsListView view, int scrollState) {
-                Log.d("2a5er_position", String.valueOf(smsListView.getLastVisiblePosition()));
-                if (smsListView.getLastVisiblePosition()>=ohterMessageInfos.size()-1&&!endOhtersList)
-                {
-                   // getLoaderManager().initLoader(1,null,FragMessageOthers.this);
-                    createOthersloader();
-                }
-            }
-
-            @Override
-            public void onScroll(AbsListView view, int firstVisibleItem, int visibleItemCount, int totalItemCount) {
-
-            }
-        });
+        smsRecyclerView=view.findViewById(R.id.SMSRecycler);
+        LinearLayoutManager lLayout=new LinearLayoutManager(getContext());
+        customOtherRecyclerViewAdapter=new CustomRecyclerViewAdapter(allMessageOtherInfos,getContext(),"Other");
+        smsRecyclerView.setLayoutManager(lLayout);
+        smsRecyclerView.setAdapter(customOtherRecyclerViewAdapter);
 
         // Add SMS Read Permision At Runtime
         // Todo : If Permission Is Not GRANTED
@@ -139,27 +105,7 @@ public class FragMessageOthers extends Fragment implements LoaderManager.LoaderC
 
     public static void createOthersloader()
     {
-        if (!endOhtersList)
-        {
-            int count=0;
-            int i=0;
-            for (i=ohterMessageInfos.size();i<allMessageOtherInfos.size();i++)
-            {
-
-                if (count>20)
-                {
-                    break;
-                }
-                ohterMessageInfos.add(allMessageOtherInfos.get(i));
-                count++;
-            }
-            if (i==allMessageOtherInfos.size())
-            {
-                endOhtersList=true;
-            }
-
-            customOhtersListViewAdapter.notifyDataSetChanged();
-        }
+        customOtherRecyclerViewAdapter.notifyDataSetChanged();
     }
 
 
@@ -171,19 +117,12 @@ public class FragMessageOthers extends Fragment implements LoaderManager.LoaderC
     @Override
     public void onLoadFinished(Loader<Cursor> loader, Cursor data) {
 
-        customOhtersListViewAdapter.notifyDataSetChanged();
+        customOtherRecyclerViewAdapter.notifyDataSetChanged();
     }
 
     @Override
     public void onLoaderReset(Loader<Cursor> loader) {
 
     }
-
-
-
-    /*public void updateList(final MessageInfo messageInfo) {
-        customListViewAdapter.insert(messageInfo, 0);
-        customListViewAdapter.notifyDataSetChanged();
-    }*/
 
 }

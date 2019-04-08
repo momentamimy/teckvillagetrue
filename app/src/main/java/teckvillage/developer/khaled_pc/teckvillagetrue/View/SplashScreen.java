@@ -70,7 +70,7 @@ public class SplashScreen extends AppCompatActivity implements EasyPermissions.P
             }else {
                 Intent intent=new Intent(this,Signup.class);//LoginActivity
                 intent.putExtra("countrycode","+20");//remove
-                intent.putExtra("phonenumber","01211220000");//remove
+                intent.putExtra("phonenumber","01021155607");//remove
                 startActivity(intent);
                 finish();
             }

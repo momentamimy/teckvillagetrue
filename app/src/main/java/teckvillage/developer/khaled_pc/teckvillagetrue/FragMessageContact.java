@@ -13,6 +13,8 @@ import android.support.annotation.Nullable;
 import android.support.v4.app.ActivityCompat;
 import android.support.v4.app.Fragment;
 import android.support.v4.content.ContextCompat;
+import android.support.v7.widget.LinearLayoutManager;
+import android.support.v7.widget.RecyclerView;
 import android.text.TextUtils;
 import android.util.Log;
 import android.view.LayoutInflater;
@@ -28,6 +30,7 @@ import java.util.ArrayList;
 import java.util.Calendar;
 
 import teckvillage.developer.khaled_pc.teckvillagetrue.Controller.CustomListViewAdapter;
+import teckvillage.developer.khaled_pc.teckvillagetrue.Controller.CustomRecyclerViewAdapter;
 import teckvillage.developer.khaled_pc.teckvillagetrue.model.Get_User_Contacts;
 import teckvillage.developer.khaled_pc.teckvillagetrue.model.MessageInfo;
 import teckvillage.developer.khaled_pc.teckvillagetrue.model.UserContactData;
@@ -41,11 +44,12 @@ public class FragMessageContact extends Fragment {
     private static FragMessageOthers inst;
     static ArrayList<MessageInfo> contactMessageInfos=new ArrayList<>();
     static ArrayList<MessageInfo> allMessageContactInfos=new ArrayList<>();
-    ListView smsListView;
+    //ListView smsListView;
     // ArrayAdapter arrayAdapter;
     static CustomListViewAdapter customCotactsListViewAdapter;
-    static boolean endContactsList=false;
+    static CustomRecyclerViewAdapter customCotactsRecyclerViewAdapter;
 
+    static RecyclerView smsRecyclerView;
 
     public FragMessageContact() {
         // Required empty public constructor
@@ -66,10 +70,15 @@ public class FragMessageContact extends Fragment {
         //LoadingContactToast(getContext());
         get_user_contacts=new Get_User_Contacts(getActivity());
 
-        smsListView = (ListView) view.findViewById(R.id.SMSList);
+        //smsListView = (ListView) view.findViewById(R.id.SMSList);
+        smsRecyclerView=view.findViewById(R.id.SMSRecycler);
+        LinearLayoutManager lLayout=new LinearLayoutManager(getContext());
+        customCotactsRecyclerViewAdapter=new CustomRecyclerViewAdapter(allMessageContactInfos,getContext(),"Contact");
+        smsRecyclerView.setLayoutManager(lLayout);
+        smsRecyclerView.setAdapter(customCotactsRecyclerViewAdapter);
 
         customCotactsListViewAdapter=new CustomListViewAdapter(contactMessageInfos,getActivity());
-        smsListView.setAdapter(customCotactsListViewAdapter);
+        /*smsListView.setAdapter(customCotactsListViewAdapter);
         smsListView.setOnItemClickListener(new AdapterView.OnItemClickListener() {
             @Override
             public void onItemClick(AdapterView<?> parent, View view, int position, long id) {
@@ -85,7 +94,7 @@ public class FragMessageContact extends Fragment {
                 info.setRead("true");
                 contactMessageInfos.set(position,info);
                 customCotactsListViewAdapter.notifyDataSetChanged();
-           */
+
             }
         });
         smsListView.setOnScrollListener(new AbsListView.OnScrollListener() {
@@ -104,7 +113,7 @@ public class FragMessageContact extends Fragment {
 
             }
         });
-
+*/
         // Add SMS Read Permision At Runtime
         // Todo : If Permission Is Not GRANTED
         if(ContextCompat.checkSelfPermission(getActivity().getBaseContext(), "android.permission.READ_SMS") == PackageManager.PERMISSION_GRANTED) {
@@ -139,7 +148,7 @@ public class FragMessageContact extends Fragment {
     }
 
     public static void createContactsloader()
-    {
+    {/*
         if (!endContactsList)
         {
             int count=0;
@@ -161,6 +170,8 @@ public class FragMessageContact extends Fragment {
             clt.dismiss();
             customCotactsListViewAdapter.notifyDataSetChanged();
         }
+    */
+    customCotactsRecyclerViewAdapter.notifyDataSetChanged();
     }
 
 

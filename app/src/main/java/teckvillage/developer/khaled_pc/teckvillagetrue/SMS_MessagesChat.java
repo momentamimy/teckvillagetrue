@@ -9,11 +9,13 @@ import android.content.ContentValues;
 import android.content.Context;
 import android.content.Intent;
 import android.content.IntentFilter;
+import android.content.SharedPreferences;
 import android.content.pm.PackageManager;
 import android.database.Cursor;
 import android.database.sqlite.SQLiteException;
 import android.net.Uri;
 import android.os.Build;
+import android.os.IBinder;
 import android.provider.Telephony;
 import android.support.design.widget.FloatingActionButton;
 import android.support.v4.app.ActivityCompat;
@@ -25,6 +27,8 @@ import android.support.v7.widget.PopupMenu;
 import android.support.v7.widget.RecyclerView;
 import android.support.v7.widget.Toolbar;
 import android.telephony.SmsManager;
+import android.telephony.SubscriptionInfo;
+import android.telephony.SubscriptionManager;
 import android.text.TextUtils;
 import android.util.Log;
 import android.view.MenuItem;
@@ -36,6 +40,8 @@ import android.widget.RelativeLayout;
 import android.widget.TextView;
 import android.widget.Toast;
 
+import java.lang.reflect.InvocationTargetException;
+import java.lang.reflect.Method;
 import java.util.ArrayList;
 import java.util.Calendar;
 import java.util.Collections;
@@ -46,12 +52,10 @@ import de.hdodenhof.circleimageview.CircleImageView;
 import teckvillage.developer.khaled_pc.teckvillagetrue.Controller.Receiver;
 import teckvillage.developer.khaled_pc.teckvillagetrue.model.MessageInfo;
 
-import static teckvillage.developer.khaled_pc.teckvillagetrue.FragMessageContact.contactMessageInfos;
-import static teckvillage.developer.khaled_pc.teckvillagetrue.FragMessageContact.customCotactsListViewAdapter;
-import static teckvillage.developer.khaled_pc.teckvillagetrue.FragMessageOthers.customOhtersListViewAdapter;
-import static teckvillage.developer.khaled_pc.teckvillagetrue.FragMessageOthers.ohterMessageInfos;
-import static teckvillage.developer.khaled_pc.teckvillagetrue.FragMessageSpam.customSpamListViewAdapter;
-import static teckvillage.developer.khaled_pc.teckvillagetrue.FragMessageSpam.spamMessageInfos;
+import static teckvillage.developer.khaled_pc.teckvillagetrue.FragMessageContact.allMessageContactInfos;
+import static teckvillage.developer.khaled_pc.teckvillagetrue.FragMessageOthers.allMessageOtherInfos;
+import static teckvillage.developer.khaled_pc.teckvillagetrue.FragMessageSpam.allMessageSpamInfos;
+import static teckvillage.developer.khaled_pc.teckvillagetrue.Message_Fragment.SMSCHANGE;
 
 public class SMS_MessagesChat extends AppCompatActivity {
 
@@ -67,9 +71,10 @@ public class SMS_MessagesChat extends AppCompatActivity {
 
     RelativeLayout Message_Container;
     EditText messageSend;
+    ImageView dualSims;
     FloatingActionButton send;
 
-    String name, address,threadID;
+    String name, address, threadID;
 
     ImageView callIcon, settingIcon;
 
@@ -113,50 +118,14 @@ public class SMS_MessagesChat extends AppCompatActivity {
         name = getIntent().getStringExtra("LogSMSName");
         address = getIntent().getStringExtra("LogSMSAddress");
         threadID = getIntent().getStringExtra("LogSMSThreadID");
-        int position= (int) getIntent().getIntExtra("LogSMSPosition",-1);
-        String type=getIntent().getStringExtra("TYPE");
-
-        if (position!=-1&&!TextUtils.isEmpty(type))
-        {
-            Log.d("paleez","ya 3m");
-
-            if (type.equals("Contact"))
-            {
-                MessageInfo info=contactMessageInfos.get(position);
-                info.setRead("true");
-                contactMessageInfos.set(position,info);
-                customCotactsListViewAdapter.notifyDataSetChanged();
-            }
-
-
-            if (type.equals("Other"))
-            {
-                MessageInfo info1=ohterMessageInfos.get(position);
-                info1.setRead("true");
-                ohterMessageInfos.set(position,info1);
-                customOhtersListViewAdapter.notifyDataSetChanged();
-            }
-
-
-            if (type.equals("Spam"))
-            {
-                MessageInfo info2=spamMessageInfos.get(position);
-                info2.setRead("true");
-                spamMessageInfos.set(position,info2);
-                customSpamListViewAdapter.notifyDataSetChanged();
-            }
-
-        }
-
 
 
         Log.d("Address::::", address);
         String regex = "\\d+";
         address = address.replaceAll("\\s", "");
         address = address.replace("-", "");
-        String s=address.replace("+","");
-        if (!s.matches(regex))
-        {
+        String s = address.replace("+", "");
+        if (!s.matches(regex)) {
             Cant_Replay_Layout.setVisibility(View.VISIBLE);
             Message_Container.setVisibility(View.GONE);
         } else {
@@ -167,6 +136,7 @@ public class SMS_MessagesChat extends AppCompatActivity {
         userName.setText(name);
 
         messageSend = findViewById(R.id.Message_Send);
+        dualSims = findViewById(R.id.Dual_Sim);
         send = findViewById(R.id.fab);
 
         lLayout = new LinearLayoutManager(getApplicationContext());
@@ -177,7 +147,50 @@ public class SMS_MessagesChat extends AppCompatActivity {
         adapter = new messages_list_adapter(this, messageInfos, messageSend, chat_RecyclerView, address);
         chat_RecyclerView.setAdapter(adapter);
 
+        final TelephonyInfo telephonyInfo = TelephonyInfo.getInstance(SMS_MessagesChat.this);
+        final boolean isSIM1Ready = telephonyInfo.isSIM1Ready();
+        final boolean isSIM2Ready = telephonyInfo.isSIM2Ready();
+        final boolean isDualSIM = telephonyInfo.isDualSIM();
+
+        if (isDualSIM) {
+            if (isSIM1Ready && isSIM2Ready) { }
+            else { dualSims.setVisibility(View.GONE); }
+        }
+        else { dualSims.setVisibility(View.GONE); }
+
+        SharedPreferences preferences=getSharedPreferences("DUAL_SIM",MODE_PRIVATE);
+        String SIM=preferences.getString("SIM","0");
+
+        if (SIM.equals("0"))
+        {
+            dualSims.setImageResource(R.drawable.ic_one);
+        }
+        else if (SIM.equals("1"))
+        {
+            dualSims.setImageResource(R.drawable.ic_two);
+        }
         //getmessages();
+        dualSims.setOnClickListener(new View.OnClickListener() {
+            @Override
+            public void onClick(View v) {
+                SharedPreferences preferences=getSharedPreferences("DUAL_SIM",MODE_PRIVATE);
+                String SIM=preferences.getString("SIM","0");
+                if (SIM.equals("0"))
+                {
+                    dualSims.setImageResource(R.drawable.ic_two);
+                    SharedPreferences.Editor editor=preferences.edit();
+                    editor.putString("SIM","1");
+                    editor.commit();
+                }
+                else if (SIM.equals("1"))
+                {
+                    dualSims.setImageResource(R.drawable.ic_one);
+                    SharedPreferences.Editor editor=preferences.edit();
+                    editor.putString("SIM","0");
+                    editor.commit();
+                }
+            }
+        });
 
 
         callIcon.setOnClickListener(new View.OnClickListener() {
@@ -203,10 +216,8 @@ public class SMS_MessagesChat extends AppCompatActivity {
                                 // item one clicked
                                 return true;
                             case R.id.delete_conversation:
-                                for (int i=0;i<messageInfos.size();i++)
-                                {
-                                    if (!messageInfos.get(i).strthread_id.equals(""))
-                                    {
+                                for (int i = 0; i < messageInfos.size(); i++) {
+                                    if (!messageInfos.get(i).strthread_id.equals("")) {
                                         delete_sms(Long.parseLong(messageInfos.get(i).strthread_id));
                                         break;
                                     }
@@ -234,35 +245,27 @@ public class SMS_MessagesChat extends AppCompatActivity {
                         intent.putExtra(Telephony.Sms.Intents.EXTRA_PACKAGE_NAME,
                                 myPackageName);
                         startActivity(intent);
-                    }
-                    else {
+                    } else {
                         String phoneNo = address;
                         String message = messageSend.getText().toString();
-                        if (phoneNo.length()>0 && message.length()>0)
-                        {
+                        if (phoneNo.length() > 0 && message.length() > 0) {
                             messageSend.setText("");
-                            sendSMS(phoneNo,message);
+                            sendSMS(phoneNo, message);
 
-                        }
-
-                        else
+                        } else
                             Toast.makeText(getBaseContext(),
                                     "Please enter both phone number and message.",
                                     Toast.LENGTH_SHORT).show();
 
                     }
-                }
-                else {
+                } else {
                     String phoneNo = address;
                     String message = messageSend.getText().toString();
-                    if (phoneNo.length()>0 && message.length()>0)
-                    {
+                    if (phoneNo.length() > 0 && message.length() > 0) {
                         messageSend.setText("");
-                        sendSMS(phoneNo,message);
+                        sendSMS(phoneNo, message);
 
-                    }
-
-                    else
+                    } else
                         Toast.makeText(getBaseContext(),
                                 "Please enter both phone number and message.",
                                 Toast.LENGTH_SHORT).show();
@@ -274,7 +277,8 @@ public class SMS_MessagesChat extends AppCompatActivity {
 
         check_read_messages_permission();
     }
-    private void check_read_messages_permission(){
+
+    private void check_read_messages_permission() {
 
         if (ContextCompat.checkSelfPermission(this,
                 Manifest.permission.READ_SMS)
@@ -290,7 +294,7 @@ public class SMS_MessagesChat extends AppCompatActivity {
             } else {
                 // No explanation needed; request the permission
                 ActivityCompat.requestPermissions(this,
-                        new String[]{Manifest.permission.READ_SMS},00);
+                        new String[]{Manifest.permission.READ_SMS}, 00);
 
                 // MY_PERMISSIONS_REQUEST_READ_CONTACTS is an
                 // app-defined int constant. The callback method gets the
@@ -348,67 +352,71 @@ public class SMS_MessagesChat extends AppCompatActivity {
      * ----------------------------------------------------------------------------------------------------------------------------------*/
 
 
-
-
-    public void insert_sms_to_sent(String phone,String sms,long l){
+    public void insert_sms_to_sent(String phone, String sms, long l) {
         ContentValues values = new ContentValues();
-        values.put("address",phone);
+        values.put("address", phone);
         values.put("body", sms);
         values.put("seen", true);
         values.put("read", true);
-        values.put("date",l);
-        values.put("type",5);
-        values.put("status",31);//in progress
+        values.put("date", l);
+        values.put("type", 5);
+        values.put("status", 31);//in progress
         getContentResolver().insert(Uri.parse("content://sms/sent"), values);
         refresh();
+        SMSCHANGE = true;
     }
 
     private void update_sms_sent(long l) {
         ContentValues values = new ContentValues();
         values.put("seen", true);
         values.put("read", true);
-        values.put("date",l);
-        values.put("type",2);
-        values.put("status",0);//sent
-        getContentResolver().update(Uri.parse("content://sms/"), values, "date=?", new String[] {String.valueOf(l)});
+        values.put("date", l);
+        values.put("type", 2);
+        values.put("status", 0);//sent
+        getContentResolver().update(Uri.parse("content://sms/"), values, "date=?", new String[]{String.valueOf(l)});
         refresh();
+        SMSCHANGE = true;
     }
 
     public void update_sms_not_sent(long l) {
         ContentValues values = new ContentValues();
         values.put("seen", true);
         values.put("read", true);
-        values.put("date",l);
-        values.put("type",5);
-        values.put("status",32);//not sent
-        getContentResolver().update(Uri.parse("content://sms/"), values, "date=?", new String[] {String.valueOf(l)});
+        values.put("date", l);
+        values.put("type", 5);
+        values.put("status", 32);//not sent
+        getContentResolver().update(Uri.parse("content://sms/"), values, "date=?", new String[]{String.valueOf(l)});
         refresh();
+        SMSCHANGE = true;
     }
 
-    public void update_unread(long id)
-    {
+    public void update_unread(long id) {
         Log.d("8qrwrqrfsaq", "seen");
         ContentValues values = new ContentValues();
         values.put("seen", true);
         values.put("read", true);
-        getContentResolver().update(Uri.parse("content://sms/inbox"), values, "_id="+id, null);
+        getContentResolver().update(Uri.parse("content://sms/inbox"), values, "_id=" + id, null);
+        SMSCHANGE = true;
     }
 
     private void delete_sms(long ID) {
-        getContentResolver().delete(Uri.parse("content://sms/"),"thread_id=?", new String[] {String.valueOf(ID)});
+        getContentResolver().delete(Uri.parse("content://sms/"), "thread_id=?", new String[]{String.valueOf(ID)});
         refresh();
+        SMSCHANGE = true;
     }
-    public void refresh(){
+
+    public void refresh() {
         messageInfos.clear();
         get_delivered_messages();
     }
-    private void get_delivered_messages(){
+
+    private void get_delivered_messages() {
 
         final String SMS_URI_INBOX = "content://sms/inbox";
         final String SMS_URI_ALL = "content://sms/";
         try {
             Uri uri = Uri.parse(SMS_URI_INBOX);
-            String[] projection = new String[] { "_id", "address", "person", "body", "date", "type","read","date_sent","thread_id","status"};
+            String[] projection = new String[]{"_id", "address", "person", "body", "date", "type", "read", "date_sent", "thread_id", "status"};
             Cursor cur = getContentResolver().query(uri, projection, null, null, "date desc");
             if (cur.moveToFirst()) {
                 int index_id = cur.getColumnIndex("_id");
@@ -433,23 +441,17 @@ public class SMS_MessagesChat extends AppCompatActivity {
                     long date_sent = cur.getInt(index_date_sent);
                     String strthread_id = cur.getString(index_thread_id);
                     int int_status = cur.getInt(index_status);
-                    if (TextUtils.isEmpty(threadID))
-                    {
+                    if (TextUtils.isEmpty(threadID)) {
                         if (strAddress.contains(address)) {
-                            messageInfos.add(new sms_messages_model(id,strAddress, longDate, strbody,int_Type,strseen,date_sent,strthread_id,int_status));
-                            if (!strseen.equals("1"))
-                            {
+                            messageInfos.add(new sms_messages_model(id, strAddress, longDate, strbody, int_Type, strseen, date_sent, strthread_id, int_status));
+                            if (!strseen.equals("1")) {
                                 update_unread(id);
                             }
                         }
-                    }
-                    else
-                    {
-                        if (strthread_id.equals(threadID))
-                        {
-                            messageInfos.add(new sms_messages_model(id,strAddress, longDate, strbody,int_Type,strseen,date_sent,strthread_id,int_status));
-                            if (!strseen.equals("1"))
-                            {
+                    } else {
+                        if (strthread_id.equals(threadID)) {
+                            messageInfos.add(new sms_messages_model(id, strAddress, longDate, strbody, int_Type, strseen, date_sent, strthread_id, int_status));
+                            if (!strseen.equals("1")) {
                                 update_unread(id);
                             }
                         }
@@ -467,13 +469,14 @@ public class SMS_MessagesChat extends AppCompatActivity {
             Log.d("SQLiteException", ex.getMessage());
         }
     }
-    private void get_sent_messages(){
+
+    private void get_sent_messages() {
 
         final String SMS_URI_INBOX = "content://sms/";
         final String SMS_URI_ALL = "content://sms/";
         try {
             Uri uri = Uri.parse(SMS_URI_INBOX);
-            String[] projection = new String[] { "_id", "address", "person", "body", "date", "type","seen","date_sent","thread_id","status"};
+            String[] projection = new String[]{"_id", "address", "person", "body", "date", "type", "seen", "date_sent", "thread_id", "status"};
             Cursor cur = getContentResolver().query(uri, projection, null, null, "date desc");
             if (cur.moveToFirst()) {
                 int index_id = cur.getColumnIndex("_id");
@@ -498,21 +501,18 @@ public class SMS_MessagesChat extends AppCompatActivity {
                     long date_sent = cur.getInt(index_date_sent);
                     String strthread_id = cur.getString(index_thread_id);
                     int int_status = cur.getInt(index_status);
-                    if (TextUtils.isEmpty(threadID))
-                    {
+                    if (TextUtils.isEmpty(threadID)) {
                         if (!TextUtils.isEmpty(strAddress))
-                            if (int_Type!=1)
+                            if (int_Type != 1)
                                 if (strAddress.contains(address)) {
-                                    messageInfos.add(new sms_messages_model(id,getSharedPreferences("logged_in",MODE_PRIVATE).getString("phone",""), longDate, strbody,int_Type,strseen,date_sent,strthread_id,int_status));
+                                    messageInfos.add(new sms_messages_model(id, getSharedPreferences("logged_in", MODE_PRIVATE).getString("phone", ""), longDate, strbody, int_Type, strseen, date_sent, strthread_id, int_status));
 
                                 }
-                    }
-                    else
-                    {
+                    } else {
                         if (!TextUtils.isEmpty(strthread_id))
-                            if (int_Type!=1)
+                            if (int_Type != 1)
                                 if (strthread_id.equals(threadID)) {
-                                    messageInfos.add(new sms_messages_model(id,getSharedPreferences("logged_in",MODE_PRIVATE).getString("phone",""), longDate, strbody,int_Type,strseen,date_sent,strthread_id,int_status));
+                                    messageInfos.add(new sms_messages_model(id, getSharedPreferences("logged_in", MODE_PRIVATE).getString("phone", ""), longDate, strbody, int_Type, strseen, date_sent, strthread_id, int_status));
                                 }
                     }
                 } while (cur.moveToNext());
@@ -528,37 +528,35 @@ public class SMS_MessagesChat extends AppCompatActivity {
         }
     }
 
-    private void sort_messages(List<sms_messages_model>list){
-        Collections.sort(list, new Comparator<sms_messages_model>(){
-            public int compare(sms_messages_model o1, sms_messages_model o2){
-                if(o1.date == o2.date)
+    private void sort_messages(List<sms_messages_model> list) {
+        Collections.sort(list, new Comparator<sms_messages_model>() {
+            public int compare(sms_messages_model o1, sms_messages_model o2) {
+                if (o1.date == o2.date)
                     return 0;
                 return o1.date < o2.date ? -1 : 1;
             }
         });
-        long myDateDay=0;
-        for (int i=0;i<messageInfos.size();i++)
-        {
-            sms_messages_model model=messageInfos.get(i);
-            Calendar calendar=Calendar.getInstance();
+        long myDateDay = 0;
+        for (int i = 0; i < messageInfos.size(); i++) {
+            sms_messages_model model = messageInfos.get(i);
+            Calendar calendar = Calendar.getInstance();
             calendar.setTimeInMillis(model.date);
-            Calendar calendar1=Calendar.getInstance();
+            Calendar calendar1 = Calendar.getInstance();
             calendar1.setTimeInMillis(myDateDay);
-            Log.d("tmtmtmtmtmtmtmtm2", myDateDay+" : "+model.date);
-            if (calendar.get(Calendar.DAY_OF_YEAR) != calendar1.get(Calendar.DAY_OF_YEAR))
-            {
-                Log.d("tmtmtmtmtmtmtmtm1", myDateDay+" : "+model.date);
-                myDateDay=model.date;
-                sms_messages_model newmodel=new sms_messages_model(0,"",model.date,"",0,"",model.date,"",0);
+            Log.d("tmtmtmtmtmtmtmtm2", myDateDay + " : " + model.date);
+            if (calendar.get(Calendar.DAY_OF_YEAR) != calendar1.get(Calendar.DAY_OF_YEAR)) {
+                Log.d("tmtmtmtmtmtmtmtm1", myDateDay + " : " + model.date);
+                myDateDay = model.date;
+                sms_messages_model newmodel = new sms_messages_model(0, "", model.date, "", 0, "", model.date, "", 0);
                 newmodel.setShowDay(true);
-                messageInfos.add(i,newmodel);
+                messageInfos.add(i, newmodel);
             }
 
         }
 
 
         adapter.notifyDataSetChanged();
-        if (messageInfos.size()>2){
+        if (messageInfos.size() > 2) {
             chat_RecyclerView.smoothScrollToPosition(messageInfos.size() - 1);
         }
     }
@@ -567,11 +565,12 @@ public class SMS_MessagesChat extends AppCompatActivity {
      * -------------------------------------------------------------------------------------------------------------------------------*/
 
 
-    private void sendSMS(String phoneNumber, String message)
-    {
-        final long l=System.currentTimeMillis();
+    private void sendSMS(String phoneNumber, String message) {
+
+        final long l = System.currentTimeMillis();
         chat_RecyclerView.setAdapter(adapter);
-        String SENT = "SMS_SENT"+l; String DELIVERED = "SMS_DELIVERED"+l;
+        String SENT = "SMS_SENT" + l;
+        String DELIVERED = "SMS_DELIVERED" + l;
         PendingIntent sentPI = PendingIntent.getBroadcast(this, 0,
                 new Intent(SENT), 0);
 
@@ -585,14 +584,13 @@ public class SMS_MessagesChat extends AppCompatActivity {
             public void onReceive(Context arg0, Intent arg1) {
 
 
-                switch (getResultCode())
-                {
+                switch (getResultCode()) {
                     case Activity.RESULT_OK:
                         Log.d("dsadadadadadad", "meshyyyyy");
 
-                        AlarmManager alarmManager= (AlarmManager) getSystemService(ALARM_SERVICE);
-                        Intent myIntent=new Intent(getApplicationContext(), Receiver.class);
-                        myIntent.putExtra("time",l);
+                        AlarmManager alarmManager = (AlarmManager) getSystemService(ALARM_SERVICE);
+                        Intent myIntent = new Intent(getApplicationContext(), Receiver.class);
+                        myIntent.putExtra("time", l);
                         PendingIntent amPI = PendingIntent.getBroadcast(getApplicationContext(), (int) l,
                                 myIntent, 0);
                         alarmManager.cancel(amPI);
@@ -606,9 +604,9 @@ public class SMS_MessagesChat extends AppCompatActivity {
                     case SmsManager.RESULT_ERROR_GENERIC_FAILURE:
                         Log.d("dsadadadadadad", "meshyyyyy");
 
-                        AlarmManager alarmManager1= (AlarmManager) getSystemService(ALARM_SERVICE);
-                        Intent myIntent1=new Intent(getApplicationContext(), Receiver.class);
-                        myIntent1.putExtra("time",l);
+                        AlarmManager alarmManager1 = (AlarmManager) getSystemService(ALARM_SERVICE);
+                        Intent myIntent1 = new Intent(getApplicationContext(), Receiver.class);
+                        myIntent1.putExtra("time", l);
                         PendingIntent amPI1 = PendingIntent.getBroadcast(getApplicationContext(), (int) l,
                                 myIntent1, 0);
                         alarmManager1.cancel(amPI1);
@@ -620,9 +618,9 @@ public class SMS_MessagesChat extends AppCompatActivity {
                         break;
                     case SmsManager.RESULT_ERROR_NO_SERVICE:
 
-                        AlarmManager alarmManager2= (AlarmManager) getSystemService(ALARM_SERVICE);
-                        Intent myIntent2=new Intent(getApplicationContext(), Receiver.class);
-                        myIntent2.putExtra("time",l);
+                        AlarmManager alarmManager2 = (AlarmManager) getSystemService(ALARM_SERVICE);
+                        Intent myIntent2 = new Intent(getApplicationContext(), Receiver.class);
+                        myIntent2.putExtra("time", l);
                         PendingIntent amPI2 = PendingIntent.getBroadcast(getApplicationContext(), (int) l,
                                 myIntent2, 0);
                         alarmManager2.cancel(amPI2);
@@ -633,9 +631,9 @@ public class SMS_MessagesChat extends AppCompatActivity {
                         break;
                     case SmsManager.RESULT_ERROR_NULL_PDU:
 
-                        AlarmManager alarmManager3= (AlarmManager) getSystemService(ALARM_SERVICE);
-                        Intent myIntent3=new Intent(getApplicationContext(), Receiver.class);
-                        myIntent3.putExtra("time",l);
+                        AlarmManager alarmManager3 = (AlarmManager) getSystemService(ALARM_SERVICE);
+                        Intent myIntent3 = new Intent(getApplicationContext(), Receiver.class);
+                        myIntent3.putExtra("time", l);
                         PendingIntent amPI3 = PendingIntent.getBroadcast(getApplicationContext(), (int) l,
                                 myIntent3, 0);
                         alarmManager3.cancel(amPI3);
@@ -646,9 +644,9 @@ public class SMS_MessagesChat extends AppCompatActivity {
                         break;
                     case SmsManager.RESULT_ERROR_RADIO_OFF:
 
-                        AlarmManager alarmManager4= (AlarmManager) getSystemService(ALARM_SERVICE);
-                        Intent myIntent4=new Intent(getApplicationContext(), Receiver.class);
-                        myIntent4.putExtra("time",l);
+                        AlarmManager alarmManager4 = (AlarmManager) getSystemService(ALARM_SERVICE);
+                        Intent myIntent4 = new Intent(getApplicationContext(), Receiver.class);
+                        myIntent4.putExtra("time", l);
                         PendingIntent amPI4 = PendingIntent.getBroadcast(getApplicationContext(), (int) l,
                                 myIntent4, 0);
                         alarmManager4.cancel(amPI4);
@@ -662,11 +660,10 @@ public class SMS_MessagesChat extends AppCompatActivity {
         }, new IntentFilter(SENT));
 
 //---when the SMS has been delivered---
-        registerReceiver(new BroadcastReceiver(){
+        registerReceiver(new BroadcastReceiver() {
             @Override
             public void onReceive(Context arg0, Intent arg1) {
-                switch (getResultCode())
-                {
+                switch (getResultCode()) {
                     case Activity.RESULT_OK:
                         Toast.makeText(getBaseContext(), "SMS delivered",
                                 Toast.LENGTH_SHORT).show();
@@ -679,7 +676,52 @@ public class SMS_MessagesChat extends AppCompatActivity {
             }
         }, new IntentFilter(DELIVERED));
 
-        SmsManager sms = SmsManager.getDefault();
+
+        SmsManager sms = null;
+
+        final TelephonyInfo telephonyInfo = TelephonyInfo.getInstance(SMS_MessagesChat.this);
+        final boolean isSIM1Ready = telephonyInfo.isSIM1Ready();
+        final boolean isSIM2Ready = telephonyInfo.isSIM2Ready();
+        final boolean isDualSIM = telephonyInfo.isDualSIM();
+
+        if (android.os.Build.VERSION.SDK_INT >= android.os.Build.VERSION_CODES.LOLLIPOP_MR1) {
+            if (isDualSIM) {
+                if (isSIM1Ready && isSIM2Ready) {
+                    final ArrayList<Integer> simCardList = new ArrayList<>();
+                    SubscriptionManager subscriptionManager;
+                    subscriptionManager = SubscriptionManager.from(SMS_MessagesChat.this);
+
+                    if (ActivityCompat.checkSelfPermission
+                            (this, Manifest.permission.READ_PHONE_STATE)
+                            != PackageManager.PERMISSION_GRANTED) {
+                        return;
+                    }
+
+                    final List<SubscriptionInfo> subscriptionInfoList = subscriptionManager.getActiveSubscriptionInfoList();
+                    for (SubscriptionInfo subscriptionInfo : subscriptionInfoList) {
+                        int subscriptionId = subscriptionInfo.getSubscriptionId();
+                        simCardList.add(subscriptionId);
+                    }
+                    final SharedPreferences preferences = getSharedPreferences("DUAL_SIM", MODE_PRIVATE);
+                    final String SIM = preferences.getString("SIM", "0");
+                    if (SIM.equals("0")) {
+                        sms = SmsManager.getSmsManagerForSubscriptionId(simCardList.get(0));
+                    } else if (SIM.equals("1")) {
+                        sms = SmsManager.getSmsManagerForSubscriptionId(simCardList.get(1));
+                    }
+                }
+                else
+                {
+                    sms=SmsManager.getDefault();
+                }
+            }
+            else
+            {
+                sms=SmsManager.getDefault();
+            }
+        }else {
+            sms=SmsManager.getDefault();
+        }
         sms.sendTextMessage(phoneNumber, null, message, sentPI, deliveredPI);
         insert_sms_to_sent(phoneNumber,message,l);
         AlarmManager alarmManager= (AlarmManager) getSystemService(ALARM_SERVICE);
@@ -693,4 +735,5 @@ public class SMS_MessagesChat extends AppCompatActivity {
     }
 
 }
+
 

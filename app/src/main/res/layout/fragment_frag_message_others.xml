@@ -5,19 +5,11 @@
     android:layout_height="match_parent"
     tools:context=".FragMessageOthers">
 
-    <!-- TODO: Update blank fragment layout -->
-    <ListView
-        android:layout_width="match_parent"
-        android:layout_height="match_parent"
-        android:id="@+id/SMSList"
-        android:divider="@null"
-        />
+
     <android.support.v7.widget.RecyclerView
         android:layout_width="match_parent"
         android:layout_height="match_parent"
-        android:id="@+id/SMSRecycler"
-        android:visibility="gone">
+        android:id="@+id/SMSRecycler"/>
 
-    </android.support.v7.widget.RecyclerView>
 
 </FrameLayout>

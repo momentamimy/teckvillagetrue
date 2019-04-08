@@ -22,6 +22,7 @@ import android.telephony.SmsMessage;
 import java.util.List;
 
 import static android.content.Context.MODE_PRIVATE;
+import static teckvillage.developer.khaled_pc.teckvillagetrue.Message_Fragment.SMSCHANGE;
 
 public class SMSReceiver extends BroadcastReceiver{
     private NotificationManager notifManager;
@@ -49,8 +50,8 @@ public class SMSReceiver extends BroadcastReceiver{
 //this will update the UI with message
 
     }
-    @RequiresApi(api = Build.VERSION_CODES.JELLY_BEAN)
     private void notification(String message, String sender, Context context){
+        SMSCHANGE=true;
         //FragMessageOthers.instance().refreshSmsInbox();
         //SMS_MessagesChat.instance().refresh();
         Intent intent;
@@ -62,6 +63,7 @@ public class SMSReceiver extends BroadcastReceiver{
         }
 
         intent = new Intent (context, MainActivity.class);
+        intent.putExtra("NOTIFICATION",true);
         if (Build.VERSION.SDK_INT >= Build.VERSION_CODES.O) {
             int importance = NotificationManager.IMPORTANCE_HIGH;
             if (mChannel == null) {
@@ -79,10 +81,11 @@ public class SMSReceiver extends BroadcastReceiver{
                     Intent.FLAG_ACTIVITY_SINGLE_TOP);
             pendingIntent = PendingIntent.getActivity (context, 0, intent, 0);
             builder.setContentTitle (sender)  // flare_icon_30
-                    .setSmallIcon (R.drawable.logo) // required
+                    .setSmallIcon (R.drawable.logo_notification) // required
                     .setContentText (message)  // required
                     .setDefaults (Notification.DEFAULT_ALL)
                     .setAutoCancel (true)
+                    .setColor((context.getResources().getColor(R.color.colorPrimary)))
                     .setContentIntent (pendingIntent)
                     .setSound (RingtoneManager.getDefaultUri
                             (RingtoneManager.TYPE_NOTIFICATION))
@@ -97,23 +100,24 @@ public class SMSReceiver extends BroadcastReceiver{
             builder.setSmallIcon(R.drawable.logo);
             builder.setContentTitle(sender);
             builder.setContentText(message);
-            builder.setColor((context.getResources().getColor(R.color.colorAccent)));
+            builder.setColor((context.getResources().getColor(R.color.colorPrimary)));
             builder.setSound(sound);
             builder.setVibrate (new long[]{100, 200, 300, 400,
                     500, 400, 300, 200, 400});
-            Intent resultIntent = new Intent(context, MainActivity.class);
-            TaskStackBuilder stackBuilder = TaskStackBuilder.create(context);
-            stackBuilder.addParentStack(MainActivity.class);
 
-// Adds the Intent that starts the Activity to the top of the stack
-            stackBuilder.addNextIntent(resultIntent);
-            PendingIntent resultPendingIntent = stackBuilder.getPendingIntent(0,PendingIntent.FLAG_UPDATE_CURRENT);
-            builder.setContentIntent(resultPendingIntent);
+            if (android.os.Build.VERSION.SDK_INT >= android.os.Build.VERSION_CODES.JELLY_BEAN) {
+                Intent resultIntent = new Intent(context, MainActivity.class);
+                resultIntent.putExtra("NOTIFICATION",true);
+                TaskStackBuilder stackBuilder = null;
+                stackBuilder = TaskStackBuilder.create(context);
+                stackBuilder.addParentStack(MainActivity.class);
+                stackBuilder.addNextIntent(resultIntent);
+                PendingIntent resultPendingIntent = null;
+                resultPendingIntent = stackBuilder.getPendingIntent(0, PendingIntent.FLAG_UPDATE_CURRENT);
+                builder.setContentIntent(resultPendingIntent);
+            }
 
-// notificationID allows you to update the notification later on.
-
-
-        } // else if (Build.VERSION.SDK_INT >= Build.VERSION_CODES.O) {
+        }
         Notification notification = builder.build ();
         int id = (int) System.currentTimeMillis();
         notifManager.notify (id, notification);

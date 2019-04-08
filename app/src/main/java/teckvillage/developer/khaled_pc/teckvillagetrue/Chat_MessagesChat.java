@@ -64,6 +64,8 @@ public class Chat_MessagesChat extends AppCompatActivity {
 
     ImageView callIcon, settingIcon;
 
+    ImageView DualSIM;
+
     private static final int MY_PERMISSIONS_REQUEST_SEND_SMS = 0;
 
     private static Chat_MessagesChat inst;
@@ -83,7 +85,8 @@ public class Chat_MessagesChat extends AppCompatActivity {
         super.onCreate(savedInstanceState);
         setContentView(R.layout.activity_sms_messages_chat);
 
-
+        DualSIM=findViewById(R.id.Dual_Sim);
+        DualSIM.setVisibility(View.GONE);
         LinearLayout toolbar = findViewById(R.id.toolbar);
         ImageView backButton = findViewById(R.id.back_button);
         backButton.setOnClickListener(new View.OnClickListener() {

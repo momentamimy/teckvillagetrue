@@ -6,6 +6,7 @@ import android.content.pm.PackageManager;
 import android.database.Cursor;
 import android.net.Uri;
 import android.os.Bundle;
+import android.provider.Telephony;
 import android.support.annotation.NonNull;
 import android.support.annotation.Nullable;
 import android.support.design.widget.FloatingActionButton;
@@ -45,6 +46,8 @@ import static teckvillage.developer.khaled_pc.teckvillagetrue.FragMessageSpam.cr
 
 
 public class Message_Fragment extends Fragment implements LoaderManager.LoaderCallbacks<Cursor> , OnBackPressedListener{
+
+    public static boolean SMSCHANGE=true;
 
     boolean DialogProgress=true;
     Get_User_Contacts get_user_contacts;
@@ -163,100 +166,96 @@ public class Message_Fragment extends Fragment implements LoaderManager.LoaderCa
 
     @Override
     public Loader<Cursor> onCreateLoader(int id, Bundle args) {
-        if (id==1)
-        {
             if (DialogProgress)
             {
                 LoadingContactToast(getActivity());
                 DialogProgress=false;
             }
-            getContext().getContentResolver().notifyChange(Uri.parse("content://sms/"), null);
+        Uri uri= null;
+        if (android.os.Build.VERSION.SDK_INT >= android.os.Build.VERSION_CODES.KITKAT) {
+            uri = Telephony.Sms.CONTENT_URI;
+        }
+        else
+        {
+            uri=Uri.parse("content://sms/");
+        }
+        getContext().getContentResolver().notifyChange(uri, null);
 
             String[] projection = new String[] { "address", "body", "date", "type","read,thread_id"};
-            CursorLoader cursorLoader=new CursorLoader(getActivity(), Uri.parse("content://sms/"),projection,null,null,"date desc");
+            CursorLoader cursorLoader=new CursorLoader(getActivity(),uri ,projection,null,null,"date desc");
             return cursorLoader;
-        }
-        return null;
     }
 
     @Override
     public void onLoadFinished(Loader<Cursor> loader, Cursor data) {
-        messageInfos.clear();
-        allMessageOtherInfos.clear();
-        allMessageContactInfos.clear();
-        allMessageSpamInfos.clear();
-        int indextype=data.getColumnIndex("type");
-        int indexBody = data.getColumnIndex("body");
-        int indexAddress = data.getColumnIndex("address");
-        int dateColumn = data.getColumnIndex("date");
-        int index_seen = data.getColumnIndex("read");
-        int threadId_index = data.getColumnIndex("thread_id");
+        if (SMSCHANGE) {
+            Log.d("paleez_LA_Paleez_LA", "onLoadFinished");
+            messageInfos.clear();
+            allMessageOtherInfos.clear();
+            allMessageContactInfos.clear();
+            allMessageSpamInfos.clear();
+            int indextype = data.getColumnIndex("type");
+            int indexBody = data.getColumnIndex("body");
+            int indexAddress = data.getColumnIndex("address");
+            int dateColumn = data.getColumnIndex("date");
+            int index_seen = data.getColumnIndex("read");
+            int threadId_index = data.getColumnIndex("thread_id");
 
-        if (indexBody < 0 || !data.moveToFirst()) return;
-        do {
-            if (!TextUtils.isEmpty(data.getString(indexAddress))) {
+            if (indexBody < 0 || !data.moveToFirst()) return;
+            do {
+                if (!TextUtils.isEmpty(data.getString(indexAddress))) {
 
-                Long timestamp = Long.parseLong(data.getString(dateColumn));
+                    Long timestamp = Long.parseLong(data.getString(dateColumn));
 
-                MessageInfo info = new MessageInfo(null, data.getString(indexAddress), data.getString(indexBody), timestamp, data.getString(indexAddress),data.getString(index_seen),data.getString(threadId_index));
-                info.setType(data.getString(indextype));
-                boolean Add = true;
-                for (int i = 0; i < messageInfos.size(); i++) {
-                    if (!TextUtils.isEmpty(messageInfos.get(i).logName))
-                        if (messageInfos.get(i).thread_id.equals(data.getString(threadId_index))) {
-                            Add = false;
-                        }
-                }
-                if (!TextUtils.isEmpty(info.getLogAddress()))
-                    if (Add) {
-                        String s=info.logAddress.replace("+","");
-                        String regex = "\\d+";
-                        String name=null;
-                        if (s.matches(regex))
-                        {
-                            name=get_user_contacts.getContactName(info.logAddress,getActivity());
-                        }
-                        if (!TextUtils.isEmpty(name))
-                        {
-                            info.setLogName(name);//contact
-                            info.setTypeMessage("contact");
-                        }
-                        else
-                        {
-                            if (info.logAddress.matches(regex)&&info.logAddress.length()<6)
-                            {
-                                info.setTypeMessage("spam");//ohters or spanm :to be continue
+                    MessageInfo info = new MessageInfo(null, data.getString(indexAddress), data.getString(indexBody), timestamp, data.getString(indexAddress), data.getString(index_seen), data.getString(threadId_index));
+                    info.setType(data.getString(indextype));
+                    boolean Add = true;
+                    for (int i = 0; i < messageInfos.size(); i++) {
+                        if (!TextUtils.isEmpty(messageInfos.get(i).logName))
+                            if (messageInfos.get(i).thread_id.equals(data.getString(threadId_index))) {
+                                Add = false;
                             }
-                            else
-                            {
-                                info.setTypeMessage("others");//ohters or spanm :to be continue
-                            }
-                        }
-                        messageInfos.add(info);
                     }
+                    if (!TextUtils.isEmpty(info.getLogAddress()))
+                        if (Add) {
+                            String s = info.logAddress.replace("+", "");
+                            String regex = "\\d+";
+                            String name = null;
+                            if (s.matches(regex)) {
+                                name = get_user_contacts.getContactName(info.logAddress, getActivity());
+                            }
+                            if (!TextUtils.isEmpty(name)) {
+                                info.setLogName(name);//contact
+                                info.setTypeMessage("contact");
+                            } else {
+                                if (info.logAddress.matches(regex) && info.logAddress.length() < 6) {
+                                    info.setTypeMessage("spam");//ohters or spanm :to be continue
+                                } else {
+                                    info.setTypeMessage("others");//ohters or spanm :to be continue
+                                }
+                            }
+                            messageInfos.add(info);
+                        }
 
-                //  arrayAdapter.add(str);
+                    //  arrayAdapter.add(str);
+                }
+            } while (data.moveToNext());
+            for (int i = 0; i < messageInfos.size(); i++) {
+                if (messageInfos.get(i).getTypeMessage().equals("contact")) {
+                    allMessageContactInfos.add(messageInfos.get(i));
+                } else if (messageInfos.get(i).getTypeMessage().equals("others")) {
+                    allMessageOtherInfos.add(messageInfos.get(i));
+                } else if (messageInfos.get(i).getTypeMessage().equals("spam")) {
+                    allMessageSpamInfos.add(messageInfos.get(i));
+                }
             }
-        } while (data.moveToNext());
-        for (int i=0;i<messageInfos.size();i++)
-        {
-            if (messageInfos.get(i).getTypeMessage().equals("contact"))
-            {
-                allMessageContactInfos.add(messageInfos.get(i));
-            }
-            else if (messageInfos.get(i).getTypeMessage().equals("others"))
-            {
-                allMessageOtherInfos.add(messageInfos.get(i));
-            }
-            else if (messageInfos.get(i).getTypeMessage().equals("spam"))
-            {
-                allMessageSpamInfos.add(messageInfos.get(i));
-            }
+            DismissLoadingContactToast();
+            createOthersloader();
+            createContactsloader();
+            createSpamloader();
+            SMSCHANGE=false;
         }
-        DismissLoadingContactToast();
-        createOthersloader();
-        createContactsloader();
-//        createSpamloader();
+        Log.d("la_paleeez",allMessageOtherInfos.get(0).logMessage);
     }
 
     @Override
