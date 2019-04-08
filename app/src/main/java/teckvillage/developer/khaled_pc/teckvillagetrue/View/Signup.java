@@ -18,6 +18,7 @@ import android.net.Uri;
 import android.os.Build;
 import android.os.Environment;
 import android.provider.MediaStore;
+import android.support.design.widget.Snackbar;
 import android.support.design.widget.TextInputLayout;
 import android.support.v4.app.ActivityCompat;
 import android.support.v4.content.ContextCompat;
@@ -52,6 +53,7 @@ import com.google.android.gms.common.SignInButton;
 import com.google.android.gms.common.api.ApiException;
 import com.google.android.gms.tasks.Task;
 import com.jaredrummler.android.device.DeviceName;
+import com.sdsmdg.tastytoast.TastyToast;
 import com.squareup.picasso.Picasso;
 import com.squareup.picasso.Target;
 
@@ -258,8 +260,8 @@ public class Signup extends AppCompatActivity {
                 //File file = null;
                 if(validation(fistname,lastname,email)) {
 
+                    //Convert text to RequestBody
                     RequestBody emailRequest = RequestBody.create(MediaType.parse("text/plain"), email);
-                    RequestBody lnameRequest = RequestBody.create(MediaType.parse("text/plain"), lastname);
                     RequestBody fnameRequest = RequestBody.create(MediaType.parse("text/plain"), fistname + " " + lastname);
                     RequestBody codecounRequest = RequestBody.create(MediaType.parse("text/plain"), Codecountry);
                     RequestBody phNumberRequest = RequestBody.create(MediaType.parse("text/plain"), phNumber);
@@ -295,38 +297,63 @@ public class Signup extends AppCompatActivity {
                                             if (response.body()!=null) {
 
                                                 // Do your success stuff...
-                                                Toast.makeText(getApplicationContext(), response.body().toString(), Toast.LENGTH_SHORT).show();
+                                                //Toast.makeText(getApplicationContext(), response.body().toString(), Toast.LENGTH_SHORT).show();
                                                 DataReceived user = response.body().getUser();
 
                                                 Log.w("success", user.getEmail());
                                                 Log.w("success", user.getName());
                                                 Log.w("success", user.getPhone());
                                                 Log.w("success", user.getApi_token());
+
+                                                //if respone retreive img name it mean user upload img
                                                 if(user.getImg()!=null){
                                                     Log.w("success", user.getImg());
-                                                    IsUserHasPhoto=true;
-                                                }
-
-                                                if(IsUserHasPhoto){
-                                                    UserProfImgInString =  encodeTobase64(bitmap);
+                                                    if(bitmap!=null) {
+                                                        //convert img to string to save it
+                                                        UserProfImgInString = encodeTobase64(bitmap);
+                                                    }else {
+                                                        //img found in server but not sent
+                                                        UserProfImgInString="NoImageHere";
+                                                    }
                                                 }else {
-                                                    UserProfImgInString="";
+                                                    //user not upload img
+                                                    UserProfImgInString="NoImageHere";
+                                                    Log.w("Noimguser", "noimg");
                                                 }
 
+
+
+                                                //retreive img and convert from string to bitmap to display it
                                                 //add_personal_photo.setImageBitmap(decodeBase64(UserProfImgInString));
 
 
-                                           /*
-                                            //when Login Success
-                                            SharedPreferences sharedPref = getSharedPreferences("WhoCaller?", MODE_PRIVATE);
-                                            SharedPreferences.Editor editor = sharedPref.edit();
-                                            editor.putBoolean("UserLogin", true);
-                                            editor.putString("User_API_token", userAPItoken);
-                                            editor.putString("User_phone", userphone);
-                                            editor.putString("User_name", username);
-                                            editor.putString("User_email", useremail);
-                                            editor.putString("User_img_profile", UserProfImgInString);
-                                            editor.commit();*/
+
+
+                                                //when Login Success
+                                                SharedPreferences sharedPref = getSharedPreferences("WhoCaller?", MODE_PRIVATE);
+                                                SharedPreferences.Editor editor = sharedPref.edit();
+                                                editor.putBoolean("UserLogin", true);
+
+                                                if(user.getApi_token()!=null) {
+                                                    editor.putString("User_API_token", user.getApi_token());
+                                                }
+                                                if(user.getPhone()!=null) {
+                                                    editor.putString("User_phone", user.getPhone());
+                                                }
+                                                if(user.getName()!=null){
+                                                    editor.putString("User_name", user.getName());
+                                                }
+                                                if(user.getEmail()!=null){
+                                                    editor.putString("User_email", user.getEmail());
+                                                }
+                                                editor.putString("User_img_profile", UserProfImgInString);
+                                                editor.apply();
+
+
+                                                //Close open MainActivity
+                                                Intent intent = new Intent(getApplicationContext(), MainActivity.class);
+                                                startActivity(intent);
+                                                finish();
 
 
                                             } else {
@@ -348,14 +375,18 @@ public class Signup extends AppCompatActivity {
                                         mProgressDialog.dismiss();
 
                                     Log.w("onFailure", t.toString());
-                                    Toast.makeText(getApplicationContext(), "Failure,Please try again", Toast.LENGTH_SHORT).show();
+                                    //Toast.makeText(getApplicationContext(), "Failure,Please try again", Toast.LENGTH_SHORT).show();
+                                    View parentLayout = findViewById(android.R.id.content);
+                                    Snackbar.make(parentLayout, "Failure,Please try again", Snackbar.LENGTH_LONG);
                                 }
                             });
-                           /*Intent intent = new Intent(getApplicationContext(), MainActivity.class);
-                           startActivity(intent);
-                           finish();*/
+
+                        }else {
+                            TastyToast.makeText(Signup.this, "Internet not access Please connect to the internet", TastyToast.LENGTH_LONG, TastyToast.ERROR);
                         }
-                   }
+                   }else {
+                        TastyToast.makeText(Signup.this, "You're offline. Please connect to the internet", TastyToast.LENGTH_LONG, TastyToast.ERROR);
+                    }
 
                 }
 
