@@ -119,6 +119,7 @@ public class PhoneStateReceiver extends BroadcastReceiver {
 
      //********************************************************************************************************************************************
      //*************************************************Old Code***************************************************************************************
+        try {
 
 
         String state= intent.getStringExtra(TelephonyManager.EXTRA_STATE);
@@ -131,8 +132,6 @@ public class PhoneStateReceiver extends BroadcastReceiver {
         //Toast.makeText(context,"Num : "+number+"State : "+state,Toast.LENGTH_LONG).show();
         Toast.makeText(context,"Num : "+number+"State : ",Toast.LENGTH_LONG).show();
         Log.d("hlaclaclclclclclclc","Num : "+number+"State : "+state);
-    try {
-
 
         if (state.equals(TelephonyManager.EXTRA_STATE_OFFHOOK)&&swithcOutgoing)
         {
@@ -147,35 +146,28 @@ public class PhoneStateReceiver extends BroadcastReceiver {
             BlockNumberWhenRing(context,number);
         }
         else if (state.equals(TelephonyManager.EXTRA_STATE_IDLE)) {
-
+          try {
 
             if (wm!=null&&viewIsAdded==true)
             {
                 wm.removeViewImmediate(view1);//error
-            try {
-                if (wm!=null&&viewIsAdded==true)
-                {
-                    wm.removeView(view1);
-                    viewIsAdded=false;
-                }
-            }catch (Exception e){
-
             }
-
 
                 Intent intent1=new Intent(context,PopupDialogActivity.class);
                 intent1.putExtra("Number",number);
                 intent1.setFlags(Intent.FLAG_ACTIVITY_NEW_TASK);
                 context.startActivity(intent1);
 
+          }catch (Exception e){
+              e.printStackTrace();
+          }
 
-
-            }
         }
-    }catch (Exception e)
-    {
 
-    }
+        }catch (Exception e){
+            e.printStackTrace();
+        }
+
     }
 
 

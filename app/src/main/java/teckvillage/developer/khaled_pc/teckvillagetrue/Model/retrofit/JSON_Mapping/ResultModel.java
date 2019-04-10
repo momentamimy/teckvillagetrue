@@ -1,8 +1,6 @@
-package teckvillage.developer.khaled_pc.teckvillagetrue.model.retrofit;
+package teckvillage.developer.khaled_pc.teckvillagetrue.model.retrofit.JSON_Mapping;
 
-import java.util.List;
-
-import retrofit2.http.POST;
+import teckvillage.developer.khaled_pc.teckvillagetrue.model.retrofit.JSON_Mapping.DataReceived;
 
 /**
  * Created by khaled-pc on 4/7/2019.

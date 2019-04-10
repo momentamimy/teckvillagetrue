@@ -1,24 +1,21 @@
 package teckvillage.developer.khaled_pc.teckvillagetrue.model.retrofit;
 
-import android.graphics.Bitmap;
-
-import java.io.File;
-
 import okhttp3.MultipartBody;
 import okhttp3.RequestBody;
-import okhttp3.ResponseBody;
 import retrofit2.Call;
-import retrofit2.http.Field;
-import retrofit2.http.FormUrlEncoded;
+import retrofit2.http.GET;
 import retrofit2.http.Multipart;
 import retrofit2.http.POST;
 import retrofit2.http.Part;
+import retrofit2.http.Path;
+import teckvillage.developer.khaled_pc.teckvillagetrue.model.retrofit.JSON_Mapping.ResultModel;
 
 /**
  * Created by khaled-pc on 4/7/2019.
  */
 
 public interface WhoCallerApi {
+
 
     //@Field("mobile_type")   String mobilebrand,
     // @Field("mobile_os")     String mobileos
@@ -38,4 +35,21 @@ public interface WhoCallerApi {
          @Part("mobile_type")   RequestBody  mobilebrand,
          @Part("mobile_os")     RequestBody  mobileos
          );
+
+
+    @GET("getMessages?api_token={accesstoken}&group_id={id}")
+    Call<ResultModel> getMessageWhenOpenChat(
+            @Path("accesstoken") String ApiAccessToken,
+            @Path("id") String id);
+
+
+    @GET("getMessages?api_token={accesstoken}&user_id={id}")
+    Call<ResultModel> getMessageWhenOpenGroupChat(
+            @Path("accesstoken") String ApiAccessToken,
+            @Path("id") String id);
+
+
+
+
+
 }

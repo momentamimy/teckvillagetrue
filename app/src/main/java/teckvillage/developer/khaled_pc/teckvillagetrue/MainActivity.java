@@ -6,6 +6,7 @@ import android.content.ContentResolver;
 import android.content.Context;
 import android.content.DialogInterface;
 import android.content.Intent;
+import android.content.SharedPreferences;
 import android.content.pm.PackageManager;
 import android.database.Cursor;
 import android.graphics.Color;
@@ -61,7 +62,7 @@ public class MainActivity extends AppCompatActivity implements NavigationView.On
 
     public BottomNavigationView navigationView2;
     ArrayList<String> PhoneNumberListCameraRecognition = new ArrayList<>();
-
+    SharedPreferences sharedPreferences;
 
     boolean SMSNotification=false;
     @Override
@@ -73,6 +74,16 @@ public class MainActivity extends AppCompatActivity implements NavigationView.On
         Intent intent = new Intent(TelecomManager.ACTION_CHANGE_DEFAULT_DIALER);
         intent.putExtra(TelecomManager.EXTRA_CHANGE_DEFAULT_DIALER_PACKAGE_NAME, getPackageName());
         startActivity(intent);
+
+
+        /*
+        sharedPreferences = getSharedPreferences("WhoCaller?", Context.MODE_PRIVATE);
+        String namesss= sharedPreferences.getString("User_name", "");
+        String numsss = sharedPreferences.getString("User_phone","false");
+        String emass = sharedPreferences.getString("User_email","false");
+        String apiaxx = sharedPreferences.getString("User_API_token","false");
+        Log.w("wlakolwla",namesss+"  ||  "+numsss);
+        Log.w("wlakolwla2",emass+"  ||  "+apiaxx);*/
 
         
         SMSNotification=getIntent().getBooleanExtra("NOTIFICATION",false);
