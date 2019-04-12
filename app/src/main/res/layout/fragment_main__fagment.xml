@@ -2,6 +2,7 @@
     xmlns:tools="http://schemas.android.com/tools"
     android:layout_width="match_parent"
     android:layout_height="match_parent"
+    android:layoutDirection="ltr"
     xmlns:app="http://schemas.android.com/apk/res-auto"
     tools:context="teckvillage.developer.khaled_pc.teckvillagetrue.Main_Fagment">
 
@@ -141,7 +142,6 @@
            android:layout_marginStart="15dp"
            android:layout_marginLeft="15dp"
            android:layout_marginEnd="15dp"
-
            />
 
 
@@ -162,6 +162,16 @@
         android:layout_width="match_parent"
         android:layout_height="match_parent"
         />
+
+        <TextView
+            android:id="@+id/nologcalltext"
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:layout_centerInParent="true"
+            android:textColor="#919ca1"
+            android:text="No Log Call"
+            android:textSize="22sp"
+            />
 
     </RelativeLayout>
 
@@ -312,7 +322,6 @@
                 android:layout_height="wrap_content"
                 android:layout_above="@+id/dialpad_bottom_rl"
                 android:numColumns="3"
-
                 android:listSelector="#00000000"
                 >
 

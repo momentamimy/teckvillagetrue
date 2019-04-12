@@ -1,14 +1,23 @@
 package teckvillage.developer.khaled_pc.teckvillagetrue.model.retrofit;
 
+import java.util.ArrayList;
+
 import okhttp3.MultipartBody;
 import okhttp3.RequestBody;
 import retrofit2.Call;
+import retrofit2.http.Body;
+import retrofit2.http.Field;
+import retrofit2.http.FormUrlEncoded;
 import retrofit2.http.GET;
 import retrofit2.http.Multipart;
 import retrofit2.http.POST;
 import retrofit2.http.Part;
 import retrofit2.http.Path;
+import retrofit2.http.Query;
 import teckvillage.developer.khaled_pc.teckvillagetrue.model.retrofit.JSON_Mapping.ResultModel;
+import teckvillage.developer.khaled_pc.teckvillagetrue.model.retrofit.JSON_Mapping.ResultModelUploadVCF;
+import teckvillage.developer.khaled_pc.teckvillagetrue.model.retrofit.JSON_Mapping.Send_Top_Ten_Contacts_JSON_Arraylist;
+import teckvillage.developer.khaled_pc.teckvillagetrue.model.retrofit.JSON_Mapping.datamodel;
 
 /**
  * Created by khaled-pc on 4/7/2019.
@@ -16,9 +25,6 @@ import teckvillage.developer.khaled_pc.teckvillagetrue.model.retrofit.JSON_Mappi
 
 public interface WhoCallerApi {
 
-
-    //@Field("mobile_type")   String mobilebrand,
-    // @Field("mobile_os")     String mobileos
 
 
  //@FormUrlEncoded
@@ -35,6 +41,22 @@ public interface WhoCallerApi {
          @Part("mobile_type")   RequestBody  mobilebrand,
          @Part("mobile_os")     RequestBody  mobileos
          );
+
+
+    @Multipart
+    @POST("addUserContacts")
+    Call<ResultModelUploadVCF> UploadVCF(
+            @Query("api_token") String ApiAccessToken,
+            @Part MultipartBody.Part vcfFile
+    );
+
+
+    //@FormUrlEncoded
+    @POST("addUserMostCalled")
+    Call<ResultModelUploadVCF> UploadTopTenContacts(
+            @Query("api_token") String ApiAccessToken,
+            @Body datamodel contacts
+            );
 
 
     @GET("getMessages?api_token={accesstoken}&group_id={id}")

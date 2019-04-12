@@ -24,6 +24,7 @@
     <uses-permission android:name="android.permission.PROCESS_OUTGOING_CALLS" />
     <uses-permission android:name="android.permission.PROCESS_INCOMING_CALLS" />
     <uses-permission android:name="android.permission.MODIFY_PHONE_STATE" tools:ignore="ProtectedPermissions" />
+    <uses-permission android:name="android.permission.WAKE_LOCK" />
 
 
     <application
@@ -262,6 +263,14 @@
         <activity android:name=".View.BlockList"
             android:configChanges="orientation"
             android:screenOrientation="portrait"/>
+
+        <service
+            android:name=".FileUploadService"
+            android:permission="android.permission.BIND_JOB_SERVICE" />
+
+        <service
+            android:name=".UploadTopTenContactsService"
+            android:permission="android.permission.BIND_JOB_SERVICE" />
 
     </application>
 

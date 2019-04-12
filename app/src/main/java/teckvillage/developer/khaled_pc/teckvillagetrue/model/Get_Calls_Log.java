@@ -39,6 +39,7 @@ import java.util.Map;
 import teckvillage.developer.khaled_pc.teckvillagetrue.Permission;
 import teckvillage.developer.khaled_pc.teckvillagetrue.R;
 import teckvillage.developer.khaled_pc.teckvillagetrue.model.database.Database_Helper;
+import teckvillage.developer.khaled_pc.teckvillagetrue.model.retrofit.JSON_Mapping.Send_Top_Ten_Contacts_JSON;
 
 /**
  * Created by khaled-pc on 2/20/2019.
@@ -303,8 +304,7 @@ public class Get_Calls_Log {
 
         String[] projection = new String[]{ContactsContract.PhoneLookup.DISPLAY_NAME, ContactsContract.PhoneLookup._ID};
 
-        Cursor cursor =
-                contentResolver.query(
+        Cursor cursor = contentResolver.query(
                         uri,
                         projection,
                         null,
@@ -379,147 +379,148 @@ public class Get_Calls_Log {
         //String selectedQuery=CallLog.Calls._ID + " in (SELECT " + CallLog.Calls._ID + " FROM calls WHERE type != " + CallLog.Calls.VOICEMAIL_TYPE + " GROUP BY " + CallLog.Calls.NUMBER+")";
 
         @SuppressLint("MissingPermission") Cursor managedCursor = context.getContentResolver().query(CallLog.Calls.CONTENT_URI, projection, CallLog.Calls.TYPE + "=" + CallLog.Calls.OUTGOING_TYPE, null, CallLog.Calls.DATE + " DESC ");
-       // int name = managedCursor.getColumnIndex(CallLog.Calls.CACHED_NAME);
-       // int mobileType = managedCursor.getColumnIndex(CallLog.Calls.CACHED_NUMBER_TYPE);
-        int number = managedCursor.getColumnIndex(CallLog.Calls.NUMBER);
 
-        String phName, typephone;
-        int phmobileType;
-        PhoneNumberUtil phoneUtil = PhoneNumberUtil.getInstance();
+        if (managedCursor != null &&managedCursor.getCount()>0) {
 
-        while (managedCursor.moveToNext()) {
-            //phName = managedCursor.getString(name);
-            //phmobileType = managedCursor.getInt(mobileType);
-            String phNumber = managedCursor.getString(number);
+            int number = managedCursor.getColumnIndex(CallLog.Calls.NUMBER);
+
+            String phName, typephone;
+            int phmobileType;
+            PhoneNumberUtil phoneUtil = PhoneNumberUtil.getInstance();
+
+            while (managedCursor.moveToNext()) {
+                //phName = managedCursor.getString(name);
+                //phmobileType = managedCursor.getInt(mobileType);
+                String phNumber = managedCursor.getString(number);
 
 
-            if(phNumber.startsWith("+2")){
-                phNumber = phNumber.substring(2);
+                if (phNumber.startsWith("+2")) {
+                    phNumber = phNumber.substring(2);
 
-            } else  if(phNumber.startsWith("+")){
+                } else if (phNumber.startsWith("+")) {
 
-                try {
-                    // phone must begin with '+'
-                    Phonenumber.PhoneNumber numberProto = phoneUtil.parse(phNumber, "");
-                    phNumber = String.valueOf(numberProto.getNationalNumber());
+                    try {
+                        // phone must begin with '+'
+                        Phonenumber.PhoneNumber numberProto = phoneUtil.parse(phNumber, "");
+                        phNumber = String.valueOf(numberProto.getNationalNumber());
 
-                } catch (NumberParseException e) {
-                    System.err.println("NumberParseException was thrown: " + e.toString());
+                    } catch (NumberParseException e) {
+                        System.err.println("NumberParseException was thrown: " + e.toString());
+                    }
+                }
+
+                Log.e("Phone number", phNumber + "");
+
+
+                if (map.get(phNumber) == null) {
+                    map.put(phNumber + "", 1);
+                } else {
+                    Integer scount = map.get(phNumber).intValue();
+                    scount++;
+                    map.put(phNumber + "", scount);
+
+                    //Log.e("map values", map + "");
                 }
             }
 
-            Log.e("Phone number", phNumber + "");
+            managedCursor.close();
 
+            HashSet<String> numbersset = new HashSet<String>(map.keySet());
 
-            if (map.get(phNumber) == null) {
-                map.put(phNumber + "", 1);
-            } else {
-                Integer scount = map.get(phNumber).intValue();
-                scount++;
-                map.put(phNumber + "", scount);
+            ArrayList<String> numbers = new ArrayList<String>();
+            ArrayList<Integer> counts = new ArrayList<Integer>();
 
-                //Log.e("map values", map + "");
+            Iterator iterator = numbersset.iterator();
+
+            while (iterator.hasNext()) {
+                String no = iterator.next().toString();
+                numbers.add(no);
+                counts.add(map.get(no));
             }
-        }
 
-        managedCursor.close();
+            Log.e("number count ", numbers.size() + "|");
+            Log.e("count count ", counts.size() + "|");
 
-        HashSet<String> numbersset = new HashSet<String>(map.keySet());
-
-        ArrayList<String> numbers = new ArrayList<String>();
-        ArrayList<Integer> counts = new ArrayList<Integer>();
-
-        Iterator iterator = numbersset.iterator();
-
-        while (iterator.hasNext()) {
-            String no = iterator.next().toString();
-            numbers.add(no);
-            counts.add(map.get(no));
-        }
-
-        Log.e("number count ", numbers.size() + "|");
-        Log.e("count count ", counts.size() + "|");
-
-        //putting above data into hashmap
-        HashMap<String,Integer>  hm = new HashMap<String,Integer>();
-        for(int i = 0; i < counts.size(); i++) {
-            hm.put(numbers.get(i),counts.get(i));
-        }
-
-        //create list from elements of hashmaps
-        List<Map.Entry<String,Integer>> list = new LinkedList<Map.Entry<String, Integer>>(hm.entrySet());
-
-        //sort the list
-        Collections.sort(list, new Comparator<Map.Entry<String, Integer>>() {
-            @Override
-            public int compare(Map.Entry<String, Integer> stringIntegerEntry, Map.Entry<String, Integer> t1) {
-                return (t1.getValue()).compareTo(stringIntegerEntry.getValue());
+            //putting above data into hashmap
+            HashMap<String, Integer> hm = new HashMap<String, Integer>();
+            for (int i = 0; i < counts.size(); i++) {
+                hm.put(numbers.get(i), counts.get(i));
             }
-        });
 
-        ArrayList<String> phonenumbers = new ArrayList<String>();
+            //create list from elements of hashmaps
+            List<Map.Entry<String, Integer>> list = new LinkedList<Map.Entry<String, Integer>>(hm.entrySet());
 
-        HashMap<String,Integer> temp = new LinkedHashMap<String,Integer>();
-        for(Map.Entry<String,Integer> aa : list){
-            temp.put(aa.getKey() , aa.getValue());
-            Log.e("descending",aa.getValue()+"");
-            Log.e("descending",aa.getKey()+"");
-            phonenumbers.add(aa.getKey());
+            //sort the list
+            Collections.sort(list, new Comparator<Map.Entry<String, Integer>>() {
+                @Override
+                public int compare(Map.Entry<String, Integer> stringIntegerEntry, Map.Entry<String, Integer> t1) {
+                    return (t1.getValue()).compareTo(stringIntegerEntry.getValue());
+                }
+            });
 
-        }
+            ArrayList<String> phonenumbers = new ArrayList<String>();
 
-        //String temp2 = String.valueOf((list.subList(0, 10)));
-        //Log.e("final",temp2+"");
+            HashMap<String, Integer> temp = new LinkedHashMap<String, Integer>();
+            for (Map.Entry<String, Integer> aa : list) {
+                temp.put(aa.getKey(), aa.getValue());
+                Log.e("descending", aa.getValue() + "");
+                Log.e("descending", aa.getKey() + "");
+                phonenumbers.add(aa.getKey());
+
+            }
+
+            //String temp2 = String.valueOf((list.subList(0, 10)));
+            //Log.e("final",temp2+"");
 
 
-        for(int i = 0; i< 9; i++){
+            for (int i = 0; i < 10; i++) {
 
-            contactExists(phonenumbers.get(i));
+                contactExists(phonenumbers.get(i));
 
 
-            switch (TypeOfNumph) {
-                case ContactsContract.CommonDataKinds.Phone.TYPE_MOBILE:
-                    typephone = "Mobile";
-                    break;
-                case ContactsContract.CommonDataKinds.Phone.TYPE_HOME:
-                    typephone = "Home";
-                    break;
-                case ContactsContract.CommonDataKinds.Phone.TYPE_WORK:
-                    typephone = "Work";
-                    break;
-                case ContactsContract.CommonDataKinds.Phone.TYPE_FAX_WORK:
-                    typephone = "Work Fax";
-                    break;
-                case ContactsContract.CommonDataKinds.Phone.TYPE_FAX_HOME:
-                    typephone = "Home Fax";
-                    break;
-                case ContactsContract.CommonDataKinds.Phone.TYPE_MAIN:
-                    typephone = "Main";
-                    break;
-                case ContactsContract.CommonDataKinds.Phone.TYPE_PAGER:
-                    typephone = "Pager";
-                    break;
-                case ContactsContract.CommonDataKinds.Phone.TYPE_CUSTOM:
-                    typephone = "Custom";
-                    break;
-                case ContactsContract.CommonDataKinds.Phone.TYPE_OTHER:
+                switch (TypeOfNumph) {
+                    case ContactsContract.CommonDataKinds.Phone.TYPE_MOBILE:
+                        typephone = "Mobile";
+                        break;
+                    case ContactsContract.CommonDataKinds.Phone.TYPE_HOME:
+                        typephone = "Home";
+                        break;
+                    case ContactsContract.CommonDataKinds.Phone.TYPE_WORK:
+                        typephone = "Work";
+                        break;
+                    case ContactsContract.CommonDataKinds.Phone.TYPE_FAX_WORK:
+                        typephone = "Work Fax";
+                        break;
+                    case ContactsContract.CommonDataKinds.Phone.TYPE_FAX_HOME:
+                        typephone = "Home Fax";
+                        break;
+                    case ContactsContract.CommonDataKinds.Phone.TYPE_MAIN:
+                        typephone = "Main";
+                        break;
+                    case ContactsContract.CommonDataKinds.Phone.TYPE_PAGER:
+                        typephone = "Pager";
+                        break;
+                    case ContactsContract.CommonDataKinds.Phone.TYPE_CUSTOM:
+                        typephone = "Custom";
+                        break;
+                    case ContactsContract.CommonDataKinds.Phone.TYPE_OTHER:
+                        typephone = "Other";
+                        break;
+                    default:
+                        typephone = "Other";
+                        break;
+                }
+
+                if (contactsName == null) {
+                    contactsName = phonenumbers.get(i);
                     typephone = "Other";
-                    break;
-                default:
-                    typephone = "Other";
-                    break;
+                }
+
+                contactInfos.add(new ContactInfo(null, contactsName, typephone, phonenumbers.get(i)));
+                contactsName = null;
             }
 
-            if(contactsName==null){
-                contactsName=phonenumbers.get(i);
-                typephone="Other";
-            }
-
-            contactInfos.add(new ContactInfo(null,contactsName,typephone,phonenumbers.get(i)));
-            contactsName=null;
-            }
-
-
+        }
 
        return  contactInfos;
     }
@@ -538,165 +539,125 @@ public class Get_Calls_Log {
         };
 
         @SuppressLint("MissingPermission") Cursor managedCursor = context.getContentResolver().query(CallLog.Calls.CONTENT_URI, projection, CallLog.Calls.TYPE + "=" + CallLog.Calls.MISSED_TYPE, null, CallLog.Calls.DATE + " DESC");
-        int name = managedCursor.getColumnIndex(CallLog.Calls.CACHED_NAME);
-        int mobileType = managedCursor.getColumnIndex(CallLog.Calls.CACHED_NUMBER_TYPE);
-        int number = managedCursor.getColumnIndex(CallLog.Calls.NUMBER);
-        int type = managedCursor.getColumnIndex(CallLog.Calls.TYPE);
-        int date = managedCursor.getColumnIndex(CallLog.Calls.DATE);
-        int duration = managedCursor.getColumnIndex(CallLog.Calls.DURATION);
+
+        if (managedCursor != null &&managedCursor.getCount()>0) {
+
+            int name = managedCursor.getColumnIndex(CallLog.Calls.CACHED_NAME);
+            int mobileType = managedCursor.getColumnIndex(CallLog.Calls.CACHED_NUMBER_TYPE);
+            int number = managedCursor.getColumnIndex(CallLog.Calls.NUMBER);
+            int type = managedCursor.getColumnIndex(CallLog.Calls.TYPE);
+            int date = managedCursor.getColumnIndex(CallLog.Calls.DATE);
+            int duration = managedCursor.getColumnIndex(CallLog.Calls.DURATION);
 
 
-        String phName, phNumber, callDate, callDuration, dateStringhour;
-        String dir = null;
-        String typephone = null;
-        int phmobileType, callType;
-        Date callDayTime;
+            String phName, phNumber, callDate, callDuration, dateStringhour;
+            String dir = null;
+            String typephone = null;
+            int phmobileType, callType;
+            Date callDayTime;
 
-        //Date Format  "dd-MM-yyyy h:mm a"
-        SimpleDateFormat formatter = new SimpleDateFormat("h:mm a", Locale.ENGLISH);
+            //Date Format  "dd-MM-yyyy h:mm a"
+            SimpleDateFormat formatter = new SimpleDateFormat("h:mm a", Locale.ENGLISH);
 
-        while (managedCursor.moveToNext()) {
-            phName = managedCursor.getString(name);
-            phmobileType = managedCursor.getInt(mobileType);
-            phNumber = managedCursor.getString(number);
-            callType = managedCursor.getInt(type);
-            callDate = managedCursor.getString(date);
-            callDayTime = new Date(Long.valueOf(callDate));
-            //callDuration = managedCursor.getString(duration);
-            dateStringhour = formatter.format(new Date(Long.parseLong(callDate)));
-
-
-            switch (callType) {
-                case CallLog.Calls.OUTGOING_TYPE:
-                    dir = "OUTGOING";
-                    break;
-
-                case CallLog.Calls.INCOMING_TYPE:
-                    dir = "INCOMING";
-                    break;
-
-                case CallLog.Calls.MISSED_TYPE:
-                    dir = "MISSED";
-                    break;
-
-                case CallLog.Calls.REJECTED_TYPE:
-                    dir = "REJECTED";
-                    break;
-
-                case CallLog.Calls.VOICEMAIL_TYPE:
-                    dir = "VOICEMAIL";
-                    break;
-
-                case CallLog.Calls.BLOCKED_TYPE:
-                    dir = "BLOCKED";
-                    break;
-
-                case CallLog.Calls.ANSWERED_EXTERNALLY_TYPE:
-                    dir = "ANSWERED";
-                    break;
-            }
+            while (managedCursor.moveToNext()) {
+                phName = managedCursor.getString(name);
+                phmobileType = managedCursor.getInt(mobileType);
+                phNumber = managedCursor.getString(number);
+                callType = managedCursor.getInt(type);
+                callDate = managedCursor.getString(date);
+                callDayTime = new Date(Long.valueOf(callDate));
+                //callDuration = managedCursor.getString(duration);
+                dateStringhour = formatter.format(new Date(Long.parseLong(callDate)));
 
 
-            switch (phmobileType) {
-                case ContactsContract.CommonDataKinds.Phone.TYPE_MOBILE:
-                    typephone = "Mobile";
-                    break;
-                case ContactsContract.CommonDataKinds.Phone.TYPE_HOME:
-                    typephone = "Home";
-                    break;
-                case ContactsContract.CommonDataKinds.Phone.TYPE_WORK:
-                    typephone = "Work";
-                    break;
-                case ContactsContract.CommonDataKinds.Phone.TYPE_FAX_WORK:
-                    typephone = "Work Fax";
-                    break;
-                case ContactsContract.CommonDataKinds.Phone.TYPE_FAX_HOME:
-                    typephone = "Home Fax";
-                    break;
-                case ContactsContract.CommonDataKinds.Phone.TYPE_MAIN:
-                    typephone = "Main";
-                    break;
-                case ContactsContract.CommonDataKinds.Phone.TYPE_PAGER:
-                    typephone = "Pager";
-                    break;
-                case ContactsContract.CommonDataKinds.Phone.TYPE_CUSTOM:
-                    typephone = "Custom";
-                    break;
-                case ContactsContract.CommonDataKinds.Phone.TYPE_OTHER:
-                    typephone = "Other";
-                    break;
-                default:
-                    break;
-            }
+                switch (callType) {
+                    case CallLog.Calls.OUTGOING_TYPE:
+                        dir = "OUTGOING";
+                        break;
 
-            //if cash name is null return name from Contacts
-            if (phName == null || phName.equals("")) {
-                if (phNumber != null) {
+                    case CallLog.Calls.INCOMING_TYPE:
+                        dir = "INCOMING";
+                        break;
 
-                    if (phNumber.equals("")) {
+                    case CallLog.Calls.MISSED_TYPE:
+                        dir = "MISSED";
+                        break;
 
-                        phName = "Unknown";
+                    case CallLog.Calls.REJECTED_TYPE:
+                        dir = "REJECTED";
+                        break;
 
-                    } else {
+                    case CallLog.Calls.VOICEMAIL_TYPE:
+                        dir = "VOICEMAIL";
+                        break;
 
-                        phName = phNumber;
-                           /*
-                        if (contactExists(phNumber)) {
-                            //phName = getContactName(phNumber);
-                            phName = contactsName;
-                            switch (TypeOfNumph) {
-                                case ContactsContract.CommonDataKinds.Phone.TYPE_MOBILE:
-                                    typephone = "Mobile";
-                                    break;
-                                case ContactsContract.CommonDataKinds.Phone.TYPE_HOME:
-                                    typephone = "Home";
-                                    break;
-                                case ContactsContract.CommonDataKinds.Phone.TYPE_WORK:
-                                    typephone = "Work";
-                                    break;
-                                case ContactsContract.CommonDataKinds.Phone.TYPE_FAX_WORK:
-                                    typephone = "Work Fax";
-                                    break;
-                                case ContactsContract.CommonDataKinds.Phone.TYPE_FAX_HOME:
-                                    typephone = "Home Fax";
-                                    break;
-                                case ContactsContract.CommonDataKinds.Phone.TYPE_MAIN:
-                                    typephone = "Main";
-                                    break;
-                                case ContactsContract.CommonDataKinds.Phone.TYPE_PAGER:
-                                    typephone = "Pager";
-                                    break;
-                                case ContactsContract.CommonDataKinds.Phone.TYPE_CUSTOM:
-                                    typephone = "Custom";
-                                    break;
-                                case ContactsContract.CommonDataKinds.Phone.TYPE_OTHER:
-                                    typephone = "Other";
-                                    break;
-                                default:
-                                    typephone = "Other";
-                                    break;
+                    case CallLog.Calls.BLOCKED_TYPE:
+                        dir = "BLOCKED";
+                        break;
 
-                            }
+                    case CallLog.Calls.ANSWERED_EXTERNALLY_TYPE:
+                        dir = "ANSWERED";
+                        break;
+                }
+
+
+                switch (phmobileType) {
+                    case ContactsContract.CommonDataKinds.Phone.TYPE_MOBILE:
+                        typephone = "Mobile";
+                        break;
+                    case ContactsContract.CommonDataKinds.Phone.TYPE_HOME:
+                        typephone = "Home";
+                        break;
+                    case ContactsContract.CommonDataKinds.Phone.TYPE_WORK:
+                        typephone = "Work";
+                        break;
+                    case ContactsContract.CommonDataKinds.Phone.TYPE_FAX_WORK:
+                        typephone = "Work Fax";
+                        break;
+                    case ContactsContract.CommonDataKinds.Phone.TYPE_FAX_HOME:
+                        typephone = "Home Fax";
+                        break;
+                    case ContactsContract.CommonDataKinds.Phone.TYPE_MAIN:
+                        typephone = "Main";
+                        break;
+                    case ContactsContract.CommonDataKinds.Phone.TYPE_PAGER:
+                        typephone = "Pager";
+                        break;
+                    case ContactsContract.CommonDataKinds.Phone.TYPE_CUSTOM:
+                        typephone = "Custom";
+                        break;
+                    case ContactsContract.CommonDataKinds.Phone.TYPE_OTHER:
+                        typephone = "Other";
+                        break;
+                    default:
+                        break;
+                }
+
+                //if cash name is null return name from Contacts
+                if (phName == null || phName.equals("")) {
+                    if (phNumber != null) {
+
+                        if (phNumber.equals("")) {
+
+                            phName = "Unknown";
 
                         } else {
-                            if (phNumber.equals("")) {
-                                phName = "Unknown";
 
-                            } else {
-                                phName = phNumber;
-                            }
-                        }*/
+                            phName = phNumber;
+                        }
+
+                    } else {
+                        phName = "Unknown Number";
                     }
-
-                } else {
-                    phName = "Unknown Number";
                 }
-            }
 
-            loglist.add(new LogInfo(null, phName, dir, callDayTime, typephone, dateStringhour, phNumber,1));
+                loglist.add(new LogInfo(null, phName, dir, callDayTime, typephone, dateStringhour, phNumber, 1));
+            }
         }
 
-        managedCursor.close();
+        if (managedCursor != null) {
+            managedCursor.close();
+        }
         return loglist;
 
     }
@@ -817,6 +778,128 @@ public class Get_Calls_Log {
 
 
         return logInfo;
+    }
+
+
+    @SuppressLint("LongLogTag")
+    public ArrayList<Send_Top_Ten_Contacts_JSON> getTopTenContactsToServer() {
+
+        ArrayList<Send_Top_Ten_Contacts_JSON> contactInfosserver=new ArrayList<>();
+
+        String[] projection = {
+                CallLog.Calls.NUMBER,
+        };
+
+
+        @SuppressLint("MissingPermission") Cursor managedCursor = context.getContentResolver().query(CallLog.Calls.CONTENT_URI, projection, CallLog.Calls.TYPE + "=" + CallLog.Calls.OUTGOING_TYPE, null, CallLog.Calls.DATE + " DESC ");
+
+
+        if (managedCursor != null &&managedCursor.getCount()>0) {
+
+            int number = managedCursor.getColumnIndex(CallLog.Calls.NUMBER);
+
+            PhoneNumberUtil phoneUtil = PhoneNumberUtil.getInstance();
+
+            while (managedCursor.moveToNext()) {
+
+                String phNumber = managedCursor.getString(number);
+
+
+                if (phNumber.startsWith("+2")) {
+                    phNumber = phNumber.substring(2);
+
+                } else if (phNumber.startsWith("+")) {
+
+                    try {
+                        // phone must begin with '+'
+                        Phonenumber.PhoneNumber numberProto = phoneUtil.parse(phNumber, "");
+                        phNumber = String.valueOf(numberProto.getNationalNumber());
+
+                    } catch (NumberParseException e) {
+                        System.err.println("NumberParseException was thrown: " + e.toString());
+                    }
+                }
+
+                Log.e("Phone number", phNumber + "");
+
+
+                if (map.get(phNumber) == null) {
+                    map.put(phNumber + "", 1);
+                } else {
+                    Integer scount = map.get(phNumber).intValue();
+                    scount++;
+                    map.put(phNumber + "", scount);
+
+                    //Log.e("map values", map + "");
+                }
+            }
+
+            managedCursor.close();
+
+            HashSet<String> numbersset = new HashSet<String>(map.keySet());
+
+            ArrayList<String> numbers = new ArrayList<String>();
+            ArrayList<Integer> counts = new ArrayList<Integer>();
+
+            Iterator iterator = numbersset.iterator();
+
+            while (iterator.hasNext()) {
+                String no = iterator.next().toString();
+                numbers.add(no);
+                counts.add(map.get(no));
+            }
+
+            Log.e("number count ", numbers.size() + "|");
+            Log.e("count count ", counts.size() + "|");
+
+            //putting above data into hashmap
+            HashMap<String, Integer> hm = new HashMap<String, Integer>();
+            for (int i = 0; i < counts.size(); i++) {
+                hm.put(numbers.get(i), counts.get(i));
+            }
+
+            //create list from elements of hashmaps
+            List<Map.Entry<String, Integer>> list = new LinkedList<Map.Entry<String, Integer>>(hm.entrySet());
+
+            //sort the list
+            Collections.sort(list, new Comparator<Map.Entry<String, Integer>>() {
+                @Override
+                public int compare(Map.Entry<String, Integer> stringIntegerEntry, Map.Entry<String, Integer> t1) {
+                    return (t1.getValue()).compareTo(stringIntegerEntry.getValue());
+                }
+            });
+
+            ArrayList<String> phonenumbers = new ArrayList<String>();
+
+            HashMap<String, Integer> temp = new LinkedHashMap<String, Integer>();
+            for (Map.Entry<String, Integer> aa : list) {
+                temp.put(aa.getKey(), aa.getValue());
+                Log.e("descending", aa.getValue() + "");
+                Log.e("descending", aa.getKey() + "");
+                phonenumbers.add(aa.getKey());
+
+            }
+
+            //String temp2 = String.valueOf((list.subList(0, 10)));
+            //Log.e("final",temp2+"");
+
+
+            for (int i = 0; i < 10; i++) {
+
+                contactExists(phonenumbers.get(i));
+
+                if (contactsName == null) {
+                    contactsName = phonenumbers.get(i);
+
+                }
+
+                contactInfosserver.add(new Send_Top_Ten_Contacts_JSON(i, contactsName, phonenumbers.get(i)));
+                contactsName = null;
+            }
+
+        }
+
+        return  contactInfosserver;
     }
 
   }

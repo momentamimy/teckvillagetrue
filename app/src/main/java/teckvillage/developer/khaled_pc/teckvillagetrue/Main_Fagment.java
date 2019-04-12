@@ -23,10 +23,6 @@ import android.os.Build;
 import android.os.Bundle;
 import android.provider.CallLog;
 import android.provider.ContactsContract;
-import android.provider.Settings;
-import android.provider.VoicemailContract;
-import android.support.annotation.NonNull;
-import android.support.annotation.Nullable;
 import android.support.design.widget.CoordinatorLayout;
 import android.support.design.widget.FloatingActionButton;
 import android.support.design.widget.TextInputLayout;
@@ -112,7 +108,7 @@ public class Main_Fagment extends Fragment implements OnBackPressedListener , Lo
     public ImageView back_space;
     ArrayList<LogInfo> loglist102 = new ArrayList<>();
     ArrayList<LogInfo> loglist103 = new ArrayList<>();
-    ;
+
     public ImageView add_contact;
 
     static final String[] GRID_NUM = new String[]{
@@ -158,6 +154,8 @@ public class Main_Fagment extends Fragment implements OnBackPressedListener , Lo
     List<ContactInfo> contactInfos55;
     ImageView firstimagwaiting, secimagwaiting;
     TextView textwaiting;
+    TextView noLogcalltext;
+
 
     public Main_Fagment() {
         // Required empty public constructor
@@ -174,6 +172,7 @@ public class Main_Fagment extends Fragment implements OnBackPressedListener , Lo
         firstimagwaiting=view.findViewById(R.id.waitingimg_topten);
         secimagwaiting=view.findViewById(R.id.waitingimg_topten2);
         textwaiting=view.findViewById(R.id.textwaiting);
+        noLogcalltext=view.findViewById(R.id.nologcalltext);
 
         getLoaderManager().initLoader(1, null, this);
 
@@ -1445,7 +1444,7 @@ public class Main_Fagment extends Fragment implements OnBackPressedListener , Lo
             adapter1 = new LogAdapter(getActivity(), groupListByDate.groupListByDate(loglist103));
             logs.setAdapter(adapter1);
             adapter1.notifyDataSetChanged();
-
+            toggleEmptyLogRecycle(loglist103);
         }
     }
 
@@ -1460,7 +1459,6 @@ public class Main_Fagment extends Fragment implements OnBackPressedListener , Lo
         new AsyncTask<Void, Void, List<ContactInfo>>() {
             @Override
             protected void onPreExecute() {
-
                 //pd = ProgressDialog.show(getActivity(), "Loading..", "Please Wait", true, false);
             }// End of onPreExecute method
 
@@ -1490,6 +1488,16 @@ public class Main_Fagment extends Fragment implements OnBackPressedListener , Lo
         firstimagwaiting.setVisibility(View.GONE);
         secimagwaiting.setVisibility(View.GONE);
         textwaiting.setVisibility(View.GONE);
+
+    }
+
+    private void toggleEmptyLogRecycle(List<LogInfo> result) {
+
+       if(result.size()>0){
+           noLogcalltext.setVisibility(View.GONE);
+       }else {
+           noLogcalltext.setVisibility(View.VISIBLE);
+       }
 
     }
 

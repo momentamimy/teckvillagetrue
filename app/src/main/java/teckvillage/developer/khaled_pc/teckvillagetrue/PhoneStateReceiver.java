@@ -70,6 +70,7 @@ import static android.content.Context.MODE_PRIVATE;
 
 public class PhoneStateReceiver extends BroadcastReceiver {
 
+    private static final String TAG = "State";
     public static WindowManager wm=null;
     private WindowManager.LayoutParams params1;
     public static View view1;
@@ -95,27 +96,38 @@ public class PhoneStateReceiver extends BroadcastReceiver {
     @Override
     public void onReceive(Context context, Intent intent) {
 
-        //We listen to two intents.  The new outgoing call only tells us of an outgoing call.  We use it to get the number.
-        if (intent.getAction().equals("android.intent.action.NEW_OUTGOING_CALL")) {
-            savedNumber = intent.getExtras().getString("android.intent.extra.PHONE_NUMBER");
-        }
-        else{
-            String stateStr = intent.getExtras().getString(TelephonyManager.EXTRA_STATE);
-            String number = intent.getExtras().getString(TelephonyManager.EXTRA_INCOMING_NUMBER);
-            int state = 0;
-            if(stateStr.equals(TelephonyManager.EXTRA_STATE_IDLE)){
-                state = TelephonyManager.CALL_STATE_IDLE;
+        if (Build.VERSION.SDK_INT <= Build.VERSION_CODES.KITKAT) {
+            String str = intent.getAction();
+            if ("android.intent.action.PHONE_STATE".equals(str))
+                inComing(context, intent);
+
+            if ("android.intent.action.NEW_OUTGOING_CALL".equals(str))
+                trueCallerOutgoing(context, intent);
+
+        }else {
+            //We listen to two intents.  The new outgoing call only tells us of an outgoing call.  We use it to get the number.
+            if (intent.getAction().equals("android.intent.action.NEW_OUTGOING_CALL")) {
+                savedNumber = intent.getExtras().getString("android.intent.extra.PHONE_NUMBER");
             }
-            else if(stateStr.equals(TelephonyManager.EXTRA_STATE_OFFHOOK)){
-                state = TelephonyManager.CALL_STATE_OFFHOOK;
-            }
-            else if(stateStr.equals(TelephonyManager.EXTRA_STATE_RINGING)){
-                state = TelephonyManager.CALL_STATE_RINGING;
-            }
+            else{
+                String stateStr = intent.getExtras().getString(TelephonyManager.EXTRA_STATE);
+                String number = intent.getExtras().getString(TelephonyManager.EXTRA_INCOMING_NUMBER);
+                int state = 0;
+                if(stateStr.equals(TelephonyManager.EXTRA_STATE_IDLE)){
+                    state = TelephonyManager.CALL_STATE_IDLE;
+                }
+                else if(stateStr.equals(TelephonyManager.EXTRA_STATE_OFFHOOK)){
+                    state = TelephonyManager.CALL_STATE_OFFHOOK;
+                }
+                else if(stateStr.equals(TelephonyManager.EXTRA_STATE_RINGING)){
+                    state = TelephonyManager.CALL_STATE_RINGING;
+                }
 
 
-            onCallStateChanged(context, state, number);
+                onCallStateChanged(context, state, number);
+            }
         }
+
 
      //********************************************************************************************************************************************
      //*************************************************Old Code***************************************************************************************
@@ -581,5 +593,28 @@ public class PhoneStateReceiver extends BroadcastReceiver {
         Notification notification = builder.build ();
         int id = (int) System.currentTimeMillis();
         notifManager.notify (id, notification);
+    }
+
+    private void inComing(Context context, Intent intent){
+        String callState = intent.getStringExtra("state");
+        if ("RINGING".equals(callState)){
+            Log.i(TAG, "RINGING SENDS BUSY");
+        }else if ("OFFHOOK".equals(callState)){
+            Log.i(TAG, "OFFHOOK SENDS BUSY");
+        }else if("IDLE".equals(callState)){
+            Log.i(TAG, "IDLE SENDS AVAILABLE");
+        }
+    }
+
+    private void trueCallerOutgoing(Context context, Intent intent)
+    {
+        String callState = intent.getStringExtra("state");
+        if ("RINGING".equals(callState)){
+            Log.i(TAG, "RINGING SENDS BUSY");
+        }else if ("OFFHOOK".equals(callState)){
+            Log.i(TAG, "OFFHOOK SENDS BUSY");
+        }else if("IDLE".equals(callState)){
+            Log.i(TAG, "IDLE SENDS AVAILABLE");
+        }
     }
 }

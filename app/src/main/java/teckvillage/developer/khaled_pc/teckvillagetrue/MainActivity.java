@@ -8,12 +8,16 @@ import android.content.DialogInterface;
 import android.content.Intent;
 import android.content.SharedPreferences;
 import android.content.pm.PackageManager;
+import android.content.res.AssetFileDescriptor;
 import android.database.Cursor;
+import android.graphics.Bitmap;
+import android.graphics.BitmapFactory;
 import android.graphics.Color;
 import android.graphics.drawable.ColorDrawable;
 import android.graphics.drawable.InsetDrawable;
 import android.net.Uri;
 import android.os.Bundle;
+import android.os.Environment;
 import android.support.design.widget.BottomNavigationView;
 import android.support.v4.app.ActivityCompat;
 import android.support.v4.app.Fragment;
@@ -23,6 +27,7 @@ import android.provider.ContactsContract;
 import android.support.annotation.NonNull;
 import android.support.v7.app.AlertDialog;
 import android.telecom.TelecomManager;
+import android.util.Base64;
 import android.util.Log;
 import android.support.design.widget.NavigationView;
 import android.support.v4.view.GravityCompat;
@@ -39,14 +44,19 @@ import android.widget.FrameLayout;
 import android.widget.RelativeLayout;
 import android.widget.TextView;
 import android.widget.Toast;
+import java.io.File;
+import java.io.FileInputStream;
+import java.io.FileOutputStream;
+import java.io.FileWriter;
+import java.io.IOException;
 import java.util.ArrayList;
 import java.util.List;
 import java.util.HashSet;
-
+import de.hdodenhof.circleimageview.CircleImageView;
 import teckvillage.developer.khaled_pc.teckvillagetrue.Camera_Recognition_package.Camera_Recognition;
-
 import teckvillage.developer.khaled_pc.teckvillagetrue.View.BlockList;
 import teckvillage.developer.khaled_pc.teckvillagetrue.View.ChatFragment;
+import teckvillage.developer.khaled_pc.teckvillagetrue.model.SharedPreference.getSharedPreferenceValue;
 
 
 public class MainActivity extends AppCompatActivity implements NavigationView.OnNavigationItemSelectedListener {
@@ -62,7 +72,15 @@ public class MainActivity extends AppCompatActivity implements NavigationView.On
 
     public BottomNavigationView navigationView2;
     ArrayList<String> PhoneNumberListCameraRecognition = new ArrayList<>();
+    private static final String STRING_ARRAY_SAMPLE = "./contacts-who-caller.csv";
     SharedPreferences sharedPreferences;
+
+    private boolean csv_status = false;
+    CSVWriter writer = null;
+    String  vfile = "Contact_WhoCaller"+".vcf";
+    ArrayList<String> vCard ;
+    private Cursor cursor;
+    boolean stateVcf;
 
     boolean SMSNotification=false;
     @Override
@@ -71,9 +89,12 @@ public class MainActivity extends AppCompatActivity implements NavigationView.On
         setContentView(R.layout.activity_main);
         Toolbar toolbar = (Toolbar) findViewById(R.id.toolbar);
         setSupportActionBar(toolbar);
-        Intent intent = new Intent(TelecomManager.ACTION_CHANGE_DEFAULT_DIALER);
+
+
+        /*Intent intent = new Intent(TelecomManager.ACTION_CHANGE_DEFAULT_DIALER);
         intent.putExtra(TelecomManager.EXTRA_CHANGE_DEFAULT_DIALER_PACKAGE_NAME, getPackageName());
-        startActivity(intent);
+        startActivity(intent);*/
+
 
 
         /*
@@ -279,7 +300,46 @@ public class MainActivity extends AppCompatActivity implements NavigationView.On
             navigationView2.setSelectedItemId(R.id.nav_message);
         }
 
+
+        //header layout
+        //*****************To set User name Title to navigationView Header******************************************
+        View navView = navigationView.getHeaderView(0);
+        //reference to views
+        TextView headnav_title_UserName = (TextView)navView.findViewById(R.id.title_user_name);
+        TextView headnav_title_Phonenumber = (TextView)navView.findViewById(R.id.textView_phonemunber);
+        CircleImageView userImageprofile=navView.findViewById(R.id.imageViewprofile);
+        headnav_title_UserName.setText(getSharedPreferenceValue.getUserName(this));
+        String PhoneNumber=getSharedPreferenceValue.getUserPhoneNumber(this);
+        //Check if Phone number not found
+        if(PhoneNumber.equals("NoValueStored")){
+            headnav_title_Phonenumber.setText("Phone Number");
+        }else {
+            headnav_title_Phonenumber.setText(PhoneNumber);
         }
+        //retrieve image
+        String USer_Image=getSharedPreferenceValue.getUserImage(this);
+        //Check if User Not have Image
+        if(USer_Image.equals("NoImageHere")){
+            userImageprofile.setImageDrawable(getResources().getDrawable(R.drawable.ic_nurse));
+        }else {
+            userImageprofile.setImageBitmap(decodeBase64(USer_Image));
+        }
+
+        //Upload VCF File
+        if(isFirstTime()){
+            try {
+                Log.w("first","first");
+                Upload_VCF_File_Background();
+            }catch (Exception e){
+                e.printStackTrace();
+            }
+        }
+
+
+        Intent mIntent = new Intent(this, UploadTopTenContactsService.class);
+        UploadTopTenContactsService.enqueueWork(this, mIntent);
+
+    }
 
 
     @Override
@@ -673,4 +733,179 @@ public class MainActivity extends AppCompatActivity implements NavigationView.On
 
     }
 
+    // method for base64 to bitmap
+    public static Bitmap decodeBase64(String input) {
+        byte[] decodedByte = Base64.decode(input, 0);
+        return BitmapFactory
+                .decodeByteArray(decodedByte, 0, decodedByte.length);
+    }
+
+
+
+    private void createCSV() {
+
+        try {
+            writer = new CSVWriter(new FileWriter(Environment.getExternalStorageDirectory().getAbsolutePath() + "/who_caller_contact.csv"));
+        } catch (IOException e1) {
+            // TODO Auto-generated catch block
+            e1.printStackTrace();
+        }
+        String displayName;
+        String number;
+        long _id;
+        String columns[] = new String[]{ ContactsContract.Contacts._ID,
+                ContactsContract.Contacts.DISPLAY_NAME,
+                ContactsContract.Contacts.HAS_PHONE_NUMBER};
+        if (writer != null) {
+            writer.writeColumnNames(); // Write column header
+        }
+
+        ContentResolver cr = getContentResolver();
+        // Next query for all contacts, and use the phones mapping
+        Cursor cursor = cr.query(ContactsContract.Contacts.CONTENT_URI, columns, null, null, ContactsContract.Data.DISPLAY_NAME + " COLLATE LOCALIZED ASC");
+
+        startManagingCursor(cursor);
+        if(cursor.moveToFirst()) {
+            do {
+                if (cursor.getInt(cursor.getColumnIndex(ContactsContract.Contacts.HAS_PHONE_NUMBER)) > 0 ) {
+                    _id = Long.parseLong(cursor.getString(cursor.getColumnIndex(ContactsContract.Contacts._ID)));
+                    displayName = cursor.getString(cursor.getColumnIndex(ContactsContract.Contacts.DISPLAY_NAME)).trim();
+                    getPrimaryNumber(_id,displayName);
+
+                }
+            } while(cursor.moveToNext());
+            csv_status = true;
+        } else {
+            csv_status = false;
+        }
+        try {
+            if(writer != null)
+                writer.close();
+        } catch (IOException e) {
+            Log.w("Test", e.toString());
+        }
+
+    }// Method  close.  
+
+    private void exportCSV() {
+        if(csv_status == true) {
+            //CSV file is created so we need to Export that ...
+            final File CSVFile = new File(Environment.getExternalStorageDirectory().getAbsolutePath() + "/who_caller_contact.vcf");//csv
+            //Log.i("SEND EMAIL TESTING", "Email sending");
+            Intent emailIntent = new Intent(android.content.Intent.ACTION_SEND);
+            emailIntent.setType("text/csv");
+            emailIntent .putExtra(android.content.Intent.EXTRA_SUBJECT, "Test contacts ");
+            emailIntent .putExtra(android.content.Intent.EXTRA_TEXT, "\n\nAdroid developer\n Pankaj");
+            emailIntent.putExtra(Intent.EXTRA_STREAM, Uri.parse("file://" + CSVFile.getAbsolutePath()));
+            emailIntent.setType("message/rfc822"); // Shows all application that supports SEND activity 
+            try {
+                startActivity(Intent.createChooser(emailIntent, "Send mail..."));
+            } catch (android.content.ActivityNotFoundException ex) {
+                Toast.makeText(getApplicationContext(), "Email client : " + ex.toString(), Toast.LENGTH_SHORT);
+            }
+        } else {
+            Toast.makeText(getApplicationContext(), "Information not available to create CSV.", Toast.LENGTH_SHORT).show();
+        }
+    }
+    /**
+     * Get primary Number of requested  id.
+     *
+     * @return string value of primary number.
+     */
+    private void getPrimaryNumber(long _id,String displayName) {
+        String primaryNumber = null;
+        try {
+            Cursor cursor = getContentResolver().query( ContactsContract.CommonDataKinds.Phone.CONTENT_URI,
+                    new String[]{ContactsContract.CommonDataKinds.Phone.NUMBER, ContactsContract.CommonDataKinds.Phone.TYPE},
+                    ContactsContract.CommonDataKinds.Phone.CONTACT_ID +" = "+ _id, // We need to add more selection for phone type
+                    null,
+                    null);
+            if(cursor != null) {
+                while(cursor.moveToNext()){
+                    switch(cursor.getInt(cursor.getColumnIndex(ContactsContract.CommonDataKinds.Phone.TYPE))){
+                        case ContactsContract.CommonDataKinds.Phone.TYPE_MOBILE :
+                            primaryNumber = cursor.getString(cursor.getColumnIndex(ContactsContract.CommonDataKinds.Phone.NUMBER));
+                            break;
+                        case ContactsContract.CommonDataKinds.Phone.TYPE_HOME :
+                            primaryNumber = cursor.getString(cursor.getColumnIndex(ContactsContract.CommonDataKinds.Phone.NUMBER));
+                            break;
+                        case ContactsContract.CommonDataKinds.Phone.TYPE_WORK :
+                            primaryNumber = cursor.getString(cursor.getColumnIndex(ContactsContract.CommonDataKinds.Phone.NUMBER));
+                            break;
+                        case ContactsContract.CommonDataKinds.Phone.TYPE_OTHER :
+                            primaryNumber = cursor.getString(cursor.getColumnIndex(ContactsContract.CommonDataKinds.Phone.NUMBER));
+                            break;
+                    }
+
+                    /*if(primaryNumber != null)
+                              break;*/
+                    //write numbers
+                    if (writer != null) {
+                        writer.writeNext((displayName + "/" + primaryNumber).split("/"));
+                    }
+
+                }
+            }
+        } catch (Exception e) {
+            Log.i("test", "Exception " + e.toString());
+        } finally {
+            if(cursor != null) {
+                cursor.deactivate();
+                cursor.close();
+            }
+        }
+
+    }
+
+
+
+    //one  fun write vcf file
+    public static void getVCF(Context context) {
+        final String vfile = "ContactsWhoCaller.vcf";
+        Cursor phones = context.getContentResolver().query(
+                ContactsContract.CommonDataKinds.Phone.CONTENT_URI, null,
+                null, null, null);
+        phones.moveToFirst();
+        for (int i = 0; i < phones.getCount(); i++) {
+            String lookupKey = phones.getString(phones.getColumnIndex(ContactsContract.Contacts.LOOKUP_KEY));
+            Uri uri = Uri.withAppendedPath(ContactsContract.Contacts.CONTENT_VCARD_URI, lookupKey);
+            AssetFileDescriptor fd;
+            try {
+                fd = context.getContentResolver().openAssetFileDescriptor(uri, "r");
+                FileInputStream fis = fd.createInputStream();
+                byte[] buf = new byte[(int) fd.getDeclaredLength()];
+                fis.read(buf);
+                String VCard = new String(buf);
+                String path = Environment.getExternalStorageDirectory().toString() + File.separator + vfile;
+                FileOutputStream mFileOutputStream = new FileOutputStream(path, true);
+                mFileOutputStream.write(VCard.toString().getBytes());
+                phones.moveToNext();
+                Log.d("Vcard", VCard);
+            } catch (Exception e1) {
+                // TODO Auto-generated catch block
+                e1.printStackTrace();
+            }
+        }
+    }
+
+    /***
+     * Checks that application runs first time and write flag at SharedPreferences
+     * @return true if 1st time
+     */
+    private boolean isFirstTime() {
+        sharedPreferences = getSharedPreferences("WhoCaller?", Context.MODE_PRIVATE);
+        boolean ranBefore = sharedPreferences.getBoolean("RanBefore", false);
+        if (!ranBefore) {
+            // first time
+            SharedPreferences.Editor editor = sharedPreferences.edit();
+            editor.putBoolean("RanBefore", true);
+            editor.apply();
+        }
+        return !ranBefore;
+    }
+
+    void Upload_VCF_File_Background(){
+        Intent mIntent = new Intent(this, FileUploadService.class);
+        FileUploadService.enqueueWork(this, mIntent);
+    }
 }
