@@ -120,15 +120,44 @@ public class UserContactsAdapters extends RecyclerView.Adapter<UserContactsAdapt
 
     @Override
     public void onBindViewHolder(final ViewHolder holder, final int position) {
+
         if(holder.contactName2!=null){
 
 
-           holder.contactName2.setText(mDataArray.get(position).usercontacName);
-           holder.contactCircleImageView2.setOnClickListener(new View.OnClickListener() {
+            RelativeLayout.LayoutParams layoutParams = (RelativeLayout.LayoutParams)holder.contactName2.getLayoutParams();
+           //Assume contactName2 is null //when get code retrieve country remove from here
+           //--------------------------------------------------------------------------------
+            holder.country2.setVisibility(View.GONE);
+            holder.contactName2.setText(mDataArray.get(position).usercontacName);//Display name
+            //set contactName Center in parent if country visiable
+            layoutParams.addRule(RelativeLayout.CENTER_IN_PARENT, RelativeLayout.TRUE);
+            holder.contactName2.setLayoutParams(layoutParams);
+           //---------------------------------------------------------------------------------
+
+            /*
+            if(mDataArray.get(position).getCountry()!=null&&mDataArray.get(position).getCountry().length()>0){
+                holder.country2.setVisibility(View.VISIBLE);
+                holder.country2.setText(mDataArray.get(position).getCountry());//Display phone or country
+                holder.contactName2.setText(mDataArray.get(position).usercontacName);//Display name
+                // if false remove center:
+                layoutParams.addRule(RelativeLayout.CENTER_IN_PARENT, 0);
+                holder.contactName2.setLayoutParams(layoutParams);
+
+            }else {
+                holder.country2.setVisibility(View.GONE);
+                holder.contactName2.setText(mDataArray.get(position).usercontacName);//Display name
+                //set contactName Center in parent if country visiable
+                layoutParams.addRule(RelativeLayout.CENTER_IN_PARENT, RelativeLayout.TRUE);
+                holder.contactName2.setLayoutParams(layoutParams);
+            }*/
+
+
+
+            holder.contactCircleImageView2.setOnClickListener(new View.OnClickListener() {
                 @Override
                 public void onClick(View v) {
 
-                   
+
                 }
             });
 

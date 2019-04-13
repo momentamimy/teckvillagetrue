@@ -10,6 +10,7 @@ import android.net.Uri;
 import android.os.Bundle;
 import android.provider.ContactsContract;
 import android.support.v4.app.ActivityCompat;
+import android.support.v4.content.ContextCompat;
 import android.support.v7.app.AlertDialog;
 import android.support.v7.app.AppCompatActivity;
 import android.util.Log;
@@ -27,6 +28,7 @@ import java.util.List;
 
 import de.hdodenhof.circleimageview.CircleImageView;
 import teckvillage.developer.khaled_pc.teckvillagetrue.MainActivity;
+import teckvillage.developer.khaled_pc.teckvillagetrue.Make_Phone_Call;
 import teckvillage.developer.khaled_pc.teckvillagetrue.R;
 import teckvillage.developer.khaled_pc.teckvillagetrue.SMS_MessagesChat;
 import teckvillage.developer.khaled_pc.teckvillagetrue.model.Get_Calls_Log;
@@ -113,21 +115,14 @@ public class User_Contact_Profile_From_log_list extends AppCompatActivity {
         makecall.setOnClickListener(new View.OnClickListener() {
             @Override
             public void onClick(View v) {
-                Intent intent = new Intent(Intent.ACTION_CALL);
                 if(phonenumee.getText().toString()!=null&&phonenumee.getText().toString().length()>0){
-                    intent.setData(Uri.parse("tel:" + phonenumee.getText().toString()));
-                    if (ActivityCompat.checkSelfPermission(User_Contact_Profile_From_log_list.this, Manifest.permission.CALL_PHONE) != PackageManager.PERMISSION_GRANTED) {
-                        // TODO: Consider calling
-                        //    ActivityCompat#requestPermissions
-                        // here to request the missing permissions, and then overriding
-                        //   public void onRequestPermissionsResult(int requestCode, String[] permissions,
-                        //                                          int[] grantResults)
-                        // to handle the case where the user grants the permission. See the documentation
-                        // for ActivityCompat#requestPermissions for more details.
-                        return;
+                    if (ContextCompat.checkSelfPermission(User_Contact_Profile_From_log_list.this, Manifest.permission.CALL_PHONE) != PackageManager.PERMISSION_GRANTED) {
+                        ActivityCompat.requestPermissions(User_Contact_Profile_From_log_list.this, new String[]{Manifest.permission.CALL_PHONE},12);
                     }
-
-                    startActivity(intent);
+                    else
+                    {
+                        Make_Phone_Call.makephonecall(User_Contact_Profile_From_log_list.this,phonenumee.getText().toString());
+                    }
                 }
 
 

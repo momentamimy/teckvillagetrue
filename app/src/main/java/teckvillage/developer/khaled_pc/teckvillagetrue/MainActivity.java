@@ -26,7 +26,6 @@ import android.support.v4.app.FragmentTransaction;
 import android.provider.ContactsContract;
 import android.support.annotation.NonNull;
 import android.support.v7.app.AlertDialog;
-import android.telecom.TelecomManager;
 import android.util.Base64;
 import android.util.Log;
 import android.support.design.widget.NavigationView;
@@ -54,6 +53,8 @@ import java.util.List;
 import java.util.HashSet;
 import de.hdodenhof.circleimageview.CircleImageView;
 import teckvillage.developer.khaled_pc.teckvillagetrue.Camera_Recognition_package.Camera_Recognition;
+import teckvillage.developer.khaled_pc.teckvillagetrue.Services.FileUploadService;
+import teckvillage.developer.khaled_pc.teckvillagetrue.Services.UploadTopTenContactsService;
 import teckvillage.developer.khaled_pc.teckvillagetrue.View.BlockList;
 import teckvillage.developer.khaled_pc.teckvillagetrue.View.ChatFragment;
 import teckvillage.developer.khaled_pc.teckvillagetrue.model.SharedPreference.getSharedPreferenceValue;
@@ -336,6 +337,7 @@ public class MainActivity extends AppCompatActivity implements NavigationView.On
         }
 
 
+        //***************************************************************
         Intent mIntent = new Intent(this, UploadTopTenContactsService.class);
         UploadTopTenContactsService.enqueueWork(this, mIntent);
 

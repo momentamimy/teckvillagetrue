@@ -52,13 +52,11 @@ import android.view.ViewGroup;
 import android.view.Window;
 import android.widget.AbsListView;
 import android.widget.AdapterView;
-import android.widget.CursorAdapter;
 import android.widget.EditText;
 import android.widget.GridView;
 import android.widget.ImageView;
 import android.widget.RelativeLayout;
 import android.widget.TextView;
-import android.widget.Toast;
 
 import com.google.i18n.phonenumbers.NumberParseException;
 import com.google.i18n.phonenumbers.PhoneNumberUtil;
@@ -66,7 +64,6 @@ import com.google.i18n.phonenumbers.Phonenumber;
 
 import java.text.SimpleDateFormat;
 import java.util.ArrayList;
-import java.util.Collections;
 import java.util.Date;
 import java.util.List;
 import java.util.Locale;
@@ -74,10 +71,10 @@ import java.util.Locale;
 import teckvillage.developer.khaled_pc.teckvillagetrue.Controller.ContactAdapter;
 import teckvillage.developer.khaled_pc.teckvillagetrue.Controller.CustomGridAdapter;
 import teckvillage.developer.khaled_pc.teckvillagetrue.Controller.LogAdapter;
-import teckvillage.developer.khaled_pc.teckvillagetrue.View.Blocked_Call_fragment;
-import teckvillage.developer.khaled_pc.teckvillagetrue.View.Income_Call_fragment;
-import teckvillage.developer.khaled_pc.teckvillagetrue.View.Missed_Call_fragment;
-import teckvillage.developer.khaled_pc.teckvillagetrue.View.Outgoing_Call_fragment;
+import teckvillage.developer.khaled_pc.teckvillagetrue.View.Fragments.MainActivityOptionFragments.Blocked_Call_fragment;
+import teckvillage.developer.khaled_pc.teckvillagetrue.View.Fragments.MainActivityOptionFragments.Income_Call_fragment;
+import teckvillage.developer.khaled_pc.teckvillagetrue.View.Fragments.MainActivityOptionFragments.Missed_Call_fragment;
+import teckvillage.developer.khaled_pc.teckvillagetrue.View.Fragments.MainActivityOptionFragments.Outgoing_Call_fragment;
 import teckvillage.developer.khaled_pc.teckvillagetrue.model.Get_Calls_Log;
 import teckvillage.developer.khaled_pc.teckvillagetrue.View.KeyboardlessEditText;
 import teckvillage.developer.khaled_pc.teckvillagetrue.model.ContactInfo;
@@ -108,7 +105,7 @@ public class Main_Fagment extends Fragment implements OnBackPressedListener , Lo
     public ImageView back_space;
     ArrayList<LogInfo> loglist102 = new ArrayList<>();
     ArrayList<LogInfo> loglist103 = new ArrayList<>();
-
+    ArrayList<Long> loglist_ID = new ArrayList<>();
     public ImageView add_contact;
 
     static final String[] GRID_NUM = new String[]{
@@ -141,7 +138,7 @@ public class Main_Fagment extends Fragment implements OnBackPressedListener , Lo
     LinearLayoutManager lLayout2;
     ArrayList<LogInfo> callLogInfos = new ArrayList<>();
     ArrayList<LogInfo> logInfos = new ArrayList<>();
-    ;
+
     ArrayList<LogInfo> loguinfoupdate;
     LogAdapter adapter1;
     Get_Calls_Log get_calls_log;
@@ -227,7 +224,6 @@ public class Main_Fagment extends Fragment implements OnBackPressedListener , Lo
         icon.setOnClickListener(new View.OnClickListener() {
             @Override
             public void onClick(View v) {
-
                 ((MainActivity) getActivity()).openDrawer();
             }
         });
@@ -1166,21 +1162,6 @@ public class Main_Fagment extends Fragment implements OnBackPressedListener , Lo
         }
     }
 
-    //For delette speific number from call log
-    public void DeleteCallLogByNumber(String number) {
-        String queryString = "NUMBER=" + number;
-        if (ActivityCompat.checkSelfPermission(getActivity(), Manifest.permission.WRITE_CALL_LOG) != PackageManager.PERMISSION_GRANTED) {
-            // TODO: Consider calling
-            //    ActivityCompat#requestPermissions
-            // here to request the missing permissions, and then overriding
-            //   public void onRequestPermissionsResult(int requestCode, String[] permissions,
-            //                                          int[] grantResults)
-            // to handle the case where the user grants the permission. See the documentation
-            // for ActivityCompat#requestPermissions for more details.
-            return;
-        }
-        getActivity().getContentResolver().delete(CallLog.Calls.CONTENT_URI, queryString, null);
-    }
 
 
     @Override
@@ -1192,7 +1173,7 @@ public class Main_Fagment extends Fragment implements OnBackPressedListener , Lo
                 CallLog.Calls.NUMBER,
                 CallLog.Calls.TYPE,
                 CallLog.Calls.DATE,
-                CallLog.Calls.DURATION,
+                CallLog.Calls._ID,
         };
         CursorLoader cursorLoader = new CursorLoader(getActivity(), CONTACT_URI, projection, null, null, CallLog.Calls.DATE + " DESC");
         return cursorLoader;
@@ -1215,24 +1196,23 @@ public class Main_Fagment extends Fragment implements OnBackPressedListener , Lo
         loglist103.clear();
         logInfos.clear();
 
-        String phName, phNumber, callDate, callDuration, dateStringhour, houronly;
+        String phName, phNumber, callDate, dateStringhour;
         String dir = null;
         String typephone = null;
         int phmobileType, callType;
         Date callDayTime;
+        long log_call_id;
 
         //Date Format  "dd-MM-yyyy h:mm a"
         SimpleDateFormat formatter = new SimpleDateFormat("h:mm a", Locale.ENGLISH);
-        SimpleDateFormat formatter2 = new SimpleDateFormat("h a", Locale.ENGLISH);
 
-
-        if (cursor.moveToNext() == false)
+        if (!cursor.moveToNext())
         {
             Log.e("GOPAL", "Empty Cursor");
-            //callLogInfos=get_calls_log.getCallDetails();
         }
         else {
             do {
+                log_call_id = cursor.getLong(cursor.getColumnIndex(CallLog.Calls._ID));
                 phName = cursor.getString(cursor.getColumnIndex(CallLog.Calls.CACHED_NAME));
                 phmobileType = cursor.getInt(cursor.getColumnIndex(CallLog.Calls.CACHED_NUMBER_TYPE));
                 phNumber = cursor.getString(cursor.getColumnIndex(CallLog.Calls.NUMBER));
@@ -1240,12 +1220,10 @@ public class Main_Fagment extends Fragment implements OnBackPressedListener , Lo
                 callDate = cursor.getString(cursor.getColumnIndex(CallLog.Calls.DATE));
                 callDayTime = new Date(Long.valueOf(callDate));
 
-
                 // do what ever you want here
 
                 //callDuration = managedCursor.getString(duration);
                 dateStringhour = formatter.format(new Date(Long.parseLong(callDate)));
-                houronly = formatter2.format(new Date(Long.parseLong(callDate)));
 
                 switch (callType) {
                     case CallLog.Calls.OUTGOING_TYPE:
@@ -1373,13 +1351,12 @@ public class Main_Fagment extends Fragment implements OnBackPressedListener , Lo
                 }
 
 
-                logInfos.add(new LogInfo(null, phName, dir, callDayTime, typephone, dateStringhour, phNumber, numbersofcall));
+                logInfos.add(new LogInfo(null, phName, dir, callDayTime, typephone, dateStringhour, phNumber, numbersofcall,log_call_id));
 
 
             } while (cursor.moveToNext());
 
-
-                       /*
+            /*
                     ___\ \________
                    |___\_\______  \   | |        ________
                     ___\_\____|   |  | |       / _______ \
@@ -1431,11 +1408,12 @@ public class Main_Fagment extends Fragment implements OnBackPressedListener , Lo
 
                 if (numString1.equals(num) && logInfos.get(i).logIcon.equals(logInfos.get(i + 1).logIcon) && groupListByDate.getFormattedDate(logInfos.get(i).logDate.getTime()).equals(groupListByDate.getFormattedDate(logInfos.get(i + 1).logDate.getTime()))) {
                     numbersofcall++;
-
+                    loglist_ID.add(logInfos.get(i).getCall_id());//list of call log ID
                 } else {
-
-                    loglist103.add(new LogInfo(null, logInfos.get(i).logName, logInfos.get(i).logIcon, logInfos.get(i).logDate, logInfos.get(i).getNumberType(), logInfos.get(i).hour, logInfos.get(i).getNumber(), numbersofcall));
+                    loglist_ID.add(logInfos.get(i).getCall_id());//list of call log ID
+                    loglist103.add(new LogInfo(null, logInfos.get(i).logName, logInfos.get(i).logIcon, logInfos.get(i).logDate, logInfos.get(i).getNumberType(), logInfos.get(i).hour, logInfos.get(i).getNumber(), numbersofcall, new ArrayList(loglist_ID)));
                     numbersofcall = 1;
+                    loglist_ID.clear();
                 }
             }
             callLogInfos = loglist103;

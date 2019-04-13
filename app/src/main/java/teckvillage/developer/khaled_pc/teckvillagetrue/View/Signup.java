@@ -318,9 +318,6 @@ public class Signup extends AppCompatActivity {
                                                 //retreive img and convert from string to bitmap to display it
                                                 //add_personal_photo.setImageBitmap(decodeBase64(UserProfImgInString));
 
-
-
-
                                                 //when Login Success
                                                 SharedPreferences sharedPref = getSharedPreferences("WhoCaller?", MODE_PRIVATE);
                                                 SharedPreferences.Editor editor = sharedPref.edit();

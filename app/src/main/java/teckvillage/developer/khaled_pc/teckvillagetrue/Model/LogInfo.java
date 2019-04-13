@@ -1,5 +1,6 @@
 package teckvillage.developer.khaled_pc.teckvillagetrue.model;
 
+import java.util.ArrayList;
 import java.util.Comparator;
 import java.util.Date;
 
@@ -14,9 +15,10 @@ public class LogInfo {
     String number;
     int type;
     int numberofcall;
+    long call_id;
+    ArrayList<Long> call_idarray;
 
-
-    public LogInfo(String imageUrl,String logName,String logIcon,Date logDate,String numberType,String hour,String number,int numberofcall)
+    public LogInfo(String imageUrl,String logName,String logIcon,Date logDate,String numberType,String hour,String number,int numberofcall,long call_id)
     {
         this.imageUrl=imageUrl;
         this.logName=logName;
@@ -26,6 +28,21 @@ public class LogInfo {
         this.hour=hour;
         this.number=number;
         this.numberofcall=numberofcall;
+        this.call_id=call_id;
+    }
+
+
+    public LogInfo(String imageUrl,String logName,String logIcon,Date logDate,String numberType,String hour,String number,int numberofcall,ArrayList<Long> call_idarray)
+    {
+        this.imageUrl=imageUrl;
+        this.logName=logName;
+        this.logIcon=logIcon;
+        this.logDate=logDate;
+        this.numberType=numberType;
+        this.hour=hour;
+        this.number=number;
+        this.numberofcall=numberofcall;
+        this.call_idarray=call_idarray;
     }
 
     public LogInfo(String logName,String logIcon,Date logDate,String numberType,String hour,String number)
@@ -45,7 +62,13 @@ public class LogInfo {
 
     }
 
+    public ArrayList<Long> getCall_idarray() {
+        return call_idarray;
+    }
 
+    public void setCall_idarray(ArrayList<Long> call_idarray) {
+        this.call_idarray = call_idarray;
+    }
 
     public static final Comparator<LogInfo> BY_DATE = new Comparator<LogInfo>() {
         @Override
@@ -56,6 +79,13 @@ public class LogInfo {
     };
 
 
+    public long getCall_id() {
+        return call_id;
+    }
+
+    public void setCall_id(long call_id) {
+        this.call_id = call_id;
+    }
 
     public String getImageUrl() {
         return imageUrl;

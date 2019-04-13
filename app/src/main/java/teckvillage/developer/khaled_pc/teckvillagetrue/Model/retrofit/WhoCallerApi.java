@@ -9,11 +9,13 @@ import retrofit2.http.Body;
 import retrofit2.http.Field;
 import retrofit2.http.FormUrlEncoded;
 import retrofit2.http.GET;
+import retrofit2.http.Header;
 import retrofit2.http.Multipart;
 import retrofit2.http.POST;
 import retrofit2.http.Part;
 import retrofit2.http.Path;
 import retrofit2.http.Query;
+import teckvillage.developer.khaled_pc.teckvillagetrue.model.retrofit.JSON_Mapping.Item_Search;
 import teckvillage.developer.khaled_pc.teckvillagetrue.model.retrofit.JSON_Mapping.ResultModel;
 import teckvillage.developer.khaled_pc.teckvillagetrue.model.retrofit.JSON_Mapping.ResultModelUploadVCF;
 import teckvillage.developer.khaled_pc.teckvillagetrue.model.retrofit.JSON_Mapping.Send_Top_Ten_Contacts_JSON_Arraylist;
@@ -27,7 +29,6 @@ public interface WhoCallerApi {
 
 
 
- //@FormUrlEncoded
  @Multipart
  @POST("createUser")
  Call<ResultModel> registeruser(
@@ -51,12 +52,27 @@ public interface WhoCallerApi {
     );
 
 
-    //@FormUrlEncoded
+
     @POST("addUserMostCalled")
     Call<ResultModelUploadVCF> UploadTopTenContacts(
+            @Header("Accept") String Accept,
             @Query("api_token") String ApiAccessToken,
             @Body datamodel contacts
             );
+
+    @FormUrlEncoded
+    @POST("searchContact")
+    Call<ArrayList<Item_Search>> SearchPhoneNumber(
+                    @Query("api_token") String ApiAccessToken,
+                    @Field("number") String phoneNumber
+            );
+
+    @FormUrlEncoded
+    @POST("searchContact")
+    Call<ArrayList<Item_Search>> SearchName(
+            @Query("api_token") String ApiAccessToken,
+            @Field("name") String phoneNumber
+    );
 
 
     @GET("getMessages?api_token={accesstoken}&group_id={id}")

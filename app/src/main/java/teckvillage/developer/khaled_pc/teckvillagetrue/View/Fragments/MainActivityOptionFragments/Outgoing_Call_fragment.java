@@ -1,4 +1,4 @@
-package teckvillage.developer.khaled_pc.teckvillagetrue.View;
+package teckvillage.developer.khaled_pc.teckvillagetrue.View.Fragments.MainActivityOptionFragments;
 
 
 import android.os.Bundle;
@@ -26,7 +26,7 @@ import teckvillage.developer.khaled_pc.teckvillagetrue.model.LogInfo;
 /**
  * A simple {@link Fragment} subclass.
  */
-public class Income_Call_fragment extends Fragment {
+public class Outgoing_Call_fragment extends Fragment {
 
     Get_Calls_Log get_calls_log;
     Get_list_from_logCall_depend_selection get_outgoing_list;
@@ -38,7 +38,8 @@ public class Income_Call_fragment extends Fragment {
     LogAdapter adapter1;
     TextView emptyrecycle;
 
-    public Income_Call_fragment() {
+
+    public Outgoing_Call_fragment() {
         // Required empty public constructor
     }
 
@@ -51,7 +52,7 @@ public class Income_Call_fragment extends Fragment {
 
          //Title
         TextView Activitytitle=view.findViewById(R.id.titleoffragment);
-        Activitytitle.setText("Income");
+        Activitytitle.setText("Outgoing");
 
         emptyrecycle=view.findViewById(R.id.textifempty);
 
@@ -77,24 +78,31 @@ public class Income_Call_fragment extends Fragment {
         logInfos=new ArrayList<>();
         if(get_calls_log.CheckPermission()){
 
-            logInfos=get_outgoing_list.get_Outgoing_list(CallLog.Calls.TYPE + "=" + CallLog.Calls.INCOMING_TYPE);
+            logInfos=get_outgoing_list.get_Outgoing_list(CallLog.Calls.TYPE + "=" + CallLog.Calls.OUTGOING_TYPE);
+
 
         }
 
+
+        Collections.sort(logInfos, LogInfo.BY_DATE);
+
         if(logInfos.size()>0) {
-            Collections.sort(logInfos, LogInfo.BY_DATE);
 
             lLayout2 = new LinearLayoutManager(getActivity());
             searchLogs.setLayoutManager(lLayout2);
             searchLogs.setItemAnimator(new DefaultItemAnimator());
-            adapter1 = new LogAdapter(getActivity(), groupListByDate.groupListByDate(logInfos));
+            adapter1=new LogAdapter(getActivity(),groupListByDate.groupListByDate(logInfos));
             searchLogs.setAdapter(adapter1);
             toggleEmptyCases(logInfos);
-        }
+    }
+
+
 
 
         return view;
     }
+
+
 
     private void toggleEmptyCases(ArrayList<LogInfo> logInfosemp) {
         // you can check casessList.size() > 0

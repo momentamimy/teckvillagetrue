@@ -99,6 +99,7 @@ public class Get_Calls_Log {
                 CallLog.Calls.TYPE,
                 CallLog.Calls.DATE,
                 CallLog.Calls.DURATION,
+                CallLog.Calls._ID,
         };
 
         @SuppressLint("MissingPermission") Cursor managedCursor = context.getContentResolver().query(CallLog.Calls.CONTENT_URI, projection, null, null, CallLog.Calls.DATE + " DESC");
@@ -115,11 +116,13 @@ public class Get_Calls_Log {
         String typephone = null;
         int phmobileType, callType;
         Date callDayTime;
+        long log_call_id;
 
         //Date Format  "dd-MM-yyyy h:mm a"
         SimpleDateFormat formatter = new SimpleDateFormat("h:mm a", Locale.ENGLISH);
 
         while (managedCursor.moveToNext()) {
+            log_call_id = managedCursor.getLong(managedCursor.getColumnIndex(CallLog.Calls._ID));
             phName = managedCursor.getString(name);
             phmobileType = managedCursor.getInt(mobileType);
             phNumber = managedCursor.getString(number);
@@ -262,7 +265,7 @@ public class Get_Calls_Log {
                 }
             }
 
-            loglist.add(new LogInfo(null, phName, dir, callDayTime, typephone, dateStringhour, phNumber,0));
+            loglist.add(new LogInfo(null, phName, dir, callDayTime, typephone, dateStringhour, phNumber,0,log_call_id));
         }
 
         managedCursor.close();
@@ -535,7 +538,7 @@ public class Get_Calls_Log {
                 CallLog.Calls.NUMBER,
                 CallLog.Calls.TYPE,
                 CallLog.Calls.DATE,
-                CallLog.Calls.DURATION,
+                CallLog.Calls._ID
         };
 
         @SuppressLint("MissingPermission") Cursor managedCursor = context.getContentResolver().query(CallLog.Calls.CONTENT_URI, projection, CallLog.Calls.TYPE + "=" + CallLog.Calls.MISSED_TYPE, null, CallLog.Calls.DATE + " DESC");
@@ -547,56 +550,31 @@ public class Get_Calls_Log {
             int number = managedCursor.getColumnIndex(CallLog.Calls.NUMBER);
             int type = managedCursor.getColumnIndex(CallLog.Calls.TYPE);
             int date = managedCursor.getColumnIndex(CallLog.Calls.DATE);
-            int duration = managedCursor.getColumnIndex(CallLog.Calls.DURATION);
 
-
-            String phName, phNumber, callDate, callDuration, dateStringhour;
+            String phName, phNumber, callDate,  dateStringhour;
             String dir = null;
             String typephone = null;
             int phmobileType, callType;
             Date callDayTime;
+            long log_call_id;
 
             //Date Format  "dd-MM-yyyy h:mm a"
             SimpleDateFormat formatter = new SimpleDateFormat("h:mm a", Locale.ENGLISH);
 
             while (managedCursor.moveToNext()) {
+                log_call_id = managedCursor.getLong(managedCursor.getColumnIndex(CallLog.Calls._ID));
                 phName = managedCursor.getString(name);
                 phmobileType = managedCursor.getInt(mobileType);
                 phNumber = managedCursor.getString(number);
                 callType = managedCursor.getInt(type);
                 callDate = managedCursor.getString(date);
                 callDayTime = new Date(Long.valueOf(callDate));
-                //callDuration = managedCursor.getString(duration);
                 dateStringhour = formatter.format(new Date(Long.parseLong(callDate)));
 
 
                 switch (callType) {
-                    case CallLog.Calls.OUTGOING_TYPE:
-                        dir = "OUTGOING";
-                        break;
-
-                    case CallLog.Calls.INCOMING_TYPE:
-                        dir = "INCOMING";
-                        break;
-
                     case CallLog.Calls.MISSED_TYPE:
                         dir = "MISSED";
-                        break;
-
-                    case CallLog.Calls.REJECTED_TYPE:
-                        dir = "REJECTED";
-                        break;
-
-                    case CallLog.Calls.VOICEMAIL_TYPE:
-                        dir = "VOICEMAIL";
-                        break;
-
-                    case CallLog.Calls.BLOCKED_TYPE:
-                        dir = "BLOCKED";
-                        break;
-
-                    case CallLog.Calls.ANSWERED_EXTERNALLY_TYPE:
-                        dir = "ANSWERED";
                         break;
                 }
 
@@ -650,8 +628,7 @@ public class Get_Calls_Log {
                         phName = "Unknown Number";
                     }
                 }
-
-                loglist.add(new LogInfo(null, phName, dir, callDayTime, typephone, dateStringhour, phNumber, 1));
+                loglist.add(new LogInfo(null, phName, dir, callDayTime, typephone, dateStringhour, phNumber, 1,log_call_id));
             }
         }
 

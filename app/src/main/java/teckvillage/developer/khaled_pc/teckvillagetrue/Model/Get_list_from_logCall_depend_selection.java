@@ -34,7 +34,7 @@ public class Get_list_from_logCall_depend_selection {
                 CallLog.Calls.NUMBER,
                 CallLog.Calls.TYPE,
                 CallLog.Calls.DATE,
-                CallLog.Calls.DURATION,
+                CallLog.Calls._ID,
         };
 
         @SuppressLint("MissingPermission") Cursor managedCursor = context.getContentResolver().query(CallLog.Calls.CONTENT_URI, projection, selection, null, CallLog.Calls.DATE + " DESC");
@@ -43,26 +43,27 @@ public class Get_list_from_logCall_depend_selection {
         int number = managedCursor.getColumnIndex(CallLog.Calls.NUMBER);
         int type = managedCursor.getColumnIndex(CallLog.Calls.TYPE);
         int date = managedCursor.getColumnIndex(CallLog.Calls.DATE);
-        int duration = managedCursor.getColumnIndex(CallLog.Calls.DURATION);
 
 
-        String phName, phNumber, callDate, callDuration, dateStringhour;
+        String phName, phNumber, callDate, dateStringhour;
         String dir = null;
         String typephone = null;
         int phmobileType, callType;
         Date callDayTime;
+        long log_call_id;
 
         //Date Format  "dd-MM-yyyy h:mm a"
         SimpleDateFormat formatter = new SimpleDateFormat("h:mm a", Locale.ENGLISH);
 
         while (managedCursor.moveToNext()) {
+            log_call_id = managedCursor.getLong(managedCursor.getColumnIndex(CallLog.Calls._ID));
             phName = managedCursor.getString(name);
             phmobileType = managedCursor.getInt(mobileType);
             phNumber = managedCursor.getString(number);
             callType = managedCursor.getInt(type);
             callDate = managedCursor.getString(date);
             callDayTime = new Date(Long.valueOf(callDate));
-            //callDuration = managedCursor.getString(duration);
+
             dateStringhour = formatter.format(new Date(Long.parseLong(callDate)));
 
 
@@ -193,7 +194,7 @@ public class Get_list_from_logCall_depend_selection {
                 }
             }
 
-            loglist.add(new LogInfo(null, phName, dir, callDayTime, typephone, dateStringhour, phNumber,1));
+            loglist.add(new LogInfo(null, phName, dir, callDayTime, typephone, dateStringhour, phNumber,1,log_call_id));
         }
 
         managedCursor.close();

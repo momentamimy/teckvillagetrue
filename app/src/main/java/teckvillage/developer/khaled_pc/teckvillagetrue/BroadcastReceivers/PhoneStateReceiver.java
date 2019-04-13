@@ -1,4 +1,4 @@
-package teckvillage.developer.khaled_pc.teckvillagetrue;
+package teckvillage.developer.khaled_pc.teckvillagetrue.BroadcastReceivers;
 
 import android.Manifest;
 import android.app.AlertDialog;
@@ -61,6 +61,10 @@ import java.util.List;
 import java.util.regex.Pattern;
 
 
+import teckvillage.developer.khaled_pc.teckvillagetrue.MainActivity;
+import teckvillage.developer.khaled_pc.teckvillagetrue.Permission;
+import teckvillage.developer.khaled_pc.teckvillagetrue.PopupDialogActivity;
+import teckvillage.developer.khaled_pc.teckvillagetrue.R;
 import teckvillage.developer.khaled_pc.teckvillagetrue.model.Get_Calls_Log;
 import teckvillage.developer.khaled_pc.teckvillagetrue.model.LogInfo;
 import teckvillage.developer.khaled_pc.teckvillagetrue.model.database.Database_Helper;

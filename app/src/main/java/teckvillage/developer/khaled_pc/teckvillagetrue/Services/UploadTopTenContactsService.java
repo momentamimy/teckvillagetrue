@@ -1,4 +1,4 @@
-package teckvillage.developer.khaled_pc.teckvillagetrue;
+package teckvillage.developer.khaled_pc.teckvillagetrue.Services;
 
 import android.content.Context;
 import android.content.Intent;
@@ -8,7 +8,6 @@ import android.util.Log;
 import android.widget.Toast;
 
 import java.util.ArrayList;
-import java.util.List;
 
 import retrofit2.Call;
 import retrofit2.Callback;
@@ -62,6 +61,7 @@ public class UploadTopTenContactsService extends JobIntentService {
         // get file list here
         ArrayList<Send_Top_Ten_Contacts_JSON> list = get_calls_log.getTopTenContactsToServer();
         Send_Top_Ten_Contacts_JSON_Arraylist send_top_ten_contacts_json_arraylist=new Send_Top_Ten_Contacts_JSON_Arraylist();
+        ArrayList<Send_Top_Ten_Contacts_JSON_Arraylist> send_top_ten_contacts_json_arraylistArrayList=new ArrayList<Send_Top_Ten_Contacts_JSON_Arraylist>();
 
         if (list == null||list.size()<0){
             Log.e(TAG, "onHandleWork: Invalid ");
@@ -70,31 +70,32 @@ public class UploadTopTenContactsService extends JobIntentService {
 
 
         ArrayList<String> listss = new ArrayList<String>();
-        listss.add("\"012809456\"");
-        //listss.add("\"010573845\"");
+        listss.add("01280945456");
+        ArrayList<String> listss2 = new ArrayList<String>();
+        listss2.add("0123698745");
+
         for(int i = 0; i< 10; i++){
             Log.w("ohhh", String.valueOf(list.get(i).getId())+" || "+list.get(i).getName()+" || "+ list.get(i).getPhones());
             send_top_ten_contacts_json_arraylist.setId(list.get(i).getId());
-            send_top_ten_contacts_json_arraylist.setName("\"khaled\"");
+            send_top_ten_contacts_json_arraylist.setName(list.get(i).getName());
             send_top_ten_contacts_json_arraylist.setPhones(listss);
-            Log.w("ohhh2", send_top_ten_contacts_json_arraylist.getId()+" || "+send_top_ten_contacts_json_arraylist.getName()+" || "+String.valueOf(send_top_ten_contacts_json_arraylist.getPhones()));
 
-            listts.add(send_top_ten_contacts_json_arraylist);
+            send_top_ten_contacts_json_arraylistArrayList.add(new Send_Top_Ten_Contacts_JSON_Arraylist(list.get(i).getId(),"\"khaled\"",listss));
+
         }
 
+        listts.add(new Send_Top_Ten_Contacts_JSON_Arraylist(1,"mhmaa",listss));
+        listts.add(new Send_Top_Ten_Contacts_JSON_Arraylist(2,"khaled",listss2));
+        listts.add(new Send_Top_Ten_Contacts_JSON_Arraylist(3,"khaledmhmaaa",listss));
 
-      /*  ArrayList<Send_Top_Ten_Contacts_JSON_Arraylist> listts = null;
-        listts.add(new Send_Top_Ten_Contacts_JSON_Arraylist(0,"wla",listss));*/
 
+        //Correct Solution
         datamodel datamodel=new datamodel();
         datamodel.setContacts(listts);
-        Log.w("aaaaaaaa", String.valueOf(datamodel.getContacts()));
-
 
         Retrofit retrofit = retrofitHead.headOfGetorPostReturnRes();
         WhoCallerApi whoCallerApi = retrofit.create(WhoCallerApi.class);
-        Log.w("apiaccesstoken",ApiAccessToken.getAPIaccessToken(getApplicationContext()));
-        Call<ResultModelUploadVCF> uploadVCF = whoCallerApi.UploadTopTenContacts(ApiAccessToken.getAPIaccessToken(getApplicationContext()), datamodel);
+        Call<ResultModelUploadVCF> uploadVCF = whoCallerApi.UploadTopTenContacts("application/json",ApiAccessToken.getAPIaccessToken(getApplicationContext()), datamodel);
 
         uploadVCF.enqueue(new Callback<ResultModelUploadVCF>() {
             @Override

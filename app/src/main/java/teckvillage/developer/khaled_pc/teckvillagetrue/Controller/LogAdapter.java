@@ -1,11 +1,16 @@
 package teckvillage.developer.khaled_pc.teckvillagetrue.Controller;
 
 import android.Manifest;
+import android.app.Activity;
 import android.content.Context;
+import android.content.DialogInterface;
 import android.content.Intent;
 import android.content.pm.PackageManager;
 import android.net.Uri;
+import android.provider.CallLog;
 import android.support.v4.app.ActivityCompat;
+import android.support.v4.content.ContextCompat;
+import android.support.v7.app.AlertDialog;
 import android.support.v7.widget.RecyclerView;
 import android.text.TextUtils;
 import android.util.Log;
@@ -16,9 +21,11 @@ import android.widget.Toast;
 
 import com.squareup.picasso.Picasso;
 
+import java.util.ArrayList;
 import java.util.List;
 
 import teckvillage.developer.khaled_pc.teckvillagetrue.MainActivity;
+import teckvillage.developer.khaled_pc.teckvillagetrue.Make_Phone_Call;
 import teckvillage.developer.khaled_pc.teckvillagetrue.R;
 import teckvillage.developer.khaled_pc.teckvillagetrue.SMS_MessagesChat;
 import teckvillage.developer.khaled_pc.teckvillagetrue.View.LogHolder;
@@ -32,6 +39,8 @@ public class LogAdapter extends RecyclerView.Adapter<LogHolder> {
     private List<LogInfo> itemList;
     private Context context;
     int numofcallvar;
+
+
 
 
     public LogAdapter(Context context, List<LogInfo> itemList) {
@@ -79,19 +88,47 @@ public class LogAdapter extends RecyclerView.Adapter<LogHolder> {
     public void onBindViewHolder(final LogHolder holder, final int position) {
 
 
-
         if (holder.logName != null) {
 
+            //assign long press
+            holder.item.setOnLongClickListener(new View.OnLongClickListener() {
+                @Override
+                public boolean onLongClick(View v) {
+
+                    //check if number  unknown
+                    if(itemList.get(position).getNumber().equals("")){
+                        OptionDialogWhenLongPressForUnknownNumber( itemList.get(position).getLogName(), position);
+                    }else {
+                        OptionDialogWhenLongPress(itemList.get(position).getLogName(),position);
+                    }
+
+                    return false;
+                }
+            });
+
+            //assign long press
+            holder.calllayout.setOnLongClickListener(new View.OnLongClickListener() {
+                @Override
+                public boolean onLongClick(View v) {
+
+                    //check if number unknown
+                    if(itemList.get(position).getNumber().equals("")){
+                        OptionDialogWhenLongPressForUnknownNumber( itemList.get(position).getLogName(), position);
+                    }else {
+                        OptionDialogWhenLongPress(itemList.get(position).getLogName(),position);
+                    }
+
+                    return false;
+                }
+            });
 
             numofcallvar=itemList.get(position).getNumberofcall();
 
             if(itemList.get(position).getNumberofcall()==1){
                 holder.numbersofcallinminte.setVisibility(View.GONE);
-
             }else {
                 holder.numbersofcallinminte.setVisibility(View.VISIBLE);
                 holder.numbersofcallinminte.setText("("+itemList.get(position).getNumberofcall()+")");
-
             }
 
 
@@ -99,21 +136,14 @@ public class LogAdapter extends RecyclerView.Adapter<LogHolder> {
                 @Override
                 public void onClick(View v) {
 
-                        Intent intent = new Intent(Intent.ACTION_CALL);
-                        intent.setData(Uri.parse("tel:" + itemList.get(position).getNumber()));
-                        if (ActivityCompat.checkSelfPermission(context, Manifest.permission.CALL_PHONE) != PackageManager.PERMISSION_GRANTED) {
-                            // TODO: Consider calling
-                            //    ActivityCompat#requestPermissions
-                            // here to request the missing permissions, and then overriding
-                            //   public void onRequestPermissionsResult(int requestCode, String[] permissions,
-                            //                                          int[] grantResults)
-                            // to handle the case where the user grants the permission. See the documentation
-                            // for ActivityCompat#requestPermissions for more details.
-                            return;
-                        }
 
-                       context.startActivity(intent);
-
+                    if (ContextCompat.checkSelfPermission(context, Manifest.permission.CALL_PHONE) != PackageManager.PERMISSION_GRANTED) {
+                        ActivityCompat.requestPermissions((Activity) context, new String[]{Manifest.permission.CALL_PHONE},12);
+                    }
+                    else
+                    {
+                        Make_Phone_Call.makephonecall(context,itemList.get(position).getNumber());
+                    }
 
                 }
             });
@@ -215,6 +245,66 @@ public class LogAdapter extends RecyclerView.Adapter<LogHolder> {
     }
 
 
+
+
+    private void OptionDialogWhenLongPress(String title, final int position){
+        final String[] Option = {"Edit number before call", "Delete from call log"};
+
+        final AlertDialog.Builder builder = new AlertDialog.Builder(context);
+        builder.setTitle(title);
+        builder.setItems(Option, new DialogInterface.OnClickListener() {
+            @Override
+            public void onClick(DialogInterface dialog, int which) {
+                // the user clicked on colors[which]
+                if(Option[which].equals("Edit number before call")){
+                  //open Dialer padd and set number
+                    String number =itemList.get(position).getNumber();
+                    Log.w("nmindialerpad",number);
+
+                }else if(Option[which].equals("Delete from call log")) {
+                    DeleteCallLogByCall_ID(itemList.get(position).getCall_idarray());
+                }
+
+            }
+        });
+        builder.show();
+
+    }
+
+    private void OptionDialogWhenLongPressForUnknownNumber(String title, final int position){
+        final String[] Option = { "Delete from call log"};
+
+        final AlertDialog.Builder builder = new AlertDialog.Builder(context);
+        builder.setTitle(title);
+        builder.setItems(Option, new DialogInterface.OnClickListener() {
+            @Override
+            public void onClick(DialogInterface dialog, int which) {
+                // the user clicked on Option[which]
+               if(Option[which].equals("Delete from call log")) {
+                   DeleteCallLogByCall_ID(itemList.get(position).getCall_idarray());
+                }
+
+            }
+        });
+        builder.show();
+
+    }
+
+
+
+    //For delette speific number from call log
+    private void DeleteCallLogByCall_ID(ArrayList<Long> arrayList) {
+        try {
+            for (int i = 0; i < arrayList.size(); i++) {
+                context.getContentResolver().delete(Uri.withAppendedPath(CallLog.Calls.CONTENT_URI, String.valueOf( arrayList.get(i))), "", null);
+            }
+            notifyDataSetChanged();
+        }
+        catch (Exception ex) {
+            System.out.print("Exception here "+ex.getMessage());
+            ex.printStackTrace();
+        }
+    }
 
 
 }

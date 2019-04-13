@@ -4,7 +4,7 @@
     android:layout_height="match_parent"
     android:id="@+id/missed_layout"
     xmlns:app="http://schemas.android.com/apk/res-auto"
-    tools:context="teckvillage.developer.khaled_pc.teckvillagetrue.View.Missed_Call_fragment">
+    tools:context="teckvillage.developer.khaled_pc.teckvillagetrue.View.Fragments.MainActivityOptionFragments.Missed_Call_fragment">
 
     <android.support.design.widget.CoordinatorLayout
         android:id="@+id/search_call_layout"

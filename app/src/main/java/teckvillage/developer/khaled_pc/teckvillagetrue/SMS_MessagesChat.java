@@ -15,7 +15,6 @@ import android.database.Cursor;
 import android.database.sqlite.SQLiteException;
 import android.net.Uri;
 import android.os.Build;
-import android.os.IBinder;
 import android.provider.Telephony;
 import android.support.design.widget.FloatingActionButton;
 import android.support.v4.app.ActivityCompat;
@@ -25,7 +24,6 @@ import android.os.Bundle;
 import android.support.v7.widget.LinearLayoutManager;
 import android.support.v7.widget.PopupMenu;
 import android.support.v7.widget.RecyclerView;
-import android.support.v7.widget.Toolbar;
 import android.telephony.SmsManager;
 import android.telephony.SubscriptionInfo;
 import android.telephony.SubscriptionManager;
@@ -40,8 +38,6 @@ import android.widget.RelativeLayout;
 import android.widget.TextView;
 import android.widget.Toast;
 
-import java.lang.reflect.InvocationTargetException;
-import java.lang.reflect.Method;
 import java.util.ArrayList;
 import java.util.Calendar;
 import java.util.Collections;
@@ -49,12 +45,9 @@ import java.util.Comparator;
 import java.util.List;
 
 import de.hdodenhof.circleimageview.CircleImageView;
-import teckvillage.developer.khaled_pc.teckvillagetrue.Controller.Receiver;
-import teckvillage.developer.khaled_pc.teckvillagetrue.model.MessageInfo;
+import teckvillage.developer.khaled_pc.teckvillagetrue.BroadcastReceivers.Receiver;
+import teckvillage.developer.khaled_pc.teckvillagetrue.Controller.messages_list_adapter;
 
-import static teckvillage.developer.khaled_pc.teckvillagetrue.FragMessageContact.allMessageContactInfos;
-import static teckvillage.developer.khaled_pc.teckvillagetrue.FragMessageOthers.allMessageOtherInfos;
-import static teckvillage.developer.khaled_pc.teckvillagetrue.FragMessageSpam.allMessageSpamInfos;
 import static teckvillage.developer.khaled_pc.teckvillagetrue.Message_Fragment.SMSCHANGE;
 
 public class SMS_MessagesChat extends AppCompatActivity {

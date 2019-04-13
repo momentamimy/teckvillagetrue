@@ -1,4 +1,4 @@
-package teckvillage.developer.khaled_pc.teckvillagetrue;
+package teckvillage.developer.khaled_pc.teckvillagetrue.Controller;
 
 import android.Manifest;
 import android.app.Activity;
@@ -16,7 +16,6 @@ import android.database.Cursor;
 import android.database.sqlite.SQLiteException;
 import android.graphics.Color;
 import android.graphics.drawable.ColorDrawable;
-import android.graphics.drawable.Drawable;
 import android.net.Uri;
 import android.os.Build;
 import android.provider.Telephony;
@@ -47,7 +46,10 @@ import java.util.Comparator;
 import java.util.Date;
 import java.util.List;
 
-import teckvillage.developer.khaled_pc.teckvillagetrue.Controller.Receiver;
+import teckvillage.developer.khaled_pc.teckvillagetrue.BroadcastReceivers.Receiver;
+import teckvillage.developer.khaled_pc.teckvillagetrue.R;
+import teckvillage.developer.khaled_pc.teckvillagetrue.TelephonyInfo;
+import teckvillage.developer.khaled_pc.teckvillagetrue.sms_messages_model;
 
 import static android.content.Context.ALARM_SERVICE;
 import static android.content.Context.MODE_PRIVATE;

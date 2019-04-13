@@ -42,7 +42,8 @@ import java.util.Comparator;
 import java.util.List;
 
 import de.hdodenhof.circleimageview.CircleImageView;
-import teckvillage.developer.khaled_pc.teckvillagetrue.Controller.Receiver;
+import teckvillage.developer.khaled_pc.teckvillagetrue.BroadcastReceivers.Receiver;
+import teckvillage.developer.khaled_pc.teckvillagetrue.Controller.messages_list_adapter;
 
 public class Chat_MessagesChat extends AppCompatActivity {
 

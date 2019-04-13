@@ -35,6 +35,9 @@ import android.widget.TextView;
 import com.intrusoft.squint.DiagonalView;
 
 import de.hdodenhof.circleimageview.CircleImageView;
+import teckvillage.developer.khaled_pc.teckvillagetrue.model.SharedPreference.getSharedPreferenceValue;
+
+import static teckvillage.developer.khaled_pc.teckvillagetrue.MainActivity.decodeBase64;
 
 public class UserProfileActivity extends AppCompatActivity {
     //CONTACT
@@ -43,15 +46,32 @@ public class UserProfileActivity extends AppCompatActivity {
     //ABOUT
     RelativeLayout info_Edit_Layout;
     LinearLayout info_Gender_Layout;
+    TextView setphonenumber,address,email,website,shortnote,gender;
 
     DiagonalView diagonalView;
     CircleImageView userPhoto;
+    String USer_Image,UserName,UserEmail;
     @Override
     protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
         setContentView(R.layout.activity_user_profile);
         diagonalView=findViewById(R.id.diagonal);
         userPhoto=findViewById(R.id.UserPhoto);
+        setphonenumber=findViewById(R.id.phone_number);
+        email=findViewById(R.id.Email);
+
+        UserName=getSharedPreferenceValue.getUserName(this);
+
+        //retrieve image
+         USer_Image= getSharedPreferenceValue.getUserImage(this);
+
+        //Check if User Not have Image
+        if(USer_Image.equals("NoImageHere")){
+            userPhoto.setImageDrawable(getResources().getDrawable(R.drawable.ic_nurse));
+        }else {
+            userPhoto.setImageBitmap(decodeBase64(USer_Image));
+        }
+
 
         //CONTACT
         Phone_Edit_Layout=findViewById(R.id.Phone_Edit_Layout);
@@ -63,6 +83,21 @@ public class UserProfileActivity extends AppCompatActivity {
         info_Edit_Layout=findViewById(R.id.info_Edit_Layout);
         info_Gender_Layout=findViewById(R.id.info_Gender_Layout);
 
+        String PhoneNumber=getSharedPreferenceValue.getUserPhoneNumber(this);
+        //Check if Phone number not found
+        if(PhoneNumber.equals("NoValueStored")){
+            setphonenumber.setText("Phone Number");
+        }else {
+            setphonenumber.setText(PhoneNumber);
+        }
+
+        UserEmail=getSharedPreferenceValue.getUserEmail(this);
+        //Check if Phone number not found
+        if(UserEmail.equals("NoValueStored")){
+            email.setText("Email@gmail.com");
+        }else {
+            email.setText(UserEmail);
+        }
 
         //CONTACT
         Phone_Edit_Layout.setOnClickListener(new View.OnClickListener() {
@@ -107,7 +142,7 @@ public class UserProfileActivity extends AppCompatActivity {
 
 
             BlurBuilder blurBuilder=new BlurBuilder();
-            Bitmap resultBmp = blurBuilder.blur(this, BitmapFactory.decodeResource(getResources(), R.drawable.tamimy));
+            Bitmap resultBmp = blurBuilder.blur(this,decodeBase64(USer_Image) );//BitmapFactory.decodeResource(getResources(), R.drawable.tamimy)
             diagonalView.setImageBitmap(resultBmp);
 
 

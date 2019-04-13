@@ -169,6 +169,7 @@
             android:layout_height="wrap_content"
             android:layout_centerInParent="true"
             android:textColor="#919ca1"
+            android:visibility="gone"
             android:text="No Log Call"
             android:textSize="22sp"
             />

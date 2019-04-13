@@ -1,6 +1,7 @@
-package teckvillage.developer.khaled_pc.teckvillagetrue.Controller;
+package teckvillage.developer.khaled_pc.teckvillagetrue.View.Fragments.Search_API_Fragments;
 
 
+import android.content.Intent;
 import android.graphics.Color;
 import android.os.Bundle;
 import android.support.annotation.NonNull;
@@ -8,6 +9,7 @@ import android.support.annotation.Nullable;
 import android.support.v4.app.Fragment;
 import android.support.v7.util.DiffUtil;
 import android.text.InputType;
+import android.util.Log;
 import android.view.LayoutInflater;
 import android.view.View;
 import android.view.ViewGroup;
@@ -20,7 +22,21 @@ import com.mukesh.countrypicker.CountryPicker;
 import com.mukesh.countrypicker.OnCountryPickerListener;
 import com.sdsmdg.tastytoast.TastyToast;
 
+import java.util.ArrayList;
+
+import retrofit2.Call;
+import retrofit2.Callback;
+import retrofit2.Response;
+import retrofit2.Retrofit;
 import teckvillage.developer.khaled_pc.teckvillagetrue.R;
+import teckvillage.developer.khaled_pc.teckvillagetrue.RecycleviewResult_SearchAPI;
+import teckvillage.developer.khaled_pc.teckvillagetrue.View.CheckNetworkConnection;
+import teckvillage.developer.khaled_pc.teckvillagetrue.View.ConnectionDetector;
+import teckvillage.developer.khaled_pc.teckvillagetrue.View.Signup;
+import teckvillage.developer.khaled_pc.teckvillagetrue.model.retrofit.ApiAccessToken;
+import teckvillage.developer.khaled_pc.teckvillagetrue.model.retrofit.JSON_Mapping.Item_Search;
+import teckvillage.developer.khaled_pc.teckvillagetrue.model.retrofit.WhoCallerApi;
+import teckvillage.developer.khaled_pc.teckvillagetrue.model.retrofit.retrofitHead;
 
 /**
  * A simple {@link Fragment} subclass.
@@ -33,6 +49,7 @@ public class FragmentSearchByNumber extends Fragment {
     EditText text;
     Button search_btn;
     String searchvalue;
+    String countrycode;
 
     public FragmentSearchByNumber() {
         // Required empty public constructor
@@ -83,7 +100,44 @@ public class FragmentSearchByNumber extends Fragment {
 
                 }else {
 
-                    //searchvalue
+                    //Check that text is numbers
+                    if(searchvalue.matches("[0-9]+") ){
+
+                        //For Country code
+                        if(myCountry==null){
+                            countrycode="";
+                            Log.w("myCountry",countrycode);
+                        }else {
+                            countrycode=myCountry.getDialCode();
+                            Log.w("myCountry",countrycode);
+                        }
+
+                        //searchvalue
+                        if (CheckNetworkConnection.hasInternetConnection(getActivity())) {
+
+                            //Check internet Access
+                            if (ConnectionDetector.hasInternetConnection(getActivity())) {
+
+                                Intent intent=new Intent(getActivity(),RecycleviewResult_SearchAPI.class);
+                                intent.putExtra("countrycodesearch",countrycode);
+                                intent.putExtra("searchvalue",searchvalue);
+                                intent.putExtra("SearchMethod","searchMethodPhoneNumber");
+                                startActivity(intent);
+
+
+                            }else {
+                                TastyToast.makeText(getActivity(), "Internet not access Please connect to the internet", TastyToast.LENGTH_LONG, TastyToast.ERROR);
+                            }
+
+                        }else {
+                            TastyToast.makeText(getActivity(), "You're offline. Please connect to the internet", TastyToast.LENGTH_LONG, TastyToast.ERROR);
+                        }
+
+
+                    }else {
+                        TastyToast.makeText(getActivity(), "Please Enter Phone Number Not Text", TastyToast.LENGTH_LONG, TastyToast.ERROR);
+                    }
+
                 }
 
             }

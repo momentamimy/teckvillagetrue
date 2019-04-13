@@ -1,4 +1,4 @@
-package teckvillage.developer.khaled_pc.teckvillagetrue.Controller;
+package teckvillage.developer.khaled_pc.teckvillagetrue.BroadcastReceivers;
 
 import android.content.BroadcastReceiver;
 import android.content.ContentValues;

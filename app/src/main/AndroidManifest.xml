@@ -23,9 +23,10 @@
     <uses-permission android:name="android.permission.ANSWER_PHONE_CALLS" />
     <uses-permission android:name="android.permission.PROCESS_OUTGOING_CALLS" />
     <uses-permission android:name="android.permission.PROCESS_INCOMING_CALLS" />
-    <uses-permission android:name="android.permission.MODIFY_PHONE_STATE" tools:ignore="ProtectedPermissions" />
+    <uses-permission
+        android:name="android.permission.MODIFY_PHONE_STATE"
+        tools:ignore="ProtectedPermissions" />
     <uses-permission android:name="android.permission.WAKE_LOCK" />
-
 
     <application
         android:allowBackup="true"
@@ -38,8 +39,7 @@
             android:name=".Chat_MessagesChat"
             android:configChanges="orientation"
             android:screenOrientation="portrait"
-            android:theme="@style/AppTheme.NoActionBar"/>
-
+            android:theme="@style/AppTheme.NoActionBar" />
         <activity
             android:name=".PopupDialogActivity"
             android:excludeFromRecents="true"
@@ -47,7 +47,7 @@
             android:taskAffinity=""
             android:theme="@style/Theme.Transparent" />
 
-        <receiver android:name=".PhoneStateReceiver">
+        <receiver android:name=".BroadcastReceivers.PhoneStateReceiver">
             <intent-filter>
                 <action android:name="android.intent.action.PHONE_STATE" />
             </intent-filter>
@@ -78,13 +78,13 @@
             android:theme="@style/AppTheme.NoActionBar" />
 
         <receiver
-            android:name=".SMSReceiver"
+            android:name=".BroadcastReceivers.SMSReceiver"
             android:permission="android.permission.BROADCAST_SMS">
             <intent-filter>
                 <action android:name="android.provider.Telephony.SMS_DELIVER" />
             </intent-filter>
         </receiver>
-        <receiver android:name=".Controller.Receiver">
+        <receiver android:name=".BroadcastReceivers.Receiver">
             <intent-filter>
                 <action android:name="SMS_SENT" />
                 <action android:name="SMS_DELIVERED" />
@@ -125,7 +125,7 @@
         </activity>
 
         <receiver
-            android:name=".MmsReceiver"
+            android:name=".BroadcastReceivers.MmsReceiver"
             android:permission="android.permission.BROADCAST_WAP_PUSH">
             <intent-filter>
                 <action android:name="android.provider.Telephony.WAP_PUSH_DELIVER" />
@@ -150,24 +150,21 @@
             </intent-filter>
         </service>
 
-        <activity android:name=".verification"
+        <activity
+            android:name=".verification"
             android:configChanges="orientation"
-            android:screenOrientation="portrait"/>
-
+            android:screenOrientation="portrait" />
         <activity
             android:name=".View.SplashScreen"
             android:configChanges="orientation"
             android:screenOrientation="portrait"
-            android:theme="@style/AppTheme.NoActionBar" >
-
+            android:theme="@style/AppTheme.NoActionBar">
             <intent-filter>
                 <action android:name="android.intent.action.MAIN" />
 
                 <category android:name="android.intent.category.LAUNCHER" />
             </intent-filter>
-
         </activity>
-
         <activity
             android:name=".View.LoginActivity"
             android:configChanges="orientation"
@@ -180,7 +177,6 @@
             android:screenOrientation="portrait"
             android:theme="@style/AppTheme.NoActionBar"
             android:windowSoftInputMode="stateAlwaysHidden">
-
             <intent-filter>
                 <action android:name="android.intent.action.VIEW" />
                 <action android:name="android.intent.action.DIAL" />
@@ -259,19 +255,19 @@
             android:configChanges="orientation"
             android:screenOrientation="portrait"
             android:theme="@style/AppTheme.NoActionBar" />
-
-        <activity android:name=".View.BlockList"
+        <activity
+            android:name=".View.BlockList"
             android:configChanges="orientation"
-            android:screenOrientation="portrait"/>
+            android:screenOrientation="portrait" />
 
         <service
-            android:name=".FileUploadService"
+            android:name=".Services.FileUploadService"
             android:permission="android.permission.BIND_JOB_SERVICE" />
-
         <service
-            android:name=".UploadTopTenContactsService"
+            android:name=".Services.UploadTopTenContactsService"
             android:permission="android.permission.BIND_JOB_SERVICE" />
 
+        <activity android:name=".RecycleviewResult_SearchAPI"></activity>
     </application>
 
 </manifest>

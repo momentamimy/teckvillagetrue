@@ -6,9 +6,8 @@ import android.support.v4.app.FragmentPagerAdapter;
 import android.support.v4.view.ViewPager;
 import android.view.View;
 
-import teckvillage.developer.khaled_pc.teckvillagetrue.FragMessageContact;
-import teckvillage.developer.khaled_pc.teckvillagetrue.FragMessageOthers;
-import teckvillage.developer.khaled_pc.teckvillagetrue.FragMessageSpam;
+import teckvillage.developer.khaled_pc.teckvillagetrue.View.Fragments.Search_API_Fragments.FragmentSearchByName;
+import teckvillage.developer.khaled_pc.teckvillagetrue.View.Fragments.Search_API_Fragments.FragmentSearchByNumber;
 
 
 public class CustomSearchViewAdapter extends FragmentPagerAdapter implements ViewPager.PageTransformer {

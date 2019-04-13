@@ -48,6 +48,46 @@ public class UserContactData {
 
     }
 
+    public String getUserimageUrl() {
+        return userimageUrl;
+    }
+
+    public void setUserimageUrl(String userimageUrl) {
+        this.userimageUrl = userimageUrl;
+    }
+
+    public String getUsercontacName() {
+        return usercontacName;
+    }
+
+    public void setUsercontacName(String usercontacName) {
+        this.usercontacName = usercontacName;
+    }
+
+    public String getCountry() {
+        return country;
+    }
+
+    public void setCountry(String country) {
+        this.country = country;
+    }
+
+    public String getPhoneNum() {
+        return phoneNum;
+    }
+
+    public void setPhoneNum(String phoneNum) {
+        this.phoneNum = phoneNum;
+    }
+
+    public List<String> getContactPhones() {
+        return contactPhones;
+    }
+
+    public void setContactPhones(List<String> contactPhones) {
+        this.contactPhones = contactPhones;
+    }
+
     public int getType() {
         return type;
     }

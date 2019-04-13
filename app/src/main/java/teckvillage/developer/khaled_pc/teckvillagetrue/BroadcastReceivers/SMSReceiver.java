@@ -1,4 +1,4 @@
-package teckvillage.developer.khaled_pc.teckvillagetrue;
+package teckvillage.developer.khaled_pc.teckvillagetrue.BroadcastReceivers;
 
 import android.annotation.TargetApi;
 import android.app.ActivityManager;
@@ -20,6 +20,10 @@ import android.telephony.SmsMessage;
 
 
 import java.util.List;
+
+import teckvillage.developer.khaled_pc.teckvillagetrue.MainActivity;
+import teckvillage.developer.khaled_pc.teckvillagetrue.R;
+import teckvillage.developer.khaled_pc.teckvillagetrue.SMS_MessagesChat;
 
 import static android.content.Context.MODE_PRIVATE;
 import static teckvillage.developer.khaled_pc.teckvillagetrue.Message_Fragment.SMSCHANGE;
