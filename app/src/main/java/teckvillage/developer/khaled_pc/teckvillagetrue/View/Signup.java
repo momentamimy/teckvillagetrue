@@ -47,6 +47,7 @@ import com.google.android.gms.auth.api.signin.GoogleSignInClient;
 import com.google.android.gms.auth.api.signin.GoogleSignInOptions;
 import com.google.android.gms.common.api.ApiException;
 import com.google.android.gms.tasks.Task;
+import com.google.firebase.iid.FirebaseInstanceId;
 import com.jaredrummler.android.device.DeviceName;
 import com.sdsmdg.tastytoast.TastyToast;
 import com.squareup.picasso.Picasso;
@@ -75,8 +76,11 @@ import retrofit2.Response;
 import retrofit2.Retrofit;
 import teckvillage.developer.khaled_pc.teckvillagetrue.MainActivity;
 import teckvillage.developer.khaled_pc.teckvillagetrue.R;
+import teckvillage.developer.khaled_pc.teckvillagetrue.model.retrofit.ApiAccessToken;
 import teckvillage.developer.khaled_pc.teckvillagetrue.model.retrofit.JSON_Mapping.DataReceived;
 import teckvillage.developer.khaled_pc.teckvillagetrue.model.retrofit.JSON_Mapping.ResultModel;
+import teckvillage.developer.khaled_pc.teckvillagetrue.model.retrofit.JSON_Mapping.TokenBodyModel;
+import teckvillage.developer.khaled_pc.teckvillagetrue.model.retrofit.JSON_Mapping.TokenDataReceived;
 import teckvillage.developer.khaled_pc.teckvillagetrue.model.retrofit.WhoCallerApi;
 import teckvillage.developer.khaled_pc.teckvillagetrue.model.retrofit.retrofitHead;
 
@@ -323,6 +327,10 @@ public class Signup extends AppCompatActivity {
                                                 SharedPreferences.Editor editor = sharedPref.edit();
                                                 editor.putBoolean("UserLogin", true);
 
+                                                if (user.getId()!=0)
+                                                {
+                                                    editor.putInt("User_ID", user.getId());
+                                                }
                                                 if(user.getApi_token()!=null) {
                                                     editor.putString("User_API_token", user.getApi_token());
                                                 }
@@ -338,6 +346,8 @@ public class Signup extends AppCompatActivity {
                                                 editor.putString("User_img_profile", UserProfImgInString);
                                                 editor.apply();
 
+                                                //uploadFirebaseToken
+                                                uploadFirebaseToken();
 
                                                 //Close open MainActivity
                                                 Intent intent = new Intent(getApplicationContext(), MainActivity.class);
@@ -765,4 +775,31 @@ public class Signup extends AppCompatActivity {
                 .decodeByteArray(decodedByte, 0, decodedByte.length);
     }
 
+    public void uploadFirebaseToken()
+    {
+        if (CheckNetworkConnection.hasInternetConnection(Signup.this)) {
+
+            //Check internet Access
+            if (ConnectionDetector.hasInternetConnection(Signup.this)) {
+                Retrofit retrofit = retrofitHead.headOfGetorPostReturnRes();
+                WhoCallerApi whoCallerApi = retrofit.create(WhoCallerApi.class);
+                Call<TokenDataReceived> tokenDataReceivedCall = whoCallerApi.uploadFirbaseToken(ApiAccessToken.getAPIaccessToken(Signup.this), new TokenBodyModel(FirebaseInstanceId.getInstance().getToken()));
+
+                tokenDataReceivedCall.enqueue(new Callback<TokenDataReceived>() {
+                    @Override
+                    public void onResponse(Call<TokenDataReceived> call, Response<TokenDataReceived> response) {
+                        if (response.isSuccessful())
+                        {
+                            Log.d("dadaadwwqfz",response.body().getMsg());
+                        }
+                    }
+
+                    @Override
+                    public void onFailure(Call<TokenDataReceived> call, Throwable t) {
+
+                    }
+                });
+            }
+        }
+    }
 }

@@ -19,6 +19,7 @@ import android.support.v4.app.NotificationCompat;
 import android.telephony.SmsMessage;
 
 
+import java.util.ArrayList;
 import java.util.List;
 
 import teckvillage.developer.khaled_pc.teckvillagetrue.MainActivity;
@@ -54,12 +55,13 @@ public class SMSReceiver extends BroadcastReceiver{
 //this will update the UI with message
 
     }
+
     private void notification(String message, String sender, Context context){
         SMSCHANGE=true;
         //FragMessageOthers.instance().refreshSmsInbox();
         //SMS_MessagesChat.instance().refresh();
         Intent intent;
-        PendingIntent pendingIntent;
+        PendingIntent pendingIntent = null;
         NotificationCompat.Builder builder;
         if (notifManager == null) {
             notifManager = (NotificationManager) context.getSystemService
@@ -88,6 +90,7 @@ public class SMSReceiver extends BroadcastReceiver{
                     .setSmallIcon (R.drawable.logo_notification) // required
                     .setContentText (message)  // required
                     .setDefaults (Notification.DEFAULT_ALL)
+                    .setGroup("messages")
                     .setAutoCancel (true)
                     .setColor((context.getResources().getColor(R.color.colorPrimary)))
                     .setContentIntent (pendingIntent)
@@ -103,6 +106,7 @@ public class SMSReceiver extends BroadcastReceiver{
             Uri sound= RingtoneManager.getDefaultUri(RingtoneManager.TYPE_NOTIFICATION);
             builder.setSmallIcon(R.drawable.logo);
             builder.setContentTitle(sender);
+            builder.setGroup("messages");
             builder.setContentText(message);
             builder.setColor((context.getResources().getColor(R.color.colorPrimary)));
             builder.setSound(sound);
@@ -122,10 +126,29 @@ public class SMSReceiver extends BroadcastReceiver{
             }
 
         }
+
+        NotificationCompat.Builder summaryBuilder = new NotificationCompat.Builder(context, "0");
+                summaryBuilder.setSmallIcon(R.drawable.logo_notification)
+                .setContentIntent(pendingIntent)
+                .setPriority(NotificationCompat.PRIORITY_LOW)
+                .setColor((context.getResources().getColor(R.color.colorPrimary)))
+                .setGroup("messages")
+                .setGroupAlertBehavior(NotificationCompat.GROUP_ALERT_CHILDREN)
+                .setGroupSummary(true)
+                .build();
+        if (android.os.Build.VERSION.SDK_INT >= android.os.Build.VERSION_CODES.JELLY_BEAN) {
+            NotificationCompat.InboxStyle inboxStyle = new NotificationCompat.InboxStyle();
+            inboxStyle.addLine(sender+" "+message);
+            inboxStyle.setSummaryText("SMS Messages");
+            summaryBuilder.setStyle(inboxStyle);
+        }
+        Notification summaryNotification = summaryBuilder.build();
+
+
         Notification notification = builder.build ();
         int id = (int) System.currentTimeMillis();
         notifManager.notify (id, notification);
-
+        notifManager.notify(444,summaryNotification);
     }
 
     public static boolean isAppRunning(Context context) {

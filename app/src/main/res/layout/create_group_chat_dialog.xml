@@ -1,0 +1,95 @@
+<?xml version="1.0" encoding="utf-8"?>
+
+
+    <android.support.v7.widget.CardView
+        xmlns:android="http://schemas.android.com/apk/res/android"
+        xmlns:app="http://schemas.android.com/apk/res-auto"
+        app:cardBackgroundColor="@android:color/white"
+        android:layout_centerInParent="true"
+        android:layout_width="match_parent"
+        android:layout_height="wrap_content"
+    android:layout_margin="20dp"
+        app:cardCornerRadius="10dp"
+        app:cardElevation="5dp">
+        <RelativeLayout
+            android:layout_width="match_parent"
+            android:layout_height="wrap_content"
+            android:orientation="vertical">
+            <TextView
+                android:background="@color/colorPrimary"
+                android:id="@+id/Group_title"
+                android:layout_width="match_parent"
+                android:layout_height="wrap_content"
+                android:textColor="#fff"
+                android:textSize="20dp"
+                android:textStyle="bold"
+                android:padding="15dp"
+                android:text="Create group chat"/>
+
+            <LinearLayout
+                android:orientation="vertical"
+                android:layout_below="@id/Group_title"
+                android:layout_width="match_parent"
+                android:layout_height="wrap_content">
+
+                <android.support.design.widget.TextInputLayout
+                    android:layout_marginTop="10dp"
+                    android:layout_marginLeft="10dp"
+                    android:layout_marginRight="10dp"
+                    android:id="@+id/input_layout_Group"
+                    android:theme="@style/TextLabe3"
+                    android:layout_width="match_parent"
+                    android:layout_height="wrap_content"
+                    app:errorTextAppearance="@style/WelcomeErrorAppearance">
+
+                    <EditText
+                        android:textColor="@color/colorPrimary"
+                        android:id="@+id/edit_Group"
+                        android:drawablePadding="10dp"
+                        android:layout_width="match_parent"
+                        android:layout_height="wrap_content"
+                        android:textSize="16sp"
+                        android:maxLines="1"
+                        android:inputType="text"
+                        android:singleLine="true"
+                        android:hint="Group Name" />
+                </android.support.design.widget.TextInputLayout>
+
+
+                <RelativeLayout
+                    android:layout_width="match_parent"
+                    android:layout_height="wrap_content"
+                    android:gravity="end"
+                    android:layout_marginTop="5dp"
+                    android:layout_marginBottom="5dp">
+
+                    <TextView
+                        android:background="?android:attr/selectableItemBackground"
+                        android:padding="5dp"
+                        android:id="@+id/btn_submit"
+                        android:layout_width="70dp"
+                        android:text="ok"
+                        android:layout_margin="10dp"
+                        android:layout_toEndOf="@+id/btn_close"
+                        android:textColor="@color/colorPrimary"
+                        android:textSize="16sp"
+                        android:layout_height="30dp"
+                        android:layout_toRightOf="@+id/btn_close" />
+
+                    <TextView
+                        android:background="?android:attr/selectableItemBackground"
+                        android:padding="5dp"
+                        android:id="@+id/btn_close"
+                        android:layout_width="wrap_content"
+                        android:layout_height="wrap_content"
+                        android:text="canel"
+                        android:textSize="16sp"
+                        android:textColor="@color/colorPrimary"
+                        android:layout_marginTop="10dp"
+                        android:layout_marginHorizontal="30dp" />
+                </RelativeLayout>
+
+            </LinearLayout>
+
+        </RelativeLayout>
+    </android.support.v7.widget.CardView>

@@ -5,8 +5,6 @@ import android.app.ProgressDialog;
 import android.content.Context;
 import android.content.ContextWrapper;
 import android.content.DialogInterface;
-import android.content.Intent;
-import android.content.SharedPreferences;
 import android.graphics.Bitmap;
 import android.graphics.BitmapFactory;
 import android.graphics.Canvas;
@@ -23,8 +21,6 @@ import android.renderscript.Allocation;
 import android.renderscript.Element;
 import android.renderscript.RenderScript;
 import android.renderscript.ScriptIntrinsicBlur;
-import android.support.annotation.RequiresApi;
-import android.support.design.widget.TextInputLayout;
 import android.support.v7.app.AlertDialog;
 import android.support.v7.app.AppCompatActivity;
 import android.os.Bundle;
@@ -58,23 +54,14 @@ import me.kaede.tagview.TagView;
 import okhttp3.MediaType;
 import okhttp3.MultipartBody;
 import okhttp3.RequestBody;
-import retrofit2.Call;
-import retrofit2.Callback;
-import retrofit2.Response;
 import retrofit2.Retrofit;
 import teckvillage.developer.khaled_pc.teckvillagetrue.View.CheckNetworkConnection;
 import teckvillage.developer.khaled_pc.teckvillagetrue.View.ConnectionDetector;
-import teckvillage.developer.khaled_pc.teckvillagetrue.View.Signup;
-import teckvillage.developer.khaled_pc.teckvillagetrue.View.SplashScreen;
 import teckvillage.developer.khaled_pc.teckvillagetrue.model.SharedPreference.getSharedPreferenceValue;
-import teckvillage.developer.khaled_pc.teckvillagetrue.model.retrofit.ApiAccessToken;
-import teckvillage.developer.khaled_pc.teckvillagetrue.model.retrofit.JSON_Mapping.DataReceived;
-import teckvillage.developer.khaled_pc.teckvillagetrue.model.retrofit.JSON_Mapping.ResultModel;
 import teckvillage.developer.khaled_pc.teckvillagetrue.model.retrofit.WhoCallerApi;
 import teckvillage.developer.khaled_pc.teckvillagetrue.model.retrofit.retrofitHead;
 
 import static teckvillage.developer.khaled_pc.teckvillagetrue.MainActivity.decodeBase64;
-import static teckvillage.developer.khaled_pc.teckvillagetrue.View.Signup.encodeTobase64;
 
 public class UserProfileActivity extends AppCompatActivity {
     //CONTACT

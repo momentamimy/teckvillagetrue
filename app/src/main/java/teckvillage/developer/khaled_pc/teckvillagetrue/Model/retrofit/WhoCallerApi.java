@@ -1,6 +1,7 @@
 package teckvillage.developer.khaled_pc.teckvillagetrue.model.retrofit;
 
 import java.util.ArrayList;
+import java.util.List;
 
 import okhttp3.MultipartBody;
 import okhttp3.RequestBody;
@@ -8,6 +9,7 @@ import retrofit2.Call;
 import retrofit2.http.Body;
 import retrofit2.http.Field;
 import retrofit2.http.FormUrlEncoded;
+
 import retrofit2.http.GET;
 import retrofit2.http.Header;
 import retrofit2.http.Multipart;
@@ -21,6 +23,18 @@ import teckvillage.developer.khaled_pc.teckvillagetrue.model.retrofit.JSON_Mappi
 import teckvillage.developer.khaled_pc.teckvillagetrue.model.retrofit.JSON_Mapping.Send_Top_Ten_Contacts_JSON_Arraylist;
 import teckvillage.developer.khaled_pc.teckvillagetrue.model.retrofit.JSON_Mapping.datamodel;
 
+import retrofit2.http.Query;
+import teckvillage.developer.khaled_pc.teckvillagetrue.model.retrofit.JSON_Mapping.DataReceived;
+import teckvillage.developer.khaled_pc.teckvillagetrue.model.retrofit.JSON_Mapping.GroupBodyModel;
+import teckvillage.developer.khaled_pc.teckvillagetrue.model.retrofit.JSON_Mapping.GroupChatResultModel;
+import teckvillage.developer.khaled_pc.teckvillagetrue.model.retrofit.JSON_Mapping.ListMessagesChatModel;
+import teckvillage.developer.khaled_pc.teckvillagetrue.model.retrofit.JSON_Mapping.MessageBodyModel;
+import teckvillage.developer.khaled_pc.teckvillagetrue.model.retrofit.JSON_Mapping.MessageChatModel;
+import teckvillage.developer.khaled_pc.teckvillagetrue.model.retrofit.JSON_Mapping.MessageGroupBodyModel;
+import teckvillage.developer.khaled_pc.teckvillagetrue.model.retrofit.JSON_Mapping.ResultModel;
+import teckvillage.developer.khaled_pc.teckvillagetrue.model.retrofit.JSON_Mapping.TokenBodyModel;
+import teckvillage.developer.khaled_pc.teckvillagetrue.model.retrofit.JSON_Mapping.TokenDataReceived;
+
 /**
  * Created by khaled-pc on 4/7/2019.
  */
@@ -29,19 +43,19 @@ public interface WhoCallerApi {
 
 
 
- @Multipart
- @POST("createUser")
- Call<ResultModel> registeruser(
-         @Part("phone_code") RequestBody  CodeCountry,
-         @Part("phone")      RequestBody  Phonenumber,
-         @Part("name")       RequestBody  username,
-         @Part("email")      RequestBody  email,
-         @Part MultipartBody.Part img,
-         @Part("register_type") RequestBody  registerMethod,
-         @Part("facebook_link") RequestBody  facebooklink,
-         @Part("mobile_type")   RequestBody  mobilebrand,
-         @Part("mobile_os")     RequestBody  mobileos
-         );
+    @Multipart
+    @POST("createUser")
+    Call<ResultModel> registeruser(
+            @Part("phone_code") RequestBody  CodeCountry,
+            @Part("phone")      RequestBody  Phonenumber,
+            @Part("name")       RequestBody  username,
+            @Part("email")      RequestBody  email,
+            @Part MultipartBody.Part img,
+            @Part("register_type") RequestBody  registerMethod,
+            @Part("facebook_link") RequestBody  facebooklink,
+            @Part("mobile_type")   RequestBody  mobilebrand,
+            @Part("mobile_os")     RequestBody  mobileos
+    );
 
 
     @Multipart
@@ -58,15 +72,15 @@ public interface WhoCallerApi {
             @Header("Accept") String Accept,
             @Query("api_token") String ApiAccessToken,
             @Body datamodel contacts
-            );
+    );
 
     @FormUrlEncoded
     @POST("searchContact")
     Call<ArrayList<Item_Search>> SearchPhoneNumber(
-                    @Query("api_token") String ApiAccessToken,
-                    @Field("number") String phoneNumber,
-                    @Field("code") String code
-            );
+            @Query("api_token") String ApiAccessToken,
+            @Field("number") String phoneNumber,
+            @Field("code") String code
+    );
 
     @FormUrlEncoded
     @POST("searchContact")
@@ -94,19 +108,42 @@ public interface WhoCallerApi {
     );
 
 
-    @GET("getMessages?api_token={accesstoken}&group_id={id}")
-    Call<ResultModel> getMessageWhenOpenChat(
-            @Path("accesstoken") String ApiAccessToken,
-            @Path("id") String id);
+
+    @POST("createGroup?")
+    Call<GroupChatResultModel> createGroup(
+            @Query("api_token") String ApiAccessToken,
+            @Body GroupBodyModel groupBodyModel);
+
+    @POST("createMessage?")
+    Call<MessageChatModel> sendMessage(
+            @Query("api_token") String ApiAccessToken,
+            @Body MessageBodyModel messageBodyModel);
+
+    @POST("createMessage?")
+    Call<MessageChatModel> sendGroupMessage(
+            @Query("api_token") String ApiAccessToken,
+            @Body MessageGroupBodyModel messageGroupBodyModel);
+
+    @GET("getChatUsers?")
+    Call<List<DataReceived>> getallChatContact(
+            @Query("api_token") String ApiAccessToken);
+
+    @GET("getMessages?")
+    Call<ListMessagesChatModel> getMessageWhenOpenChat(
+            @Query("api_token") String ApiAccessToken,
+            @Query("user_id") String id);
 
 
-    @GET("getMessages?api_token={accesstoken}&user_id={id}")
-    Call<ResultModel> getMessageWhenOpenGroupChat(
-            @Path("accesstoken") String ApiAccessToken,
-            @Path("id") String id);
+    @GET("getMessages?")
+    Call<ListMessagesChatModel> getMessageWhenOpenGroupChat(
+            @Query("api_token") String ApiAccessToken,
+            @Query("group_id") String id);
 
 
-
+    @POST("updateUserMobileToken?")
+    Call<TokenDataReceived> uploadFirbaseToken(
+            @Query("api_token") String ApiAccessToken,
+            @Body TokenBodyModel tokenBodyModel);
 
 
 }

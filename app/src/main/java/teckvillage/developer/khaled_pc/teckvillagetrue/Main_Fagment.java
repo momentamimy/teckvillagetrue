@@ -1209,6 +1209,7 @@ public class Main_Fagment extends Fragment implements OnBackPressedListener , Lo
         if (!cursor.moveToNext())
         {
             Log.e("GOPAL", "Empty Cursor");
+            callLogInfos=get_calls_log.getCallDetails();
         }
         else {
             do {

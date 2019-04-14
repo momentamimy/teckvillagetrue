@@ -217,12 +217,9 @@ public class SendToActivity extends AppCompatActivity {
 
     public ArrayList<UserContactData> orderSendToContactArray(ArrayList<UserContactData> contactData)
     {
-        UserContactData data=new UserContactData("","","", (long) -1);
-        data.setType(3);
-        contactData.set(0,data);
         UserContactData data1=new UserContactData("","","", (long) -1);
         data1.setType(2);
-        contactData.set(1,data1);
+        contactData.set(0,data1);
         return contactData;
     }
 }

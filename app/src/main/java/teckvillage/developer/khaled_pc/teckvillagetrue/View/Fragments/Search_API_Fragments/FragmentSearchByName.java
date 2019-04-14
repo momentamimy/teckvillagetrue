@@ -20,22 +20,10 @@ import com.mukesh.countrypicker.CountryPicker;
 import com.mukesh.countrypicker.OnCountryPickerListener;
 import com.sdsmdg.tastytoast.TastyToast;
 
-import java.util.ArrayList;
-
-import retrofit2.Call;
-import retrofit2.Callback;
-import retrofit2.Response;
-import retrofit2.Retrofit;
 import teckvillage.developer.khaled_pc.teckvillagetrue.R;
 import teckvillage.developer.khaled_pc.teckvillagetrue.RecycleviewResult_SearchAPI;
 import teckvillage.developer.khaled_pc.teckvillagetrue.View.CheckNetworkConnection;
 import teckvillage.developer.khaled_pc.teckvillagetrue.View.ConnectionDetector;
-import teckvillage.developer.khaled_pc.teckvillagetrue.View.Signup;
-import teckvillage.developer.khaled_pc.teckvillagetrue.model.retrofit.ApiAccessToken;
-import teckvillage.developer.khaled_pc.teckvillagetrue.model.retrofit.JSON_Mapping.Item_Search;
-import teckvillage.developer.khaled_pc.teckvillagetrue.model.retrofit.JSON_Mapping.ResultModel;
-import teckvillage.developer.khaled_pc.teckvillagetrue.model.retrofit.WhoCallerApi;
-import teckvillage.developer.khaled_pc.teckvillagetrue.model.retrofit.retrofitHead;
 
 /**
  * A simple {@link Fragment} subclass.

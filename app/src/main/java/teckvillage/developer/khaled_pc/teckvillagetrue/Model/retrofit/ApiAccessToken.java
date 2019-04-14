@@ -16,4 +16,8 @@ public class ApiAccessToken {
       return sharedPref.getString("User_API_token","NoAPIACCESS");
     }
 
+    public static int  getID(Context context){
+        SharedPreferences sharedPref = context.getSharedPreferences("WhoCaller?", MODE_PRIVATE);
+        return sharedPref.getInt("User_ID",-1);
+    }
 }
