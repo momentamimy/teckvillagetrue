@@ -531,7 +531,7 @@ public class PhoneStateReceiver extends BroadcastReceiver {
         }
 
         Intent intent;
-        PendingIntent pendingIntent;
+        PendingIntent pendingIntent = null;
         NotificationCompat.Builder builder;
         if (notifManager == null) {
             notifManager = (NotificationManager) context.getSystemService
@@ -560,6 +560,7 @@ public class PhoneStateReceiver extends BroadcastReceiver {
                     .setSmallIcon (R.drawable.logo_notification) // required
                     .setContentText (message)  // required
                     .setDefaults (Notification.DEFAULT_ALL)
+                    .setGroup("Blocked_Numbers")
                     .setAutoCancel (true)
                     .setColor((context.getResources().getColor(R.color.colorPrimary)))
                     .setContentIntent (pendingIntent)
@@ -576,6 +577,7 @@ public class PhoneStateReceiver extends BroadcastReceiver {
             builder.setSmallIcon(R.drawable.logo);
             builder.setContentTitle("Call Blocked by Whocaller");
             builder.setContentText(message);
+            builder.setGroup("Blocked_Numbers");
             builder.setColor((context.getResources().getColor(R.color.colorPrimary)));
             builder.setSound(sound);
             builder.setVibrate (new long[]{100, 200, 300, 400,
@@ -594,9 +596,28 @@ public class PhoneStateReceiver extends BroadcastReceiver {
             }
 
         }
+        NotificationCompat.Builder summaryBuilder = new NotificationCompat.Builder(context, "0");
+        summaryBuilder.setSmallIcon(R.drawable.logo_notification)
+                .setContentIntent(pendingIntent)
+                .setPriority(NotificationCompat.PRIORITY_LOW)
+                .setColor((context.getResources().getColor(R.color.colorPrimary)))
+                .setGroup("Blocked_Numbers")
+                .setGroupAlertBehavior(NotificationCompat.GROUP_ALERT_CHILDREN)
+                .setGroupSummary(true)
+                .build();
+        if (android.os.Build.VERSION.SDK_INT >= android.os.Build.VERSION_CODES.JELLY_BEAN) {
+            NotificationCompat.InboxStyle inboxStyle = new NotificationCompat.InboxStyle();
+            inboxStyle.addLine(number+" "+message);
+            inboxStyle.setSummaryText("Blocked Numbers");
+            summaryBuilder.setStyle(inboxStyle);
+        }
+        Notification summaryNotification = summaryBuilder.build();
+
+
         Notification notification = builder.build ();
         int id = (int) System.currentTimeMillis();
         notifManager.notify (id, notification);
+        notifManager.notify(666,summaryNotification);
     }
 
     private void inComing(Context context, Intent intent){

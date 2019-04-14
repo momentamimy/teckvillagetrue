@@ -52,7 +52,9 @@
                     android:layout_height="wrap_content"
                     android:text="hello"
                     android:layout_gravity="end"
-                    android:textSize="15dp"/>
+                    android:textSize="15dp"
+                    android:layout_marginStart="5dp"
+                    android:layout_marginLeft="5dp" />
                 <LinearLayout
                     android:layout_gravity="end"
                     android:layout_below="@+id/message"
