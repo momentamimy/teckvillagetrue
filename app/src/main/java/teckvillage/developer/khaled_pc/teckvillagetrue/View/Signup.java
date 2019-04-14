@@ -789,7 +789,7 @@ public class Signup extends AppCompatActivity {
             if (ConnectionDetector.hasInternetConnection(Signup.this)) {
                 Retrofit retrofit = retrofitHead.headOfGetorPostReturnRes();
                 WhoCallerApi whoCallerApi = retrofit.create(WhoCallerApi.class);
-                Call<TokenDataReceived> tokenDataReceivedCall = whoCallerApi.uploadFirbaseToken(ApiAccessToken.getAPIaccessToken(Signup.this), new TokenBodyModel(FirebaseInstanceId.getInstance().getToken()));
+                Call<TokenDataReceived> tokenDataReceivedCall = whoCallerApi.uploadFirbaseToken("application/json",ApiAccessToken.getAPIaccessToken(Signup.this), new TokenBodyModel(FirebaseInstanceId.getInstance().getToken()));
 
                 tokenDataReceivedCall.enqueue(new Callback<TokenDataReceived>() {
                     @Override

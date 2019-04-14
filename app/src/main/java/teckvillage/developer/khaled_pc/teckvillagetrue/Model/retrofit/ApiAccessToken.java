@@ -13,7 +13,7 @@ public class ApiAccessToken {
 
   public static String  getAPIaccessToken(Context context){
       SharedPreferences sharedPref = context.getSharedPreferences("WhoCaller?", MODE_PRIVATE);
-      return sharedPref.getString("User_API_token","NoAPIACCESS");
+      return sharedPref.getString("User_API_token","NoAPIACCESS");//NoAPIACCESS
     }
 
     public static int  getID(Context context){
