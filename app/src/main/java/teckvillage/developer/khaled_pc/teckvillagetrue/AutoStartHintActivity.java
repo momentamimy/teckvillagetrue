@@ -56,4 +56,6 @@ public class AutoStartHintActivity extends AppCompatActivity {
             }
         });
     }
+
+
 }

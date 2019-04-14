@@ -142,6 +142,7 @@ public interface WhoCallerApi {
 
     @POST("updateUserMobileToken?")
     Call<TokenDataReceived> uploadFirbaseToken(
+            @Header("Accept") String Accept,
             @Query("api_token") String ApiAccessToken,
             @Body TokenBodyModel tokenBodyModel);
 

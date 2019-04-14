@@ -15,6 +15,7 @@ import android.support.v7.widget.Toolbar;
 import android.text.Editable;
 import android.text.TextUtils;
 import android.text.TextWatcher;
+import android.util.Log;
 import android.view.View;
 import android.view.Window;
 import android.widget.EditText;
@@ -37,6 +38,9 @@ import teckvillage.developer.khaled_pc.teckvillagetrue.SMS_MessagesChat;
 import teckvillage.developer.khaled_pc.teckvillagetrue.model.Get_User_Contacts;
 import teckvillage.developer.khaled_pc.teckvillagetrue.model.retrofit.ApiAccessToken;
 import teckvillage.developer.khaled_pc.teckvillagetrue.model.retrofit.JSON_Mapping.DataReceived;
+import teckvillage.developer.khaled_pc.teckvillagetrue.model.retrofit.JSON_Mapping.GroupBodyModel;
+import teckvillage.developer.khaled_pc.teckvillagetrue.model.retrofit.JSON_Mapping.GroupChatModel;
+import teckvillage.developer.khaled_pc.teckvillagetrue.model.retrofit.JSON_Mapping.GroupChatResultModel;
 import teckvillage.developer.khaled_pc.teckvillagetrue.model.retrofit.WhoCallerApi;
 import teckvillage.developer.khaled_pc.teckvillagetrue.model.retrofit.retrofitHead;
 
@@ -294,7 +298,7 @@ public class SendToChatActivity extends AppCompatActivity {
         Ok.setOnClickListener(new View.OnClickListener() {
             @Override
             public void onClick(View v) {
-                /*GroupBodyModel bodyModel=new GroupBodyModel(usersId,Group.getText().toString());
+                GroupBodyModel bodyModel=new GroupBodyModel(usersId,Group.getText().toString());
 
                 Retrofit retrofit = retrofitHead.headOfGetorPostReturnRes();
                 WhoCallerApi whoCallerApi = retrofit.create(WhoCallerApi.class);
@@ -315,8 +319,8 @@ public class SendToChatActivity extends AppCompatActivity {
                     public void onFailure(Call<GroupChatResultModel> call, Throwable t) {
                         Log.d("meeeeesheeey22", t.getMessage());
                     }
-                });*/
-                ArrayList<String> UsersNames_IDs=new ArrayList<>();
+                });
+                /*ArrayList<String> UsersNames_IDs=new ArrayList<>();
                 for (int i=0;i<addingUserContactsData.size();i++)
                 {
                     UsersNames_IDs.add(addingUserContactsData.get(i).getName()+"::"
@@ -329,7 +333,7 @@ public class SendToChatActivity extends AppCompatActivity {
                 intent.putExtra("userList",UsersNames_IDs);
                 startActivity(intent);
                 MyDialogCreatGroup.dismiss();
-            }
+            */}
         });
         MyDialogCreatGroup.show();
     }

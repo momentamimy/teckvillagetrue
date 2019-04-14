@@ -135,7 +135,7 @@ public class PhoneStateReceiver extends BroadcastReceiver {
 
      //********************************************************************************************************************************************
      //*************************************************Old Code***************************************************************************************
-        try {
+      /*  try {
 
 
         String state= intent.getStringExtra(TelephonyManager.EXTRA_STATE);
@@ -153,7 +153,8 @@ public class PhoneStateReceiver extends BroadcastReceiver {
         {
             if (!viewIsAdded)
             {
-                DisplayDialogOverApps(context,number);
+
+
             }
         }
         else if (state.equals(TelephonyManager.EXTRA_STATE_RINGING)&&swithcincomgoing)
@@ -162,28 +163,14 @@ public class PhoneStateReceiver extends BroadcastReceiver {
             BlockNumberWhenRing(context,number);
         }
         else if (state.equals(TelephonyManager.EXTRA_STATE_IDLE)) {
-          try {
 
-            if (wm!=null&&viewIsAdded==true)
-            {
-                wm.removeViewImmediate(view1);//error
-            }
-
-                Intent intent1=new Intent(context,PopupDialogActivity.class);
-                intent1.putExtra("Number",number);
-                intent1.setFlags(Intent.FLAG_ACTIVITY_NEW_TASK);
-                context.startActivity(intent1);
-
-          }catch (Exception e){
-              e.printStackTrace();
-          }
 
         }
 
         }catch (Exception e){
             e.printStackTrace();
         }
-
+*/
     }
 
 
@@ -192,13 +179,7 @@ public class PhoneStateReceiver extends BroadcastReceiver {
 
     public void DisplayDialogOverApps(Context context,String Number) {
 
-        get_calls_log=new Get_Calls_Log(context);
-        String contactName= (String) get_calls_log.getContactName(Number);
-        Bitmap contactPhoto=  get_calls_log.retrieveContactPhoto(Number);
-        if (TextUtils.isEmpty(contactName))
-        {
-            contactName=Number;
-        }
+
         wm = (WindowManager) context.getSystemService(Context.WINDOW_SERVICE);
         int LAYOUT_FLAG;
         if (Build.VERSION.SDK_INT >= Build.VERSION_CODES.O) {
@@ -226,16 +207,16 @@ public class PhoneStateReceiver extends BroadcastReceiver {
         TextView CallerNumber=view1.findViewById(R.id.Caller_Number);
         TextView CallerNumberType=view1.findViewById(R.id.Caller_Number_Type);
 
-        CallerName.setText(contactName);
+        CallerName.setText(Number);
         CallerNumber.setText(Number);
-        if (contactPhoto!=null)
+        /*if (contactPhoto!=null)
         {
             BlurBuilder blurBuilder=new BlurBuilder();
             CallerImage.setImageBitmap(contactPhoto);
             Bitmap resultBmp = blurBuilder.blur(context, contactPhoto);
             CallerProfileLayout.setBackgroundDrawable(new BitmapDrawable(resultBmp));
 
-        }
+        }*/
 
         CloseDialog.setOnClickListener(new View.OnClickListener() {
             @Override
@@ -305,8 +286,21 @@ public class PhoneStateReceiver extends BroadcastReceiver {
 
     }
 
+    boolean blockList(Context context,String phonenumber)
+    {
+        //Block List Phone numbers
+        BlockNumbers=RetreiveAllNumberInBlockList(context);
 
-    void BlockNumberWhenRing(Context context,String phonenumber){
+        for(int i=0;i<BlockNumbers.size();i++){
+            if ((BlockNumbers.get(i) != null) &&BlockNumbers.get(i).equalsIgnoreCase(phonenumber)) {
+
+                return true;
+            }
+        }
+    return false;
+    }
+
+    boolean BlockNumberWhenRing(Context context,String phonenumber){
 
         //Block List Phone numbers
         BlockNumbers=RetreiveAllNumberInBlockList(context);
@@ -343,12 +337,14 @@ public class PhoneStateReceiver extends BroadcastReceiver {
                         BloackNotification(BlockNumbers.get(i),context);
                         //addFromCallLog(context,phonenumber);//Add to block list history
                         ADDphoneNumberBlockListHistory(context,addFromCallLog(context,phonenumber),BlockNumbers.get(i));
+                        return true;
                     }
                 }
 
 
             } catch (Exception e) {
                 Toast.makeText(context, e.toString(), Toast.LENGTH_LONG).show();
+                return false;
 
             }
             //Turn OFF the mute
@@ -359,7 +355,7 @@ public class PhoneStateReceiver extends BroadcastReceiver {
         }
 
 
-
+        return false;
     }
 
 
@@ -467,11 +463,90 @@ public class PhoneStateReceiver extends BroadcastReceiver {
     }
 
     //Derived classes should override these to respond to specific events of interest
-    protected void onIncomingCallStarted(Context ctx, String number, Date start){Log.w("NewState","onIncomingCallStarted"+" %%PhoneNumber= "+number);}
-    protected void onOutgoingCallStarted(Context ctx, String number, Date start){Log.w("NewState","onOutgoingCallStarted"+" %%PhoneNumber= "+number);}
-    protected void onIncomingCallEnded(Context ctx, String number, Date start, Date end){Log.w("NewState","onIncomingCallEnded"+" %%PhoneNumber= "+number);}//When user Answer income call and close call
-    protected void onOutgoingCallEnded(Context ctx, String number, Date start, Date end){Log.w("NewState","onOutgoingCallEnded"+" %%PhoneNumber= "+number);}
-    protected void onMissedCall(Context ctx, String number, Date start){Log.w("NewState","onMissedCall"+" %%PhoneNumber= "+number);}//Occur when Income call -> Ring until End (No answer) Or User Cancel(phone number Blocked)
+    protected void onIncomingCallStarted(Context ctx, String number, Date start){
+        if (!BlockNumberWhenRing(ctx,number))
+        {
+            preferences=ctx.getSharedPreferences("PopUp_Dialog",MODE_PRIVATE);
+            boolean swithcOutgoing=preferences.getBoolean("SwitchOutgoing",true);
+            boolean swithcincomgoing=preferences.getBoolean("switchIncoming",true);
+            get_calls_log=new Get_Calls_Log(ctx);
+            if (!get_calls_log.contactExists(number)&&swithcincomgoing)
+            {
+                DisplayDialogOverApps(ctx,number);
+            }
+        }
+        Log.w("NewState","onIncomingCallStarted"+" %%PhoneNumber= "+number);}
+
+    protected void onOutgoingCallStarted(Context ctx, String number, Date start){
+        preferences=ctx.getSharedPreferences("PopUp_Dialog",MODE_PRIVATE);
+        boolean swithcOutgoing=preferences.getBoolean("SwitchOutgoing",true);
+        boolean swithcincomgoing=preferences.getBoolean("switchIncoming",true);
+        get_calls_log=new Get_Calls_Log(ctx);
+        if (!get_calls_log.contactExists(number)&&swithcOutgoing)
+        {
+            DisplayDialogOverApps(ctx,number);
+        }
+        Log.w("NewState","onOutgoingCallStarted"+" %%PhoneNumber= "+number);}
+
+    protected void onIncomingCallEnded(Context ctx, String number, Date start, Date end){
+        preferences=ctx.getSharedPreferences("PopUp_Dialog",MODE_PRIVATE);
+        boolean swithcOutgoing=preferences.getBoolean("SwitchOutgoing",true);
+        boolean swithcincomgoing=preferences.getBoolean("switchIncoming",true);
+        get_calls_log=new Get_Calls_Log(ctx);
+        if (!get_calls_log.contactExists(number)&&swithcincomgoing)
+        {
+            try {
+
+                if (wm!=null&&viewIsAdded==true)
+                {
+                    wm.removeViewImmediate(view1);//error
+                    viewIsAdded=false;
+                }
+            }catch (Exception e){
+                e.printStackTrace();
+            }
+            Intent intent1=new Intent(ctx,PopupDialogActivity.class);
+            intent1.putExtra("Number",number);
+            intent1.setFlags(Intent.FLAG_ACTIVITY_NEW_TASK);
+            ctx.startActivity(intent1);
+
+        }
+        Log.w("NewState","onIncomingCallEnded"+" %%PhoneNumber= "+number);}//When user Answer income call and close call
+
+    protected void onOutgoingCallEnded(Context ctx, String number, Date start, Date end){
+        preferences=ctx.getSharedPreferences("PopUp_Dialog",MODE_PRIVATE);
+        boolean swithcOutgoing=preferences.getBoolean("SwitchOutgoing",true);
+        boolean swithcincomgoing=preferences.getBoolean("switchIncoming",true);
+        get_calls_log=new Get_Calls_Log(ctx);
+        if (!get_calls_log.contactExists(number)&&swithcOutgoing)
+        {
+            try {
+
+                if (wm!=null&&viewIsAdded==true)
+                {
+                    wm.removeViewImmediate(view1);//error
+                    viewIsAdded=false;
+                }
+            }catch (Exception e){
+                e.printStackTrace();
+            }
+                Intent intent1=new Intent(ctx,PopupDialogActivity.class);
+                intent1.putExtra("Number",number);
+                intent1.setFlags(Intent.FLAG_ACTIVITY_NEW_TASK);
+                ctx.startActivity(intent1);
+
+        }
+        Log.w("NewState","onOutgoingCallEnded"+" %%PhoneNumber= "+number);}
+
+    protected void onMissedCall(Context ctx, String number, Date start){
+        if (!blockList(ctx,number))
+        {
+            Intent intent1=new Intent(ctx,PopupDialogActivity.class);
+            intent1.putExtra("Number",number);
+            intent1.setFlags(Intent.FLAG_ACTIVITY_NEW_TASK);
+            ctx.startActivity(intent1);
+        }
+        Log.w("NewState","onMissedCall"+" %%PhoneNumber= "+number);}//Occur when Income call -> Ring until End (No answer) Or User Cancel(phone number Blocked)
 
 
 
