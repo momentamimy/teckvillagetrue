@@ -35,14 +35,14 @@ import teckvillage.developer.khaled_pc.teckvillagetrue.Controller.AddingSendToCh
 import teckvillage.developer.khaled_pc.teckvillagetrue.Controller.SendToChatContactsAdapters;
 import teckvillage.developer.khaled_pc.teckvillagetrue.R;
 import teckvillage.developer.khaled_pc.teckvillagetrue.SMS_MessagesChat;
-import teckvillage.developer.khaled_pc.teckvillagetrue.model.Get_User_Contacts;
-import teckvillage.developer.khaled_pc.teckvillagetrue.model.retrofit.ApiAccessToken;
-import teckvillage.developer.khaled_pc.teckvillagetrue.model.retrofit.JSON_Mapping.DataReceived;
-import teckvillage.developer.khaled_pc.teckvillagetrue.model.retrofit.JSON_Mapping.GroupBodyModel;
-import teckvillage.developer.khaled_pc.teckvillagetrue.model.retrofit.JSON_Mapping.GroupChatModel;
-import teckvillage.developer.khaled_pc.teckvillagetrue.model.retrofit.JSON_Mapping.GroupChatResultModel;
-import teckvillage.developer.khaled_pc.teckvillagetrue.model.retrofit.WhoCallerApi;
-import teckvillage.developer.khaled_pc.teckvillagetrue.model.retrofit.retrofitHead;
+import teckvillage.developer.khaled_pc.teckvillagetrue.Model.Get_User_Contacts;
+import teckvillage.developer.khaled_pc.teckvillagetrue.Model.retrofit.ApiAccessToken;
+import teckvillage.developer.khaled_pc.teckvillagetrue.Model.retrofit.JSON_Mapping.DataReceived;
+import teckvillage.developer.khaled_pc.teckvillagetrue.Model.retrofit.JSON_Mapping.GroupBodyModel;
+import teckvillage.developer.khaled_pc.teckvillagetrue.Model.retrofit.JSON_Mapping.GroupChatModel;
+import teckvillage.developer.khaled_pc.teckvillagetrue.Model.retrofit.JSON_Mapping.GroupChatResultModel;
+import teckvillage.developer.khaled_pc.teckvillagetrue.Model.retrofit.WhoCallerApi;
+import teckvillage.developer.khaled_pc.teckvillagetrue.Model.retrofit.retrofitHead;
 
 public class SendToChatActivity extends AppCompatActivity {
 

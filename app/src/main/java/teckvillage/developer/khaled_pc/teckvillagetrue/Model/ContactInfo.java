@@ -1,4 +1,4 @@
-package teckvillage.developer.khaled_pc.teckvillagetrue.model;
+package teckvillage.developer.khaled_pc.teckvillagetrue.Model;
 
 public class ContactInfo {
     public String imageUrl;

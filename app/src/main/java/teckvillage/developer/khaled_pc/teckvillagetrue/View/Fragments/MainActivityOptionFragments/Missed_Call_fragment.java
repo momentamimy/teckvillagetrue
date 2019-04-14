@@ -1,34 +1,25 @@
 package teckvillage.developer.khaled_pc.teckvillagetrue.View.Fragments.MainActivityOptionFragments;
 
 
-import android.content.Context;
 import android.os.Bundle;
-import android.support.design.widget.CoordinatorLayout;
 import android.support.v4.app.Fragment;
 import android.support.v7.widget.DefaultItemAnimator;
 import android.support.v7.widget.LinearLayoutManager;
 import android.support.v7.widget.RecyclerView;
-import android.text.format.DateFormat;
 import android.view.LayoutInflater;
 import android.view.View;
 import android.view.ViewGroup;
 import android.widget.ImageView;
 import android.widget.TextView;
-import android.widget.Toast;
-import android.widget.Toolbar;
 
 import java.util.ArrayList;
-import java.util.Calendar;
 import java.util.Collections;
-import java.util.List;
 
-import teckvillage.developer.khaled_pc.teckvillagetrue.CallSearchLogAdapter;
 import teckvillage.developer.khaled_pc.teckvillagetrue.Controller.LogAdapter;
 import teckvillage.developer.khaled_pc.teckvillagetrue.R;
-import teckvillage.developer.khaled_pc.teckvillagetrue.model.ContactInfo;
-import teckvillage.developer.khaled_pc.teckvillagetrue.model.Get_Calls_Log;
-import teckvillage.developer.khaled_pc.teckvillagetrue.model.GroupListByDate;
-import teckvillage.developer.khaled_pc.teckvillagetrue.model.LogInfo;
+import teckvillage.developer.khaled_pc.teckvillagetrue.Model.Get_Calls_Log;
+import teckvillage.developer.khaled_pc.teckvillagetrue.Model.GroupListByDate;
+import teckvillage.developer.khaled_pc.teckvillagetrue.Model.LogInfo;
 
 /**
  * A simple {@link Fragment} subclass.

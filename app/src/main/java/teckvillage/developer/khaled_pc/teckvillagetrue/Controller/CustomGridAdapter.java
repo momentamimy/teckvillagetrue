@@ -10,7 +10,7 @@ import android.widget.TextView;
 import java.util.List;
 
 import teckvillage.developer.khaled_pc.teckvillagetrue.R;
-import teckvillage.developer.khaled_pc.teckvillagetrue.model.GridListDataModel;
+import teckvillage.developer.khaled_pc.teckvillagetrue.Model.GridListDataModel;
 
 public class CustomGridAdapter extends BaseAdapter {
 

@@ -4,14 +4,12 @@ import android.support.v7.app.AppCompatActivity;
 import android.os.Bundle;
 import android.support.v7.widget.LinearLayoutManager;
 import android.support.v7.widget.RecyclerView;
-import android.support.v7.widget.Toolbar;
-import android.util.Log;
 import android.view.MenuItem;
 
 import java.util.ArrayList;
 
 import teckvillage.developer.khaled_pc.teckvillagetrue.Controller.CustomNotificationRecyclerViewAdapter;
-import teckvillage.developer.khaled_pc.teckvillagetrue.model.MessageInfo;
+import teckvillage.developer.khaled_pc.teckvillagetrue.Model.MessageInfo;
 
 public class Notifications extends AppCompatActivity {
 

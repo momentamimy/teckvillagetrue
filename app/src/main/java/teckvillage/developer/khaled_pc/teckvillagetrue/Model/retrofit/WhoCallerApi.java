@@ -1,4 +1,4 @@
-package teckvillage.developer.khaled_pc.teckvillagetrue.model.retrofit;
+package teckvillage.developer.khaled_pc.teckvillagetrue.Model.retrofit;
 
 import java.util.ArrayList;
 import java.util.List;
@@ -15,26 +15,22 @@ import retrofit2.http.Header;
 import retrofit2.http.Multipart;
 import retrofit2.http.POST;
 import retrofit2.http.Part;
-import retrofit2.http.Path;
 import retrofit2.http.Query;
-import teckvillage.developer.khaled_pc.teckvillagetrue.model.retrofit.JSON_Mapping.Item_Search;
-import teckvillage.developer.khaled_pc.teckvillagetrue.model.retrofit.JSON_Mapping.ResultModel;
-import teckvillage.developer.khaled_pc.teckvillagetrue.model.retrofit.JSON_Mapping.ResultModelUploadVCF;
-import teckvillage.developer.khaled_pc.teckvillagetrue.model.retrofit.JSON_Mapping.ResultModel_Update_User_data;
-import teckvillage.developer.khaled_pc.teckvillagetrue.model.retrofit.JSON_Mapping.Send_Top_Ten_Contacts_JSON_Arraylist;
-import teckvillage.developer.khaled_pc.teckvillagetrue.model.retrofit.JSON_Mapping.datamodel;
+import teckvillage.developer.khaled_pc.teckvillagetrue.Model.retrofit.JSON_Mapping.Item_Search;
+import teckvillage.developer.khaled_pc.teckvillagetrue.Model.retrofit.JSON_Mapping.ResultModel;
+import teckvillage.developer.khaled_pc.teckvillagetrue.Model.retrofit.JSON_Mapping.ResultModelUploadVCF;
+import teckvillage.developer.khaled_pc.teckvillagetrue.Model.retrofit.JSON_Mapping.ResultModel_Update_User_data;
+import teckvillage.developer.khaled_pc.teckvillagetrue.Model.retrofit.JSON_Mapping.datamodel;
 
-import retrofit2.http.Query;
-import teckvillage.developer.khaled_pc.teckvillagetrue.model.retrofit.JSON_Mapping.DataReceived;
-import teckvillage.developer.khaled_pc.teckvillagetrue.model.retrofit.JSON_Mapping.GroupBodyModel;
-import teckvillage.developer.khaled_pc.teckvillagetrue.model.retrofit.JSON_Mapping.GroupChatResultModel;
-import teckvillage.developer.khaled_pc.teckvillagetrue.model.retrofit.JSON_Mapping.ListMessagesChatModel;
-import teckvillage.developer.khaled_pc.teckvillagetrue.model.retrofit.JSON_Mapping.MessageBodyModel;
-import teckvillage.developer.khaled_pc.teckvillagetrue.model.retrofit.JSON_Mapping.MessageChatModel;
-import teckvillage.developer.khaled_pc.teckvillagetrue.model.retrofit.JSON_Mapping.MessageGroupBodyModel;
-import teckvillage.developer.khaled_pc.teckvillagetrue.model.retrofit.JSON_Mapping.ResultModel;
-import teckvillage.developer.khaled_pc.teckvillagetrue.model.retrofit.JSON_Mapping.TokenBodyModel;
-import teckvillage.developer.khaled_pc.teckvillagetrue.model.retrofit.JSON_Mapping.TokenDataReceived;
+import teckvillage.developer.khaled_pc.teckvillagetrue.Model.retrofit.JSON_Mapping.DataReceived;
+import teckvillage.developer.khaled_pc.teckvillagetrue.Model.retrofit.JSON_Mapping.GroupBodyModel;
+import teckvillage.developer.khaled_pc.teckvillagetrue.Model.retrofit.JSON_Mapping.GroupChatResultModel;
+import teckvillage.developer.khaled_pc.teckvillagetrue.Model.retrofit.JSON_Mapping.ListMessagesChatModel;
+import teckvillage.developer.khaled_pc.teckvillagetrue.Model.retrofit.JSON_Mapping.MessageBodyModel;
+import teckvillage.developer.khaled_pc.teckvillagetrue.Model.retrofit.JSON_Mapping.MessageChatModel;
+import teckvillage.developer.khaled_pc.teckvillagetrue.Model.retrofit.JSON_Mapping.MessageGroupBodyModel;
+import teckvillage.developer.khaled_pc.teckvillagetrue.Model.retrofit.JSON_Mapping.TokenBodyModel;
+import teckvillage.developer.khaled_pc.teckvillagetrue.Model.retrofit.JSON_Mapping.TokenDataReceived;
 
 /**
  * Created by khaled-pc on 4/7/2019.

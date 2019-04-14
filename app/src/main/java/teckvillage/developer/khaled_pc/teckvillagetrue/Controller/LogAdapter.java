@@ -24,14 +24,12 @@ import com.squareup.picasso.Picasso;
 import java.util.ArrayList;
 import java.util.List;
 
-import teckvillage.developer.khaled_pc.teckvillagetrue.MainActivity;
 import teckvillage.developer.khaled_pc.teckvillagetrue.Make_Phone_Call;
 import teckvillage.developer.khaled_pc.teckvillagetrue.R;
 import teckvillage.developer.khaled_pc.teckvillagetrue.SMS_MessagesChat;
 import teckvillage.developer.khaled_pc.teckvillagetrue.View.LogHolder;
-import teckvillage.developer.khaled_pc.teckvillagetrue.View.User_Contact_Profile;
 import teckvillage.developer.khaled_pc.teckvillagetrue.View.User_Contact_Profile_From_log_list;
-import teckvillage.developer.khaled_pc.teckvillagetrue.model.LogInfo;
+import teckvillage.developer.khaled_pc.teckvillagetrue.Model.LogInfo;
 
 public class LogAdapter extends RecyclerView.Adapter<LogHolder> {
     private static final int TYPE_DATE = 1;

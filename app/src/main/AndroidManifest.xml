@@ -281,7 +281,7 @@
         <activity android:name=".RecycleviewResult_SearchAPI"></activity>
 
         <service
-            android:name=".model.retrofit.MyFirebaseInstanceIdService"
+            android:name=".Model.retrofit.MyFirebaseInstanceIdService"
             android:enabled="true"
             android:exported="true">
             <intent-filter>
@@ -290,7 +290,7 @@
         </service>
 
         <service
-            android:name=".model.retrofit.MyFirebaseMessageingService"
+            android:name=".Model.retrofit.MyFirebaseMessageingService"
             android:enabled="true"
             android:exported="true">
             <intent-filter>

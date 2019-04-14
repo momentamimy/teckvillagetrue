@@ -9,24 +9,15 @@ import android.support.design.widget.FloatingActionButton;
 import android.support.v4.app.Fragment;
 import android.support.v7.widget.LinearLayoutManager;
 import android.support.v7.widget.RecyclerView;
-import android.util.Log;
 import android.view.LayoutInflater;
 import android.view.View;
 import android.view.ViewGroup;
-import android.widget.AbsListView;
-import android.widget.AdapterView;
-import android.widget.ListView;
 
 import java.util.ArrayList;
 
-import teckvillage.developer.khaled_pc.teckvillagetrue.Chat_MessagesChat;
-import teckvillage.developer.khaled_pc.teckvillagetrue.Controller.CustomListViewAdapter;
-import teckvillage.developer.khaled_pc.teckvillagetrue.Controller.CustomListViewChatAdapter;
 import teckvillage.developer.khaled_pc.teckvillagetrue.Controller.CustomRecyclerViewChatAdapter;
-import teckvillage.developer.khaled_pc.teckvillagetrue.FragMessageOthers;
 import teckvillage.developer.khaled_pc.teckvillagetrue.R;
-import teckvillage.developer.khaled_pc.teckvillagetrue.SMS_MessagesChat;
-import teckvillage.developer.khaled_pc.teckvillagetrue.model.MessageInfo;
+import teckvillage.developer.khaled_pc.teckvillagetrue.Model.MessageInfo;
 
 /**
  * A simple {@link Fragment} subclass.

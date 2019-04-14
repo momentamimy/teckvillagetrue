@@ -4,10 +4,8 @@ import android.Manifest;
 import android.content.DialogInterface;
 import android.content.Intent;
 import android.content.pm.PackageManager;
-import android.content.res.Resources;
 import android.database.Cursor;
 import android.graphics.Color;
-import android.graphics.drawable.Drawable;
 import android.net.Uri;
 import android.provider.ContactsContract;
 import android.support.v4.app.ActivityCompat;
@@ -29,8 +27,8 @@ import de.hdodenhof.circleimageview.CircleImageView;
 import teckvillage.developer.khaled_pc.teckvillagetrue.Make_Phone_Call;
 import teckvillage.developer.khaled_pc.teckvillagetrue.R;
 import teckvillage.developer.khaled_pc.teckvillagetrue.SMS_MessagesChat;
-import teckvillage.developer.khaled_pc.teckvillagetrue.model.database.Database_Helper;
-import teckvillage.developer.khaled_pc.teckvillagetrue.model.database.tables.block;
+import teckvillage.developer.khaled_pc.teckvillagetrue.Model.database.Database_Helper;
+import teckvillage.developer.khaled_pc.teckvillagetrue.Model.database.tables.block;
 
 public class User_Contact_Profile extends AppCompatActivity {
 

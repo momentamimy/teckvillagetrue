@@ -1,35 +1,24 @@
 package teckvillage.developer.khaled_pc.teckvillagetrue.Controller;
 
-import android.Manifest;
-import android.app.Activity;
 import android.content.Context;
 import android.content.DialogInterface;
 import android.content.Intent;
-import android.content.pm.PackageManager;
-import android.net.Uri;
-import android.support.v4.app.ActivityCompat;
 import android.support.v7.app.AlertDialog;
 import android.support.v7.widget.RecyclerView;
-import android.util.Log;
 import android.view.LayoutInflater;
 import android.view.View;
 import android.view.ViewGroup;
 import android.widget.TextView;
 import android.widget.Toast;
 
-import com.squareup.picasso.Picasso;
-
 import java.util.List;
 
 import teckvillage.developer.khaled_pc.teckvillagetrue.R;
 import teckvillage.developer.khaled_pc.teckvillagetrue.View.BlockList;
 import teckvillage.developer.khaled_pc.teckvillagetrue.View.Block_List_Holder;
-import teckvillage.developer.khaled_pc.teckvillagetrue.View.ContactHolder;
 import teckvillage.developer.khaled_pc.teckvillagetrue.View.User_Contact_Profile_From_log_list;
-import teckvillage.developer.khaled_pc.teckvillagetrue.model.ContactInfo;
-import teckvillage.developer.khaled_pc.teckvillagetrue.model.DataItems_Block;
-import teckvillage.developer.khaled_pc.teckvillagetrue.model.database.Database_Helper;
-import teckvillage.developer.khaled_pc.teckvillagetrue.model.database.tables.block;
+import teckvillage.developer.khaled_pc.teckvillagetrue.Model.database.Database_Helper;
+import teckvillage.developer.khaled_pc.teckvillagetrue.Model.database.tables.block;
 
 public class Block_Adapter extends RecyclerView.Adapter<Block_List_Holder> {
 

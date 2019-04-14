@@ -16,7 +16,7 @@ import android.widget.TextView;
 
 import java.util.List;
 
-import teckvillage.developer.khaled_pc.teckvillagetrue.model.Get_Calls_Log;
+import teckvillage.developer.khaled_pc.teckvillagetrue.Model.Get_Calls_Log;
 
 /**
  * Created by khaled-pc on 4/12/2019.

@@ -14,10 +14,8 @@ import java.util.List;
 import de.hdodenhof.circleimageview.CircleImageView;
 import teckvillage.developer.khaled_pc.teckvillagetrue.Chat_MessagesChat;
 import teckvillage.developer.khaled_pc.teckvillagetrue.R;
-import teckvillage.developer.khaled_pc.teckvillagetrue.SMS_MessagesChat;
-import teckvillage.developer.khaled_pc.teckvillagetrue.model.Get_User_Contacts;
-import teckvillage.developer.khaled_pc.teckvillagetrue.model.UserContactData;
-import teckvillage.developer.khaled_pc.teckvillagetrue.model.retrofit.JSON_Mapping.DataReceived;
+import teckvillage.developer.khaled_pc.teckvillagetrue.Model.Get_User_Contacts;
+import teckvillage.developer.khaled_pc.teckvillagetrue.Model.retrofit.JSON_Mapping.DataReceived;
 
 import static teckvillage.developer.khaled_pc.teckvillagetrue.View.SendToChatActivity.MultipleRecivers;
 import static teckvillage.developer.khaled_pc.teckvillagetrue.View.SendToChatActivity.addingMulipleUserContacts;

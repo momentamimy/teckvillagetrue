@@ -1,14 +1,7 @@
 package teckvillage.developer.khaled_pc.teckvillagetrue;
 
-import android.content.ContentResolver;
-import android.content.Context;
-import android.support.v4.content.CursorLoader;
-import android.content.Intent;
 import android.content.pm.PackageManager;
 import android.database.Cursor;
-import android.graphics.Typeface;
-import android.net.Uri;
-import android.os.AsyncTask;
 import android.os.Bundle;
 import android.support.annotation.NonNull;
 import android.support.annotation.Nullable;
@@ -17,30 +10,17 @@ import android.support.v4.app.Fragment;
 import android.support.v4.app.LoaderManager;
 import android.support.v4.content.ContextCompat;
 import android.support.v4.content.Loader;
-import android.support.v7.widget.GridLayoutManager;
 import android.support.v7.widget.LinearLayoutManager;
 import android.support.v7.widget.RecyclerView;
-import android.text.TextUtils;
-import android.util.Log;
 import android.view.LayoutInflater;
 import android.view.View;
 import android.view.ViewGroup;
-import android.widget.AbsListView;
-import android.widget.AdapterView;
-import android.widget.ListView;
-import android.widget.TextView;
-import android.widget.Toast;
-
-import net.steamcrafted.loadtoast.LoadToast;
 
 import java.util.ArrayList;
-import java.util.Calendar;
 
-import teckvillage.developer.khaled_pc.teckvillagetrue.Controller.CustomListViewAdapter;
 import teckvillage.developer.khaled_pc.teckvillagetrue.Controller.CustomRecyclerViewAdapter;
-import teckvillage.developer.khaled_pc.teckvillagetrue.model.Get_User_Contacts;
-import teckvillage.developer.khaled_pc.teckvillagetrue.model.MessageInfo;
-import teckvillage.developer.khaled_pc.teckvillagetrue.model.UserContactData;
+import teckvillage.developer.khaled_pc.teckvillagetrue.Model.Get_User_Contacts;
+import teckvillage.developer.khaled_pc.teckvillagetrue.Model.MessageInfo;
 
 
 public class FragMessageOthers extends Fragment implements LoaderManager.LoaderCallbacks<Cursor> {

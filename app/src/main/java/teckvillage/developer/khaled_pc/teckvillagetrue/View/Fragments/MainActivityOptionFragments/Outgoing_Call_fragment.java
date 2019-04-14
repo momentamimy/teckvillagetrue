@@ -18,10 +18,10 @@ import java.util.Collections;
 
 import teckvillage.developer.khaled_pc.teckvillagetrue.Controller.LogAdapter;
 import teckvillage.developer.khaled_pc.teckvillagetrue.R;
-import teckvillage.developer.khaled_pc.teckvillagetrue.model.Get_Calls_Log;
-import teckvillage.developer.khaled_pc.teckvillagetrue.model.Get_list_from_logCall_depend_selection;
-import teckvillage.developer.khaled_pc.teckvillagetrue.model.GroupListByDate;
-import teckvillage.developer.khaled_pc.teckvillagetrue.model.LogInfo;
+import teckvillage.developer.khaled_pc.teckvillagetrue.Model.Get_Calls_Log;
+import teckvillage.developer.khaled_pc.teckvillagetrue.Model.Get_list_from_logCall_depend_selection;
+import teckvillage.developer.khaled_pc.teckvillagetrue.Model.GroupListByDate;
+import teckvillage.developer.khaled_pc.teckvillagetrue.Model.LogInfo;
 
 /**
  * A simple {@link Fragment} subclass.

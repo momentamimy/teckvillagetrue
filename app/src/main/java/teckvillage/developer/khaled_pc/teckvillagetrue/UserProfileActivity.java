@@ -64,18 +64,15 @@ import retrofit2.Response;
 import retrofit2.Retrofit;
 import teckvillage.developer.khaled_pc.teckvillagetrue.View.CheckNetworkConnection;
 import teckvillage.developer.khaled_pc.teckvillagetrue.View.ConnectionDetector;
-import teckvillage.developer.khaled_pc.teckvillagetrue.View.Signup;
 import teckvillage.developer.khaled_pc.teckvillagetrue.View.SplashScreen;
-import teckvillage.developer.khaled_pc.teckvillagetrue.model.SharedPreference.getSharedPreferenceValue;
-import teckvillage.developer.khaled_pc.teckvillagetrue.model.retrofit.ApiAccessToken;
+import teckvillage.developer.khaled_pc.teckvillagetrue.Model.SharedPreference.getSharedPreferenceValue;
+import teckvillage.developer.khaled_pc.teckvillagetrue.Model.retrofit.ApiAccessToken;
 
-import teckvillage.developer.khaled_pc.teckvillagetrue.model.retrofit.JSON_Mapping.ResultModel;
-import teckvillage.developer.khaled_pc.teckvillagetrue.model.retrofit.JSON_Mapping.ResultModel_Update_User_data;
-import teckvillage.developer.khaled_pc.teckvillagetrue.model.retrofit.JSON_Mapping.Result_Update_User_Data;
-import teckvillage.developer.khaled_pc.teckvillagetrue.model.retrofit.WhoCallerApi;
-import teckvillage.developer.khaled_pc.teckvillagetrue.model.retrofit.retrofitHead;
+import teckvillage.developer.khaled_pc.teckvillagetrue.Model.retrofit.JSON_Mapping.ResultModel_Update_User_data;
+import teckvillage.developer.khaled_pc.teckvillagetrue.Model.retrofit.JSON_Mapping.Result_Update_User_Data;
+import teckvillage.developer.khaled_pc.teckvillagetrue.Model.retrofit.WhoCallerApi;
+import teckvillage.developer.khaled_pc.teckvillagetrue.Model.retrofit.retrofitHead;
 
-import static teckvillage.developer.khaled_pc.teckvillagetrue.MainActivity.decodeBase64;
 import static teckvillage.developer.khaled_pc.teckvillagetrue.View.Signup.encodeTobase64;
 
 public class UserProfileActivity extends AppCompatActivity {

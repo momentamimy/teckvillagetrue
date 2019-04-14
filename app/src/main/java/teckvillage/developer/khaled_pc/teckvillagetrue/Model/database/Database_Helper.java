@@ -1,4 +1,4 @@
-package teckvillage.developer.khaled_pc.teckvillagetrue.model.database;
+package teckvillage.developer.khaled_pc.teckvillagetrue.Model.database;
 
 import android.content.ContentValues;
 import android.content.Context;
@@ -9,9 +9,8 @@ import android.database.sqlite.SQLiteOpenHelper;
 import java.util.ArrayList;
 import java.util.List;
 
-import teckvillage.developer.khaled_pc.teckvillagetrue.View.BlockList;
-import teckvillage.developer.khaled_pc.teckvillagetrue.model.database.tables.BlockListHistory;
-import teckvillage.developer.khaled_pc.teckvillagetrue.model.database.tables.block;
+import teckvillage.developer.khaled_pc.teckvillagetrue.Model.database.tables.BlockListHistory;
+import teckvillage.developer.khaled_pc.teckvillagetrue.Model.database.tables.block;
 
 /**
  * Created by khaled-pc on 3/30/2019.

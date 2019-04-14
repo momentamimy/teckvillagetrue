@@ -1,4 +1,4 @@
-package teckvillage.developer.khaled_pc.teckvillagetrue.model.SharedPreference;
+package teckvillage.developer.khaled_pc.teckvillagetrue.Model.SharedPreference;
 
 import android.content.Context;
 import android.content.SharedPreferences;

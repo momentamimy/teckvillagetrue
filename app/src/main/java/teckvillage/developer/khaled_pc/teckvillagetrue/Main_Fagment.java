@@ -75,12 +75,12 @@ import teckvillage.developer.khaled_pc.teckvillagetrue.View.Fragments.MainActivi
 import teckvillage.developer.khaled_pc.teckvillagetrue.View.Fragments.MainActivityOptionFragments.Income_Call_fragment;
 import teckvillage.developer.khaled_pc.teckvillagetrue.View.Fragments.MainActivityOptionFragments.Missed_Call_fragment;
 import teckvillage.developer.khaled_pc.teckvillagetrue.View.Fragments.MainActivityOptionFragments.Outgoing_Call_fragment;
-import teckvillage.developer.khaled_pc.teckvillagetrue.model.Get_Calls_Log;
+import teckvillage.developer.khaled_pc.teckvillagetrue.Model.Get_Calls_Log;
 import teckvillage.developer.khaled_pc.teckvillagetrue.View.KeyboardlessEditText;
-import teckvillage.developer.khaled_pc.teckvillagetrue.model.ContactInfo;
-import teckvillage.developer.khaled_pc.teckvillagetrue.model.GridListDataModel;
-import teckvillage.developer.khaled_pc.teckvillagetrue.model.GroupListByDate;
-import teckvillage.developer.khaled_pc.teckvillagetrue.model.LogInfo;
+import teckvillage.developer.khaled_pc.teckvillagetrue.Model.ContactInfo;
+import teckvillage.developer.khaled_pc.teckvillagetrue.Model.GridListDataModel;
+import teckvillage.developer.khaled_pc.teckvillagetrue.Model.GroupListByDate;
+import teckvillage.developer.khaled_pc.teckvillagetrue.Model.LogInfo;
 
 import static android.app.Activity.RESULT_CANCELED;
 import static android.app.Activity.RESULT_OK;

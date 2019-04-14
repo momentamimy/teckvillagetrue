@@ -61,7 +61,7 @@ import teckvillage.developer.khaled_pc.teckvillagetrue.Services.FileUploadServic
 import teckvillage.developer.khaled_pc.teckvillagetrue.Services.UploadTopTenContactsService;
 import teckvillage.developer.khaled_pc.teckvillagetrue.View.BlockList;
 import teckvillage.developer.khaled_pc.teckvillagetrue.View.ChatFragment;
-import teckvillage.developer.khaled_pc.teckvillagetrue.model.SharedPreference.getSharedPreferenceValue;
+import teckvillage.developer.khaled_pc.teckvillagetrue.Model.SharedPreference.getSharedPreferenceValue;
 
 
 public class MainActivity extends AppCompatActivity implements NavigationView.OnNavigationItemSelectedListener {

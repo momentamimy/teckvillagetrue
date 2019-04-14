@@ -1,6 +1,5 @@
-package teckvillage.developer.khaled_pc.teckvillagetrue.model;
+package teckvillage.developer.khaled_pc.teckvillagetrue.Model;
 
-import android.content.Context;
 import android.text.format.DateFormat;
 
 import java.util.ArrayList;

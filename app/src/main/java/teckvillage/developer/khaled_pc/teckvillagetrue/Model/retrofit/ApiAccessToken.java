@@ -1,4 +1,4 @@
-package teckvillage.developer.khaled_pc.teckvillagetrue.model.retrofit;
+package teckvillage.developer.khaled_pc.teckvillagetrue.Model.retrofit;
 
 import android.content.Context;
 import android.content.SharedPreferences;

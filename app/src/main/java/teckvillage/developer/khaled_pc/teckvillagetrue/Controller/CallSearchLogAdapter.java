@@ -14,7 +14,7 @@ import java.util.List;
 
 import teckvillage.developer.khaled_pc.teckvillagetrue.R;
 import teckvillage.developer.khaled_pc.teckvillagetrue.View.SearchLogHolder;
-import teckvillage.developer.khaled_pc.teckvillagetrue.model.LogInfo;
+import teckvillage.developer.khaled_pc.teckvillagetrue.Model.LogInfo;
 
 public class CallSearchLogAdapter extends RecyclerView.Adapter<SearchLogHolder> {
     private List<LogInfo> itemList;

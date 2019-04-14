@@ -23,9 +23,8 @@ import java.util.List;
 import teckvillage.developer.khaled_pc.teckvillagetrue.Controller.AddingSendToContactsAdapters;
 import teckvillage.developer.khaled_pc.teckvillagetrue.Controller.LetterComparator;
 import teckvillage.developer.khaled_pc.teckvillagetrue.Controller.SendToContactsAdapters;
-import teckvillage.developer.khaled_pc.teckvillagetrue.Controller.UserContactsAdapters;
-import teckvillage.developer.khaled_pc.teckvillagetrue.model.Get_User_Contacts;
-import teckvillage.developer.khaled_pc.teckvillagetrue.model.UserContactData;
+import teckvillage.developer.khaled_pc.teckvillagetrue.Model.Get_User_Contacts;
+import teckvillage.developer.khaled_pc.teckvillagetrue.Model.UserContactData;
 
 public class SendToActivity extends AppCompatActivity {
 

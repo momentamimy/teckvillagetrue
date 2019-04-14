@@ -1,4 +1,4 @@
-package teckvillage.developer.khaled_pc.teckvillagetrue.model.database.tables;
+package teckvillage.developer.khaled_pc.teckvillagetrue.Model.database.tables;
 
 /**
  * Created by khaled-pc on 3/30/2019.

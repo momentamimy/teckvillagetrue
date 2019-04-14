@@ -7,7 +7,7 @@ import android.os.Bundle;
 import android.telephony.SmsMessage;
 
 import teckvillage.developer.khaled_pc.teckvillagetrue.FragMessageOthers;
-import teckvillage.developer.khaled_pc.teckvillagetrue.model.MessageInfo;
+import teckvillage.developer.khaled_pc.teckvillagetrue.Model.MessageInfo;
 
 public class SMSBReceiver extends BroadcastReceiver {
     public static final String SMS_BUNDLE = "pdus";

@@ -18,7 +18,7 @@ import java.util.List;
 
 import teckvillage.developer.khaled_pc.teckvillagetrue.R;
 import teckvillage.developer.khaled_pc.teckvillagetrue.View.ContactHolder;
-import teckvillage.developer.khaled_pc.teckvillagetrue.model.ContactInfo;
+import teckvillage.developer.khaled_pc.teckvillagetrue.Model.ContactInfo;
 
 public class ContactAdapter extends RecyclerView.Adapter<ContactHolder> {
 

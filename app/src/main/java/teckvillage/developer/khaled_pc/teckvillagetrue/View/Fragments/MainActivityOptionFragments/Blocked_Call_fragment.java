@@ -2,7 +2,6 @@ package teckvillage.developer.khaled_pc.teckvillagetrue.View.Fragments.MainActiv
 
 
 import android.os.Bundle;
-import android.provider.CallLog;
 import android.support.v4.app.Fragment;
 import android.support.v7.widget.DefaultItemAnimator;
 import android.support.v7.widget.LinearLayoutManager;
@@ -20,12 +19,11 @@ import java.util.List;
 
 import teckvillage.developer.khaled_pc.teckvillagetrue.Controller.LogAdapter;
 import teckvillage.developer.khaled_pc.teckvillagetrue.R;
-import teckvillage.developer.khaled_pc.teckvillagetrue.model.Get_Calls_Log;
-import teckvillage.developer.khaled_pc.teckvillagetrue.model.Get_list_from_logCall_depend_selection;
-import teckvillage.developer.khaled_pc.teckvillagetrue.model.GroupListByDate;
-import teckvillage.developer.khaled_pc.teckvillagetrue.model.LogInfo;
-import teckvillage.developer.khaled_pc.teckvillagetrue.model.database.Database_Helper;
-import teckvillage.developer.khaled_pc.teckvillagetrue.model.database.tables.BlockListHistory;
+import teckvillage.developer.khaled_pc.teckvillagetrue.Model.Get_Calls_Log;
+import teckvillage.developer.khaled_pc.teckvillagetrue.Model.Get_list_from_logCall_depend_selection;
+import teckvillage.developer.khaled_pc.teckvillagetrue.Model.GroupListByDate;
+import teckvillage.developer.khaled_pc.teckvillagetrue.Model.LogInfo;
+import teckvillage.developer.khaled_pc.teckvillagetrue.Model.database.Database_Helper;
 
 /**
  * A simple {@link Fragment} subclass.

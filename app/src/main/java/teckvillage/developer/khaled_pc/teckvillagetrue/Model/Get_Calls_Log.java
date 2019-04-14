@@ -1,4 +1,4 @@
-package teckvillage.developer.khaled_pc.teckvillagetrue.model;
+package teckvillage.developer.khaled_pc.teckvillagetrue.Model;
 
 import android.Manifest;
 import android.annotation.SuppressLint;
@@ -37,9 +37,8 @@ import java.util.Locale;
 import java.util.Map;
 
 import teckvillage.developer.khaled_pc.teckvillagetrue.Permission;
-import teckvillage.developer.khaled_pc.teckvillagetrue.R;
-import teckvillage.developer.khaled_pc.teckvillagetrue.model.database.Database_Helper;
-import teckvillage.developer.khaled_pc.teckvillagetrue.model.retrofit.JSON_Mapping.Send_Top_Ten_Contacts_JSON;
+import teckvillage.developer.khaled_pc.teckvillagetrue.Model.database.Database_Helper;
+import teckvillage.developer.khaled_pc.teckvillagetrue.Model.retrofit.JSON_Mapping.Send_Top_Ten_Contacts_JSON;
 
 /**
  * Created by khaled-pc on 2/20/2019.

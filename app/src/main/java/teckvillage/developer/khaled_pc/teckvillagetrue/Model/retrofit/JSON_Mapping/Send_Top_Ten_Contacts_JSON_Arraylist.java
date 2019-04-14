@@ -1,4 +1,4 @@
-package teckvillage.developer.khaled_pc.teckvillagetrue.model.retrofit.JSON_Mapping;
+package teckvillage.developer.khaled_pc.teckvillagetrue.Model.retrofit.JSON_Mapping;
 
 import com.google.gson.annotations.Expose;
 import com.google.gson.annotations.SerializedName;

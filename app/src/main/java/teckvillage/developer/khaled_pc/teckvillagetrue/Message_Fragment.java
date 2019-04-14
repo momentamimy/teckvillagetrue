@@ -29,11 +29,10 @@ import android.widget.ImageView;
 import android.widget.RelativeLayout;
 
 import java.util.ArrayList;
-import java.util.Calendar;
 
 import teckvillage.developer.khaled_pc.teckvillagetrue.Controller.CustomMessageViewAdapter;
-import teckvillage.developer.khaled_pc.teckvillagetrue.model.Get_User_Contacts;
-import teckvillage.developer.khaled_pc.teckvillagetrue.model.MessageInfo;
+import teckvillage.developer.khaled_pc.teckvillagetrue.Model.Get_User_Contacts;
+import teckvillage.developer.khaled_pc.teckvillagetrue.Model.MessageInfo;
 
 import static teckvillage.developer.khaled_pc.teckvillagetrue.FragMessageContact.DismissLoadingContactToast;
 import static teckvillage.developer.khaled_pc.teckvillagetrue.FragMessageContact.LoadingContactToast;
