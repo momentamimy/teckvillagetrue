@@ -97,6 +97,9 @@ public class UserProfileActivity extends AppCompatActivity {
         gender=findViewById(R.id.gender_label);
         save=findViewById(R.id.savechangebtn);
         tag=findViewById(R.id.tagviewprofile);
+        shortnote=findViewById(R.id.info);
+        website=findViewById(R.id.Websie);
+        address=findViewById(R.id.home_address);
 
         //CHANGE UserName Or Image
         editbtnimgandusername.setOnClickListener(new View.OnClickListener() {
@@ -201,6 +204,7 @@ public class UserProfileActivity extends AppCompatActivity {
                 MyCustomShortTextEditDialog();
             }
         });
+
         info_Gender_Layout.setOnClickListener(new View.OnClickListener() {
             @Override
             public void onClick(View v) {
@@ -268,7 +272,7 @@ public class UserProfileActivity extends AppCompatActivity {
         Window window = MyDialogHomeEdit.getWindow();
         window.setLayout(Toolbar.LayoutParams.MATCH_PARENT, Toolbar.LayoutParams.WRAP_CONTENT);
         MyDialogHomeEdit.getWindow().setBackgroundDrawable(new ColorDrawable(Color.TRANSPARENT));
-        EditText Street,ZibCode,City;
+        final EditText Street,ZibCode,City;
         TextView Cancel,Ok;
 
         Street=MyDialogHomeEdit.findViewById(R.id.edit_Street);
@@ -288,6 +292,7 @@ public class UserProfileActivity extends AppCompatActivity {
         Ok.setOnClickListener(new View.OnClickListener() {
             @Override
             public void onClick(View v) {
+                address.setText(Street.getText().toString().trim()+","+ZibCode.getText().toString().trim()+" "+City.getText().toString().trim());
                 MyDialogHomeEdit.dismiss();
             }
         });
@@ -336,7 +341,7 @@ public class UserProfileActivity extends AppCompatActivity {
         Window window = MyDialogWebsiteEdit.getWindow();
         window.setLayout(Toolbar.LayoutParams.MATCH_PARENT, Toolbar.LayoutParams.WRAP_CONTENT);
         MyDialogWebsiteEdit.getWindow().setBackgroundDrawable(new ColorDrawable(Color.TRANSPARENT));
-        EditText Website;
+        final EditText Website;
         TextView Cancel,Ok;
 
         Website=MyDialogWebsiteEdit.findViewById(R.id.edit_Websie);
@@ -354,6 +359,7 @@ public class UserProfileActivity extends AppCompatActivity {
         Ok.setOnClickListener(new View.OnClickListener() {
             @Override
             public void onClick(View v) {
+                website.setText(Website.getText().toString().trim());
                 MyDialogWebsiteEdit.dismiss();
             }
         });
@@ -407,6 +413,7 @@ public class UserProfileActivity extends AppCompatActivity {
         Ok.setOnClickListener(new View.OnClickListener() {
             @Override
             public void onClick(View v) {
+                shortnote.setText(ShortText.getText().toString().trim());
                 MyDialogShortTextEdit.dismiss();
             }
         });

@@ -10,6 +10,8 @@
     android:layout_width="match_parent"
     android:layout_height="match_parent"
     android:orientation="vertical"
+    android:id="@+id/lolo"
+    android:layout_above="@+id/savechangebtn"
     tools:context=".UserProfileActivity">
 <RelativeLayout
     android:layout_width="match_parent"
@@ -38,7 +40,7 @@
             android:src="@drawable/tamimy"
             android:layout_marginStart="30dp"
             android:layout_marginLeft="30dp"
-            android:layout_marginTop="70dp"
+            android:layout_marginTop="67dp"
             />
 
 
@@ -94,8 +96,8 @@
 
         <ImageView
             android:id="@+id/edit_usernameandimage"
-            android:layout_width="24dp"
-            android:layout_height="24dp"
+            android:layout_width="20dp"
+            android:layout_height="20dp"
             android:layout_alignParentEnd="true"
             android:layout_margin="15dp"
             android:src="@drawable/ic_edit_blue_gray_24dp"
@@ -445,7 +447,7 @@
                     android:layout_width="match_parent"
                     android:layout_height="wrap_content"
                     android:text="Prefer not to say"/>
-                
+
             </LinearLayout>
         </RelativeLayout>
     </android.support.v7.widget.CardView>

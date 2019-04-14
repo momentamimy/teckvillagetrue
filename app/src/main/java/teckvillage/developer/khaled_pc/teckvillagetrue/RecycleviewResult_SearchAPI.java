@@ -133,6 +133,7 @@ public class RecycleviewResult_SearchAPI extends AppCompatActivity {
 
         Retrofit retrofit = retrofitHead.headOfGetorPostReturnRes();
         WhoCallerApi whoCallerApi = retrofit.create(WhoCallerApi.class);
+        Log.w("countrycode",Codecountry);
         Call<ArrayList<Item_Search>> searchByNumber = whoCallerApi.SearchPhoneNumber(ApiAccessToken.getAPIaccessToken(RecycleviewResult_SearchAPI.this),searchvalue,Codecountry);
 
         searchByNumber.enqueue(new Callback<ArrayList<Item_Search>>() {
