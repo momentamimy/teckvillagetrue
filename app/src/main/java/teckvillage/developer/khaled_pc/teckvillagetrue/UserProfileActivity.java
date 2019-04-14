@@ -23,8 +23,6 @@ import android.renderscript.Allocation;
 import android.renderscript.Element;
 import android.renderscript.RenderScript;
 import android.renderscript.ScriptIntrinsicBlur;
-import android.support.annotation.RequiresApi;
-import android.support.design.widget.TextInputLayout;
 import android.support.v7.app.AlertDialog;
 import android.support.v7.app.AppCompatActivity;
 import android.os.Bundle;
@@ -40,12 +38,14 @@ import android.widget.Button;
 import android.widget.EditText;
 import android.widget.ImageView;
 import android.widget.LinearLayout;
+import android.widget.ProgressBar;
 import android.widget.RelativeLayout;
 import android.widget.TextView;
 import android.widget.Toast;
 
 import com.intrusoft.squint.DiagonalView;
 import com.sdsmdg.tastytoast.TastyToast;
+import com.squareup.picasso.Picasso;
 
 import java.io.File;
 import java.io.FileInputStream;
@@ -68,8 +68,9 @@ import teckvillage.developer.khaled_pc.teckvillagetrue.View.Signup;
 import teckvillage.developer.khaled_pc.teckvillagetrue.View.SplashScreen;
 import teckvillage.developer.khaled_pc.teckvillagetrue.model.SharedPreference.getSharedPreferenceValue;
 import teckvillage.developer.khaled_pc.teckvillagetrue.model.retrofit.ApiAccessToken;
-import teckvillage.developer.khaled_pc.teckvillagetrue.model.retrofit.JSON_Mapping.DataReceived;
-import teckvillage.developer.khaled_pc.teckvillagetrue.model.retrofit.JSON_Mapping.ResultModel;
+
+import teckvillage.developer.khaled_pc.teckvillagetrue.model.retrofit.JSON_Mapping.ResultModel_Update_User_data;
+import teckvillage.developer.khaled_pc.teckvillagetrue.model.retrofit.JSON_Mapping.Result_Update_User_Data;
 import teckvillage.developer.khaled_pc.teckvillagetrue.model.retrofit.WhoCallerApi;
 import teckvillage.developer.khaled_pc.teckvillagetrue.model.retrofit.retrofitHead;
 
@@ -87,12 +88,15 @@ public class UserProfileActivity extends AppCompatActivity {
     TextView setphonenumber,address,email,website,shortnote,gender,usernameprofile;
 
     DiagonalView diagonalView;
-    CircleImageView userPhoto;
+    CircleImageView userPhoto,progressCircleImageView;
     String USer_Image,UserName,UserEmail;
     ImageView editbtnimgandusername;
     Button save;
     TagView tag;
     String UserProfImgInString;
+    String genderinreq;
+    ProgressBar progressBar;
+
 
     @Override
     protected void onCreate(Bundle savedInstanceState) {
@@ -113,6 +117,8 @@ public class UserProfileActivity extends AppCompatActivity {
         shortnote=findViewById(R.id.info);
         website=findViewById(R.id.Websie);
         address=findViewById(R.id.home_address);
+        progressBar=findViewById(R.id.progressupdate);
+        progressCircleImageView=findViewById(R.id.UserPhotopicssovisableimage);
 
         //CHANGE UserName Or Image
         editbtnimgandusername.setOnClickListener(new View.OnClickListener() {
@@ -141,6 +147,11 @@ public class UserProfileActivity extends AppCompatActivity {
             }
         });
 
+        website.setText(getSharedPreferenceValue.getUserWebsite(this));
+        gender.setText(getSharedPreferenceValue.getUserGender(this));
+        address.setText(getSharedPreferenceValue.getUseraddress(this));
+
+
         UserName=getSharedPreferenceValue.getUserName(this);
         usernameprofile.setText(UserName);
 
@@ -151,7 +162,29 @@ public class UserProfileActivity extends AppCompatActivity {
         if(USer_Image.equals("NoImageHere")){
             userPhoto.setImageDrawable(getResources().getDrawable(R.drawable.ic_nurse));
         }else {
-            userPhoto.setImageBitmap(decodeBase64(USer_Image));
+            progressBar.setVisibility(View.VISIBLE);
+            Picasso.with(this)
+                    .load(USer_Image)
+                    .into(userPhoto, new com.squareup.picasso.Callback() {
+                        @Override
+                        public void onSuccess() {
+                           progressBar.setVisibility(View.GONE);
+                           progressCircleImageView.setVisibility(View.GONE);
+                           //show
+                            BlurBuilder blurBuilder=new BlurBuilder();
+                            Bitmap bitmap =((BitmapDrawable)userPhoto.getDrawable()).getBitmap();
+                            Bitmap resultBmp = blurBuilder.blur(UserProfileActivity.this,bitmap );//BitmapFactory.decodeResource(getResources(), R.drawable.tamimy)
+                            diagonalView.setImageBitmap(resultBmp);
+                        }
+
+                        @Override
+                        public void onError() {
+                            userPhoto.setImageDrawable(getResources().getDrawable(R.drawable.ic_nurse));
+                            progressBar.setVisibility(View.GONE);
+                            progressCircleImageView.setVisibility(View.GONE);
+                        }
+                    });
+           // userPhoto.setImageBitmap(decodeBase64(USer_Image));
         }
 
 
@@ -226,9 +259,14 @@ public class UserProfileActivity extends AppCompatActivity {
         });
 
 
-            BlurBuilder blurBuilder=new BlurBuilder();
-            Bitmap resultBmp = blurBuilder.blur(this,decodeBase64(USer_Image) );//BitmapFactory.decodeResource(getResources(), R.drawable.tamimy)
-            diagonalView.setImageBitmap(resultBmp);
+
+            if(!USer_Image.equals("NoImageHere")){
+                BlurBuilder blurBuilder=new BlurBuilder();
+                Bitmap bitmap =((BitmapDrawable)userPhoto.getDrawable()).getBitmap();
+                Bitmap resultBmp = blurBuilder.blur(this,bitmap );//BitmapFactory.decodeResource(getResources(), R.drawable.tamimy)
+                diagonalView.setImageBitmap(resultBmp);
+            }
+
 
 
     }
@@ -285,12 +323,15 @@ public class UserProfileActivity extends AppCompatActivity {
         Window window = MyDialogHomeEdit.getWindow();
         window.setLayout(Toolbar.LayoutParams.MATCH_PARENT, Toolbar.LayoutParams.WRAP_CONTENT);
         MyDialogHomeEdit.getWindow().setBackgroundDrawable(new ColorDrawable(Color.TRANSPARENT));
-        final EditText Street,ZibCode,City;
+        final EditText Street,ZibCode,City,Country;
         TextView Cancel,Ok;
 
         Street=MyDialogHomeEdit.findViewById(R.id.edit_Street);
         ZibCode=MyDialogHomeEdit.findViewById(R.id.edit_ZIB);
         City=MyDialogHomeEdit.findViewById(R.id.edit_City);
+        Country=MyDialogHomeEdit.findViewById(R.id.edit_country);
+
+        Country.setText(getSharedPreferenceValue.getUserCountry(UserProfileActivity.this));
 
         Cancel=MyDialogHomeEdit.findViewById(R.id.btn_close);
         Ok=MyDialogHomeEdit.findViewById(R.id.btn_submit);
@@ -321,7 +362,7 @@ public class UserProfileActivity extends AppCompatActivity {
         Window window = MyDialogEmailEdit.getWindow();
         window.setLayout(Toolbar.LayoutParams.MATCH_PARENT, Toolbar.LayoutParams.WRAP_CONTENT);
         MyDialogEmailEdit.getWindow().setBackgroundDrawable(new ColorDrawable(Color.TRANSPARENT));
-        EditText Email;
+        final EditText Email;
         TextView Cancel,Ok;
 
         Email=MyDialogEmailEdit.findViewById(R.id.edit_Email);
@@ -339,6 +380,7 @@ public class UserProfileActivity extends AppCompatActivity {
         Ok.setOnClickListener(new View.OnClickListener() {
             @Override
             public void onClick(View v) {
+                email.setText(Email.getText().toString().trim());
                 MyDialogEmailEdit.dismiss();
             }
         });
@@ -508,18 +550,24 @@ public class UserProfileActivity extends AppCompatActivity {
             e.printStackTrace();
         }
 
-        if(validation(usernameprofile.getText().toString(),email.getText().toString())) {
+        if(validation(usernameprofile.getText().toString(),email.getText().toString().trim())) {
 
 
             //Convert text to RequestBody
             RequestBody emailRequest = RequestBody.create(MediaType.parse("text/plain"), email.getText().toString());
             RequestBody fnameRequest = RequestBody.create(MediaType.parse("text/plain"), usernameprofile.getText().toString());
-            /*RequestBody codecounRequest = RequestBody.create(MediaType.parse("text/plain"), Codecountry);
-            RequestBody phNumberRequest = RequestBody.create(MediaType.parse("text/plain"), phNumber);
-            RequestBody LoginMethodRequest = RequestBody.create(MediaType.parse("text/plain"), LoginMethod);
-            RequestBody facebookProfileLinkRequest = RequestBody.create(MediaType.parse("text/plain"), facebookProfileLink);
-            RequestBody devicenameRequest = RequestBody.create(MediaType.parse("text/plain"), devicename);
-            RequestBody AndroidVersioncounRequest = RequestBody.create(MediaType.parse("text/plain"), AndroidVersion);*/
+            RequestBody addressreq = RequestBody.create(MediaType.parse("text/plain"), address.getText().toString());
+
+            if(gender.getText().toString().equals("Male")){
+                 genderinreq="male";
+            }else if(gender.getText().toString().equals("Female")){
+                genderinreq="female";
+            }if(gender.getText().toString().equals("Prefer_not_to_say")){
+                genderinreq="other";
+            }
+            RequestBody websiterequest = RequestBody.create(MediaType.parse("text/plain"), website.getText().toString());
+            RequestBody genderrebody = RequestBody.create(MediaType.parse("text/plain"), genderinreq);
+            RequestBody aboutreq = RequestBody.create(MediaType.parse("text/plain"), shortnote.getText().toString());
 
 
             //Check wifi or data available
@@ -536,11 +584,11 @@ public class UserProfileActivity extends AppCompatActivity {
 
                     Retrofit retrofit = retrofitHead.headOfGetorPostReturnRes();
                     WhoCallerApi whoCallerApi = retrofit.create(WhoCallerApi.class);
-                    //Call<ResultModel> register_user = whoCallerApi.UptadeUserProfile(ApiAccessToken.getAPIaccessToken(UserProfileActivity.this), fnameRequest, emailRequest, fileToUpload, fileToUpload, LoginMethodRequest, facebookProfileLinkRequest, devicenameRequest, AndroidVersioncounRequest);//,devicename,AndroidVersion
-/*
-                    register_user.enqueue(new Callback<ResultModel>() {
+                    Call<ResultModel_Update_User_data> updateUserdata = whoCallerApi.UptadeUserProfile(ApiAccessToken.getAPIaccessToken(UserProfileActivity.this), fnameRequest, emailRequest, fileToUpload,null, null, null, addressreq, websiterequest,genderrebody,aboutreq);//,devicename,AndroidVersion
+
+                    updateUserdata.enqueue(new Callback<ResultModel_Update_User_data>() {
                         @Override
-                        public void onResponse(Call<ResultModel> call, Response<ResultModel> response) {
+                        public void onResponse(Call<ResultModel_Update_User_data> call, Response<ResultModel_Update_User_data> response) {
                             try {
                                 if (mProgressDialog.isShowing())
                                     mProgressDialog.dismiss();
@@ -551,12 +599,11 @@ public class UserProfileActivity extends AppCompatActivity {
 
                                         // Do your success stuff...
                                         //Toast.makeText(getApplicationContext(), response.body().toString(), Toast.LENGTH_SHORT).show();
-                                        DataReceived user = response.body().getUser();
+                                        Result_Update_User_Data user = response.body().getUser();
 
                                         Log.w("success", user.getEmail());
                                         Log.w("success", user.getName());
                                         Log.w("success", user.getPhone());
-                                        Log.w("success", user.getApi_token());
 
                                         //if respone retreive img name it mean user upload img
                                         if (user.getImg() != null) {
@@ -575,17 +622,11 @@ public class UserProfileActivity extends AppCompatActivity {
                                         }
 
 
-                                        //retreive img and convert from string to bitmap to display it
-                                        //add_personal_photo.setImageBitmap(decodeBase64(UserProfImgInString));
-
                                         //when Login Success
                                         SharedPreferences sharedPref = getSharedPreferences("WhoCaller?", MODE_PRIVATE);
                                         SharedPreferences.Editor editor = sharedPref.edit();
-                                        editor.putBoolean("UserLogin", true);
 
-                                        if (user.getApi_token() != null) {
-                                            editor.putString("User_API_token", user.getApi_token());
-                                        }
+
                                         if (user.getPhone() != null) {
                                             editor.putString("User_phone", user.getPhone());
                                         }
@@ -595,13 +636,35 @@ public class UserProfileActivity extends AppCompatActivity {
                                         if (user.getEmail() != null) {
                                             editor.putString("User_email", user.getEmail());
                                         }
-                                        editor.putString("User_img_profile", UserProfImgInString);
+                                        if (user.getAbout() != null) {
+                                            editor.putString("User_ShortNote", user.getAbout());
+                                        }
+                                        if (user.getAddress() != null) {
+                                            editor.putString("User_address", user.getAddress());
+                                        }
+                                        if (user.getCompany() != null) {
+                                            editor.putString("User_company", user.getCompany());
+                                        }
+                                        if (user.getGender() != null) {
+                                            editor.putString("User_gender", user.getGender());
+                                        }
+                                        if (user.getTag_id() != null) {
+                                            editor.putString("User_TagID", user.getTag_id());
+                                        }
+                                        if (user.getWebsite() != null) {
+                                            editor.putString("User_Website", user.getWebsite());
+                                        }
+                                        if(user.getImg()!=null){
+                                            editor.putString("User_img_profile","http://whocaller.net/uploads/"+ user.getImg());
+                                        }else {
+                                            //user not upload img
+                                            editor.putString("User_img_profile","NoImageHere");
+                                        }
+                                        //editor.putString("User_img_profile", UserProfImgInString);
                                         editor.apply();
 
 
                                         //Close open MainActivity
-                                        Intent intent = new Intent(getApplicationContext(), MainActivity.class);
-                                        startActivity(intent);
                                         finish();
 
 
@@ -619,7 +682,7 @@ public class UserProfileActivity extends AppCompatActivity {
                         }
 
                         @Override
-                        public void onFailure(Call<ResultModel> call, Throwable t) {
+                        public void onFailure(Call<ResultModel_Update_User_data> call, Throwable t) {
                             if (mProgressDialog.isShowing())
                                 mProgressDialog.dismiss();
 
@@ -628,7 +691,7 @@ public class UserProfileActivity extends AppCompatActivity {
                             //View parentLayout = findViewById(R.id.layoutsignuo);
                             //Snackbar.make(parentLayout, "Failure,Please try again", Snackbar.LENGTH_LONG);
                         }
-                    });*/
+                    });
 
 
                 } else {
@@ -653,13 +716,13 @@ public class UserProfileActivity extends AppCompatActivity {
                     public void onClick(DialogInterface dialog, int which) {
                         // Continue with delete operation
                         //remove share preferences
-                       /* SharedPreferences preferences = getSharedPreferences("WhoCaller?", MODE_PRIVATE);
+                        SharedPreferences preferences = getSharedPreferences("WhoCaller?", MODE_PRIVATE);
                         preferences.edit().clear().apply();
                         //start splash
                         Intent intent=new Intent(UserProfileActivity.this,SplashScreen.class);
                         intent.setFlags(Intent.FLAG_ACTIVITY_NEW_TASK | Intent.FLAG_ACTIVITY_CLEAR_TASK);
                         startActivity(intent);
-                        finish();*/
+                        finish();
 
                     }
                 })
@@ -720,11 +783,10 @@ public class UserProfileActivity extends AppCompatActivity {
             Toast.makeText(UserProfileActivity.this,"Name Field Empty",Toast.LENGTH_LONG).show();
             return false;
         }
-
         if (TextUtils.isEmpty(email)) {
             Toast.makeText(UserProfileActivity.this,"Email Field Empty",Toast.LENGTH_LONG).show();
             return false;
-        }else if( Patterns.EMAIL_ADDRESS.matcher(email).matches()){
+        }else if( !Patterns.EMAIL_ADDRESS.matcher(email).matches()){
             Toast.makeText(UserProfileActivity.this,"Email not valid",Toast.LENGTH_LONG).show();
             return false;
         }

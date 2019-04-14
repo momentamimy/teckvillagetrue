@@ -107,6 +107,8 @@
         android:id="@+id/contact_recycleview"
         android:layout_width="match_parent"
         android:layout_height="wrap_content"
+        android:layout_marginStart="8dp"
+        android:layout_marginLeft="8dp"
         />
 
        <ImageView
@@ -180,7 +182,8 @@
     <RelativeLayout
 
         android:layout_width="match_parent"
-        android:layout_height="match_parent">
+        android:layout_height="match_parent"
+        >
 
         <android.support.design.widget.CoordinatorLayout
             android:id="@+id/search_call_layout"

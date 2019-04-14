@@ -114,6 +114,7 @@ public class Signup extends AppCompatActivity {
     boolean IsUserHasPhoto=false;
     String UserProfImgInString;
     Bitmap bitmap;
+    String countryname;
 
     @SuppressLint("MissingPermission")
     @Override
@@ -335,7 +336,11 @@ public class Signup extends AppCompatActivity {
                                                 if(user.getEmail()!=null){
                                                     editor.putString("User_email", user.getEmail());
                                                 }
-                                                editor.putString("User_img_profile", UserProfImgInString);
+                                                if(user.getImg()!=null){
+                                                    editor.putString("User_img_profile","http://whocaller.net/uploads/"+ user.getImg());
+                                                }
+                                                //editor.putString("User_img_profile", UserProfImgInString);
+                                                editor.putString("UserCountry", countryname);
                                                 editor.apply();
 
 
@@ -398,6 +403,7 @@ public class Signup extends AppCompatActivity {
     private void getIntentDetails() {
         phNumber=getIntent().getStringExtra("phonenumber");
         Codecountry=getIntent().getStringExtra("countrycode");
+        countryname=getIntent().getStringExtra("contryname");
     }
 
 

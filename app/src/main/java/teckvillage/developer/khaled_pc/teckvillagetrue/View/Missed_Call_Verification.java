@@ -27,6 +27,7 @@ public class Missed_Call_Verification extends AppCompatActivity {
     SharedPreferences sharedPreferences;
     String coincode;
     String number;
+    String contryname;
 
     @Override
     protected void onCreate(Bundle savedInstanceState) {
@@ -35,6 +36,7 @@ public class Missed_Call_Verification extends AppCompatActivity {
 
         number=getIntent().getStringExtra("num");
         coincode=getIntent().getStringExtra("codenum");
+        contryname=getIntent().getStringExtra("contryname");
         //Log.w("code",coincode);
 
         if(number.isEmpty()) {
@@ -86,12 +88,14 @@ public class Missed_Call_Verification extends AppCompatActivity {
             SharedPreferences.Editor editor = sharedPreferences.edit();
             editor.putBoolean("IsPhoneNumberMissedCallVerification", true);
             editor.putString("Countrycode", coincode);
+            editor.putString("UserCountry", contryname);
             editor.putString("PhoneNumVerified", number);
             editor.apply();
 
             Intent intent = new Intent(getApplicationContext(), Signup.class);
             intent.putExtra("countrycode",coincode);
             intent.putExtra("phonenumber",number);
+            intent.putExtra("contryname",contryname);
             startActivity(intent);
             finish();
         }

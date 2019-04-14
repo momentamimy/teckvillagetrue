@@ -40,9 +40,13 @@ import android.view.MenuItem;
 import android.view.View;
 import android.view.Window;
 import android.widget.FrameLayout;
+import android.widget.ProgressBar;
 import android.widget.RelativeLayout;
 import android.widget.TextView;
 import android.widget.Toast;
+
+import com.squareup.picasso.Picasso;
+
 import java.io.File;
 import java.io.FileInputStream;
 import java.io.FileOutputStream;
@@ -308,7 +312,8 @@ public class MainActivity extends AppCompatActivity implements NavigationView.On
         //reference to views
         TextView headnav_title_UserName = (TextView)navView.findViewById(R.id.title_user_name);
         TextView headnav_title_Phonenumber = (TextView)navView.findViewById(R.id.textView_phonemunber);
-        CircleImageView userImageprofile=navView.findViewById(R.id.imageViewprofile);
+        final CircleImageView userImageprofile=navView.findViewById(R.id.imageViewprofile);
+        final ProgressBar progressBar=navView.findViewById(R.id.progressheadernav);
         headnav_title_UserName.setText(getSharedPreferenceValue.getUserName(this));
         String PhoneNumber=getSharedPreferenceValue.getUserPhoneNumber(this);
         //Check if Phone number not found
@@ -323,7 +328,25 @@ public class MainActivity extends AppCompatActivity implements NavigationView.On
         if(USer_Image.equals("NoImageHere")){
             userImageprofile.setImageDrawable(getResources().getDrawable(R.drawable.ic_nurse));
         }else {
-            userImageprofile.setImageBitmap(decodeBase64(USer_Image));
+            Log.w("image",USer_Image);
+            //userImageprofile.setImageBitmap(decodeBase64(USer_Image));
+            progressBar.setVisibility(View.VISIBLE);
+            Picasso.with(this)
+                    .load(USer_Image)
+                    .into(userImageprofile, new com.squareup.picasso.Callback() {
+                        @Override
+                        public void onSuccess() {
+                            progressBar.setVisibility(View.GONE);
+
+                        }
+
+                        @Override
+                        public void onError() {
+                            userImageprofile.setImageDrawable(getResources().getDrawable(R.drawable.ic_nurse));
+                            progressBar.setVisibility(View.GONE);
+
+                        }
+                    });
         }
 
         //Upload VCF File

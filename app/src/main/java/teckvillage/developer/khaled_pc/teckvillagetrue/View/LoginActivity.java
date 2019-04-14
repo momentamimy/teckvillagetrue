@@ -31,7 +31,7 @@ public class LoginActivity extends AppCompatActivity implements TextWatcher {
     boolean PhoneNumberValid;
     SharedPreferences sharedPreferences;
     boolean IsPhoneNumberMissed_Call_VerificationHappen;
-    String  countrycodee,phnum;
+    String  countrycodee,phnum,countryname;
 
 
     @Override
@@ -48,12 +48,14 @@ public class LoginActivity extends AppCompatActivity implements TextWatcher {
         IsPhoneNumberMissed_Call_VerificationHappen= sharedPreferences.getBoolean("IsPhoneNumberMissedCallVerification", false);
         countrycodee = sharedPreferences.getString("Countrycode","false");
         phnum = sharedPreferences.getString("PhoneNumVerified","false");
+        countryname = sharedPreferences.getString("UserCountry","false");
 
         //Close This Activity If Phone number Verified and Open Signup ACtivity
         if(IsPhoneNumberMissed_Call_VerificationHappen){
             Intent intent = new Intent(getApplicationContext(), Signup.class);
             intent.putExtra("countrycode",countrycodee);
             intent.putExtra("phonenumber",phnum);
+            intent.putExtra("contryname",countryname);
             startActivity(intent);
             finish();
         }
@@ -95,9 +97,11 @@ public class LoginActivity extends AppCompatActivity implements TextWatcher {
                 //Toast.makeText(getApplicationContext(),myCountry.getDialCode().toString(),Toast.LENGTH_LONG).show();
                 String number=myCountry.getDialCode()+phoneNumber.getText().toString().trim();
                 String councode=myCountry.getDialCode();
+                String contryname=myCountry.getName();
                 Intent intent=new Intent(getApplicationContext(), Missed_Call_Verification.class);
                 intent.putExtra("num",number);
                 intent.putExtra("codenum",councode);
+                intent.putExtra("contryname",contryname);
                 startActivity(intent);
                 finish();
             }

@@ -93,7 +93,7 @@ public class FileUploadService extends JobIntentService {
                boolean me = response.body().isResponse();
                Log.w("success", mesf);
                Log.w("success", String.valueOf(me));
-               Toast.makeText(getApplicationContext(),"successUploadVCF",Toast.LENGTH_LONG).show();
+               //Toast.makeText(getApplicationContext(),"successUploadVCF",Toast.LENGTH_LONG).show();
            }
 
            @Override

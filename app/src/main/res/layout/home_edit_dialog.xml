@@ -1,20 +1,21 @@
 <?xml version="1.0" encoding="utf-8"?>
-
-
-    <android.support.v7.widget.CardView
+<android.support.v7.widget.CardView
         xmlns:android="http://schemas.android.com/apk/res/android"
         xmlns:app="http://schemas.android.com/apk/res-auto"
         app:cardBackgroundColor="@android:color/white"
         android:layout_centerInParent="true"
         android:layout_width="match_parent"
         android:layout_height="wrap_content"
-    android:layout_margin="20dp"
+        android:layout_margin="20dp"
         app:cardCornerRadius="10dp"
         app:cardElevation="5dp">
+
+
         <RelativeLayout
             android:layout_width="match_parent"
             android:layout_height="wrap_content"
             android:orientation="vertical">
+
             <TextView
                 android:background="@color/colorPrimary"
                 android:id="@+id/Address_title"
@@ -103,6 +104,35 @@
                 </android.support.design.widget.TextInputLayout>
             </LinearLayout>
 
+
+            <LinearLayout
+                android:orientation="vertical"
+                android:layout_below="@id/Address_title"
+                android:layout_width="match_parent"
+                android:layout_height="wrap_content">
+
+                <android.support.design.widget.TextInputLayout
+                    android:layout_marginLeft="10dp"
+                    android:layout_marginRight="10dp"
+                    android:id="@+id/input_layout_country"
+                    android:theme="@style/TextLabe3"
+                    android:layout_width="match_parent"
+                    android:layout_height="wrap_content"
+                    app:errorTextAppearance="@style/WelcomeErrorAppearance">
+
+                    <EditText
+                        android:textColor="@color/colorPrimary"
+                        android:id="@+id/edit_country"
+                        android:drawablePadding="10dp"
+                        android:layout_width="match_parent"
+                        android:layout_height="wrap_content"
+                        android:textSize="16sp"
+                        android:maxLines="1"
+                        android:singleLine="true"
+                        android:hint="Country" />
+                </android.support.design.widget.TextInputLayout>
+
+            </LinearLayout>
                 <RelativeLayout
                     android:layout_width="match_parent"
                     android:layout_height="wrap_content"

@@ -18,6 +18,7 @@ import retrofit2.http.Query;
 import teckvillage.developer.khaled_pc.teckvillagetrue.model.retrofit.JSON_Mapping.Item_Search;
 import teckvillage.developer.khaled_pc.teckvillagetrue.model.retrofit.JSON_Mapping.ResultModel;
 import teckvillage.developer.khaled_pc.teckvillagetrue.model.retrofit.JSON_Mapping.ResultModelUploadVCF;
+import teckvillage.developer.khaled_pc.teckvillagetrue.model.retrofit.JSON_Mapping.ResultModel_Update_User_data;
 import teckvillage.developer.khaled_pc.teckvillagetrue.model.retrofit.JSON_Mapping.Send_Top_Ten_Contacts_JSON_Arraylist;
 import teckvillage.developer.khaled_pc.teckvillagetrue.model.retrofit.JSON_Mapping.datamodel;
 
@@ -80,7 +81,7 @@ public interface WhoCallerApi {
 
     @Multipart
     @POST("updateUserData")
-    Call<ResultModel> UptadeUserProfile(
+    Call<ResultModel_Update_User_data> UptadeUserProfile(
             @Query("api_token") String ApiAccessToken,
             @Part("name")       RequestBody  username,
             @Part("email")      RequestBody  email,
@@ -91,8 +92,7 @@ public interface WhoCallerApi {
             @Part("address")      RequestBody  address,
             @Part("website") RequestBody  website,
             @Part("gender") RequestBody  gender,
-            @Part("about")   RequestBody  about,
-            @Part("mobile_os")     RequestBody  mobileos
+            @Part("about")   RequestBody  about
     );
 
 

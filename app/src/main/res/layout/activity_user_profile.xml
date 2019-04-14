@@ -13,6 +13,7 @@
     android:id="@+id/lolo"
     android:layout_above="@+id/savechangebtn"
     tools:context=".UserProfileActivity">
+
 <RelativeLayout
     android:layout_width="match_parent"
     android:layout_height="match_parent">
@@ -37,10 +38,31 @@
             android:id="@+id/UserPhoto"
             android:layout_width="60dp"
             android:layout_height="60dp"
-            android:src="@drawable/tamimy"
+            android:src="@drawable/ic_nurse"
             android:layout_marginStart="30dp"
             android:layout_marginLeft="30dp"
             android:layout_marginTop="67dp"
+            />
+
+        <de.hdodenhof.circleimageview.CircleImageView
+            android:id="@+id/UserPhotopicssovisableimage"
+            android:layout_width="60dp"
+            android:layout_height="60dp"
+            android:src="@drawable/ic_nurse"
+            android:layout_marginStart="30dp"
+            android:layout_marginLeft="30dp"
+            android:layout_marginTop="67dp"
+            />
+
+        <ProgressBar
+            android:id="@+id/progressupdate"
+            android:layout_width="71dp"
+            android:layout_height="79dp"
+            android:layout_marginStart="24dp"
+            android:layout_marginLeft="30dp"
+            android:layout_marginTop="57dp"
+            android:visibility="gone"
+            android:theme="@style/AppTheme.grayAccent"
             />
 
 
@@ -100,6 +122,7 @@
             android:layout_height="20dp"
             android:layout_alignParentEnd="true"
             android:layout_margin="15dp"
+            android:visibility="gone"
             android:src="@drawable/ic_mode_edit_white_24dp"
             android:layout_alignParentRight="true" />
 
