@@ -1,7 +1,11 @@
 package teckvillage.developer.khaled_pc.teckvillagetrue;
 
 import android.app.Dialog;
+import android.app.ProgressDialog;
 import android.content.Context;
+import android.content.ContextWrapper;
+import android.content.DialogInterface;
+import android.content.Intent;
 import android.content.SharedPreferences;
 import android.graphics.Bitmap;
 import android.graphics.BitmapFactory;
@@ -11,7 +15,9 @@ import android.graphics.ColorFilter;
 import android.graphics.LightingColorFilter;
 import android.graphics.Matrix;
 import android.graphics.Paint;
+import android.graphics.drawable.BitmapDrawable;
 import android.graphics.drawable.ColorDrawable;
+import android.graphics.drawable.Drawable;
 import android.os.Build;
 import android.renderscript.Allocation;
 import android.renderscript.Element;
@@ -19,48 +25,121 @@ import android.renderscript.RenderScript;
 import android.renderscript.ScriptIntrinsicBlur;
 import android.support.annotation.RequiresApi;
 import android.support.design.widget.TextInputLayout;
+import android.support.v7.app.AlertDialog;
 import android.support.v7.app.AppCompatActivity;
 import android.os.Bundle;
 import android.support.v7.widget.Toolbar;
 import android.text.Editable;
 import android.text.TextUtils;
 import android.text.TextWatcher;
+import android.util.Log;
+import android.util.Patterns;
 import android.view.View;
 import android.view.Window;
+import android.widget.Button;
 import android.widget.EditText;
+import android.widget.ImageView;
 import android.widget.LinearLayout;
 import android.widget.RelativeLayout;
 import android.widget.TextView;
+import android.widget.Toast;
 
 import com.intrusoft.squint.DiagonalView;
+import com.sdsmdg.tastytoast.TastyToast;
+
+import java.io.File;
+import java.io.FileInputStream;
+import java.io.FileNotFoundException;
+import java.io.FileOutputStream;
+import java.io.IOException;
 
 import de.hdodenhof.circleimageview.CircleImageView;
+import me.kaede.tagview.TagView;
+import okhttp3.MediaType;
+import okhttp3.MultipartBody;
+import okhttp3.RequestBody;
+import retrofit2.Call;
+import retrofit2.Callback;
+import retrofit2.Response;
+import retrofit2.Retrofit;
+import teckvillage.developer.khaled_pc.teckvillagetrue.View.CheckNetworkConnection;
+import teckvillage.developer.khaled_pc.teckvillagetrue.View.ConnectionDetector;
+import teckvillage.developer.khaled_pc.teckvillagetrue.View.Signup;
+import teckvillage.developer.khaled_pc.teckvillagetrue.View.SplashScreen;
 import teckvillage.developer.khaled_pc.teckvillagetrue.model.SharedPreference.getSharedPreferenceValue;
+import teckvillage.developer.khaled_pc.teckvillagetrue.model.retrofit.ApiAccessToken;
+import teckvillage.developer.khaled_pc.teckvillagetrue.model.retrofit.JSON_Mapping.DataReceived;
+import teckvillage.developer.khaled_pc.teckvillagetrue.model.retrofit.JSON_Mapping.ResultModel;
+import teckvillage.developer.khaled_pc.teckvillagetrue.model.retrofit.WhoCallerApi;
+import teckvillage.developer.khaled_pc.teckvillagetrue.model.retrofit.retrofitHead;
 
 import static teckvillage.developer.khaled_pc.teckvillagetrue.MainActivity.decodeBase64;
+import static teckvillage.developer.khaled_pc.teckvillagetrue.View.Signup.encodeTobase64;
 
 public class UserProfileActivity extends AppCompatActivity {
     //CONTACT
-    RelativeLayout Phone_Edit_Layout,home_Edit_Layout,Email_Edit_Layout,Websie_Edit_Layout;
+    RelativeLayout Phone_Edit_Layout,home_Edit_Layout,Email_Edit_Layout,Websie_Edit_Layout,TagEdit_Layout;
 
     //ABOUT
     RelativeLayout info_Edit_Layout;
     LinearLayout info_Gender_Layout;
-    TextView setphonenumber,address,email,website,shortnote,gender;
+    Bitmap bitmap;
+    TextView setphonenumber,address,email,website,shortnote,gender,usernameprofile;
 
     DiagonalView diagonalView;
     CircleImageView userPhoto;
     String USer_Image,UserName,UserEmail;
+    ImageView editbtnimgandusername;
+    Button save;
+    TagView tag;
+    String UserProfImgInString;
+
     @Override
     protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
         setContentView(R.layout.activity_user_profile);
+
+
         diagonalView=findViewById(R.id.diagonal);
         userPhoto=findViewById(R.id.UserPhoto);
         setphonenumber=findViewById(R.id.phone_number);
         email=findViewById(R.id.Email);
+        editbtnimgandusername=findViewById(R.id.edit_usernameandimage);
+        usernameprofile=findViewById(R.id.UserName_Profile);
+        TagEdit_Layout=findViewById(R.id.tag_Edit_Layout);
+        gender=findViewById(R.id.gender_label);
+        save=findViewById(R.id.savechangebtn);
+        tag=findViewById(R.id.tagviewprofile);
+
+        //CHANGE UserName Or Image
+        editbtnimgandusername.setOnClickListener(new View.OnClickListener() {
+            @Override
+            public void onClick(View v) {
+
+            }
+        });
+
+        //Call API TO SAVE CHANGE
+        save.setOnClickListener(new View.OnClickListener() {
+            @Override
+            public void onClick(View v) {
+
+                CallAPI_SAVE_Change();
+
+            }
+        });
+
+
+        //OPEN Dialog to change Tag
+        TagEdit_Layout.setOnClickListener(new View.OnClickListener() {
+            @Override
+            public void onClick(View v) {
+
+            }
+        });
 
         UserName=getSharedPreferenceValue.getUserName(this);
+        usernameprofile.setText(UserName);
 
         //retrieve image
          USer_Image= getSharedPreferenceValue.getUserImage(this);
@@ -103,9 +182,11 @@ public class UserProfileActivity extends AppCompatActivity {
         Phone_Edit_Layout.setOnClickListener(new View.OnClickListener() {
             @Override
             public void onClick(View v) {
-
+                EDIT_PhoneNumber_ALertDialog();
             }
         });
+
+
         home_Edit_Layout.setOnClickListener(new View.OnClickListener() {
             @Override
             public void onClick(View v) {
@@ -363,22 +444,288 @@ public class UserProfileActivity extends AppCompatActivity {
         Prefer_not_to_say.setOnClickListener(new View.OnClickListener() {
             @Override
             public void onClick(View v) {
+                gender.setText("Prefer_not_to_say");
                 MyDialogGender.dismiss();
             }
         });
         Male.setOnClickListener(new View.OnClickListener() {
             @Override
             public void onClick(View v) {
+                gender.setText("Male");
                 MyDialogGender.dismiss();
             }
         });
         Female.setOnClickListener(new View.OnClickListener() {
             @Override
             public void onClick(View v) {
+                gender.setText("Female");
                 MyDialogGender.dismiss();
             }
         });
 
         MyDialogGender.show();
     }
+
+    void CallAPI_SAVE_Change() {
+
+        File file = null;
+        MultipartBody.Part fileToUpload=null;
+        RequestBody mFile=null;
+
+
+        try {
+
+            Drawable drawable = userPhoto.getDrawable();
+            boolean hasImage = (drawable != null);
+
+            if(hasImage && (drawable instanceof BitmapDrawable)){
+
+                bitmap =((BitmapDrawable)userPhoto.getDrawable()).getBitmap();// bitmapDrawable.getBitmap();
+
+                if(bitmap!=null) {
+
+
+                    file= loadImageFromStorage( saveToInternalStorage(bitmap));
+                    mFile = RequestBody.create(MediaType.parse("image/*"), file);
+                    fileToUpload = MultipartBody.Part.createFormData("img", file.getName(), mFile);
+
+                    Log.w("fileimg",file.getPath()+" || "+file.getName()+" || "+String.valueOf(file));
+                }
+
+
+            }else {
+                fileToUpload=null;
+            }
+
+        }catch (Exception e){
+            e.printStackTrace();
+        }
+
+        if(validation(usernameprofile.getText().toString(),email.getText().toString())) {
+
+
+            //Convert text to RequestBody
+            RequestBody emailRequest = RequestBody.create(MediaType.parse("text/plain"), email.getText().toString());
+            RequestBody fnameRequest = RequestBody.create(MediaType.parse("text/plain"), usernameprofile.getText().toString());
+            /*RequestBody codecounRequest = RequestBody.create(MediaType.parse("text/plain"), Codecountry);
+            RequestBody phNumberRequest = RequestBody.create(MediaType.parse("text/plain"), phNumber);
+            RequestBody LoginMethodRequest = RequestBody.create(MediaType.parse("text/plain"), LoginMethod);
+            RequestBody facebookProfileLinkRequest = RequestBody.create(MediaType.parse("text/plain"), facebookProfileLink);
+            RequestBody devicenameRequest = RequestBody.create(MediaType.parse("text/plain"), devicename);
+            RequestBody AndroidVersioncounRequest = RequestBody.create(MediaType.parse("text/plain"), AndroidVersion);*/
+
+
+            //Check wifi or data available
+            if (CheckNetworkConnection.hasInternetConnection(UserProfileActivity.this)) {
+
+                //Check internet Access
+                if (ConnectionDetector.hasInternetConnection(UserProfileActivity.this)) {
+
+
+                    final ProgressDialog mProgressDialog = new ProgressDialog(UserProfileActivity.this);
+                    mProgressDialog.setIndeterminate(true);
+                    mProgressDialog.setMessage("Loading...");
+                    mProgressDialog.show();
+
+                    Retrofit retrofit = retrofitHead.headOfGetorPostReturnRes();
+                    WhoCallerApi whoCallerApi = retrofit.create(WhoCallerApi.class);
+                    //Call<ResultModel> register_user = whoCallerApi.UptadeUserProfile(ApiAccessToken.getAPIaccessToken(UserProfileActivity.this), fnameRequest, emailRequest, fileToUpload, fileToUpload, LoginMethodRequest, facebookProfileLinkRequest, devicenameRequest, AndroidVersioncounRequest);//,devicename,AndroidVersion
+/*
+                    register_user.enqueue(new Callback<ResultModel>() {
+                        @Override
+                        public void onResponse(Call<ResultModel> call, Response<ResultModel> response) {
+                            try {
+                                if (mProgressDialog.isShowing())
+                                    mProgressDialog.dismiss();
+
+                                if (response.isSuccessful()) {
+
+                                    if (response.body() != null) {
+
+                                        // Do your success stuff...
+                                        //Toast.makeText(getApplicationContext(), response.body().toString(), Toast.LENGTH_SHORT).show();
+                                        DataReceived user = response.body().getUser();
+
+                                        Log.w("success", user.getEmail());
+                                        Log.w("success", user.getName());
+                                        Log.w("success", user.getPhone());
+                                        Log.w("success", user.getApi_token());
+
+                                        //if respone retreive img name it mean user upload img
+                                        if (user.getImg() != null) {
+                                            Log.w("success", user.getImg());
+                                            if (bitmap != null) {
+                                                //convert img to string to save it
+                                                UserProfImgInString = encodeTobase64(bitmap);
+                                            } else {
+                                                //img found in server but not sent
+                                                UserProfImgInString = "NoImageHere";
+                                            }
+                                        } else {
+                                            //user not upload img
+                                            UserProfImgInString = "NoImageHere";
+                                            Log.w("Noimguser", "noimg");
+                                        }
+
+
+                                        //retreive img and convert from string to bitmap to display it
+                                        //add_personal_photo.setImageBitmap(decodeBase64(UserProfImgInString));
+
+                                        //when Login Success
+                                        SharedPreferences sharedPref = getSharedPreferences("WhoCaller?", MODE_PRIVATE);
+                                        SharedPreferences.Editor editor = sharedPref.edit();
+                                        editor.putBoolean("UserLogin", true);
+
+                                        if (user.getApi_token() != null) {
+                                            editor.putString("User_API_token", user.getApi_token());
+                                        }
+                                        if (user.getPhone() != null) {
+                                            editor.putString("User_phone", user.getPhone());
+                                        }
+                                        if (user.getName() != null) {
+                                            editor.putString("User_name", user.getName());
+                                        }
+                                        if (user.getEmail() != null) {
+                                            editor.putString("User_email", user.getEmail());
+                                        }
+                                        editor.putString("User_img_profile", UserProfImgInString);
+                                        editor.apply();
+
+
+                                        //Close open MainActivity
+                                        Intent intent = new Intent(getApplicationContext(), MainActivity.class);
+                                        startActivity(intent);
+                                        finish();
+
+
+                                    } else {
+                                        Toast.makeText(getApplicationContext(), "Failure,Please try again", Toast.LENGTH_SHORT).show();
+                                    }
+                                } else {
+                                    Toast.makeText(getApplicationContext(), "Failure,Please try again", Toast.LENGTH_SHORT).show();
+                                }
+
+
+                            } catch (Exception e) {
+                                e.printStackTrace();
+                            }
+                        }
+
+                        @Override
+                        public void onFailure(Call<ResultModel> call, Throwable t) {
+                            if (mProgressDialog.isShowing())
+                                mProgressDialog.dismiss();
+
+                            Log.w("onFailure", t.toString());
+                            Toast.makeText(getApplicationContext(), "Failure,Please try again", Toast.LENGTH_SHORT).show();
+                            //View parentLayout = findViewById(R.id.layoutsignuo);
+                            //Snackbar.make(parentLayout, "Failure,Please try again", Snackbar.LENGTH_LONG);
+                        }
+                    });*/
+
+
+                } else {
+                    TastyToast.makeText(UserProfileActivity.this, "Internet not access Please connect to the internet", TastyToast.LENGTH_LONG, TastyToast.ERROR);
+                }
+            } else {
+                TastyToast.makeText(UserProfileActivity.this, "You're offline. Please connect to the internet", TastyToast.LENGTH_LONG, TastyToast.ERROR);
+            }
+        }
+    }
+
+
+    void EDIT_PhoneNumber_ALertDialog(){
+
+        new AlertDialog.Builder(UserProfileActivity.this)
+                .setTitle("Change number")
+                .setMessage("Badges and Data associated with this number will be lost. Tap Continue to change this phone number")
+
+                // Specifying a listener allows you to take an action before dismissing the dialog.
+                // The dialog is automatically dismissed when a dialog button is clicked.
+                .setPositiveButton("CONTINUE", new DialogInterface.OnClickListener() {
+                    public void onClick(DialogInterface dialog, int which) {
+                        // Continue with delete operation
+                        //remove share preferences
+                       /* SharedPreferences preferences = getSharedPreferences("WhoCaller?", MODE_PRIVATE);
+                        preferences.edit().clear().apply();
+                        //start splash
+                        Intent intent=new Intent(UserProfileActivity.this,SplashScreen.class);
+                        intent.setFlags(Intent.FLAG_ACTIVITY_NEW_TASK | Intent.FLAG_ACTIVITY_CLEAR_TASK);
+                        startActivity(intent);
+                        finish();*/
+
+                    }
+                })
+
+                // A null listener allows the button to dismiss the dialog and take no further action.
+                .setNegativeButton("CANCEL", new DialogInterface.OnClickListener() {
+                    public void onClick(DialogInterface dialog, int which) {
+                        // Cancel
+                        dialog.dismiss();
+                    }
+                })
+                .setIcon(android.R.drawable.ic_dialog_alert)
+                .show();
+    }
+
+    public File loadImageFromStorage(String path) {
+
+        try {
+            File f=new File(path, "profile.jpg");
+            Bitmap b = BitmapFactory.decodeStream(new FileInputStream(f));
+            //ImageView img=(ImageView)findViewById(R.id.imgPicker);
+            //img.setImageBitmap(b);
+            return f;
+        }
+        catch (FileNotFoundException e)
+        {
+            e.printStackTrace();
+        }
+        return null;
+    }
+
+    public String saveToInternalStorage(Bitmap bitmapImage){
+        ContextWrapper cw = new ContextWrapper(getApplicationContext());
+        // path to /data/data/yourapp/app_data/imageDir
+        File directory = cw.getDir("imageDir", Context.MODE_PRIVATE);
+        // Create imageDir
+        File mypath=new File(directory,"profile.jpg");
+
+        FileOutputStream fos = null;
+        try {
+            fos = new FileOutputStream(mypath);
+            // Use the compress method on the BitMap object to write image to the OutputStream
+            bitmapImage.compress(Bitmap.CompressFormat.PNG, 100, fos);
+        } catch (Exception e) {
+            e.printStackTrace();
+        } finally {
+            try {
+                fos.close();
+            } catch (IOException e) {
+                e.printStackTrace();
+            }
+        }
+        return directory.getAbsolutePath();
+    }
+
+    boolean validation(String fname, String email){
+        if (TextUtils.isEmpty(fname)) {
+            Toast.makeText(UserProfileActivity.this,"Name Field Empty",Toast.LENGTH_LONG).show();
+            return false;
+        }
+
+        if (TextUtils.isEmpty(email)) {
+            Toast.makeText(UserProfileActivity.this,"Email Field Empty",Toast.LENGTH_LONG).show();
+            return false;
+        }else if( Patterns.EMAIL_ADDRESS.matcher(email).matches()){
+            Toast.makeText(UserProfileActivity.this,"Email not valid",Toast.LENGTH_LONG).show();
+            return false;
+        }
+
+
+        return  true;
+    }
+
+
+
 }

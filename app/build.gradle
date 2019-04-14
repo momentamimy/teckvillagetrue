@@ -47,6 +47,8 @@ dependencies {
     //Device model
     implementation 'com.jaredrummler:android-device-names:1.1.8'
     implementation 'com.google.code.gson:gson:2.6.1'
+    //tags
+    implementation 'com.github.kaedea:Android-Cloud-TagView-Plus:b546a5f073'
 
 
     implementation 'com.google.android.gms:play-services-auth:11.8.0'

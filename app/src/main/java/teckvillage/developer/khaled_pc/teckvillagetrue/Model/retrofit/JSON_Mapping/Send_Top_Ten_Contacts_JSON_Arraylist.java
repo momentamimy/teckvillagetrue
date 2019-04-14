@@ -12,9 +12,7 @@ import java.util.List;
 
 public class Send_Top_Ten_Contacts_JSON_Arraylist {
 
-    @SerializedName("id")
-    @Expose
-    private int id;
+
     @SerializedName("name")
     @Expose
     private String name;
@@ -22,8 +20,10 @@ public class Send_Top_Ten_Contacts_JSON_Arraylist {
     @Expose
     private ArrayList<String> phones = new ArrayList<String>();;
 
-    public Send_Top_Ten_Contacts_JSON_Arraylist(int id, String name, ArrayList<String> phones) {
-        this.id = id;
+
+
+    public Send_Top_Ten_Contacts_JSON_Arraylist( String name, ArrayList<String> phones) {
+
         this.name = name;
         this.phones = phones;
     }
@@ -33,13 +33,7 @@ public class Send_Top_Ten_Contacts_JSON_Arraylist {
     }
 
 
-    public int getId() {
-        return id;
-    }
 
-    public void setId(int id) {
-        this.id = id;
-    }
 
     public String getName() {
         return name;

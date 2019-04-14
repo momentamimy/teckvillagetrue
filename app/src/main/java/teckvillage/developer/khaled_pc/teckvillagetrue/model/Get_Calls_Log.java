@@ -870,7 +870,7 @@ public class Get_Calls_Log {
 
                 }
 
-                contactInfosserver.add(new Send_Top_Ten_Contacts_JSON(i, contactsName, phonenumbers.get(i)));
+                contactInfosserver.add(new Send_Top_Ten_Contacts_JSON( contactsName, phonenumbers.get(i)));
                 contactsName = null;
             }
 

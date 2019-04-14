@@ -64,14 +64,33 @@ public interface WhoCallerApi {
     @POST("searchContact")
     Call<ArrayList<Item_Search>> SearchPhoneNumber(
                     @Query("api_token") String ApiAccessToken,
-                    @Field("number") String phoneNumber
+                    @Field("number") String phoneNumber,
+                    @Field("code") String code
             );
 
     @FormUrlEncoded
     @POST("searchContact")
     Call<ArrayList<Item_Search>> SearchName(
             @Query("api_token") String ApiAccessToken,
-            @Field("name") String phoneNumber
+            @Field("name") String phoneNumber,
+            @Field("code") String code
+    );
+
+    @Multipart
+    @POST("updateUserData")
+    Call<ResultModel> UptadeUserProfile(
+            @Query("api_token") String ApiAccessToken,
+            @Part("name")       RequestBody  username,
+            @Part("email")      RequestBody  email,
+            @Part MultipartBody.Part img,
+            @Part("tag_id") RequestBody  TagID,
+            @Part("company") RequestBody  company,
+            @Part("title") RequestBody  title,
+            @Part("address")      RequestBody  address,
+            @Part("website") RequestBody  website,
+            @Part("gender") RequestBody  gender,
+            @Part("about")   RequestBody  about,
+            @Part("mobile_os")     RequestBody  mobileos
     );
 
 

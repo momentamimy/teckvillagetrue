@@ -5,13 +5,13 @@ package teckvillage.developer.khaled_pc.teckvillagetrue.model.retrofit.JSON_Mapp
  */
 
 public class Send_Top_Ten_Contacts_JSON {
-    int id;
+
     String name;
     String phones;
 
 
-    public Send_Top_Ten_Contacts_JSON(int id, String name, String phones) {
-        this.id = id;
+    public Send_Top_Ten_Contacts_JSON( String name, String phones) {
+
         this.name = name;
         this.phones = phones;
     }
@@ -24,13 +24,7 @@ public class Send_Top_Ten_Contacts_JSON {
         return phones;
     }
 
-    public int getId() {
-        return id;
-    }
 
-    public void setId(int id) {
-        this.id = id;
-    }
 
     public String getName() {
         return name;

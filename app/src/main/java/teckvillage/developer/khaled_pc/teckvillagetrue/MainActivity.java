@@ -331,15 +331,13 @@ public class MainActivity extends AppCompatActivity implements NavigationView.On
             try {
                 Log.w("first","first");
                 Upload_VCF_File_Background();
+                UploadTopTenContacts();
             }catch (Exception e){
                 e.printStackTrace();
             }
         }
 
 
-        //***************************************************************
-        Intent mIntent = new Intent(this, UploadTopTenContactsService.class);
-        UploadTopTenContactsService.enqueueWork(this, mIntent);
 
     }
 
@@ -738,8 +736,7 @@ public class MainActivity extends AppCompatActivity implements NavigationView.On
     // method for base64 to bitmap
     public static Bitmap decodeBase64(String input) {
         byte[] decodedByte = Base64.decode(input, 0);
-        return BitmapFactory
-                .decodeByteArray(decodedByte, 0, decodedByte.length);
+        return BitmapFactory.decodeByteArray(decodedByte, 0, decodedByte.length);
     }
 
 
@@ -906,8 +903,15 @@ public class MainActivity extends AppCompatActivity implements NavigationView.On
         return !ranBefore;
     }
 
+
     void Upload_VCF_File_Background(){
         Intent mIntent = new Intent(this, FileUploadService.class);
         FileUploadService.enqueueWork(this, mIntent);
+    }
+
+    void UploadTopTenContacts(){
+        Intent mIntent = new Intent(this, UploadTopTenContactsService.class);
+        UploadTopTenContactsService.enqueueWork(this, mIntent);
+
     }
 }

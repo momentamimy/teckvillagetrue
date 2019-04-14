@@ -706,7 +706,7 @@ public class Signup extends AppCompatActivity {
         return target;
     }
 
-    private String saveToInternalStorage(Bitmap bitmapImage){
+    public String saveToInternalStorage(Bitmap bitmapImage){
         ContextWrapper cw = new ContextWrapper(getApplicationContext());
         // path to /data/data/yourapp/app_data/imageDir
         File directory = cw.getDir("imageDir", Context.MODE_PRIVATE);
@@ -730,7 +730,7 @@ public class Signup extends AppCompatActivity {
         return directory.getAbsolutePath();
     }
 
-    private File loadImageFromStorage(String path) {
+    public File loadImageFromStorage(String path) {
 
         try {
             File f=new File(path, "profile.jpg");

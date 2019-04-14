@@ -1,5 +1,8 @@
 <?xml version="1.0" encoding="utf-8"?>
-<android.support.v7.widget.CardView
+<RelativeLayout xmlns:android="http://schemas.android.com/apk/res/android"
+    android:layout_width="match_parent" android:layout_height="match_parent">
+
+    <android.support.v7.widget.CardView
         xmlns:android="http://schemas.android.com/apk/res/android"
         xmlns:app="http://schemas.android.com/apk/res-auto"
         app:cardBackgroundColor="@android:color/white"
@@ -9,6 +12,7 @@
         android:layout_margin="20dp"
         app:cardCornerRadius="10dp"
         app:cardElevation="5dp">
+
         <RelativeLayout
             android:layout_width="match_parent"
             android:layout_height="wrap_content"
@@ -22,7 +26,7 @@
                 android:textSize="20dp"
                 android:textStyle="bold"
                 android:padding="15dp"
-                android:text="Website"/>
+                android:text="Choose Tag"/>
 
             <LinearLayout
                 android:orientation="vertical"
@@ -30,27 +34,23 @@
                 android:layout_width="match_parent"
                 android:layout_height="wrap_content">
 
-                <android.support.design.widget.TextInputLayout
-                    android:layout_marginTop="10dp"
-                    android:layout_marginLeft="10dp"
-                    android:layout_marginRight="10dp"
-                    android:id="@+id/input_layout_Websie"
-                    android:theme="@style/TextLabe3"
+
+                <me.kaede.tagview.TagView
+                    android:id="@+id/tagview"
                     android:layout_width="match_parent"
                     android:layout_height="wrap_content"
-                    app:errorTextAppearance="@style/WelcomeErrorAppearance">
+                    android:layout_marginTop="20dp"
+                    android:layout_marginBottom="10dp"
+                    app:lineMargin="5dp"
+                    app:tagMargin="3dp"
+                    app:textPaddingBottom="3dp"
+                    app:textPaddingLeft="10dp"
+                    app:textPaddingRight="10dp"
+                    app:textPaddingTop="3dp"
+                    android:layout_marginLeft="10dp"
+                    android:layout_marginRight="10dp">
+                </me.kaede.tagview.TagView>
 
-                    <EditText
-                        android:textColor="@color/colorPrimary"
-                        android:id="@+id/edit_Websie"
-                        android:drawablePadding="10dp"
-                        android:layout_width="match_parent"
-                        android:layout_height="wrap_content"
-                        android:textSize="16sp"
-                        android:maxLines="1"
-                        android:singleLine="true"
-                        android:hint="Websie" />
-                </android.support.design.widget.TextInputLayout>
 
 
                 <RelativeLayout
@@ -94,3 +94,5 @@
 
         </RelativeLayout>
     </android.support.v7.widget.CardView>
+
+</RelativeLayout>

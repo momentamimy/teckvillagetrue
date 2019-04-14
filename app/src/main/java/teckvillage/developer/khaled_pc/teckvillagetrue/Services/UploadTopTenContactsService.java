@@ -52,41 +52,27 @@ public class UploadTopTenContactsService extends JobIntentService {
          * Download/Upload of file
          * The system or framework is already holding a wake lock for us at this point
          */
-        //ArrayList<Send_Top_Ten_Contacts_JSON> list=new ArrayList<>();
+
 
         get_calls_log = new Get_Calls_Log(getApplicationContext());
         ArrayList<Send_Top_Ten_Contacts_JSON_Arraylist> listts = new ArrayList<>();;
 
-
-        // get file list here
+        // get Top Ten contact from Device
         ArrayList<Send_Top_Ten_Contacts_JSON> list = get_calls_log.getTopTenContactsToServer();
-        Send_Top_Ten_Contacts_JSON_Arraylist send_top_ten_contacts_json_arraylist=new Send_Top_Ten_Contacts_JSON_Arraylist();
-        ArrayList<Send_Top_Ten_Contacts_JSON_Arraylist> send_top_ten_contacts_json_arraylistArrayList=new ArrayList<Send_Top_Ten_Contacts_JSON_Arraylist>();
 
+        //Check if Empty
         if (list == null||list.size()<0){
             Log.e(TAG, "onHandleWork: Invalid ");
             return;
         }
 
 
-        ArrayList<String> listss = new ArrayList<String>();
-        listss.add("01280945456");
-        ArrayList<String> listss2 = new ArrayList<String>();
-        listss2.add("0123698745");
-
+        //Add all
         for(int i = 0; i< 10; i++){
-            Log.w("ohhh", String.valueOf(list.get(i).getId())+" || "+list.get(i).getName()+" || "+ list.get(i).getPhones());
-            send_top_ten_contacts_json_arraylist.setId(list.get(i).getId());
-            send_top_ten_contacts_json_arraylist.setName(list.get(i).getName());
-            send_top_ten_contacts_json_arraylist.setPhones(listss);
-
-            send_top_ten_contacts_json_arraylistArrayList.add(new Send_Top_Ten_Contacts_JSON_Arraylist(list.get(i).getId(),"\"khaled\"",listss));
-
+            ArrayList<String> listss = new ArrayList<String>();
+            listss.add(list.get(i).getPhones());
+            listts.add(new Send_Top_Ten_Contacts_JSON_Arraylist(list.get(i).getName(),listss));
         }
-
-        listts.add(new Send_Top_Ten_Contacts_JSON_Arraylist(1,"mhmaa",listss));
-        listts.add(new Send_Top_Ten_Contacts_JSON_Arraylist(2,"khaled",listss2));
-        listts.add(new Send_Top_Ten_Contacts_JSON_Arraylist(3,"khaledmhmaaa",listss));
 
 
         //Correct Solution
@@ -106,7 +92,7 @@ public class UploadTopTenContactsService extends JobIntentService {
                    boolean me = response.body().isResponse();
                    Log.w("success", mesf);
                    Log.w("success", String.valueOf(me));
-                   Toast.makeText(getApplicationContext(),"successUploadTopTenContacts",Toast.LENGTH_LONG).show();
+
                }else {
                    Log.w("Fail", String.valueOf(response.body()));
                }

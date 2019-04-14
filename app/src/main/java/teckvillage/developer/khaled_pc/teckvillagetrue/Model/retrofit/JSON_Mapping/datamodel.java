@@ -12,6 +12,8 @@ import java.util.ArrayList;
 
 public class datamodel {
 
+    @SerializedName("contacts")
+    @Expose
     private ArrayList<Send_Top_Ten_Contacts_JSON_Arraylist> contacts;
 
     public ArrayList<Send_Top_Ten_Contacts_JSON_Arraylist> getContacts() {
