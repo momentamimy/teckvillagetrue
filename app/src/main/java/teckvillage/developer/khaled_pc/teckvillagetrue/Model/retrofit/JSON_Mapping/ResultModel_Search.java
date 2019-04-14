@@ -1,4 +1,4 @@
-package teckvillage.developer.khaled_pc.teckvillagetrue.model.retrofit.JSON_Mapping;
+package teckvillage.developer.khaled_pc.teckvillagetrue.Model.retrofit.JSON_Mapping;
 
 /**
  * Created by khaled-pc on 4/12/2019.
