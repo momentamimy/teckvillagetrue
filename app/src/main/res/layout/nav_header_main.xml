@@ -25,15 +25,27 @@
         android:paddingTop="@dimen/nav_header_vertical_spacing"
         android:src="@drawable/ic_nurse" />
 
-    <ProgressBar
+        <de.hdodenhof.circleimageview.CircleImageView
+            android:layout_centerInParent="true"
+            android:id="@+id/imageViewprofile2"
+            android:layout_width="80dp"
+            android:layout_height="80dp"
+            android:paddingTop="@dimen/nav_header_vertical_spacing"
+            android:src="@drawable/ic_nurse" />
+
+
+
+        <ProgressBar
         android:id="@+id/progressheadernav"
         android:layout_width="85dp"
-        android:layout_height="100dp"
+        android:layout_height="85dp"
         android:visibility="gone"
         android:layout_gravity="center"
         android:paddingTop="@dimen/nav_header_vertical_spacing"
         android:theme="@style/AppTheme.grayAccent"
         />
+
+
 
     </RelativeLayout>
 

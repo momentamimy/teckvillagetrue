@@ -313,6 +313,7 @@ public class MainActivity extends AppCompatActivity implements NavigationView.On
         TextView headnav_title_UserName = (TextView)navView.findViewById(R.id.title_user_name);
         TextView headnav_title_Phonenumber = (TextView)navView.findViewById(R.id.textView_phonemunber);
         final CircleImageView userImageprofile=navView.findViewById(R.id.imageViewprofile);
+        final CircleImageView Userimagprofile=navView.findViewById(R.id.imageViewprofile2);
         final ProgressBar progressBar=navView.findViewById(R.id.progressheadernav);
         headnav_title_UserName.setText(getSharedPreferenceValue.getUserName(this));
         String PhoneNumber=getSharedPreferenceValue.getUserPhoneNumber(this);
@@ -337,13 +338,14 @@ public class MainActivity extends AppCompatActivity implements NavigationView.On
                         @Override
                         public void onSuccess() {
                             progressBar.setVisibility(View.GONE);
-
+                            Userimagprofile.setVisibility(View.GONE);
                         }
 
                         @Override
                         public void onError() {
                             userImageprofile.setImageDrawable(getResources().getDrawable(R.drawable.ic_nurse));
                             progressBar.setVisibility(View.GONE);
+                            Userimagprofile.setVisibility(View.GONE);
 
                         }
                     });

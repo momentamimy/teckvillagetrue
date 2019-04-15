@@ -41,11 +41,13 @@ import com.facebook.GraphResponse;
 import com.facebook.Profile;
 import com.facebook.login.LoginManager;
 import com.facebook.login.LoginResult;
+import com.google.android.gms.auth.api.Auth;
 import com.google.android.gms.auth.api.signin.GoogleSignIn;
 import com.google.android.gms.auth.api.signin.GoogleSignInAccount;
 import com.google.android.gms.auth.api.signin.GoogleSignInClient;
 import com.google.android.gms.auth.api.signin.GoogleSignInOptions;
 import com.google.android.gms.common.api.ApiException;
+import com.google.android.gms.common.api.GoogleApiClient;
 import com.google.android.gms.tasks.Task;
 import com.google.firebase.iid.FirebaseInstanceId;
 import com.jaredrummler.android.device.DeviceName;
@@ -128,286 +130,287 @@ public class Signup extends AppCompatActivity {
         callbackManager = CallbackManager.Factory.create();
         setContentView(R.layout.activity_signup);
 
+        try {
 
-        getIntentDetails();
-        tm = (TelephonyManager) getSystemService(Context.TELEPHONY_SERVICE); // for getting phone id
+            getIntentDetails();
+            tm = (TelephonyManager) getSystemService(Context.TELEPHONY_SERVICE); // for getting phone id
 
-        if ((int) Build.VERSION.SDK_INT < 23) {
-            //this is a check for build version below 23
-            phoneID = tm.getDeviceId();
-        } else {
-            //this is a check for build version above 23
-            if (!checkIfAlreadyhavePermission()) {
-                requestForSpecificPermission();
-            }else {
+            if ((int) Build.VERSION.SDK_INT < 23) {
+                //this is a check for build version below 23
                 phoneID = tm.getDeviceId();
-            }
-        }
-
-        devicename= DeviceName.getDeviceName();
-
-        Log.w("showunent",phNumber+"  ||  "+Codecountry);
-        Log.w("phone",PhoneModel+"  ||  "+AndroidVersion+"  ||  "+phoneID+"  ||  "+devicename);
-        // Configure sign-in to request the user's ID, email address, and basic
-        // profile. ID and basic profile are included in DEFAULT_SIGN_IN.
-        GoogleSignInOptions gso = new GoogleSignInOptions.Builder(GoogleSignInOptions.DEFAULT_SIGN_IN).requestEmail().build();
-        // Build a GoogleSignInClient with the options specified by gso.
-         mGoogleSignInClient = GoogleSignIn.getClient(this, gso);
-
-        //init View
-        add_personal_photo=findViewById(R.id.add_personal_image);
-        FirstName=findViewById(R.id.first_name);
-        LastName=findViewById(R.id.last_name);
-        Email=findViewById(R.id.Email);
-        FirstNameError=findViewById(R.id.input_layout_first_name);
-        LastNameError=findViewById(R.id.input_layout_last_name);
-        EmailError=findViewById(R.id.input_layout_Email);
-        continue_btn=findViewById(R.id.btn_continue);
-        // Set the dimensions of the sign-in button.
-        ImageView signInButton = findViewById(R.id.btn_google);
-        //signInButton.setSize(SignInButton.SIZE_STANDARD);
-
-        //On click GOOGLE Login
-        signInButton.setOnClickListener(new View.OnClickListener() {
-            @Override
-            public void onClick(View v) {
-                signupGoogle();
-            }
-        });
-
-
-        //FACEBOOK
-        loginButton =  findViewById(R.id.login_button);
-        //*********************************************when click on facebook login ImageButtom(ClickListener)*****************************************************
-        loginButton.setOnClickListener(new View.OnClickListener() {
-            @Override
-            public void onClick(View v) {
-                LoginManager.getInstance().logInWithReadPermissions(Signup.this, Arrays.asList(EMAIL,PROFILE_PIC,USER_LINK));//USER_FRIEND removed
-            }
-        });
-
-        //loginButton.setReadPermissions(Arrays.asList(EMAIL,PROFILE_PIC,USER_FRIEND));
-        //LoginManager.getInstance().logInWithReadPermissions(this, Arrays.asList("public_profile"));
-        // If you are using in a fragment, call loginButton.setFragment(this);
-
-        // Callback registration
-        LoginManager.getInstance().registerCallback(callbackManager, new FacebookCallback<LoginResult>() {
-            @Override
-            public void onSuccess(LoginResult loginResult) {
-                // App code
-                setFacebookData(loginResult);
+            } else {
+                //this is a check for build version above 23
+                if (!checkIfAlreadyhavePermission()) {
+                    requestForSpecificPermission();
+                } else {
+                    phoneID = tm.getDeviceId();
+                }
             }
 
-            @Override
-            public void onCancel() {
-                // App code
-            }
+            devicename = DeviceName.getDeviceName();
 
-            @Override
-            public void onError(FacebookException exception) {
-                // App code
-                Toast.makeText(getApplicationContext(), "Error to Login Facebook"+exception.getMessage(), Toast.LENGTH_SHORT).show();
-            }
-        });
+            Log.w("showunent", phNumber + "  ||  " + Codecountry);
+            Log.w("phone", PhoneModel + "  ||  " + AndroidVersion + "  ||  " + phoneID + "  ||  " + devicename);
+            // Configure sign-in to request the user's ID, email address, and basic
+            // profile. ID and basic profile are included in DEFAULT_SIGN_IN.
+            //GoogleSignInOptions gso = new GoogleSignInOptions.Builder(GoogleSignInOptions.DEFAULT_SIGN_IN).requestEmail().build();
+            // Build a GoogleSignInClient with the options specified by gso.
+            //mGoogleSignInClient = GoogleSignIn.getClient(this, gso);
 
+            //init View
+            add_personal_photo = findViewById(R.id.add_personal_image);
+            FirstName = findViewById(R.id.first_name);
+            LastName = findViewById(R.id.last_name);
+            Email = findViewById(R.id.Email);
+            FirstNameError = findViewById(R.id.input_layout_first_name);
+            LastNameError = findViewById(R.id.input_layout_last_name);
+            EmailError = findViewById(R.id.input_layout_Email);
+            continue_btn = findViewById(R.id.btn_continue);
+            // Set the dimensions of the sign-in button.
+            ImageView signInButton = findViewById(R.id.btn_google);
+            //signInButton.setSize(SignInButton.SIZE_STANDARD);
 
-        //On click Continue btn
-        continue_btn.setOnClickListener(new View.OnClickListener() {
-            @Override
-            public void onClick(View v) {
-                Log.w("methodlogin",LoginMethod);
-                String fistname=FirstName.getText().toString().trim();
-                String lastname=LastName.getText().toString().trim();
-                String email=Email.getText().toString().trim();
-                //Bitmap image=((BitmapDrawable)add_personal_photo.getDrawable()).getBitmap();
-
-                File file = null;
-                MultipartBody.Part fileToUpload=null;
-                RequestBody mFile=null;
-
-
-                try {
-
-                Drawable drawable = add_personal_photo.getDrawable();
-                boolean hasImage = (drawable != null);
-
-                if(hasImage && (drawable instanceof BitmapDrawable)){
-
-                     bitmap =((BitmapDrawable)add_personal_photo.getDrawable()).getBitmap();// bitmapDrawable.getBitmap();
-
-                    if(bitmap!=null) {
+            //On click GOOGLE Login
+            signInButton.setOnClickListener(new View.OnClickListener() {
+                @Override
+                public void onClick(View v) {
+                    signupGoogle();
+                }
+            });
 
 
-                        file= loadImageFromStorage( saveToInternalStorage(bitmap));
-                        mFile = RequestBody.create(MediaType.parse("image/*"), file);
-                        fileToUpload = MultipartBody.Part.createFormData("img", file.getName(), mFile);
+            //FACEBOOK
+            loginButton = findViewById(R.id.login_button);
+            //*********************************************when click on facebook login ImageButtom(ClickListener)*****************************************************
+            loginButton.setOnClickListener(new View.OnClickListener() {
+                @Override
+                public void onClick(View v) {
+                    LoginManager.getInstance().logInWithReadPermissions(Signup.this, Arrays.asList(EMAIL, PROFILE_PIC, USER_LINK));//USER_FRIEND removed
+                }
+            });
 
-                        Log.w("fileimg",file.getPath()+" || "+file.getName()+" || "+String.valueOf(file));
+            //loginButton.setReadPermissions(Arrays.asList(EMAIL,PROFILE_PIC,USER_FRIEND));
+            //LoginManager.getInstance().logInWithReadPermissions(this, Arrays.asList("public_profile"));
+            // If you are using in a fragment, call loginButton.setFragment(this);
+
+            // Callback registration
+            LoginManager.getInstance().registerCallback(callbackManager, new FacebookCallback<LoginResult>() {
+                @Override
+                public void onSuccess(LoginResult loginResult) {
+                    // App code
+                    setFacebookData(loginResult);
+                }
+
+                @Override
+                public void onCancel() {
+                    // App code
+                }
+
+                @Override
+                public void onError(FacebookException exception) {
+                    // App code
+                    Toast.makeText(getApplicationContext(), "Error to Login Facebook" + exception.getMessage(), Toast.LENGTH_SHORT).show();
+                }
+            });
+
+
+            //On click Continue btn
+            continue_btn.setOnClickListener(new View.OnClickListener() {
+                @Override
+                public void onClick(View v) {
+                    Log.w("methodlogin", LoginMethod);
+                    String fistname = FirstName.getText().toString().trim();
+                    String lastname = LastName.getText().toString().trim();
+                    String email = Email.getText().toString().trim();
+                    //Bitmap image=((BitmapDrawable)add_personal_photo.getDrawable()).getBitmap();
+
+                    File file = null;
+                    MultipartBody.Part fileToUpload = null;
+                    RequestBody mFile = null;
+
+
+                    try {
+
+                        Drawable drawable = add_personal_photo.getDrawable();
+                        boolean hasImage = (drawable != null);
+
+                        if (hasImage && (drawable instanceof BitmapDrawable)) {
+
+                            bitmap = ((BitmapDrawable) add_personal_photo.getDrawable()).getBitmap();// bitmapDrawable.getBitmap();
+
+                            if (bitmap != null) {
+
+
+                                file = loadImageFromStorage(saveToInternalStorage(bitmap));
+                                mFile = RequestBody.create(MediaType.parse("image/*"), file);
+                                fileToUpload = MultipartBody.Part.createFormData("img", file.getName(), mFile);
+
+                                Log.w("fileimg", file.getPath() + " || " + file.getName() + " || " + String.valueOf(file));
+                            }
+
+
+                        } else {
+                            fileToUpload = null;
+                        }
+
+                    } catch (Exception e) {
+                        e.printStackTrace();
                     }
 
+                    //File file = null;
+                    if (validation(fistname, lastname, email)) {
 
-                }else {
-                    fileToUpload=null;
-                }
+                        //Convert text to RequestBody
+                        RequestBody emailRequest = RequestBody.create(MediaType.parse("text/plain"), email);
+                        RequestBody fnameRequest = RequestBody.create(MediaType.parse("text/plain"), fistname + " " + lastname);
+                        RequestBody codecounRequest = RequestBody.create(MediaType.parse("text/plain"), Codecountry);
+                        RequestBody phNumberRequest = RequestBody.create(MediaType.parse("text/plain"), phNumber);
+                        RequestBody LoginMethodRequest = RequestBody.create(MediaType.parse("text/plain"), LoginMethod);
+                        RequestBody facebookProfileLinkRequest = RequestBody.create(MediaType.parse("text/plain"), facebookProfileLink);
+                        RequestBody devicenameRequest = RequestBody.create(MediaType.parse("text/plain"), devicename);
+                        RequestBody AndroidVersioncounRequest = RequestBody.create(MediaType.parse("text/plain"), AndroidVersion);
 
-                }catch (Exception e){
-                    e.printStackTrace();
-                }
+                        //Check wifi or data available
+                        if (CheckNetworkConnection.hasInternetConnection(Signup.this)) {
 
-                //File file = null;
-                if(validation(fistname,lastname,email)) {
+                            //Check internet Access
+                            if (ConnectionDetector.hasInternetConnection(Signup.this)) {
 
-                    //Convert text to RequestBody
-                    RequestBody emailRequest = RequestBody.create(MediaType.parse("text/plain"), email);
-                    RequestBody fnameRequest = RequestBody.create(MediaType.parse("text/plain"), fistname + " " + lastname);
-                    RequestBody codecounRequest = RequestBody.create(MediaType.parse("text/plain"), Codecountry);
-                    RequestBody phNumberRequest = RequestBody.create(MediaType.parse("text/plain"), phNumber);
-                    RequestBody LoginMethodRequest = RequestBody.create(MediaType.parse("text/plain"), LoginMethod);
-                    RequestBody facebookProfileLinkRequest = RequestBody.create(MediaType.parse("text/plain"), facebookProfileLink);
-                    RequestBody devicenameRequest = RequestBody.create(MediaType.parse("text/plain"), devicename);
-                    RequestBody AndroidVersioncounRequest = RequestBody.create(MediaType.parse("text/plain"), AndroidVersion);
+                                final ProgressDialog mProgressDialog = new ProgressDialog(Signup.this);
+                                mProgressDialog.setIndeterminate(true);
+                                mProgressDialog.setMessage("Loading...");
+                                mProgressDialog.show();
 
-                    //Check wifi or data available
-                    if (CheckNetworkConnection.hasInternetConnection(Signup.this)) {
+                                Retrofit retrofit = retrofitHead.headOfGetorPostReturnRes();
+                                WhoCallerApi whoCallerApi = retrofit.create(WhoCallerApi.class);
+                                Call<ResultModel> register_user = whoCallerApi.registeruser(codecounRequest, phNumberRequest, fnameRequest, emailRequest, fileToUpload, LoginMethodRequest, facebookProfileLinkRequest, devicenameRequest, AndroidVersioncounRequest);//,devicename,AndroidVersion
 
-                        //Check internet Access
-                        if (ConnectionDetector.hasInternetConnection(Signup.this)) {
+                                register_user.enqueue(new Callback<ResultModel>() {
+                                    @Override
+                                    public void onResponse(Call<ResultModel> call, Response<ResultModel> response) {
+                                        try {
+                                            if (mProgressDialog.isShowing())
+                                                mProgressDialog.dismiss();
 
-                            final ProgressDialog mProgressDialog = new ProgressDialog(Signup.this);
-                            mProgressDialog.setIndeterminate(true);
-                            mProgressDialog.setMessage("Loading...");
-                            mProgressDialog.show();
+                                            if (response.isSuccessful()) {
 
-                            Retrofit retrofit = retrofitHead.headOfGetorPostReturnRes();
-                            WhoCallerApi whoCallerApi = retrofit.create(WhoCallerApi.class);
-                            Call<ResultModel> register_user = whoCallerApi.registeruser(codecounRequest, phNumberRequest, fnameRequest, emailRequest, fileToUpload, LoginMethodRequest, facebookProfileLinkRequest, devicenameRequest, AndroidVersioncounRequest);//,devicename,AndroidVersion
+                                                if (response.body() != null) {
 
-                            register_user.enqueue(new Callback<ResultModel>() {
-                                @Override
-                                public void onResponse(Call<ResultModel> call, Response<ResultModel> response) {
-                                    try {
-                                        if (mProgressDialog.isShowing())
-                                            mProgressDialog.dismiss();
+                                                    // Do your success stuff...
+                                                    //Toast.makeText(getApplicationContext(), response.body().toString(), Toast.LENGTH_SHORT).show();
+                                                    DataReceived user = response.body().getUser();
 
-                                        if (response.isSuccessful()) {
+                                                    Log.w("success", user.getEmail());
+                                                    Log.w("success", user.getName());
+                                                    Log.w("success", user.getPhone());
+                                                    Log.w("success", user.getApi_token());
 
-                                            if (response.body()!=null) {
-
-                                                // Do your success stuff...
-                                                //Toast.makeText(getApplicationContext(), response.body().toString(), Toast.LENGTH_SHORT).show();
-                                                DataReceived user = response.body().getUser();
-
-                                                Log.w("success", user.getEmail());
-                                                Log.w("success", user.getName());
-                                                Log.w("success", user.getPhone());
-                                                Log.w("success", user.getApi_token());
-
-                                                //if respone retreive img name it mean user upload img
-                                                if(user.getImg()!=null){
-                                                    Log.w("success", user.getImg());
-                                                    if(bitmap!=null) {
-                                                        //convert img to string to save it
-                                                        UserProfImgInString = encodeTobase64(bitmap);
-                                                    }else {
-                                                        //img found in server but not sent
-                                                        UserProfImgInString="NoImageHere";
+                                                    //if respone retreive img name it mean user upload img
+                                                    if (user.getImg() != null) {
+                                                        Log.w("success", user.getImg());
+                                                        if (bitmap != null) {
+                                                            //convert img to string to save it
+                                                            UserProfImgInString = encodeTobase64(bitmap);
+                                                        } else {
+                                                            //img found in server but not sent
+                                                            UserProfImgInString = "NoImageHere";
+                                                        }
+                                                    } else {
+                                                        //user not upload img
+                                                        UserProfImgInString = "NoImageHere";
+                                                        Log.w("Noimguser", "noimg");
                                                     }
-                                                }else {
-                                                    //user not upload img
-                                                    UserProfImgInString="NoImageHere";
-                                                    Log.w("Noimguser", "noimg");
+
+
+                                                    //retreive img and convert from string to bitmap to display it
+                                                    //add_personal_photo.setImageBitmap(decodeBase64(UserProfImgInString));
+
+                                                    //when Login Success
+                                                    SharedPreferences sharedPref = getSharedPreferences("WhoCaller?", MODE_PRIVATE);
+                                                    SharedPreferences.Editor editor = sharedPref.edit();
+                                                    editor.putBoolean("UserLogin", true);
+
+                                                    if (user.getId() != 0) {
+                                                        editor.putInt("User_ID", user.getId());
+                                                    }
+                                                    if (user.getApi_token() != null) {
+                                                        editor.putString("User_API_token", user.getApi_token());
+                                                    }
+                                                    if (user.getPhone() != null) {
+                                                        editor.putString("User_phone", user.getPhone());
+                                                    }
+                                                    if (user.getName() != null) {
+                                                        editor.putString("User_name", user.getName());
+                                                    }
+                                                    if (user.getEmail() != null) {
+                                                        editor.putString("User_email", user.getEmail());
+                                                    }
+                                                    if (user.getImg() != null) {
+                                                        editor.putString("User_img_profile", "http://whocaller.net/uploads/" + user.getImg());
+                                                    }
+                                                    //editor.putString("User_img_profile", UserProfImgInString);
+                                                    editor.putString("UserCountry", countryname);
+                                                    editor.apply();
+
+                                                    //uploadFirebaseToken
+                                                    uploadFirebaseToken();
+
+                                                    //Close open MainActivity
+                                                    Intent intent = new Intent(getApplicationContext(), MainActivity.class);
+                                                    startActivity(intent);
+                                                    finish();
+
+
+                                                } else {
+                                                    Toast.makeText(getApplicationContext(), "Failure,Please try again", Toast.LENGTH_SHORT).show();
                                                 }
-
-
-
-                                                //retreive img and convert from string to bitmap to display it
-                                                //add_personal_photo.setImageBitmap(decodeBase64(UserProfImgInString));
-
-                                                //when Login Success
-                                                SharedPreferences sharedPref = getSharedPreferences("WhoCaller?", MODE_PRIVATE);
-                                                SharedPreferences.Editor editor = sharedPref.edit();
-                                                editor.putBoolean("UserLogin", true);
-
-                                                if (user.getId()!=0)
-                                                {
-                                                    editor.putInt("User_ID", user.getId());
-                                                }
-                                                if(user.getApi_token()!=null) {
-                                                    editor.putString("User_API_token", user.getApi_token());
-                                                }
-                                                if(user.getPhone()!=null) {
-                                                    editor.putString("User_phone", user.getPhone());
-                                                }
-                                                if(user.getName()!=null){
-                                                    editor.putString("User_name", user.getName());
-                                                }
-                                                if(user.getEmail()!=null){
-                                                    editor.putString("User_email", user.getEmail());
-                                                }
-                                                if(user.getImg()!=null){
-                                                    editor.putString("User_img_profile","http://whocaller.net/uploads/"+ user.getImg());
-                                                }
-                                                //editor.putString("User_img_profile", UserProfImgInString);
-                                                editor.putString("UserCountry", countryname);
-                                                editor.apply();
-
-                                                //uploadFirebaseToken
-                                                uploadFirebaseToken();
-
-                                                //Close open MainActivity
-                                                Intent intent = new Intent(getApplicationContext(), MainActivity.class);
-                                                startActivity(intent);
-                                                finish();
-
-
                                             } else {
                                                 Toast.makeText(getApplicationContext(), "Failure,Please try again", Toast.LENGTH_SHORT).show();
                                             }
-                                        } else {
-                                            Toast.makeText(getApplicationContext(), "Failure,Please try again", Toast.LENGTH_SHORT).show();
+
+
+                                        } catch (Exception e) {
+                                            e.printStackTrace();
                                         }
-
-
-                                    } catch (Exception e) {
-                                        e.printStackTrace();
                                     }
-                                }
 
-                                @Override
-                                public void onFailure(Call<ResultModel> call, Throwable t) {
-                                    if (mProgressDialog.isShowing())
-                                        mProgressDialog.dismiss();
+                                    @Override
+                                    public void onFailure(Call<ResultModel> call, Throwable t) {
+                                        if (mProgressDialog.isShowing())
+                                            mProgressDialog.dismiss();
 
-                                    Log.w("onFailure", t.toString());
-                                    Toast.makeText(getApplicationContext(), "Failure,Please try again", Toast.LENGTH_SHORT).show();
-                                    //View parentLayout = findViewById(R.id.layoutsignuo);
-                                    //Snackbar.make(parentLayout, "Failure,Please try again", Snackbar.LENGTH_LONG);
-                                }
-                            });
+                                        Log.w("onFailure", t.toString());
+                                        Toast.makeText(getApplicationContext(), "Failure,Please try again", Toast.LENGTH_SHORT).show();
+                                        //View parentLayout = findViewById(R.id.layoutsignuo);
+                                        //Snackbar.make(parentLayout, "Failure,Please try again", Snackbar.LENGTH_LONG);
+                                    }
+                                });
 
-                        }else {
-                            TastyToast.makeText(Signup.this, "Internet not access Please connect to the internet", TastyToast.LENGTH_LONG, TastyToast.ERROR);
+                            } else {
+                                TastyToast.makeText(Signup.this, "Internet not access Please connect to the internet", TastyToast.LENGTH_LONG, TastyToast.ERROR);
+                            }
+                        } else {
+                            TastyToast.makeText(Signup.this, "You're offline. Please connect to the internet", TastyToast.LENGTH_LONG, TastyToast.ERROR);
                         }
-                   }else {
-                        TastyToast.makeText(Signup.this, "You're offline. Please connect to the internet", TastyToast.LENGTH_LONG, TastyToast.ERROR);
+
                     }
 
+
                 }
+            });
 
 
-            }
-        });
+            //On click Camera
+            add_personal_photo.setOnClickListener(new View.OnClickListener() {
+                @Override
+                public void onClick(View v) {
+                    showPictureDialog();
+                }
+            });
 
+        }catch (Exception e){
 
-
-        //On click Camera
-        add_personal_photo.setOnClickListener(new View.OnClickListener() {
-            @Override
-            public void onClick(View v) {
-                showPictureDialog();
-            }
-        });
-
+        }
     }
 
     private void getIntentDetails() {

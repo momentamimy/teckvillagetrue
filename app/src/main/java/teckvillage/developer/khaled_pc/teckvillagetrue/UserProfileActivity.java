@@ -146,7 +146,19 @@ public class UserProfileActivity extends AppCompatActivity {
         });
 
         website.setText(getSharedPreferenceValue.getUserWebsite(this));
-        gender.setText(getSharedPreferenceValue.getUserGender(this));
+        //set gender
+        String puttedtextgender=getSharedPreferenceValue.getUserGender(this);
+        Log.w("puttedtextgender",puttedtextgender);
+        if(puttedtextgender.equals("male")){
+            gender.setText("Male");
+        }else if(puttedtextgender.equals("female")){
+            gender.setText("Female");
+        }if(puttedtextgender.equals("other")){
+            gender.setText("Prefer not to say");
+        }else {
+            gender.setText(puttedtextgender);
+        }
+
         address.setText(getSharedPreferenceValue.getUseraddress(this));
 
 
@@ -258,12 +270,12 @@ public class UserProfileActivity extends AppCompatActivity {
 
 
 
-            if(!USer_Image.equals("NoImageHere")){
+            /*if(!USer_Image.equals("NoImageHere")){
                 BlurBuilder blurBuilder=new BlurBuilder();
                 Bitmap bitmap =((BitmapDrawable)userPhoto.getDrawable()).getBitmap();
                 Bitmap resultBmp = blurBuilder.blur(this,bitmap );//BitmapFactory.decodeResource(getResources(), R.drawable.tamimy)
                 diagonalView.setImageBitmap(resultBmp);
-            }
+            }*/
 
 
 
@@ -328,6 +340,11 @@ public class UserProfileActivity extends AppCompatActivity {
         ZibCode=MyDialogHomeEdit.findViewById(R.id.edit_ZIB);
         City=MyDialogHomeEdit.findViewById(R.id.edit_City);
         Country=MyDialogHomeEdit.findViewById(R.id.edit_country);
+        String streetText=Street.getText().toString().trim();
+        String zipcodeTExt=","+ZibCode.getText().toString().trim();
+        String CityText=" "+City.getText().toString().trim();
+        String CountryText=Country.getText().toString().trim();
+
 
         Country.setText(getSharedPreferenceValue.getUserCountry(UserProfileActivity.this));
 
@@ -491,7 +508,7 @@ public class UserProfileActivity extends AppCompatActivity {
         Prefer_not_to_say.setOnClickListener(new View.OnClickListener() {
             @Override
             public void onClick(View v) {
-                gender.setText("Prefer_not_to_say");
+                gender.setText("Prefer not to say");
                 MyDialogGender.dismiss();
             }
         });
@@ -557,10 +574,10 @@ public class UserProfileActivity extends AppCompatActivity {
             RequestBody addressreq = RequestBody.create(MediaType.parse("text/plain"), address.getText().toString());
 
             if(gender.getText().toString().equals("Male")){
-                 genderinreq="male";
+                genderinreq="male";
             }else if(gender.getText().toString().equals("Female")){
                 genderinreq="female";
-            }if(gender.getText().toString().equals("Prefer_not_to_say")){
+            }if(gender.getText().toString().equals("Prefer not to say")){
                 genderinreq="other";
             }
             RequestBody websiterequest = RequestBody.create(MediaType.parse("text/plain"), website.getText().toString());

@@ -222,8 +222,13 @@
                 android:layout_width="wrap_content"
                 android:layout_height="wrap_content"
                 android:text="My Address"
+                android:singleLine="true"
                 android:layout_toEndOf="@+id/home_icon"
-                android:layout_toRightOf="@+id/home_icon" />
+                android:layout_toRightOf="@+id/home_icon"
+                android:layout_toStartOf="@+id/editweb"
+                android:layout_toLeftOf="@+id/editweb"
+                android:layout_marginEnd="5dp"
+                android:layout_marginRight="5dp" />
             <TextView
                 android:textColor="@color/Tomyacolor"
                 android:textSize="15dp"
@@ -235,6 +240,7 @@
                 android:layout_toEndOf="@+id/home_icon"
                 android:layout_toRightOf="@+id/home_icon"/>
             <ImageView
+                android:id="@+id/editweb"
                 android:layout_width="wrap_content"
                 android:layout_height="wrap_content"
                 android:src="@drawable/ic_edit_blue_gray_24dp"
@@ -265,9 +271,14 @@
                 android:id="@+id/Email"
                 android:layout_width="wrap_content"
                 android:layout_height="wrap_content"
-                android:text="momentamimy@gmail.com"
+                android:singleLine="true"
+                android:text="momentamimy@gmail.com algm;lgrlmegalml;aegm"
                 android:layout_toEndOf="@+id/Email_icon"
-                android:layout_toRightOf="@+id/Email_icon" />
+                android:layout_toRightOf="@+id/Email_icon"
+                android:layout_toStartOf="@+id/editaaaa"
+                android:layout_toLeftOf="@+id/editaaaa"
+                android:layout_marginEnd="5dp"
+                android:layout_marginRight="5dp" />
             <TextView
                 android:textColor="@color/Tomyacolor"
                 android:textSize="15dp"
@@ -280,6 +291,7 @@
                 android:layout_toRightOf="@+id/Email_icon"/>
 
             <ImageView
+                android:id="@+id/editaaaa"
                 android:layout_width="wrap_content"
                 android:layout_height="wrap_content"
                 android:src="@drawable/ic_edit_blue_gray_24dp"
@@ -311,6 +323,7 @@
                 android:layout_width="wrap_content"
                 android:layout_height="wrap_content"
                 android:text="My Website"
+                android:singleLine="true"
                 android:layout_toEndOf="@+id/Websie_icon"
                 android:layout_toRightOf="@+id/Websie_icon" />
             <TextView

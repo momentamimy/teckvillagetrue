@@ -36,7 +36,7 @@
                 android:layout_height="wrap_content"
                 android:textColor="@color/Tomyacolor"
                 android:textSize="18dp"
-                android:text="Prefer_not_to_say"/>
+                android:text="Prefer not to say"/>
             <TextView
                 android:layout_marginTop="10dp"
                 android:padding="20dp"

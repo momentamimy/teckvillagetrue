@@ -51,7 +51,7 @@ public class getSharedPreferenceValue {
 
     public static String getUserGender(Context context){
         SharedPreferences sharedPref = context.getSharedPreferences("WhoCaller?", MODE_PRIVATE);
-        return sharedPref.getString("User_gender","Prefer_not_to_say");
+        return sharedPref.getString("User_gender","Prefer not to say");
     }
 
     public static String getUserTagId(Context context){

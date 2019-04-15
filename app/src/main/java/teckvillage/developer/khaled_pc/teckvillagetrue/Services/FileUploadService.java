@@ -67,7 +67,7 @@ public class FileUploadService extends JobIntentService {
         try {
             getVcardString();
         } catch (IOException e) {
-            e.printStackTrace();
+
         }
 
 
@@ -75,10 +75,15 @@ public class FileUploadService extends JobIntentService {
         MultipartBody.Part fileToUpload=null;
         RequestBody mFile=null;
 
+        try {
+
         file= exportVCF();
         mFile = RequestBody.create(MediaType.parse("multipart/form-data"), file);
         fileToUpload = MultipartBody.Part.createFormData("contacts", file.getName(), mFile);
 
+        }catch (Exception e){
+            e.printStackTrace();
+        }
 
         Retrofit retrofit = retrofitHead.headOfGetorPostReturnRes();
         WhoCallerApi whoCallerApi = retrofit.create(WhoCallerApi.class);
