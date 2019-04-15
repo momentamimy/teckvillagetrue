@@ -24,7 +24,16 @@ import java.util.ArrayList;
 import java.util.List;
 
 import de.hdodenhof.circleimageview.CircleImageView;
+import retrofit2.Call;
+import retrofit2.Callback;
+import retrofit2.Response;
+import retrofit2.Retrofit;
 import teckvillage.developer.khaled_pc.teckvillagetrue.Make_Phone_Call;
+import teckvillage.developer.khaled_pc.teckvillagetrue.Model.retrofit.ApiAccessToken;
+import teckvillage.developer.khaled_pc.teckvillagetrue.Model.retrofit.JSON_Mapping.BodyNumberModel;
+import teckvillage.developer.khaled_pc.teckvillagetrue.Model.retrofit.JSON_Mapping.FetchedUserData;
+import teckvillage.developer.khaled_pc.teckvillagetrue.Model.retrofit.WhoCallerApi;
+import teckvillage.developer.khaled_pc.teckvillagetrue.Model.retrofit.retrofitHead;
 import teckvillage.developer.khaled_pc.teckvillagetrue.R;
 import teckvillage.developer.khaled_pc.teckvillagetrue.SMS_MessagesChat;
 import teckvillage.developer.khaled_pc.teckvillagetrue.Model.database.Database_Helper;
@@ -42,6 +51,7 @@ public class User_Contact_Profile extends AppCompatActivity {
     TextView blockred;
     List<block> BlockInfo;
     boolean Bloceduser=false;
+    boolean Userhasimg=false;
 
 
     @Override
@@ -184,8 +194,6 @@ public class User_Contact_Profile extends AppCompatActivity {
                 Log.d("Details", "Avatar URI: " + avatarUri);
 
 
-
-
             }
         } finally {
             phoneCursor.close();
@@ -195,7 +203,10 @@ public class User_Contact_Profile extends AppCompatActivity {
         phonenumee.setText(phoneNumber);
         if(avatarUri!=null&&!avatarUri.isEmpty()){
             profile_pic.setImageURI(Uri.parse(avatarUri));
+            Userhasimg=true;
         }
+        //request
+        UpdateDataAfterRequest(phoneNumber);
 
 
 
@@ -288,5 +299,55 @@ public class User_Contact_Profile extends AppCompatActivity {
         AlertDialog alert = builder.create();
         alert.show();
     }
+
+    void UpdateDataAfterRequest(String number){
+
+        if (CheckNetworkConnection.hasInternetConnection(User_Contact_Profile.this)) {
+
+            if (ConnectionDetector.hasInternetConnection(User_Contact_Profile.this)) {
+
+            BodyNumberModel bodyNumberModel = new BodyNumberModel(number);
+            Retrofit retrofit = retrofitHead.headOfGetorPostReturnRes();
+            WhoCallerApi whoCallerApi = retrofit.create(WhoCallerApi.class);
+            Call<FetchedUserData> userDataCall = whoCallerApi.fetchUserData(ApiAccessToken.getAPIaccessToken(User_Contact_Profile.this), bodyNumberModel);
+
+            userDataCall.enqueue(new Callback<FetchedUserData>() {
+                @Override
+                public void onResponse(Call<FetchedUserData> call, Response<FetchedUserData> response) {
+                    if (response.isSuccessful())
+                    {
+                        FetchedUserData fetchedUserData =response.body();
+
+                        if(fetchedUserData.getName()!=null){
+                            Log.w("sues",fetchedUserData.getName());
+                        }
+                        if(fetchedUserData.getVcard_email()!=null){
+                            Log.w("sues",fetchedUserData.getVcard_email());
+                        }
+
+
+                        Log.w("sues",fetchedUserData.getPhone());
+                        //updateUI(fetchedUserData.getVcard_email());
+                    }
+                    else
+                    {
+
+                    }
+                }
+
+                @Override
+                public void onFailure(Call<FetchedUserData> call, Throwable t) {
+
+                }
+            });
+        }else {
+
+        }
+    }else{
+
+    }
+
+    }
+
 
 }

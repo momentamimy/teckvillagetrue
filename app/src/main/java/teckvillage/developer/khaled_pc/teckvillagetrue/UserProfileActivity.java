@@ -597,6 +597,7 @@ public class UserProfileActivity extends AppCompatActivity {
 
                     final ProgressDialog mProgressDialog = new ProgressDialog(UserProfileActivity.this);
                     mProgressDialog.setIndeterminate(true);
+                    mProgressDialog.setCancelable(false);
                     mProgressDialog.setMessage("Loading...");
                     mProgressDialog.show();
 

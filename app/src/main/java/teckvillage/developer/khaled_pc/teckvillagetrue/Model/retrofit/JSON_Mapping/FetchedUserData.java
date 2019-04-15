@@ -13,6 +13,7 @@ public class FetchedUserData {
     String user_name;
     int user_tag_id;
     int spam_count;
+    boolean is_spam;
     String vcard_fullname,
             vcard_dob,
             vcard_email,
@@ -24,6 +25,14 @@ public class FetchedUserData {
             vcard_note,
             created_at,
             updated_at;
+
+    public boolean isIs_spam() {
+        return is_spam;
+    }
+
+    public void setIs_spam(boolean is_spam) {
+        this.is_spam = is_spam;
+    }
 
     public int getId() {
         return id;

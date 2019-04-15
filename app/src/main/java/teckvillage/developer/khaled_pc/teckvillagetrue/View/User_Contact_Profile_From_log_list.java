@@ -10,6 +10,7 @@ import android.support.v4.app.ActivityCompat;
 import android.support.v4.content.ContextCompat;
 import android.support.v7.app.AlertDialog;
 import android.support.v7.app.AppCompatActivity;
+import android.util.Log;
 import android.view.View;
 import android.widget.ImageView;
 import android.widget.LinearLayout;
@@ -22,7 +23,16 @@ import java.util.ArrayList;
 import java.util.List;
 
 import de.hdodenhof.circleimageview.CircleImageView;
+import retrofit2.Call;
+import retrofit2.Callback;
+import retrofit2.Response;
+import retrofit2.Retrofit;
 import teckvillage.developer.khaled_pc.teckvillagetrue.Make_Phone_Call;
+import teckvillage.developer.khaled_pc.teckvillagetrue.Model.retrofit.ApiAccessToken;
+import teckvillage.developer.khaled_pc.teckvillagetrue.Model.retrofit.JSON_Mapping.BodyNumberModel;
+import teckvillage.developer.khaled_pc.teckvillagetrue.Model.retrofit.JSON_Mapping.FetchedUserData;
+import teckvillage.developer.khaled_pc.teckvillagetrue.Model.retrofit.WhoCallerApi;
+import teckvillage.developer.khaled_pc.teckvillagetrue.Model.retrofit.retrofitHead;
 import teckvillage.developer.khaled_pc.teckvillagetrue.R;
 import teckvillage.developer.khaled_pc.teckvillagetrue.SMS_MessagesChat;
 import teckvillage.developer.khaled_pc.teckvillagetrue.Model.Get_Calls_Log;
@@ -79,7 +89,10 @@ public class User_Contact_Profile_From_log_list extends AppCompatActivity {
                 isfrommycontact=false;
                 nameofcontact.setText(number);
                 phonenumee.setText(number);
+                UpdateDataAfterRequest(number);
             }
+
+
 
 
 
@@ -304,5 +317,65 @@ public class User_Contact_Profile_From_log_list extends AppCompatActivity {
         alert.show();
 
     }
+
+
+    void UpdateDataAfterRequest(final String number){
+
+        if (CheckNetworkConnection.hasInternetConnection(User_Contact_Profile_From_log_list.this)) {
+
+            if (ConnectionDetector.hasInternetConnection(User_Contact_Profile_From_log_list.this)) {
+
+                BodyNumberModel bodyNumberModel = new BodyNumberModel(number);
+                Retrofit retrofit = retrofitHead.headOfGetorPostReturnRes();
+                WhoCallerApi whoCallerApi = retrofit.create(WhoCallerApi.class);
+                Call<FetchedUserData> userDataCall = whoCallerApi.fetchUserData(ApiAccessToken.getAPIaccessToken(User_Contact_Profile_From_log_list.this), bodyNumberModel);
+
+                userDataCall.enqueue(new Callback<FetchedUserData>() {
+                    @Override
+                    public void onResponse(Call<FetchedUserData> call, Response<FetchedUserData> response) {
+                        if (response.isSuccessful())
+                        {
+                            FetchedUserData fetchedUserData =response.body();
+
+                            if(fetchedUserData.getUser_name()!=null){
+                                Log.w("sues",fetchedUserData.getUser_name());
+                                nameofcontact.setText(fetchedUserData.getUser_name());
+
+                            }else {
+                                if(fetchedUserData.getName()!=null){
+                                    Log.w("sues",fetchedUserData.getName());
+                                    nameofcontact.setText(fetchedUserData.getName());
+                                }else {
+                                    nameofcontact.setText(number);
+                                }
+                            }
+                            if(fetchedUserData.getVcard_email()!=null){
+                                Log.w("sues",fetchedUserData.getVcard_email());
+                            }
+
+
+                            Log.w("sues",fetchedUserData.getPhone());
+                            //updateUI(fetchedUserData.getVcard_email());
+                        }
+                        else
+                        {
+
+                        }
+                    }
+
+                    @Override
+                    public void onFailure(Call<FetchedUserData> call, Throwable t) {
+
+                    }
+                });
+            }else {
+
+            }
+        }else{
+
+        }
+
+    }
+
 
 }

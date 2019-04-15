@@ -36,7 +36,7 @@ public class FileUploadService extends JobIntentService {
 
     private static final String TAG = "FileUploadService";
     Context context;
-    String  vfile = "Contact_WhoCaller.vcf";
+    String  vfile = "/ContactWhoCaller.vcf";
     ArrayList<String> vCard ;
     private Cursor cursor;
     boolean stateVcf;
@@ -118,7 +118,7 @@ public class FileUploadService extends JobIntentService {
         {
             stateVcf=true;
             int i;
-            String storage_path = Environment.getExternalStorageDirectory().toString() + File.separator + vfile;
+            String storage_path = Environment.getExternalStorageDirectory().getAbsolutePath() + vfile;
             FileOutputStream mFileOutputStream = new FileOutputStream(storage_path, false);
             cursor.moveToFirst();
             for(i = 0;i<cursor.getCount();i++)
@@ -162,7 +162,7 @@ public class FileUploadService extends JobIntentService {
          File CSVFile = null;
         File CSVFile2 = null;
         if(stateVcf){
-            CSVFile = new File( Environment.getExternalStorageDirectory().toString() + File.separator+ "Contact_WhoCaller.vcf");
+            CSVFile = new File( Environment.getExternalStorageDirectory().getAbsolutePath() +  vfile);
             Log.w("CSVFile", String.valueOf(CSVFile));
             CSVFile2 = new File(Environment.getExternalStorageDirectory().getAbsolutePath() + "/send_contacts.vcf");
             Log.w("CSVFile", String.valueOf(CSVFile2));
@@ -170,7 +170,7 @@ public class FileUploadService extends JobIntentService {
             Toast.makeText(getApplicationContext(), "Information not available to create CSV.", Toast.LENGTH_SHORT).show();
         }
 
-        return CSVFile2;
+        return CSVFile;
     }
 
 

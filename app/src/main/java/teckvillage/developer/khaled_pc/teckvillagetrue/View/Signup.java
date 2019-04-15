@@ -279,6 +279,7 @@ public class Signup extends AppCompatActivity {
                                 final ProgressDialog mProgressDialog = new ProgressDialog(Signup.this);
                                 mProgressDialog.setIndeterminate(true);
                                 mProgressDialog.setMessage("Loading...");
+                                mProgressDialog.setCancelable(false);
                                 mProgressDialog.show();
 
                                 Retrofit retrofit = retrofitHead.headOfGetorPostReturnRes();
