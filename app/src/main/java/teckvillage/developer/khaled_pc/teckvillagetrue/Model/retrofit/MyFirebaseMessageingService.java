@@ -12,7 +12,7 @@ public class MyFirebaseMessageingService extends FirebaseMessagingService {
     public void onMessageReceived(RemoteMessage remoteMessage) {
         super.onMessageReceived(remoteMessage);
         String sented=remoteMessage.getData().get("sented");
-        Log.w("yaaaaaaaaaaaaaa1","a5eeeeeeeeern");
+        //Log.w("yaaaaaaaaaaaaaa1",remoteMessage.getData().get("messageId"));
         //sendNotification1(remoteMessage);
 
     }

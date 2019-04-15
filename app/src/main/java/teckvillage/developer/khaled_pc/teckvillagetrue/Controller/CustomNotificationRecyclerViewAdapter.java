@@ -10,16 +10,18 @@ import android.widget.TextView;
 
 import java.util.ArrayList;
 import java.util.Calendar;
+import java.util.List;
 
+import teckvillage.developer.khaled_pc.teckvillagetrue.Model.retrofit.JSON_Mapping.NotificattionDataReceived;
 import teckvillage.developer.khaled_pc.teckvillagetrue.R;
 import teckvillage.developer.khaled_pc.teckvillagetrue.Model.MessageInfo;
 
 public class CustomNotificationRecyclerViewAdapter extends RecyclerView.Adapter<CustomNotificationRecyclerViewAdapter.ViewHolder>{
 
-    private ArrayList<MessageInfo> dataSet;
+    private List<NotificattionDataReceived> dataSet;
     Context mContext;
 
-    public CustomNotificationRecyclerViewAdapter(ArrayList<MessageInfo> data, Context context) {
+    public CustomNotificationRecyclerViewAdapter(List<NotificattionDataReceived> data, Context context) {
         this.dataSet = data;
         this.mContext = context;
 
@@ -34,11 +36,11 @@ public class CustomNotificationRecyclerViewAdapter extends RecyclerView.Adapter<
 
     @Override
     public void onBindViewHolder(ViewHolder holder, int position) {
-        MessageInfo dataModel =dataSet.get(position);
-        holder.logName.setText(dataModel.logName);
-        holder.textMessage.setText(dataModel.logMessage);
+        NotificattionDataReceived dataModel =dataSet.get(position);
+        holder.logName.setText(dataModel.getTitle());
+        holder.textMessage.setText(dataModel.getBody());
 
-        Calendar calendar=Calendar.getInstance();
+        /*Calendar calendar=Calendar.getInstance();
         calendar.setTimeInMillis(dataModel.logDate);
         Calendar calendar1=Calendar.getInstance();
         if (calendar.get(Calendar.DAY_OF_YEAR) == calendar1.get(Calendar.DAY_OF_YEAR) &&
@@ -59,7 +61,7 @@ public class CustomNotificationRecyclerViewAdapter extends RecyclerView.Adapter<
         else
         {
             holder.messageDate.setText(String.format("%1$tb %1$td %1$tY", calendar));
-        }
+        }*/
     }
 
     @Override
@@ -80,6 +82,7 @@ public class CustomNotificationRecyclerViewAdapter extends RecyclerView.Adapter<
             textMessage=itemView.findViewById(R.id.text_sms_message);
             messageDate=itemView.findViewById(R.id.date_notifcation_message);
             contact_img_log_recycle=itemView.findViewById(R.id.contact_img_log_recycle);
+            messageDate.setVisibility(View.GONE);
         }
     }
 }

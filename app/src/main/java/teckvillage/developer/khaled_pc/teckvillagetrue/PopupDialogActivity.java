@@ -182,6 +182,7 @@ public class PopupDialogActivity extends Activity {
                         {
                             Log.d("userNamePaleeez", response.body().getName());
                             UserData[0] =response.body();
+                            updateCard(UserData[0]);
                         }
                         else
                         {
@@ -201,5 +202,12 @@ public class PopupDialogActivity extends Activity {
             UserData[0]=null;
         }
         return UserData[0];
+    }
+
+    public void updateCard(FetchedUserData userData)
+    {
+
+        CallerName.setText(userData.getName());
+        CallerNumber.setText(userData.getFull_phone());
     }
 }

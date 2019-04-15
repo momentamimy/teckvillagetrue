@@ -1,21 +1,37 @@
 package teckvillage.developer.khaled_pc.teckvillagetrue;
 
+import android.app.ProgressDialog;
 import android.support.v7.app.AppCompatActivity;
 import android.os.Bundle;
 import android.support.v7.widget.LinearLayoutManager;
 import android.support.v7.widget.RecyclerView;
+import android.util.Log;
 import android.view.MenuItem;
 
 import java.util.ArrayList;
+import java.util.List;
 
+import retrofit2.Call;
+import retrofit2.Callback;
+import retrofit2.Response;
+import retrofit2.Retrofit;
 import teckvillage.developer.khaled_pc.teckvillagetrue.Controller.CustomNotificationRecyclerViewAdapter;
 import teckvillage.developer.khaled_pc.teckvillagetrue.Model.MessageInfo;
+import teckvillage.developer.khaled_pc.teckvillagetrue.Model.retrofit.ApiAccessToken;
+import teckvillage.developer.khaled_pc.teckvillagetrue.Model.retrofit.JSON_Mapping.BodyNumberModel;
+import teckvillage.developer.khaled_pc.teckvillagetrue.Model.retrofit.JSON_Mapping.FetchedUserData;
+import teckvillage.developer.khaled_pc.teckvillagetrue.Model.retrofit.JSON_Mapping.NotificattionDataReceived;
+import teckvillage.developer.khaled_pc.teckvillagetrue.Model.retrofit.WhoCallerApi;
+import teckvillage.developer.khaled_pc.teckvillagetrue.Model.retrofit.retrofitHead;
+import teckvillage.developer.khaled_pc.teckvillagetrue.View.CheckNetworkConnection;
+import teckvillage.developer.khaled_pc.teckvillagetrue.View.ConnectionDetector;
+import teckvillage.developer.khaled_pc.teckvillagetrue.View.Signup;
 
 public class Notifications extends AppCompatActivity {
 
     RecyclerView NotificationRecyclerview;
 
-    ArrayList<MessageInfo> messageInfos;
+    List<NotificattionDataReceived> messageInfos;
     CustomNotificationRecyclerViewAdapter customNotificationRecyclerViewAdapter;
     @Override
     protected void onCreate(Bundle savedInstanceState) {
@@ -29,20 +45,18 @@ public class Notifications extends AppCompatActivity {
         MessageInfo info1=new MessageInfo("","WhoCaller","you can modify position of Caller Dialoghkhkhkh khkhkhkhkhkh khkhkhkhkhkh khkhkhkhkhkhkh bkgjgjgjgjgjgjgjgjgjgjgj",System.currentTimeMillis());
 
 
-        messageInfos.add(info);
+        /*messageInfos.add(info);
         messageInfos.add(info1);
+*/
 
         getSupportActionBar().setTitle("Notification");
         getSupportActionBar().setDisplayShowHomeEnabled(true);   //back button on App Bar
         getSupportActionBar().setDisplayHomeAsUpEnabled(true);   //back button on App Bar
 
         NotificationRecyclerview=findViewById(R.id.notificationRecyclerview);
-        customNotificationRecyclerViewAdapter=new CustomNotificationRecyclerViewAdapter(messageInfos,getApplicationContext());
 
-        LinearLayoutManager lLayout = new LinearLayoutManager(getApplicationContext());
-        NotificationRecyclerview.setLayoutManager(lLayout);
-        NotificationRecyclerview.setAdapter(customNotificationRecyclerViewAdapter);
 
+        getallnotification();
     }
 
     @Override
@@ -57,5 +71,55 @@ public class Notifications extends AppCompatActivity {
         }
 
         return super.onOptionsItemSelected(item);
+    }
+
+    public void getallnotification()
+    {
+        if (CheckNetworkConnection.hasInternetConnection(getApplicationContext())) {
+
+            //Check internet Access
+            if (ConnectionDetector.hasInternetConnection(getApplicationContext())) {
+
+                final ProgressDialog mProgressDialog = new ProgressDialog(Notifications.this);
+                mProgressDialog.setIndeterminate(true);
+                mProgressDialog.setMessage("Loading...");
+                mProgressDialog.setCancelable(false);
+                mProgressDialog.show();
+
+                Retrofit retrofit = retrofitHead.headOfGetorPostReturnRes();
+                WhoCallerApi whoCallerApi = retrofit.create(WhoCallerApi.class);
+                Call<List<NotificattionDataReceived>> getallNotification = whoCallerApi.getallNotification(ApiAccessToken.getAPIaccessToken(getApplicationContext()));
+                getallNotification.enqueue(new Callback<List<NotificattionDataReceived>>() {
+                    @Override
+                    public void onResponse(Call<List<NotificattionDataReceived>> call, Response<List<NotificattionDataReceived>> response) {
+                        if (mProgressDialog.isShowing())
+                            mProgressDialog.dismiss();
+                        if (response.isSuccessful())
+                        {
+                            Log.d("paleezRun",response.body().get(0).getBody());
+                            messageInfos=response.body();
+                            customNotificationRecyclerViewAdapter=new CustomNotificationRecyclerViewAdapter(messageInfos,getApplicationContext());
+
+                            LinearLayoutManager lLayout = new LinearLayoutManager(getApplicationContext());
+                            NotificationRecyclerview.setLayoutManager(lLayout);
+                            NotificationRecyclerview.setAdapter(customNotificationRecyclerViewAdapter);
+                        }
+                        else
+                        {
+                            Log.d("paleezRun","notfafa");
+                        }
+
+
+                    }
+
+                    @Override
+                    public void onFailure(Call<List<NotificattionDataReceived>> call, Throwable t) {
+                        Log.d("paleezRun","fafa");
+                        if (mProgressDialog.isShowing())
+                            mProgressDialog.dismiss();
+                    }
+                });
+            }
+        }
     }
 }

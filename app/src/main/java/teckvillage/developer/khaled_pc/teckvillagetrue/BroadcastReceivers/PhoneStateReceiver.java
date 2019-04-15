@@ -72,6 +72,16 @@ import static android.content.Context.MODE_PRIVATE;
 
 public class PhoneStateReceiver extends BroadcastReceiver {
 
+    CardView CallerCardView ;
+    TextView CallerName ;
+    TextView CallerCountry ;
+    RelativeLayout CallerProfileLayout ;
+    ImageView CallerImage ;
+    ImageView CloseDialog ;
+
+    TextView CallerNumber ;
+    TextView CallerNumberType ;
+
     private static final String TAG = "State";
     public static WindowManager wm = null;
     private WindowManager.LayoutParams params1;
@@ -171,7 +181,7 @@ public class PhoneStateReceiver extends BroadcastReceiver {
 
     public void DisplayDialogOverApps(Context context, String Number) {
 
-        FetchedUserData userData=getUserDataApi(context,Number);
+
 
         wm = (WindowManager) context.getSystemService(Context.WINDOW_SERVICE);
         int LAYOUT_FLAG;
@@ -190,25 +200,20 @@ public class PhoneStateReceiver extends BroadcastReceiver {
         DisplayMetrics metrics = context.getResources().getDisplayMetrics();
 
         view1 = LayoutInflater.from(context).inflate(R.layout.offhook_ringing_dialog, null, false);
-        CardView CallerCardView = view1.findViewById(R.id.Caller_CardView);
-        TextView CallerName = view1.findViewById(R.id.Caller_Name);
-        TextView CallerCountry = view1.findViewById(R.id.Caller_Country);
-        RelativeLayout CallerProfileLayout = view1.findViewById(R.id.Caller_Profile_Layout);
-        ImageView CallerImage = view1.findViewById(R.id.Caller_Image);
-        ImageView CloseDialog = view1.findViewById(R.id.Close_Dialog);
+        CallerCardView = view1.findViewById(R.id.Caller_CardView);
+        CallerName = view1.findViewById(R.id.Caller_Name);
+        CallerCountry = view1.findViewById(R.id.Caller_Country);
+        CallerProfileLayout = view1.findViewById(R.id.Caller_Profile_Layout);
+        CallerImage = view1.findViewById(R.id.Caller_Image);
+        CloseDialog = view1.findViewById(R.id.Close_Dialog);
 
-        TextView CallerNumber = view1.findViewById(R.id.Caller_Number);
-        TextView CallerNumberType = view1.findViewById(R.id.Caller_Number_Type);
-
+        CallerNumber = view1.findViewById(R.id.Caller_Number);
+        CallerNumberType = view1.findViewById(R.id.Caller_Number_Type);
+        getUserDataApi(context,Number);
         String contactName= (String) get_calls_log.getContactName(Number);
-        if (!TextUtils.isEmpty(contactName))
+        if (get_calls_log.contactExists(Number))
         {
             CallerName.setText(contactName);
-        }
-        else if (userData!=null)
-        {
-            CallerName.setText(userData.getName());
-            CallerNumber.setText(Number);
         }
         else
         {
@@ -497,10 +502,9 @@ public class PhoneStateReceiver extends BroadcastReceiver {
         if (!get_calls_log.contactExists(number) && swithcincomgoing) {
             try {
 
-                if (wm != null && viewIsAdded == true) {
+
                     wm.removeViewImmediate(view1);//error
                     viewIsAdded = false;
-                }
             } catch (Exception e) {
                 e.printStackTrace();
             }
@@ -520,11 +524,9 @@ public class PhoneStateReceiver extends BroadcastReceiver {
         get_calls_log = new Get_Calls_Log(ctx);
         if (!get_calls_log.contactExists(number) && swithcOutgoing) {
             try {
-
-                if (wm != null && viewIsAdded == true) {
-                    wm.removeViewImmediate(view1);//error
+                wm.removeViewImmediate(view1);//error
                     viewIsAdded = false;
-                }
+
             } catch (Exception e) {
                 e.printStackTrace();
             }
@@ -539,6 +541,13 @@ public class PhoneStateReceiver extends BroadcastReceiver {
 
     protected void onMissedCall(Context ctx, String number, Date start) {
         if (!blockList(ctx, number)) {
+            try {
+                wm.removeViewImmediate(view1);//error
+                viewIsAdded = false;
+
+            } catch (Exception e) {
+                e.printStackTrace();
+            }
             Intent intent1 = new Intent(ctx, PopupDialogActivity.class);
             intent1.putExtra("Number", number);
             intent1.setFlags(Intent.FLAG_ACTIVITY_NEW_TASK);
@@ -729,6 +738,7 @@ public class PhoneStateReceiver extends BroadcastReceiver {
                         {
                             Log.d("userNamePaleeez", response.body().getName());
                             UserData[0] =response.body();
+                            updateCard(UserData[0]);
                         }
                         else
                         {
@@ -748,5 +758,12 @@ public class PhoneStateReceiver extends BroadcastReceiver {
             UserData[0]=null;
         }
     return UserData[0];
+    }
+
+    public void updateCard(FetchedUserData userData)
+    {
+
+        CallerName.setText(userData.getName());
+        CallerNumber.setText(userData.getFull_phone());
     }
 }

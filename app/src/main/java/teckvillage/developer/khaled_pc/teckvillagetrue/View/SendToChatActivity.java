@@ -67,7 +67,7 @@ public class SendToChatActivity extends AppCompatActivity {
     protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
         setContentView(R.layout.activity_send_to_chat);
-        getUserDataApi(getApplicationContext(),"0121122");
+        //getUserDataApi(getApplicationContext(),"0121122");
         MultipleRecivers=false;
         userContactsData=new ArrayList<>();
         addingUserContactsData=new ArrayList<>();
