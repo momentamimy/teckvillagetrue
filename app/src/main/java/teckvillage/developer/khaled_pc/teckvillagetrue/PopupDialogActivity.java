@@ -16,6 +16,7 @@ import android.renderscript.ScriptIntrinsicBlur;
 import android.os.Bundle;
 import android.support.v7.widget.Toolbar;
 import android.text.TextUtils;
+import android.util.Log;
 import android.util.TypedValue;
 import android.view.View;
 import android.view.Window;
@@ -23,7 +24,18 @@ import android.widget.ImageView;
 import android.widget.RelativeLayout;
 import android.widget.TextView;
 
+import retrofit2.Call;
+import retrofit2.Callback;
+import retrofit2.Response;
+import retrofit2.Retrofit;
 import teckvillage.developer.khaled_pc.teckvillagetrue.Model.Get_Calls_Log;
+import teckvillage.developer.khaled_pc.teckvillagetrue.Model.retrofit.ApiAccessToken;
+import teckvillage.developer.khaled_pc.teckvillagetrue.Model.retrofit.JSON_Mapping.BodyNumberModel;
+import teckvillage.developer.khaled_pc.teckvillagetrue.Model.retrofit.JSON_Mapping.FetchedUserData;
+import teckvillage.developer.khaled_pc.teckvillagetrue.Model.retrofit.WhoCallerApi;
+import teckvillage.developer.khaled_pc.teckvillagetrue.Model.retrofit.retrofitHead;
+import teckvillage.developer.khaled_pc.teckvillagetrue.View.CheckNetworkConnection;
+import teckvillage.developer.khaled_pc.teckvillagetrue.View.ConnectionDetector;
 
 public class PopupDialogActivity extends Activity {
 
@@ -76,13 +88,24 @@ public class PopupDialogActivity extends Activity {
         get_calls_log=new Get_Calls_Log(this);
         String contactName= (String) get_calls_log.getContactName(number);
         Bitmap contactPhoto=  get_calls_log.retrieveContactPhoto(number);
-        if (TextUtils.isEmpty(contactName))
+        FetchedUserData userData=getUserDataApi(getApplicationContext(),number);
+        if (!TextUtils.isEmpty(contactName))
         {
-            contactName=number;
+            CallerName.setText(contactName);
+            CallerNumber.setText(number);
+        }
+        if (userData!=null)
+        {
+            CallerName.setText(userData.getName());
+            CallerNumber.setText(number);
+        }
+        else
+        {
+            CallerName.setText(number);
+            CallerNumber.setText(number);
         }
 
-        CallerName.setText(contactName);
-        CallerNumber.setText(number);
+
         if (contactPhoto!=null)
         {
             BlurBuilder blurBuilder=new BlurBuilder();
@@ -138,5 +161,45 @@ public class PopupDialogActivity extends Activity {
             }
             return null;
         }
+    }
+
+    public FetchedUserData getUserDataApi(Context context, String number) {
+        final FetchedUserData[] UserData = {null};
+        if (CheckNetworkConnection.hasInternetConnection(context)) {
+
+            //Check internet Access
+            if (ConnectionDetector.hasInternetConnection(context)) {
+
+                BodyNumberModel bodyNumberModel = new BodyNumberModel(number);
+                Retrofit retrofit = retrofitHead.headOfGetorPostReturnRes();
+                WhoCallerApi whoCallerApi = retrofit.create(WhoCallerApi.class);
+                Call<FetchedUserData> userDataCall = whoCallerApi.fetchUserData(ApiAccessToken.getAPIaccessToken(context), bodyNumberModel);
+
+                userDataCall.enqueue(new Callback<FetchedUserData>() {
+                    @Override
+                    public void onResponse(Call<FetchedUserData> call, Response<FetchedUserData> response) {
+                        if (response.isSuccessful())
+                        {
+                            Log.d("userNamePaleeez", response.body().getName());
+                            UserData[0] =response.body();
+                        }
+                        else
+                        {
+                            UserData[0]=null;
+                        }
+                    }
+
+                    @Override
+                    public void onFailure(Call<FetchedUserData> call, Throwable t) {
+                        UserData[0]=null;
+                    }
+                });
+            }else {
+                UserData[0]=null;
+            }
+        }else{
+            UserData[0]=null;
+        }
+        return UserData[0];
     }
 }

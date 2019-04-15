@@ -33,6 +33,8 @@ import retrofit2.Retrofit;
 import teckvillage.developer.khaled_pc.teckvillagetrue.Chat_MessagesChat;
 import teckvillage.developer.khaled_pc.teckvillagetrue.Controller.AddingSendToChatContactsAdapters;
 import teckvillage.developer.khaled_pc.teckvillagetrue.Controller.SendToChatContactsAdapters;
+import teckvillage.developer.khaled_pc.teckvillagetrue.Model.retrofit.JSON_Mapping.BodyNumberModel;
+import teckvillage.developer.khaled_pc.teckvillagetrue.Model.retrofit.JSON_Mapping.FetchedUserData;
 import teckvillage.developer.khaled_pc.teckvillagetrue.R;
 import teckvillage.developer.khaled_pc.teckvillagetrue.SMS_MessagesChat;
 import teckvillage.developer.khaled_pc.teckvillagetrue.Model.Get_User_Contacts;
@@ -65,6 +67,7 @@ public class SendToChatActivity extends AppCompatActivity {
     protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
         setContentView(R.layout.activity_send_to_chat);
+        getUserDataApi(getApplicationContext(),"0121122");
         MultipleRecivers=false;
         userContactsData=new ArrayList<>();
         addingUserContactsData=new ArrayList<>();
@@ -298,6 +301,10 @@ public class SendToChatActivity extends AppCompatActivity {
         Ok.setOnClickListener(new View.OnClickListener() {
             @Override
             public void onClick(View v) {
+                if (CheckNetworkConnection.hasInternetConnection(SendToChatActivity.this)) {
+
+                    //Check internet Access
+                    if (ConnectionDetector.hasInternetConnection(SendToChatActivity.this)) {
                 GroupBodyModel bodyModel=new GroupBodyModel(usersId,Group.getText().toString());
 
                 Retrofit retrofit = retrofitHead.headOfGetorPostReturnRes();
@@ -333,8 +340,52 @@ public class SendToChatActivity extends AppCompatActivity {
                 intent.putExtra("userList",UsersNames_IDs);
                 startActivity(intent);
                 MyDialogCreatGroup.dismiss();
-            */}
+            */
+                    }
+                }
+            }
         });
         MyDialogCreatGroup.show();
+    }
+
+    public void getUserDataApi(Context context, String number) {
+        if (CheckNetworkConnection.hasInternetConnection(context)) {
+
+            //Check internet Access
+            if (ConnectionDetector.hasInternetConnection(context)) {
+
+                BodyNumberModel bodyNumberModel = new BodyNumberModel(number);
+                Retrofit retrofit = retrofitHead.headOfGetorPostReturnRes();
+                WhoCallerApi whoCallerApi = retrofit.create(WhoCallerApi.class);
+                Call<FetchedUserData> userDataCall = whoCallerApi.fetchUserData(ApiAccessToken.getAPIaccessToken(context), bodyNumberModel);
+
+                userDataCall.enqueue(new Callback<FetchedUserData>() {
+                    @Override
+                    public void onResponse(Call<FetchedUserData> call, Response<FetchedUserData> response) {
+                        if (response.isSuccessful())
+                        {
+                            if (TextUtils.isEmpty(response.body().getName()))
+                            {
+                                Log.d("userNamePaleeez", "userNamePaleeez");
+                            }
+                            else
+                            {
+                                Log.d("userNamePaleeez", response.body().getName());
+                            }
+
+                        }
+                        else
+                        {
+                            Log.d("userNamePaleeez", "userNamePaleeez");
+                        }
+                    }
+
+                    @Override
+                    public void onFailure(Call<FetchedUserData> call, Throwable t) {
+                        Log.d("userNamePaleeez", "failure");
+                    }
+                });
+            }
+        }
     }
 }

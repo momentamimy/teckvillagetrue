@@ -23,7 +23,7 @@ import com.sinch.verification.VerificationListener;
 import teckvillage.developer.khaled_pc.teckvillagetrue.R;
 
 public class Missed_Call_Verification extends AppCompatActivity {
-    private final String APPLICATION_KEY = "e0a9bd29-08ef-425c-9a03-84d04aa7ef7e";
+    private final String APPLICATION_KEY = "273d034e-e60a-4a6b-8a0d-88be29333bca";
     SharedPreferences sharedPreferences;
     String coincode;
     String number;

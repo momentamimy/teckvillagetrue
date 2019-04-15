@@ -124,7 +124,7 @@ public class FileUploadService extends JobIntentService {
             for(i = 0;i<cursor.getCount();i++)
             {
                 get(cursor);
-                Log.d("TAG", "Contact "+(i+1)+"VcF String is"+vCard.get(i));
+               // Log.d("TAG", "Contact "+(i+1)+"VcF String is"+vCard.get(i));
                 cursor.moveToNext();
                 mFileOutputStream.write(vCard.get(i).toString().getBytes());
             }

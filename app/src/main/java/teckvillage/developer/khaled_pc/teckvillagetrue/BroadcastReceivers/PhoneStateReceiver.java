@@ -12,6 +12,7 @@ import android.content.SharedPreferences;
 import android.database.Cursor;
 import android.graphics.Bitmap;
 import android.graphics.PixelFormat;
+import android.graphics.drawable.BitmapDrawable;
 import android.media.AudioManager;
 import android.media.RingtoneManager;
 import android.net.Uri;
@@ -46,22 +47,36 @@ import java.util.List;
 import java.util.regex.Pattern;
 
 
+import retrofit2.Call;
+import retrofit2.Callback;
+import retrofit2.Response;
+import retrofit2.Retrofit;
 import teckvillage.developer.khaled_pc.teckvillagetrue.MainActivity;
+import teckvillage.developer.khaled_pc.teckvillagetrue.Model.retrofit.ApiAccessToken;
+import teckvillage.developer.khaled_pc.teckvillagetrue.Model.retrofit.JSON_Mapping.BodyNumberModel;
+import teckvillage.developer.khaled_pc.teckvillagetrue.Model.retrofit.JSON_Mapping.FetchedUserData;
+import teckvillage.developer.khaled_pc.teckvillagetrue.Model.retrofit.JSON_Mapping.GroupBodyModel;
+import teckvillage.developer.khaled_pc.teckvillagetrue.Model.retrofit.JSON_Mapping.GroupChatResultModel;
+import teckvillage.developer.khaled_pc.teckvillagetrue.Model.retrofit.WhoCallerApi;
+import teckvillage.developer.khaled_pc.teckvillagetrue.Model.retrofit.retrofitHead;
 import teckvillage.developer.khaled_pc.teckvillagetrue.Permission;
 import teckvillage.developer.khaled_pc.teckvillagetrue.PopupDialogActivity;
 import teckvillage.developer.khaled_pc.teckvillagetrue.R;
 import teckvillage.developer.khaled_pc.teckvillagetrue.Model.Get_Calls_Log;
 import teckvillage.developer.khaled_pc.teckvillagetrue.Model.database.Database_Helper;
+import teckvillage.developer.khaled_pc.teckvillagetrue.View.CheckNetworkConnection;
+import teckvillage.developer.khaled_pc.teckvillagetrue.View.ConnectionDetector;
+import teckvillage.developer.khaled_pc.teckvillagetrue.View.SendToChatActivity;
 
 import static android.content.Context.MODE_PRIVATE;
 
 public class PhoneStateReceiver extends BroadcastReceiver {
 
     private static final String TAG = "State";
-    public static WindowManager wm=null;
+    public static WindowManager wm = null;
     private WindowManager.LayoutParams params1;
     public static View view1;
-    static boolean viewIsAdded=false;
+    static boolean viewIsAdded = false;
     Get_Calls_Log get_calls_log;
     Database_Helper db;
     List<String> BlockNumbers;
@@ -91,22 +106,19 @@ public class PhoneStateReceiver extends BroadcastReceiver {
             if ("android.intent.action.NEW_OUTGOING_CALL".equals(str))
                 trueCallerOutgoing(context, intent);
 
-        }else {
+        } else {
             //We listen to two intents.  The new outgoing call only tells us of an outgoing call.  We use it to get the number.
             if (intent.getAction().equals("android.intent.action.NEW_OUTGOING_CALL")) {
                 savedNumber = intent.getExtras().getString("android.intent.extra.PHONE_NUMBER");
-            }
-            else{
+            } else {
                 String stateStr = intent.getExtras().getString(TelephonyManager.EXTRA_STATE);
                 String number = intent.getExtras().getString(TelephonyManager.EXTRA_INCOMING_NUMBER);
                 int state = 0;
-                if(stateStr.equals(TelephonyManager.EXTRA_STATE_IDLE)){
+                if (stateStr.equals(TelephonyManager.EXTRA_STATE_IDLE)) {
                     state = TelephonyManager.CALL_STATE_IDLE;
-                }
-                else if(stateStr.equals(TelephonyManager.EXTRA_STATE_OFFHOOK)){
+                } else if (stateStr.equals(TelephonyManager.EXTRA_STATE_OFFHOOK)) {
                     state = TelephonyManager.CALL_STATE_OFFHOOK;
-                }
-                else if(stateStr.equals(TelephonyManager.EXTRA_STATE_RINGING)){
+                } else if (stateStr.equals(TelephonyManager.EXTRA_STATE_RINGING)) {
                     state = TelephonyManager.CALL_STATE_RINGING;
                 }
 
@@ -116,8 +128,8 @@ public class PhoneStateReceiver extends BroadcastReceiver {
         }
 
 
-     //********************************************************************************************************************************************
-     //*************************************************Old Code***************************************************************************************
+        //********************************************************************************************************************************************
+        //*************************************************Old Code***************************************************************************************
       /*  try {
 
 
@@ -157,11 +169,9 @@ public class PhoneStateReceiver extends BroadcastReceiver {
     }
 
 
+    public void DisplayDialogOverApps(Context context, String Number) {
 
-
-
-    public void DisplayDialogOverApps(Context context,String Number) {
-
+        FetchedUserData userData=getUserDataApi(context,Number);
 
         wm = (WindowManager) context.getSystemService(Context.WINDOW_SERVICE);
         int LAYOUT_FLAG;
@@ -179,56 +189,66 @@ public class PhoneStateReceiver extends BroadcastReceiver {
 
         DisplayMetrics metrics = context.getResources().getDisplayMetrics();
 
-        view1 = LayoutInflater.from(context).inflate(R.layout.offhook_ringing_dialog,null, false);
-        CardView CallerCardView=view1.findViewById(R.id.Caller_CardView);
-        TextView CallerName=view1.findViewById(R.id.Caller_Name);
-        TextView CallerCountry=view1.findViewById(R.id.Caller_Country);
-        RelativeLayout CallerProfileLayout=view1.findViewById(R.id.Caller_Profile_Layout);
-        ImageView CallerImage=view1.findViewById(R.id.Caller_Image);
-        ImageView CloseDialog=view1.findViewById(R.id.Close_Dialog);
+        view1 = LayoutInflater.from(context).inflate(R.layout.offhook_ringing_dialog, null, false);
+        CardView CallerCardView = view1.findViewById(R.id.Caller_CardView);
+        TextView CallerName = view1.findViewById(R.id.Caller_Name);
+        TextView CallerCountry = view1.findViewById(R.id.Caller_Country);
+        RelativeLayout CallerProfileLayout = view1.findViewById(R.id.Caller_Profile_Layout);
+        ImageView CallerImage = view1.findViewById(R.id.Caller_Image);
+        ImageView CloseDialog = view1.findViewById(R.id.Close_Dialog);
 
-        TextView CallerNumber=view1.findViewById(R.id.Caller_Number);
-        TextView CallerNumberType=view1.findViewById(R.id.Caller_Number_Type);
+        TextView CallerNumber = view1.findViewById(R.id.Caller_Number);
+        TextView CallerNumberType = view1.findViewById(R.id.Caller_Number_Type);
 
-        CallerName.setText(Number);
-        CallerNumber.setText(Number);
-        /*if (contactPhoto!=null)
+        String contactName= (String) get_calls_log.getContactName(Number);
+        if (!TextUtils.isEmpty(contactName))
+        {
+            CallerName.setText(contactName);
+        }
+        else if (userData!=null)
+        {
+            CallerName.setText(userData.getName());
+            CallerNumber.setText(Number);
+        }
+        else
+        {
+            CallerName.setText(Number);
+            CallerNumber.setText(Number);
+        }
+
+        Bitmap contactPhoto =get_calls_log.retrieveContactPhoto(Number);
+        if (contactPhoto!=null)
         {
             BlurBuilder blurBuilder=new BlurBuilder();
             CallerImage.setImageBitmap(contactPhoto);
             Bitmap resultBmp = blurBuilder.blur(context, contactPhoto);
             CallerProfileLayout.setBackgroundDrawable(new BitmapDrawable(resultBmp));
 
-        }*/
+        }
 
         CloseDialog.setOnClickListener(new View.OnClickListener() {
             @Override
             public void onClick(View v) {
                 wm.removeView(view1);
-                viewIsAdded=false;
+                viewIsAdded = false;
             }
         });
 
-        String dialogPosition=preferences.getString("DialogPosition","Center");
-        params1.height = dpToPx(150,context);
-        params1.width = metrics.widthPixels-40;
+        String dialogPosition = preferences.getString("DialogPosition", "Center");
+        params1.height = dpToPx(150, context);
+        params1.width = metrics.widthPixels - 40;
         params1.x = 0;
         params1.format = PixelFormat.TRANSLUCENT;
 
-        if (dialogPosition.equals("Top"))
-        {
-            params1.y = -metrics.heightPixels/2;
-        }
-        else if (dialogPosition.equals("Center"))
-        {
+        if (dialogPosition.equals("Top")) {
+            params1.y = -metrics.heightPixels / 2;
+        } else if (dialogPosition.equals("Center")) {
             params1.y = 0;
-        }
-        else if (dialogPosition.equals("Bottom"))
-        {
-            params1.y = metrics.heightPixels/2;
+        } else if (dialogPosition.equals("Bottom")) {
+            params1.y = metrics.heightPixels / 2;
         }
         wm.addView(view1, params1);
-        viewIsAdded=true;
+        viewIsAdded = true;
     }
 
     public int dpToPx(float dp, Context context) {
@@ -269,26 +289,25 @@ public class PhoneStateReceiver extends BroadcastReceiver {
 
     }
 
-    boolean blockList(Context context,String phonenumber)
-    {
+    boolean blockList(Context context, String phonenumber) {
         //Block List Phone numbers
-        BlockNumbers=RetreiveAllNumberInBlockList(context);
+        BlockNumbers = RetreiveAllNumberInBlockList(context);
 
-        for(int i=0;i<BlockNumbers.size();i++){
-            if ((BlockNumbers.get(i) != null) &&BlockNumbers.get(i).equalsIgnoreCase(phonenumber)) {
+        for (int i = 0; i < BlockNumbers.size(); i++) {
+            if ((BlockNumbers.get(i) != null) && BlockNumbers.get(i).equalsIgnoreCase(phonenumber)) {
 
                 return true;
             }
         }
-    return false;
+        return false;
     }
 
-    boolean BlockNumberWhenRing(Context context,String phonenumber){
+    boolean BlockNumberWhenRing(Context context, String phonenumber) {
 
         //Block List Phone numbers
-        BlockNumbers=RetreiveAllNumberInBlockList(context);
+        BlockNumbers = RetreiveAllNumberInBlockList(context);
 
-        if(BlockNumbers.size()>0){
+        if (BlockNumbers.size() > 0) {
 
             AudioManager audioManager = (AudioManager) context.getSystemService(Context.AUDIO_SERVICE);
             //Turn ON the mute
@@ -311,15 +330,15 @@ public class PhoneStateReceiver extends BroadcastReceiver {
                 m.setAccessible(true); // Make it accessible
 
 
-                for(int i=0;i<BlockNumbers.size();i++){
-                    if ((BlockNumbers.get(i) != null) &&BlockNumbers.get(i).equalsIgnoreCase(phonenumber)) {
-                       // m2.invoke(telephonyService); //silenceRinger
+                for (int i = 0; i < BlockNumbers.size(); i++) {
+                    if ((BlockNumbers.get(i) != null) && BlockNumbers.get(i).equalsIgnoreCase(phonenumber)) {
+                        // m2.invoke(telephonyService); //silenceRinger
                         m.invoke(telephonyService); // invoke endCall()
                         m.setAccessible(true); // Make it accessible
 
-                        BloackNotification(BlockNumbers.get(i),context);
+                        BloackNotification(BlockNumbers.get(i), context);
                         //addFromCallLog(context,phonenumber);//Add to block list history
-                        ADDphoneNumberBlockListHistory(context,addFromCallLog(context,phonenumber),BlockNumbers.get(i));
+                        ADDphoneNumberBlockListHistory(context, addFromCallLog(context, phonenumber), BlockNumbers.get(i));
                         return true;
                     }
                 }
@@ -342,25 +361,25 @@ public class PhoneStateReceiver extends BroadcastReceiver {
     }
 
 
-   public List<String> RetreiveAllNumberInBlockList(Context context){
+    public List<String> RetreiveAllNumberInBlockList(Context context) {
 
-       List<String> BlockNumbersH;
-       db=new Database_Helper(context);
-       BlockNumbersH=db.getAllBlocklistNumbers();
+        List<String> BlockNumbersH;
+        db = new Database_Helper(context);
+        BlockNumbersH = db.getAllBlocklistNumbers();
 
-       return BlockNumbersH;
+        return BlockNumbersH;
 
-   }
+    }
 
-    public String ADDphoneNumberBlockListHistory(Context context,long ID,String num){
+    public String ADDphoneNumberBlockListHistory(Context context, long ID, String num) {
 
 
-        db=new Database_Helper(context);
-        long id=db.insertBlockListHistory(ID,num);
+        db = new Database_Helper(context);
+        long id = db.insertBlockListHistory(ID, num);
 
-        if(id!=-1){
+        if (id != -1) {
             return "Success";
-        }else {
+        } else {
             return "Failed";
 
         }
@@ -375,7 +394,7 @@ public class PhoneStateReceiver extends BroadcastReceiver {
         } catch (InterruptedException ignored) {
         }
         // and then ADD it
-       return getLastRecordIdFromCallLog(context, number, 10000);
+        return getLastRecordIdFromCallLog(context, number, 10000);
     }
 
     // Returns last call record from the Call log that was written since "duration" time
@@ -408,13 +427,13 @@ public class PhoneStateReceiver extends BroadcastReceiver {
 
                 // searching for normal number
                 if (_number != null) {
-                        _number = normalizePhoneNumber(_number);
-                        if (_number.equals(number)) {
-                            id = cursor.getLong(ID);
-                            Log.w("Loglastcalldetails","ID= " +String.valueOf(id)+"  $$  " +"Number=  "+_number);
-                            break;
-                        }
+                    _number = normalizePhoneNumber(_number);
+                    if (_number.equals(number)) {
+                        id = cursor.getLong(ID);
+                        Log.w("Loglastcalldetails", "ID= " + String.valueOf(id) + "  $$  " + "Number=  " + _number);
+                        break;
                     }
+                }
 
             } while (cursor.moveToNext());
             cursor.close();
@@ -446,97 +465,93 @@ public class PhoneStateReceiver extends BroadcastReceiver {
     }
 
     //Derived classes should override these to respond to specific events of interest
-    protected void onIncomingCallStarted(Context ctx, String number, Date start){
-        if (!BlockNumberWhenRing(ctx,number))
-        {
-            preferences=ctx.getSharedPreferences("PopUp_Dialog",MODE_PRIVATE);
-            boolean swithcOutgoing=preferences.getBoolean("SwitchOutgoing",true);
-            boolean swithcincomgoing=preferences.getBoolean("switchIncoming",true);
-            get_calls_log=new Get_Calls_Log(ctx);
-            if (!get_calls_log.contactExists(number)&&swithcincomgoing)
-            {
-                DisplayDialogOverApps(ctx,number);
+    protected void onIncomingCallStarted(Context ctx, String number, Date start) {
+        if (!BlockNumberWhenRing(ctx, number)) {
+            preferences = ctx.getSharedPreferences("PopUp_Dialog", MODE_PRIVATE);
+            boolean swithcOutgoing = preferences.getBoolean("SwitchOutgoing", true);
+            boolean swithcincomgoing = preferences.getBoolean("switchIncoming", true);
+            get_calls_log = new Get_Calls_Log(ctx);
+            if (!get_calls_log.contactExists(number) && swithcincomgoing) {
+                DisplayDialogOverApps(ctx, number);
             }
         }
-        Log.w("NewState","onIncomingCallStarted"+" %%PhoneNumber= "+number);}
+        Log.w("NewState", "onIncomingCallStarted" + " %%PhoneNumber= " + number);
+    }
 
-    protected void onOutgoingCallStarted(Context ctx, String number, Date start){
-        preferences=ctx.getSharedPreferences("PopUp_Dialog",MODE_PRIVATE);
-        boolean swithcOutgoing=preferences.getBoolean("SwitchOutgoing",true);
-        boolean swithcincomgoing=preferences.getBoolean("switchIncoming",true);
-        get_calls_log=new Get_Calls_Log(ctx);
-        if (!get_calls_log.contactExists(number)&&swithcOutgoing)
-        {
-            DisplayDialogOverApps(ctx,number);
+    protected void onOutgoingCallStarted(Context ctx, String number, Date start) {
+        preferences = ctx.getSharedPreferences("PopUp_Dialog", MODE_PRIVATE);
+        boolean swithcOutgoing = preferences.getBoolean("SwitchOutgoing", true);
+        boolean swithcincomgoing = preferences.getBoolean("switchIncoming", true);
+        get_calls_log = new Get_Calls_Log(ctx);
+        if (!get_calls_log.contactExists(number) && swithcOutgoing) {
+            DisplayDialogOverApps(ctx, number);
         }
-        Log.w("NewState","onOutgoingCallStarted"+" %%PhoneNumber= "+number);}
+        Log.w("NewState", "onOutgoingCallStarted" + " %%PhoneNumber= " + number);
+    }
 
-    protected void onIncomingCallEnded(Context ctx, String number, Date start, Date end){
-        preferences=ctx.getSharedPreferences("PopUp_Dialog",MODE_PRIVATE);
-        boolean swithcOutgoing=preferences.getBoolean("SwitchOutgoing",true);
-        boolean swithcincomgoing=preferences.getBoolean("switchIncoming",true);
-        get_calls_log=new Get_Calls_Log(ctx);
-        if (!get_calls_log.contactExists(number)&&swithcincomgoing)
-        {
+    protected void onIncomingCallEnded(Context ctx, String number, Date start, Date end) {
+        preferences = ctx.getSharedPreferences("PopUp_Dialog", MODE_PRIVATE);
+        boolean swithcOutgoing = preferences.getBoolean("SwitchOutgoing", true);
+        boolean swithcincomgoing = preferences.getBoolean("switchIncoming", true);
+        get_calls_log = new Get_Calls_Log(ctx);
+        if (!get_calls_log.contactExists(number) && swithcincomgoing) {
             try {
 
-                if (wm!=null&&viewIsAdded==true)
-                {
+                if (wm != null && viewIsAdded == true) {
                     wm.removeViewImmediate(view1);//error
-                    viewIsAdded=false;
+                    viewIsAdded = false;
                 }
-            }catch (Exception e){
+            } catch (Exception e) {
                 e.printStackTrace();
             }
-            Intent intent1=new Intent(ctx,PopupDialogActivity.class);
-            intent1.putExtra("Number",number);
+            Intent intent1 = new Intent(ctx, PopupDialogActivity.class);
+            intent1.putExtra("Number", number);
             intent1.setFlags(Intent.FLAG_ACTIVITY_NEW_TASK);
             ctx.startActivity(intent1);
 
         }
-        Log.w("NewState","onIncomingCallEnded"+" %%PhoneNumber= "+number);}//When user Answer income call and close call
+        Log.w("NewState", "onIncomingCallEnded" + " %%PhoneNumber= " + number);
+    }//When user Answer income call and close call
 
-    protected void onOutgoingCallEnded(Context ctx, String number, Date start, Date end){
-        preferences=ctx.getSharedPreferences("PopUp_Dialog",MODE_PRIVATE);
-        boolean swithcOutgoing=preferences.getBoolean("SwitchOutgoing",true);
-        boolean swithcincomgoing=preferences.getBoolean("switchIncoming",true);
-        get_calls_log=new Get_Calls_Log(ctx);
-        if (!get_calls_log.contactExists(number)&&swithcOutgoing)
-        {
+    protected void onOutgoingCallEnded(Context ctx, String number, Date start, Date end) {
+        preferences = ctx.getSharedPreferences("PopUp_Dialog", MODE_PRIVATE);
+        boolean swithcOutgoing = preferences.getBoolean("SwitchOutgoing", true);
+        boolean swithcincomgoing = preferences.getBoolean("switchIncoming", true);
+        get_calls_log = new Get_Calls_Log(ctx);
+        if (!get_calls_log.contactExists(number) && swithcOutgoing) {
             try {
 
-                if (wm!=null&&viewIsAdded==true)
-                {
+                if (wm != null && viewIsAdded == true) {
                     wm.removeViewImmediate(view1);//error
-                    viewIsAdded=false;
+                    viewIsAdded = false;
                 }
-            }catch (Exception e){
+            } catch (Exception e) {
                 e.printStackTrace();
             }
-                Intent intent1=new Intent(ctx,PopupDialogActivity.class);
-                intent1.putExtra("Number",number);
-                intent1.setFlags(Intent.FLAG_ACTIVITY_NEW_TASK);
-                ctx.startActivity(intent1);
+            Intent intent1 = new Intent(ctx, PopupDialogActivity.class);
+            intent1.putExtra("Number", number);
+            intent1.setFlags(Intent.FLAG_ACTIVITY_NEW_TASK);
+            ctx.startActivity(intent1);
 
         }
-        Log.w("NewState","onOutgoingCallEnded"+" %%PhoneNumber= "+number);}
+        Log.w("NewState", "onOutgoingCallEnded" + " %%PhoneNumber= " + number);
+    }
 
-    protected void onMissedCall(Context ctx, String number, Date start){
-        if (!blockList(ctx,number))
-        {
-            Intent intent1=new Intent(ctx,PopupDialogActivity.class);
-            intent1.putExtra("Number",number);
+    protected void onMissedCall(Context ctx, String number, Date start) {
+        if (!blockList(ctx, number)) {
+            Intent intent1 = new Intent(ctx, PopupDialogActivity.class);
+            intent1.putExtra("Number", number);
             intent1.setFlags(Intent.FLAG_ACTIVITY_NEW_TASK);
             ctx.startActivity(intent1);
         }
-        Log.w("NewState","onMissedCall"+" %%PhoneNumber= "+number);}//Occur when Income call -> Ring until End (No answer) Or User Cancel(phone number Blocked)
-
+        Log.w("NewState", "onMissedCall" + " %%PhoneNumber= " + number);
+    }//Occur when Income call -> Ring until End (No answer) Or User Cancel(phone number Blocked)
 
 
     //Incoming call-  goes from IDLE to RINGING when it rings, to OFFHOOK when it's answered, to IDLE when its hung up
     //Outgoing call-  goes from IDLE to OFFHOOK when it dials out, to IDLE when hung up
     public void onCallStateChanged(Context context, int state, String number) {
-        if(lastState == state){
+        if (lastState == state) {
             //No change, debounce extras
             return;
         }
@@ -549,7 +564,7 @@ public class PhoneStateReceiver extends BroadcastReceiver {
                 break;
             case TelephonyManager.CALL_STATE_OFFHOOK:
                 //Transition of ringing->offhook are pickups of incoming calls.  Nothing done on them
-                if(lastState != TelephonyManager.CALL_STATE_RINGING){
+                if (lastState != TelephonyManager.CALL_STATE_RINGING) {
                     isIncoming = false;
                     callStartTime = new Date();
                     onOutgoingCallStarted(context, savedNumber, callStartTime);
@@ -557,14 +572,12 @@ public class PhoneStateReceiver extends BroadcastReceiver {
                 break;
             case TelephonyManager.CALL_STATE_IDLE:
                 //Went to idle-  this is the end of a call.  What type depends on previous state(s)
-                if(lastState == TelephonyManager.CALL_STATE_RINGING){
+                if (lastState == TelephonyManager.CALL_STATE_RINGING) {
                     //Ring but no pickup-  a miss
                     onMissedCall(context, savedNumber, callStartTime);
-                }
-                else if(isIncoming){
+                } else if (isIncoming) {
                     onIncomingCallEnded(context, savedNumber, callStartTime, new Date());
-                }
-                else{
+                } else {
                     onOutgoingCallEnded(context, savedNumber, callStartTime, new Date());
                 }
                 break;
@@ -575,17 +588,14 @@ public class PhoneStateReceiver extends BroadcastReceiver {
 
     private NotificationManager notifManager;
     private NotificationChannel mChannel;
-    public void BloackNotification(String number,Context context)
-    {
-        String message="";
-        String ContactName= get_calls_log.getContactName(number);
-        if (TextUtils.isEmpty(ContactName))
-        {
-            message="("+number+")";
-        }
-        else
-        {
-            message="("+number+")"+ContactName;
+
+    public void BloackNotification(String number, Context context) {
+        String message = "";
+        String ContactName = get_calls_log.getContactName(number);
+        if (TextUtils.isEmpty(ContactName)) {
+            message = "(" + number + ")";
+        } else {
+            message = "(" + number + ")" + ContactName;
         }
 
         Intent intent;
@@ -596,54 +606,54 @@ public class PhoneStateReceiver extends BroadcastReceiver {
                     (Context.NOTIFICATION_SERVICE);
         }
 
-        intent = new Intent (context, MainActivity.class);
-        intent.putExtra("NOTIFICATION",true);
+        intent = new Intent(context, MainActivity.class);
+        intent.putExtra("NOTIFICATION", true);
         if (Build.VERSION.SDK_INT >= Build.VERSION_CODES.O) {
             int importance = NotificationManager.IMPORTANCE_HIGH;
             if (mChannel == null) {
                 NotificationChannel mChannel = new NotificationChannel
-                        ("0",number,importance);
-                mChannel.setDescription (message);
-                mChannel.enableVibration (true);
-                mChannel.setVibrationPattern (new long[]
+                        ("0", number, importance);
+                mChannel.setDescription(message);
+                mChannel.enableVibration(true);
+                mChannel.setVibrationPattern(new long[]
                         {100, 200, 300, 400, 500, 400, 300, 200, 400});
-                notifManager.createNotificationChannel (mChannel);
+                notifManager.createNotificationChannel(mChannel);
             }
-            builder = new NotificationCompat.Builder (context,"0");
+            builder = new NotificationCompat.Builder(context, "0");
 
-            intent.setFlags (Intent.FLAG_ACTIVITY_CLEAR_TOP |
+            intent.setFlags(Intent.FLAG_ACTIVITY_CLEAR_TOP |
                     Intent.FLAG_ACTIVITY_SINGLE_TOP);
-            pendingIntent = PendingIntent.getActivity (context, 0, intent, 0);
-            builder.setContentTitle ("Call Blocked by Whocaller")  // flare_icon_30
-                    .setSmallIcon (R.drawable.logo_notification) // required
-                    .setContentText (message)  // required
-                    .setDefaults (Notification.DEFAULT_ALL)
+            pendingIntent = PendingIntent.getActivity(context, 0, intent, 0);
+            builder.setContentTitle("Call Blocked by Whocaller")  // flare_icon_30
+                    .setSmallIcon(R.drawable.logo_notification) // required
+                    .setContentText(message)  // required
+                    .setDefaults(Notification.DEFAULT_ALL)
                     .setGroup("Blocked_Numbers")
-                    .setAutoCancel (true)
+                    .setAutoCancel(true)
                     .setColor((context.getResources().getColor(R.color.colorPrimary)))
-                    .setContentIntent (pendingIntent)
-                    .setSound (RingtoneManager.getDefaultUri
+                    .setContentIntent(pendingIntent)
+                    .setSound(RingtoneManager.getDefaultUri
                             (RingtoneManager.TYPE_NOTIFICATION))
-                    .setVibrate (new long[]{100, 200, 300, 400,
+                    .setVibrate(new long[]{100, 200, 300, 400,
                             500, 400, 300, 200, 400});
         } else {
 
-            builder = new NotificationCompat.Builder (context);
+            builder = new NotificationCompat.Builder(context);
 
 
-            Uri sound= RingtoneManager.getDefaultUri(RingtoneManager.TYPE_NOTIFICATION);
+            Uri sound = RingtoneManager.getDefaultUri(RingtoneManager.TYPE_NOTIFICATION);
             builder.setSmallIcon(R.drawable.logo);
             builder.setContentTitle("Call Blocked by Whocaller");
             builder.setContentText(message);
             builder.setGroup("Blocked_Numbers");
             builder.setColor((context.getResources().getColor(R.color.colorPrimary)));
             builder.setSound(sound);
-            builder.setVibrate (new long[]{100, 200, 300, 400,
+            builder.setVibrate(new long[]{100, 200, 300, 400,
                     500, 400, 300, 200, 400});
 
             if (android.os.Build.VERSION.SDK_INT >= android.os.Build.VERSION_CODES.JELLY_BEAN) {
                 Intent resultIntent = new Intent(context, MainActivity.class);
-                resultIntent.putExtra("NOTIFICATION",true);
+                resultIntent.putExtra("NOTIFICATION", true);
                 TaskStackBuilder stackBuilder = null;
                 stackBuilder = TaskStackBuilder.create(context);
                 stackBuilder.addParentStack(MainActivity.class);
@@ -665,39 +675,78 @@ public class PhoneStateReceiver extends BroadcastReceiver {
                 .build();
         if (android.os.Build.VERSION.SDK_INT >= android.os.Build.VERSION_CODES.JELLY_BEAN) {
             NotificationCompat.InboxStyle inboxStyle = new NotificationCompat.InboxStyle();
-            inboxStyle.addLine(number+" "+message);
+            inboxStyle.addLine(number + " " + message);
             inboxStyle.setSummaryText("Blocked Numbers");
             summaryBuilder.setStyle(inboxStyle);
         }
         Notification summaryNotification = summaryBuilder.build();
 
 
-        Notification notification = builder.build ();
+        Notification notification = builder.build();
         int id = (int) System.currentTimeMillis();
-        notifManager.notify (id, notification);
-        notifManager.notify(666,summaryNotification);
+        notifManager.notify(id, notification);
+        notifManager.notify(666, summaryNotification);
     }
 
-    private void inComing(Context context, Intent intent){
+    private void inComing(Context context, Intent intent) {
         String callState = intent.getStringExtra("state");
-        if ("RINGING".equals(callState)){
+        if ("RINGING".equals(callState)) {
             Log.i(TAG, "RINGING SENDS BUSY");
-        }else if ("OFFHOOK".equals(callState)){
+        } else if ("OFFHOOK".equals(callState)) {
             Log.i(TAG, "OFFHOOK SENDS BUSY");
-        }else if("IDLE".equals(callState)){
+        } else if ("IDLE".equals(callState)) {
             Log.i(TAG, "IDLE SENDS AVAILABLE");
         }
     }
 
-    private void trueCallerOutgoing(Context context, Intent intent)
-    {
+    private void trueCallerOutgoing(Context context, Intent intent) {
         String callState = intent.getStringExtra("state");
-        if ("RINGING".equals(callState)){
+        if ("RINGING".equals(callState)) {
             Log.i(TAG, "RINGING SENDS BUSY");
-        }else if ("OFFHOOK".equals(callState)){
+        } else if ("OFFHOOK".equals(callState)) {
             Log.i(TAG, "OFFHOOK SENDS BUSY");
-        }else if("IDLE".equals(callState)){
+        } else if ("IDLE".equals(callState)) {
             Log.i(TAG, "IDLE SENDS AVAILABLE");
         }
+    }
+
+    public FetchedUserData getUserDataApi(Context context, String number) {
+        final FetchedUserData[] UserData = {null};
+        if (CheckNetworkConnection.hasInternetConnection(context)) {
+
+            //Check internet Access
+            if (ConnectionDetector.hasInternetConnection(context)) {
+
+                BodyNumberModel bodyNumberModel = new BodyNumberModel(number);
+                Retrofit retrofit = retrofitHead.headOfGetorPostReturnRes();
+                WhoCallerApi whoCallerApi = retrofit.create(WhoCallerApi.class);
+                Call<FetchedUserData> userDataCall = whoCallerApi.fetchUserData(ApiAccessToken.getAPIaccessToken(context), bodyNumberModel);
+
+                userDataCall.enqueue(new Callback<FetchedUserData>() {
+                    @Override
+                    public void onResponse(Call<FetchedUserData> call, Response<FetchedUserData> response) {
+                        if (response.isSuccessful())
+                        {
+                            Log.d("userNamePaleeez", response.body().getName());
+                            UserData[0] =response.body();
+                        }
+                        else
+                        {
+                            UserData[0]=null;
+                        }
+                    }
+
+                    @Override
+                    public void onFailure(Call<FetchedUserData> call, Throwable t) {
+                        UserData[0]=null;
+                    }
+                });
+            }else {
+                UserData[0]=null;
+            }
+        }else{
+            UserData[0]=null;
+        }
+    return UserData[0];
     }
 }

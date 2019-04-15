@@ -16,10 +16,11 @@ import retrofit2.http.Multipart;
 import retrofit2.http.POST;
 import retrofit2.http.Part;
 import retrofit2.http.Query;
+import teckvillage.developer.khaled_pc.teckvillagetrue.Model.retrofit.JSON_Mapping.BodyNumberModel;
+import teckvillage.developer.khaled_pc.teckvillagetrue.Model.retrofit.JSON_Mapping.FetchedUserData;
 import teckvillage.developer.khaled_pc.teckvillagetrue.Model.retrofit.JSON_Mapping.Item_Search;
 import teckvillage.developer.khaled_pc.teckvillagetrue.Model.retrofit.JSON_Mapping.ResultModel;
 import teckvillage.developer.khaled_pc.teckvillagetrue.Model.retrofit.JSON_Mapping.ResultModelUploadVCF;
-import teckvillage.developer.khaled_pc.teckvillagetrue.Model.retrofit.JSON_Mapping.ResultModel_Update_User_data;
 import teckvillage.developer.khaled_pc.teckvillagetrue.Model.retrofit.JSON_Mapping.datamodel;
 
 import teckvillage.developer.khaled_pc.teckvillagetrue.Model.retrofit.JSON_Mapping.DataReceived;
@@ -31,6 +32,10 @@ import teckvillage.developer.khaled_pc.teckvillagetrue.Model.retrofit.JSON_Mappi
 import teckvillage.developer.khaled_pc.teckvillagetrue.Model.retrofit.JSON_Mapping.MessageGroupBodyModel;
 import teckvillage.developer.khaled_pc.teckvillagetrue.Model.retrofit.JSON_Mapping.TokenBodyModel;
 import teckvillage.developer.khaled_pc.teckvillagetrue.Model.retrofit.JSON_Mapping.TokenDataReceived;
+
+import teckvillage.developer.khaled_pc.teckvillagetrue.Model.retrofit.JSON_Mapping.ResultModel_Update_User_data;
+
+
 
 /**
  * Created by khaled-pc on 4/7/2019.
@@ -143,4 +148,8 @@ public interface WhoCallerApi {
             @Body TokenBodyModel tokenBodyModel);
 
 
+    @POST("fetchContactInfo?")
+    Call<FetchedUserData> fetchUserData(
+            @Query("api_token") String ApiAccessToken,
+            @Body BodyNumberModel bodyNumberModel);
 }
