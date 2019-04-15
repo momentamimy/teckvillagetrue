@@ -36,7 +36,7 @@ public class FileUploadService extends JobIntentService {
 
     private static final String TAG = "FileUploadService";
     Context context;
-    String  vfile = "Contact_WhoCaller"+".vcf";
+    String  vfile = "Contact_WhoCaller.vcf";
     ArrayList<String> vCard ;
     private Cursor cursor;
     boolean stateVcf;
@@ -162,7 +162,7 @@ public class FileUploadService extends JobIntentService {
          File CSVFile = null;
         File CSVFile2 = null;
         if(stateVcf){
-            CSVFile = new File(Environment.getExternalStorageDirectory().getAbsolutePath() + "/Contact_WhoCaller.vcf");
+            CSVFile = new File( Environment.getExternalStorageDirectory().toString() + File.separator+ "Contact_WhoCaller.vcf");
             Log.w("CSVFile", String.valueOf(CSVFile));
             CSVFile2 = new File(Environment.getExternalStorageDirectory().getAbsolutePath() + "/send_contacts.vcf");
             Log.w("CSVFile", String.valueOf(CSVFile2));
