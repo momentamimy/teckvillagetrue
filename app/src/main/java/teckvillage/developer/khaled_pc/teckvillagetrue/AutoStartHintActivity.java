@@ -12,6 +12,8 @@ import android.widget.TextView;
 
 import java.util.List;
 
+import teckvillage.developer.khaled_pc.teckvillagetrue.View.LoginActivity;
+
 public class AutoStartHintActivity extends AppCompatActivity {
 
     TextView later,Setting;
@@ -24,7 +26,12 @@ public class AutoStartHintActivity extends AppCompatActivity {
         later.setOnClickListener(new View.OnClickListener() {
             @Override
             public void onClick(View v) {
-                startActivity(new Intent(getApplicationContext(),MainActivity.class));
+                Intent intent=new Intent(getApplicationContext(), LoginActivity.class);//LoginActivity
+                /* Intent intent=new Intent(this,Signup.class);//LoginActivity
+                intent.putExtra("countrycode","+20");//remove
+                intent.putExtra("phonenumber","01021155607");//remove
+                intent.putExtra("contryname","Egypt");//remove*/
+                startActivity(intent);
                 finish();
             }
         });

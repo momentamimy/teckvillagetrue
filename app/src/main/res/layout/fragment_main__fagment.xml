@@ -265,14 +265,16 @@
                 >
 
                 <ImageView
+                    android:layout_marginStart="6dp"
                     android:padding="10dp"
                     android:id="@+id/add_Contact"
-                    android:layout_width="50dp"
-                    android:layout_height="50dp"
+                    android:layout_width="42dp"
+                    android:layout_height="42dp"
                     android:layout_centerVertical="true"
-                    android:layout_marginRight="15dp"
+                    android:layout_marginRight="6dp"
                     android:background="@drawable/ic_filter_state"
-                    android:src="@drawable/add_contact" />
+                    android:src="@drawable/add_contact"
+                    android:layout_marginLeft="3dp" />
 
                 <teckvillage.developer.khaled_pc.teckvillagetrue.View.KeyboardlessEditText
                     android:textColor="#0089c0"
@@ -301,10 +303,11 @@
                 <ImageView
                     android:padding="10dp"
                     android:id="@+id/backspace_imageView"
-                    android:layout_width="50dp"
-                    android:layout_height="50dp"
+                    android:layout_width="45dp"
+                    android:layout_height="45dp"
                     android:layout_alignParentRight="true"
                     android:layout_centerVertical="true"
+                    android:layout_marginEnd="15dp"
                     android:layout_marginRight="15dp"
                     android:background="@drawable/ic_filter_state"
                     android:src="@drawable/ic_backspace_black_24dp" />
@@ -344,8 +347,8 @@
         <android.support.design.widget.FloatingActionButton
             android:id="@+id/fab"
             android:layout_margin="20dp"
-            android:layout_width="wrap_content"
-            android:layout_height="wrap_content"
+            android:layout_width="60dp"
+            android:layout_height="60dp"
             app:elevation="6dp"
             android:src="@drawable/animation_list2"
             app:rippleColor="#36000000"

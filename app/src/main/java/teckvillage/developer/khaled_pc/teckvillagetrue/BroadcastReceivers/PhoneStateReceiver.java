@@ -118,7 +118,7 @@ public class PhoneStateReceiver extends BroadcastReceiver {
 
         } else {
             //We listen to two intents.  The new outgoing call only tells us of an outgoing call.  We use it to get the number.
-            if (intent.getAction().equals("android.intent.action.NEW_OUTGOING_CALL")) {
+            if (intent.getAction().equalsIgnoreCase("android.intent.action.NEW_OUTGOING_CALL")) {
                 savedNumber = intent.getExtras().getString("android.intent.extra.PHONE_NUMBER");
             } else {
                 String stateStr = intent.getExtras().getString(TelephonyManager.EXTRA_STATE);
@@ -620,7 +620,7 @@ public class PhoneStateReceiver extends BroadcastReceiver {
         if (Build.VERSION.SDK_INT >= Build.VERSION_CODES.O) {
             int importance = NotificationManager.IMPORTANCE_HIGH;
             if (mChannel == null) {
-                NotificationChannel mChannel = new NotificationChannel
+                mChannel = new NotificationChannel
                         ("0", number, importance);
                 mChannel.setDescription(message);
                 mChannel.enableVibration(true);

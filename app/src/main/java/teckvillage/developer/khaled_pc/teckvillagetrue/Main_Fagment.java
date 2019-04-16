@@ -21,6 +21,7 @@ import android.net.Uri;
 import android.os.AsyncTask;
 import android.os.Build;
 import android.os.Bundle;
+import android.os.SystemClock;
 import android.provider.CallLog;
 import android.provider.ContactsContract;
 import android.support.design.widget.CoordinatorLayout;
@@ -44,6 +45,7 @@ import android.text.TextUtils;
 import android.text.style.ImageSpan;
 import android.util.DisplayMetrics;
 import android.util.Log;
+import android.util.TypedValue;
 import android.view.LayoutInflater;
 import android.view.MenuItem;
 import android.view.MotionEvent;
@@ -806,11 +808,13 @@ public class Main_Fagment extends Fragment implements OnBackPressedListener , Lo
         animatorSet.playTogether(callLayoutAnim, rotate, translationX);
         animatorSet.start();
     }
-
+    public int dpToPx(float dp, Context context) {
+        return (int) TypedValue.applyDimension(TypedValue.COMPLEX_UNIT_DIP, dp, context.getResources().getDisplayMetrics());
+    }
     public void open_button(int duration) {
         ObjectAnimator callLayoutAnim = callLayoutAnim(!aBoolean, 400);
         DisplayMetrics metrics = getResources().getDisplayMetrics();
-        ObjectAnimator translationX = ObjectAnimator.ofFloat(fab, "x", metrics.widthPixels / 2 - fab.getWidth() / 2); // metrics.heightPixels or root.getHeight()
+        ObjectAnimator translationX = ObjectAnimator.ofFloat(fab, "x", metrics.widthPixels / 2 - dpToPx(30,getContext())); // metrics.heightPixels or root.getHeight()
         ObjectAnimator rotate = ObjectAnimator.ofFloat(fab, "rotation", 360);
         rotate.setDuration(duration);
         translationX.setDuration(duration);
@@ -1540,5 +1544,14 @@ public class Main_Fagment extends Fragment implements OnBackPressedListener , Lo
             }
         });
     MyDialogDualSim.show();
+    }
+
+    public void openDialPadWithNumber(String num)
+    {
+        callButtonAnim(0);
+        phone_num_edt.setText(num);
+        writeAnim(0);
+        SortSearchCallList(num);
+        firstclick = false;
     }
 }

@@ -66,7 +66,7 @@ public class ChatFragment extends Fragment {
         chatMessageInfos.add(info2);
 
         chatRecyclerView=view.findViewById(R.id.ChatRecycler);
-
+        chatRecyclerView.setVisibility(View.GONE);
         customRecyclerViewChatAdapter=new CustomRecyclerViewChatAdapter(chatMessageInfos,getActivity());
 
         chatRecyclerView.setLayoutManager(new LinearLayoutManager(getActivity()));

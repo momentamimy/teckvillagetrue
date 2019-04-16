@@ -13,6 +13,7 @@ import java.util.List;
 
 import de.hdodenhof.circleimageview.CircleImageView;
 import teckvillage.developer.khaled_pc.teckvillagetrue.Chat_MessagesChat;
+import teckvillage.developer.khaled_pc.teckvillagetrue.Model.retrofit.JSON_Mapping.RoomModel;
 import teckvillage.developer.khaled_pc.teckvillagetrue.R;
 import teckvillage.developer.khaled_pc.teckvillagetrue.Model.Get_User_Contacts;
 import teckvillage.developer.khaled_pc.teckvillagetrue.Model.retrofit.JSON_Mapping.DataReceived;
@@ -29,9 +30,9 @@ public class SendToChatContactsAdapters extends RecyclerView.Adapter<SendToChatC
 
 
     Context context;
-    private List<DataReceived> mDataArray;
+    private List<RoomModel> mDataArray;
     Get_User_Contacts get_user_contacts;
-    public SendToChatContactsAdapters(Context context, List<DataReceived> mDataArray) {
+    public SendToChatContactsAdapters(Context context, List<RoomModel> mDataArray) {
         this.mDataArray=mDataArray;
         this.context=context;
         get_user_contacts=new Get_User_Contacts(context);
@@ -55,7 +56,7 @@ public class SendToChatContactsAdapters extends RecyclerView.Adapter<SendToChatC
         }
         else {
             if (holder.contactName2 != null) {
-                final DataReceived data = mDataArray.get(position);
+                final RoomModel data = mDataArray.get(position);
                 holder.itemView.setOnClickListener(new View.OnClickListener() {
                     @Override
                     public void onClick(View v) {
@@ -63,7 +64,7 @@ public class SendToChatContactsAdapters extends RecyclerView.Adapter<SendToChatC
                             final String num = get_user_contacts.getPhoneNumber(mDataArray.get(position).getName(), context).replace(" ", "");
                             Intent intent = new Intent(context, Chat_MessagesChat.class);
                             intent.putExtra("UserName", data.getName());
-                            intent.putExtra("UserAddress", data.getFull_phone());
+                            //intent.putExtra("UserAddress", data.getFull_phone());
                             intent.putExtra("UserID", data.getId());
                             context.startActivity(intent);
 

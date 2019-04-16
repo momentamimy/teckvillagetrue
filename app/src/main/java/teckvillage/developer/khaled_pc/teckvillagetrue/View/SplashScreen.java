@@ -1,6 +1,7 @@
 package teckvillage.developer.khaled_pc.teckvillagetrue.View;
 
 import android.Manifest;
+import android.content.ComponentName;
 import android.content.Context;
 import android.content.Intent;
 import android.content.SharedPreferences;
@@ -21,6 +22,7 @@ import java.util.List;
 import pub.devrel.easypermissions.AfterPermissionGranted;
 import pub.devrel.easypermissions.AppSettingsDialog;
 import pub.devrel.easypermissions.EasyPermissions;
+import teckvillage.developer.khaled_pc.teckvillagetrue.AutoStartHintActivity;
 import teckvillage.developer.khaled_pc.teckvillagetrue.MainActivity;
 import teckvillage.developer.khaled_pc.teckvillagetrue.R;
 
@@ -45,7 +47,8 @@ public class SplashScreen extends AppCompatActivity implements EasyPermissions.P
                 Manifest.permission.RECEIVE_SMS,
                 Manifest.permission.READ_EXTERNAL_STORAGE,
                 Manifest.permission.WRITE_EXTERNAL_STORAGE,
-                Manifest.permission.CAMERA
+                Manifest.permission.CAMERA,
+                Manifest.permission.PROCESS_OUTGOING_CALLS
         };
 
         sharedPreferences = getSharedPreferences("WhoCaller?", Context.MODE_PRIVATE);
@@ -68,13 +71,26 @@ public class SplashScreen extends AppCompatActivity implements EasyPermissions.P
                 startActivity(intent);
                 finish();
             }else {
-                Intent intent=new Intent(this,LoginActivity.class);//LoginActivity
+                String manufacturer = android.os.Build.MANUFACTURER;
+                if ("xiaomi".equalsIgnoreCase(manufacturer)|| "oppo".equalsIgnoreCase(manufacturer)||
+                        "vivo".equalsIgnoreCase(manufacturer)||
+                        "Letv".equalsIgnoreCase(manufacturer)||
+                        "Honor".equalsIgnoreCase(manufacturer))
+                {
+                    Intent intent=new Intent(this, AutoStartHintActivity.class);//LoginActivity
+                    startActivity(intent);
+                    finish();
+                }
+                else
+                {
+                    Intent intent=new Intent(this,LoginActivity.class);//LoginActivity
                 /* Intent intent=new Intent(this,Signup.class);//LoginActivity
                 intent.putExtra("countrycode","+20");//remove
                 intent.putExtra("phonenumber","01021155607");//remove
                 intent.putExtra("contryname","Egypt");//remove*/
-                startActivity(intent);
-                finish();
+                    startActivity(intent);
+                    finish();
+                }
             }
 
         }
@@ -85,7 +101,7 @@ public class SplashScreen extends AppCompatActivity implements EasyPermissions.P
             @Override
             public void onClick(View v) {
                 //checkDrawOverlayPermission();
-                if (Build.VERSION.SDK_INT == Build.VERSION_CODES.M) {
+                if (Build.VERSION.SDK_INT >= Build.VERSION_CODES.M) {
                     Log.v("App", "Build Version Greater than or equal to M: " + Build.VERSION_CODES.M);
                     checkDrawOverlayPermission();
                 } else {
@@ -113,7 +129,8 @@ public class SplashScreen extends AppCompatActivity implements EasyPermissions.P
                 Manifest.permission.RECEIVE_SMS,
                 Manifest.permission.READ_EXTERNAL_STORAGE,
                 Manifest.permission.WRITE_EXTERNAL_STORAGE,
-                Manifest.permission.CAMERA
+                Manifest.permission.CAMERA,
+                Manifest.permission.PROCESS_OUTGOING_CALLS
         };
         if (EasyPermissions.hasPermissions(getApplicationContext(),perms))
         {
@@ -123,13 +140,27 @@ public class SplashScreen extends AppCompatActivity implements EasyPermissions.P
                 startActivity(intent);
                 finish();
             }else {
-                Intent intent=new Intent(this,LoginActivity.class);//LoginActivity
+                String manufacturer = android.os.Build.MANUFACTURER;
+                if ("xiaomi".equalsIgnoreCase(manufacturer)|| "oppo".equalsIgnoreCase(manufacturer)||
+                        "vivo".equalsIgnoreCase(manufacturer)||
+                        "Letv".equalsIgnoreCase(manufacturer)||
+                        "Honor".equalsIgnoreCase(manufacturer))
+                {
+                    Intent intent=new Intent(this, AutoStartHintActivity.class);//LoginActivity
+                    startActivity(intent);
+                    finish();
+                }
+                else
+                {
+                    Intent intent=new Intent(this,LoginActivity.class);//LoginActivity
                 /* Intent intent=new Intent(this,Signup.class);//LoginActivity
                 intent.putExtra("countrycode","+20");//remove
                 intent.putExtra("phonenumber","01021155607");//remove
                 intent.putExtra("contryname","Egypt");//remove*/
-                startActivity(intent);
-                finish();
+                    startActivity(intent);
+                    finish();
+                }
+
             }
         }
         else

@@ -11,6 +11,7 @@ import android.widget.TextView;
 import java.util.List;
 
 import de.hdodenhof.circleimageview.CircleImageView;
+import teckvillage.developer.khaled_pc.teckvillagetrue.Model.retrofit.JSON_Mapping.RoomModel;
 import teckvillage.developer.khaled_pc.teckvillagetrue.R;
 import teckvillage.developer.khaled_pc.teckvillagetrue.Model.retrofit.JSON_Mapping.DataReceived;
 
@@ -25,8 +26,8 @@ public class AddingSendToChatContactsAdapters extends RecyclerView.Adapter<Addin
 
 
     Context context;
-    private List<DataReceived> mDataArray;
-    public AddingSendToChatContactsAdapters(Context context, List<DataReceived> mDataArray) {
+    private List<RoomModel> mDataArray;
+    public AddingSendToChatContactsAdapters(Context context, List<RoomModel> mDataArray) {
         this.mDataArray=mDataArray;
         this.context=context;
     }
@@ -40,7 +41,7 @@ public class AddingSendToChatContactsAdapters extends RecyclerView.Adapter<Addin
 
     @Override
     public void onBindViewHolder(final ViewHolder holder, final int position) {
-        final DataReceived contactData=mDataArray.get(position);
+        final RoomModel contactData=mDataArray.get(position);
         holder.contactName2.setText(contactData.getName());
         holder.removeContact.setOnClickListener(new View.OnClickListener() {
             @Override

@@ -34,7 +34,9 @@ import teckvillage.developer.khaled_pc.teckvillagetrue.Chat_MessagesChat;
 import teckvillage.developer.khaled_pc.teckvillagetrue.Controller.AddingSendToChatContactsAdapters;
 import teckvillage.developer.khaled_pc.teckvillagetrue.Controller.SendToChatContactsAdapters;
 import teckvillage.developer.khaled_pc.teckvillagetrue.Model.retrofit.JSON_Mapping.BodyNumberModel;
+import teckvillage.developer.khaled_pc.teckvillagetrue.Model.retrofit.JSON_Mapping.DataReceivedChatUsers;
 import teckvillage.developer.khaled_pc.teckvillagetrue.Model.retrofit.JSON_Mapping.FetchedUserData;
+import teckvillage.developer.khaled_pc.teckvillagetrue.Model.retrofit.JSON_Mapping.RoomModel;
 import teckvillage.developer.khaled_pc.teckvillagetrue.R;
 import teckvillage.developer.khaled_pc.teckvillagetrue.SMS_MessagesChat;
 import teckvillage.developer.khaled_pc.teckvillagetrue.Model.Get_User_Contacts;
@@ -52,13 +54,13 @@ public class SendToChatActivity extends AppCompatActivity {
     EditText sendToEditText;
     Get_User_Contacts get_user_contacts;
     RecyclerView mRecyclerView;
-    public List<DataReceived> userContactsData;
+    public List<RoomModel> userContactsData;
     public SendToChatContactsAdapters sendToContactsAdapters;
     static RecyclerView mRecyclerViewMutilpleContacts;
     LinearLayoutManager lLayout;
     ImageView multipleUsers;
     public static boolean MultipleRecivers;
-    public static ArrayList<DataReceived> addingUserContactsData;
+    public static List<RoomModel> addingUserContactsData;
     public static AddingSendToChatContactsAdapters addingSendToContactsAdapters;
     static TextView textHint;
     static FloatingActionButton fab;
@@ -114,7 +116,7 @@ public class SendToChatActivity extends AppCompatActivity {
                     String num=sendToEditText.getText().toString().replace(" ","");
                     String name= (String) get_user_contacts.getContactName(num,getApplicationContext());
 
-                    Intent intent=new Intent(getApplicationContext(), SMS_MessagesChat.class);
+                    Intent intent=new Intent(getApplicationContext(), Chat_MessagesChat.class);
                     intent.putExtra("LogSMSAddress",num);
                     if (TextUtils.isEmpty(name))
                     {
@@ -130,10 +132,10 @@ public class SendToChatActivity extends AppCompatActivity {
                 {
                     if (addingUserContactsData.size()==1)
                     {
-                        DataReceived user=addingUserContactsData.get(0);
+                        RoomModel user=addingUserContactsData.get(0);
                         Intent intent=new Intent(getApplicationContext(), Chat_MessagesChat.class);
                         intent.putExtra("UserName", user.getName());
-                        intent.putExtra("UserAddress", user.getFull_phone());
+                        //intent.putExtra("UserAddress", user.getFull_phone());
                         intent.putExtra("UserID", user.getId());
                         startActivity(intent);
                     }
@@ -202,30 +204,36 @@ public class SendToChatActivity extends AppCompatActivity {
             if (ConnectionDetector.hasInternetConnection(SendToChatActivity.this)) {
                 Retrofit retrofit = retrofitHead.headOfGetorPostReturnRes();
                 WhoCallerApi whoCallerApi = retrofit.create(WhoCallerApi.class);
-                Call<List<DataReceived>> MessageWhenOpenChat = whoCallerApi.getallChatContact(ApiAccessToken.getAPIaccessToken(SendToChatActivity.this));
+                Call<DataReceivedChatUsers> MessageWhenOpenChat = whoCallerApi.getallChatContact(ApiAccessToken.getAPIaccessToken(SendToChatActivity.this));
 
-                MessageWhenOpenChat.enqueue(new Callback<List<DataReceived>>() {
+                MessageWhenOpenChat.enqueue(new Callback<DataReceivedChatUsers>() {
                     @Override
-                    public void onResponse(Call<List<DataReceived>> call, Response<List<DataReceived>> response) {
+                    public void onResponse(Call<DataReceivedChatUsers> call, Response<DataReceivedChatUsers> response) {
                         if (response.isSuccessful())
                         {
-                            userContactsData= response.body();
 
+                            Log.d("dadadawqffsxzdf","sucees");
+                            userContactsData= response.body().getRoom();
                             sendToContactsAdapters=new SendToChatContactsAdapters(getApplicationContext(),userContactsData);
                             mRecyclerView.setLayoutManager(new LinearLayoutManager(getApplicationContext()));
                             mRecyclerView.setAdapter(sendToContactsAdapters);
                         }
+                        else
+                        {
+                            Log.d("dadadawqffsxzdf","failed");
+                        }
                     }
 
                     @Override
-                    public void onFailure(Call<List<DataReceived>> call, Throwable t) {
+                    public void onFailure(Call<DataReceivedChatUsers> call, Throwable t) {
+                        Log.d("dadadawqffsxzdf","failure");
                     }
                 });
             }
         }
     }
 
-    public static void addingMulipleUserContacts(Context context, DataReceived data)
+    public static void addingMulipleUserContacts(Context context, RoomModel data)
     {
         for (int i=0;i<addingUserContactsData.size();i++)
         {
@@ -252,8 +260,8 @@ public class SendToChatActivity extends AppCompatActivity {
         }
     }
 
-    private List<DataReceived> SortSearchContacts(String num) {
-        ArrayList<DataReceived> infos = new ArrayList<>();
+    private List<RoomModel> SortSearchContacts(String num) {
+        ArrayList<RoomModel> infos = new ArrayList<>();
         for (int i = 0; i < userContactsData.size(); i++) {
             if (userContactsData.get(i).getName().contains(num)) {
                 infos.add(userContactsData.get(i));
@@ -263,7 +271,7 @@ public class SendToChatActivity extends AppCompatActivity {
         for (int i = 0; i < infos.size(); i++) {
             position = infos.get(i).getName().indexOf(num);
             if (infos.get(0).getName().indexOf(num) > position) {
-                DataReceived inf = infos.get(i);
+                RoomModel inf = infos.get(i);
                 infos.remove(i);
                 infos.add(0, inf);
             }
