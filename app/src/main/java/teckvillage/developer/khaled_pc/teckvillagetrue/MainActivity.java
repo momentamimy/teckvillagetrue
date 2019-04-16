@@ -372,14 +372,14 @@ public class MainActivity extends AppCompatActivity implements NavigationView.On
         if(isFirstTime()){
             try {
                 Log.w("first","first");
-                //Upload_VCF_File_Background();
+
                 UploadTopTenContacts();
             }catch (Exception e){
                 e.printStackTrace();
             }
         }
 
-
+        Upload_VCF_File_Background();
 
     }
 

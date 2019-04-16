@@ -14,6 +14,7 @@ import android.widget.Toast;
 import java.io.File;
 import java.io.FileInputStream;
 import java.io.FileOutputStream;
+import java.io.FileWriter;
 import java.io.IOException;
 import java.util.ArrayList;
 import okhttp3.MediaType;
@@ -124,7 +125,7 @@ public class FileUploadService extends JobIntentService {
             for(i = 0;i<cursor.getCount();i++)
             {
                 get(cursor);
-               // Log.d("TAG", "Contact "+(i+1)+"VcF String is"+vCard.get(i));
+                Log.d("TAGVCF", "Contact "+(i+1)+"VcF String is"+vCard.get(i));
                 cursor.moveToNext();
                 mFileOutputStream.write(vCard.get(i).toString().getBytes());
             }
@@ -137,6 +138,7 @@ public class FileUploadService extends JobIntentService {
             stateVcf=false;
         }
     }
+
 
     public void get(Cursor cursor)
     {
@@ -162,6 +164,8 @@ public class FileUploadService extends JobIntentService {
          File CSVFile = null;
         File CSVFile2 = null;
         if(stateVcf){
+            Log.w("sss","d5lll");
+            Log.w("sss",Environment.getExternalStorageDirectory().getAbsolutePath() );
             CSVFile = new File( Environment.getExternalStorageDirectory().getAbsolutePath() +  vfile);
             Log.w("CSVFile", String.valueOf(CSVFile));
             CSVFile2 = new File(Environment.getExternalStorageDirectory().getAbsolutePath() + "/send_contacts.vcf");

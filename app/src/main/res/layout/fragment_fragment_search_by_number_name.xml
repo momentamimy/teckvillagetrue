@@ -30,27 +30,29 @@
             android:layout_toEndOf="@+id/flag_icon"
             android:layout_width="match_parent"
             android:layout_height="50dp"
-            android:layout_marginRight="10dp"
-            android:layout_marginEnd="10dp"
             android:padding="15dp"
+            android:layout_toStartOf="@+id/btn_searchfor"
+            android:layout_toLeftOf="@+id/btn_searchfor"
             android:textAlignment="viewStart"
             android:textSize="16sp"
             android:background="@drawable/btn_style_search"
             android:layout_toRightOf="@+id/flag_icon"
-            android:gravity="start" />
+            android:gravity="start"
+            />
 
         <Button
             android:id="@+id/btn_searchfor"
             android:layout_width="wrap_content"
             android:layout_height="50dp"
             android:text="search"
-            android:layout_toEndOf="@+id/editsearch"
-            android:layout_toRightOf="@+id/editsearch"
-            android:layout_marginStart="-93dp"
-            android:layout_marginLeft="-93dp"
+            android:layout_alignParentEnd="true"
+            android:layout_alignParentRight="true"
+            android:layout_marginEnd="5dp"
+            android:layout_marginRight="5dp"
             android:textColor="@android:color/white"
             android:background="@drawable/btn_style_search2"
-            android:layout_centerVertical="true"/>
+            android:layout_centerVertical="true"
+            />
 
     </RelativeLayout>
 
