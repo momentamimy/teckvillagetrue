@@ -151,7 +151,6 @@ public class UserProfileActivity extends AppCompatActivity {
         website.setText(getSharedPreferenceValue.getUserWebsite(this));
         //set gender
         String puttedtextgender=getSharedPreferenceValue.getUserGender(this);
-        Log.w("puttedtextgender",puttedtextgender);
         if(puttedtextgender.equals("male")){
             gender.setText("Male");
         }else if(puttedtextgender.equals("female")){
@@ -620,9 +619,7 @@ public class UserProfileActivity extends AppCompatActivity {
                                         //Toast.makeText(getApplicationContext(), response.body().toString(), Toast.LENGTH_SHORT).show();
                                         Result_Update_User_Data user = response.body().getUser();
 
-                                        Log.w("success", user.getEmail());
-                                        Log.w("success", user.getName());
-                                        Log.w("success", user.getPhone());
+                                        Log.w("success", String.valueOf(user));
 
                                         //if respone retreive img name it mean user upload img
                                         if (user.getImg() != null) {

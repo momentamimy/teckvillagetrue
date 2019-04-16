@@ -33,10 +33,11 @@
             android:layout_marginRight="10dp"
             android:layout_marginEnd="10dp"
             android:padding="15dp"
+            android:textAlignment="viewStart"
             android:textSize="16sp"
             android:background="@drawable/btn_style_search"
             android:layout_toRightOf="@+id/flag_icon"
-             />
+            android:gravity="start" />
 
         <Button
             android:id="@+id/btn_searchfor"

@@ -5,8 +5,16 @@ package teckvillage.developer.khaled_pc.teckvillagetrue.Model.retrofit.JSON_Mapp
  */
 
 public class Result_Update_User_Data {
-    String phone_code,phone,name,email,img,register_type,facebook_link,full_phone,api_token,updated_at,created_at,tag_id,company,title,address,website,gender,about;
+    String phone_code,phone,name,email,img,register_type,facebook_link,full_phone,api_token,updated_at,created_at,tag_id,company,title,address,website,gender,about,country;
     int id;
+
+    public String getCountry() {
+        return country;
+    }
+
+    public void setCountry(String country) {
+        this.country = country;
+    }
 
     public String getPhone_code() {
         return phone_code;

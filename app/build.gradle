@@ -51,8 +51,9 @@ dependencies {
     implementation 'com.github.kaedea:Android-Cloud-TagView-Plus:b546a5f073'
 
 
-    implementation 'com.google.android.gms:play-services-auth:11.8.0'
+    implementation 'com.google.android.gms:play-services-auth:16.0.1'
 
+    //pusher
     implementation 'com.pusher:pusher-java-client:1.5.0'
 
     implementation 'com.google.firebase:firebase-core:16.0.1'

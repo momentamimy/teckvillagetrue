@@ -719,8 +719,8 @@ public class PhoneStateReceiver extends BroadcastReceiver {
         }
     }
 
-    public FetchedUserData getUserDataApi(Context context, String number) {
-        final FetchedUserData[] UserData = {null};
+    public void getUserDataApi(Context context, String number) {
+
         if (CheckNetworkConnection.hasInternetConnection(context)) {
 
             //Check internet Access
@@ -737,27 +737,27 @@ public class PhoneStateReceiver extends BroadcastReceiver {
                         if (response.isSuccessful())
                         {
                             Log.d("userNamePaleeez", response.body().getName());
-                            UserData[0] =response.body();
-                            updateCard(UserData[0]);
+                            FetchedUserData resp =response.body();
+                            updateCard(resp);
                         }
                         else
                         {
-                            UserData[0]=null;
+                            Log.d("onFailure", "other error");
                         }
                     }
 
                     @Override
                     public void onFailure(Call<FetchedUserData> call, Throwable t) {
-                        UserData[0]=null;
+                        Log.d("onFailure", t.getMessage());
                     }
                 });
             }else {
-                UserData[0]=null;
+
             }
         }else{
-            UserData[0]=null;
+
         }
-    return UserData[0];
+
     }
 
     public void updateCard(FetchedUserData userData)

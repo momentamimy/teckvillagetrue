@@ -17,6 +17,7 @@ import java.util.Calendar;
 import teckvillage.developer.khaled_pc.teckvillagetrue.Chat_MessagesChat;
 import teckvillage.developer.khaled_pc.teckvillagetrue.R;
 import teckvillage.developer.khaled_pc.teckvillagetrue.Model.MessageInfo;
+import teckvillage.developer.khaled_pc.teckvillagetrue.SMS_MessagesChat;
 
 public class CustomRecyclerViewChatAdapter extends RecyclerView.Adapter<CustomRecyclerViewChatAdapter.ViewHolder>{
 
@@ -100,7 +101,7 @@ public class CustomRecyclerViewChatAdapter extends RecyclerView.Adapter<CustomRe
         holder.itemView.setOnClickListener(new View.OnClickListener() {
             @Override
             public void onClick(View v) {
-                Intent intent=new Intent(mContext, Chat_MessagesChat.class);
+                Intent intent=new Intent(mContext, SMS_MessagesChat.class);
                 intent.putExtra("LogSMSName",dataSet.get(position).logName);
                 intent.putExtra("LogSMSAddress",dataSet.get(position).logAddress);
                 intent.putExtra("LogSMSThreadID",dataSet.get(position).thread_id);

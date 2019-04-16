@@ -53,6 +53,7 @@ public interface WhoCallerApi {
             @Part("phone")      RequestBody  Phonenumber,
             @Part("name")       RequestBody  username,
             @Part("email")      RequestBody  email,
+            @Part("country")      RequestBody  country,
             @Part MultipartBody.Part img,
             @Part("register_type") RequestBody  registerMethod,
             @Part("facebook_link") RequestBody  facebooklink,

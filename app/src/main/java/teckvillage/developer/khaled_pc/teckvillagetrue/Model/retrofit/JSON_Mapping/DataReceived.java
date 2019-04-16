@@ -5,8 +5,16 @@ package teckvillage.developer.khaled_pc.teckvillagetrue.Model.retrofit.JSON_Mapp
  */
 
 public class DataReceived {
-   String phone_code,phone,name,email,img,register_type,facebook_link,full_phone,api_token,updated_at,created_at;
+   String phone_code,phone,name,email,img,register_type,facebook_link,full_phone,api_token,updated_at,created_at,country;
    int id;
+
+    public String getCountry() {
+        return country;
+    }
+
+    public void setCountry(String country) {
+        this.country = country;
+    }
 
     public String getRegister_type() {
         return register_type;

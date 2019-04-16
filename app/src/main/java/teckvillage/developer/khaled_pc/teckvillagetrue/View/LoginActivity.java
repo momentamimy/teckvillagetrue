@@ -14,9 +14,11 @@ import android.widget.EditText;
 import android.widget.TextView;
 import android.widget.Toast;
 
+import com.facebook.login.Login;
 import com.mukesh.countrypicker.Country;
 import com.mukesh.countrypicker.CountryPicker;
 import com.mukesh.countrypicker.OnCountryPickerListener;
+import com.sdsmdg.tastytoast.TastyToast;
 
 import teckvillage.developer.khaled_pc.teckvillagetrue.R;
 import teckvillage.developer.khaled_pc.teckvillagetrue.verification;
@@ -58,6 +60,7 @@ public class LoginActivity extends AppCompatActivity implements TextWatcher {
             intent.putExtra("contryname",countryname);
             startActivity(intent);
             finish();
+
         }
 
         codeCountry.setOnClickListener(new View.OnClickListener() {
@@ -81,29 +84,44 @@ public class LoginActivity extends AppCompatActivity implements TextWatcher {
         continu.setOnClickListener(new View.OnClickListener() {
             @Override
             public void onClick(View v) {
-                if (myCountry==null)
-                {
-                    Toast.makeText(getApplicationContext(),"You Should Select Your Country",Toast.LENGTH_LONG).show();
-                    return;
-                }else if(!PhoneNumberValid){
-                    Toast.makeText(getApplicationContext(),"You Should Enter Correct Phone Number",Toast.LENGTH_LONG).show();
-                    return;
-                }else if(myCountry.getName().equals("Egypt")&&phoneNumber.getText().toString().trim().length()<11||phoneNumber.getText().toString().trim().length()>11){
 
-                    Toast.makeText(getApplicationContext(),"You Should Enter Correct Phone Number",Toast.LENGTH_LONG).show();
-                    return;
-                }
+                //Check wifi or data available
+              if (CheckNetworkConnection.hasInternetConnection(LoginActivity.this)) {
 
-                //Toast.makeText(getApplicationContext(),myCountry.getDialCode().toString(),Toast.LENGTH_LONG).show();
-                String number=myCountry.getDialCode()+phoneNumber.getText().toString().trim();
-                String councode=myCountry.getDialCode();
-                String contryname=myCountry.getName();
-                Intent intent=new Intent(getApplicationContext(), Missed_Call_Verification.class);
-                intent.putExtra("num",number);
-                intent.putExtra("codenum",councode);
-                intent.putExtra("contryname",contryname);
-                startActivity(intent);
-                finish();
+                    //Check internet Access
+                   if (ConnectionDetector.hasInternetConnection(LoginActivity.this)) {
+
+                        if (myCountry == null) {
+                            Toast.makeText(getApplicationContext(), "You Should Select Your Country", Toast.LENGTH_LONG).show();
+                            return;
+                        } else if (!PhoneNumberValid) {
+                            Toast.makeText(getApplicationContext(), "You Should Enter Correct Phone Number", Toast.LENGTH_LONG).show();
+                            return;
+                        } else if (myCountry.getName().equals("Egypt") && phoneNumber.getText().toString().trim().length() < 11 || phoneNumber.getText().toString().trim().length() > 11) {
+
+                            Toast.makeText(getApplicationContext(), "You Should Enter Correct Phone Number", Toast.LENGTH_LONG).show();
+                            return;
+                        }
+
+                        //Toast.makeText(getApplicationContext(),myCountry.getDialCode().toString(),Toast.LENGTH_LONG).show();
+                        String number = phoneNumber.getText().toString().trim();
+                        String numberwithcode = myCountry.getDialCode() + phoneNumber.getText().toString().trim();
+                        String councode = myCountry.getDialCode();
+                        String contryname = myCountry.getName();
+                        Intent intent = new Intent(getApplicationContext(), Missed_Call_Verification.class);
+                        intent.putExtra("num", number);
+                        intent.putExtra("numwtihcode", numberwithcode);
+                        intent.putExtra("codenum", councode);
+                        intent.putExtra("contryname", contryname);
+                        startActivity(intent);
+                        finish();
+
+          } else {
+                TastyToast.makeText(LoginActivity.this, "Internet not access Please connect to the internet", TastyToast.LENGTH_LONG, TastyToast.ERROR);
+            }
+        } else {
+            TastyToast.makeText(LoginActivity.this, "You're offline. Please connect to the internet", TastyToast.LENGTH_LONG, TastyToast.ERROR);
+        }
             }
         });
     }
@@ -138,7 +156,7 @@ public class LoginActivity extends AppCompatActivity implements TextWatcher {
     }
 
     private boolean isValidPhoneNumber(CharSequence phoneNumber) {
-        if (!TextUtils.isEmpty(phoneNumber)&&phoneNumber.length() > 4) {
+        if (!TextUtils.isEmpty(phoneNumber)&&phoneNumber.length() >= 5) {
             return true;
         }
         return false;
@@ -146,7 +164,7 @@ public class LoginActivity extends AppCompatActivity implements TextWatcher {
 
 
     private boolean setcross(CharSequence phoneNumber) {
-        if (!TextUtils.isEmpty(phoneNumber)&&phoneNumber.length() > 1&&phoneNumber.length() <= 4) {
+        if (!TextUtils.isEmpty(phoneNumber)&&phoneNumber.length() >= 1&&phoneNumber.length() < 5) {
             return true;
         }
         return false;

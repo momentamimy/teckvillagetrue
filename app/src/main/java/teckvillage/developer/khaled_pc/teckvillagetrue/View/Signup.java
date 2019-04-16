@@ -153,9 +153,9 @@ public class Signup extends AppCompatActivity {
             Log.w("phone", PhoneModel + "  ||  " + AndroidVersion + "  ||  " + phoneID + "  ||  " + devicename);
             // Configure sign-in to request the user's ID, email address, and basic
             // profile. ID and basic profile are included in DEFAULT_SIGN_IN.
-            //GoogleSignInOptions gso = new GoogleSignInOptions.Builder(GoogleSignInOptions.DEFAULT_SIGN_IN).requestEmail().build();
+            GoogleSignInOptions gso = new GoogleSignInOptions.Builder(GoogleSignInOptions.DEFAULT_SIGN_IN).requestEmail().build();
             // Build a GoogleSignInClient with the options specified by gso.
-            //mGoogleSignInClient = GoogleSignIn.getClient(this, gso);
+            mGoogleSignInClient = GoogleSignIn.getClient(this, gso);
 
             //init View
             add_personal_photo = findViewById(R.id.add_personal_image);
@@ -262,6 +262,7 @@ public class Signup extends AppCompatActivity {
 
                         //Convert text to RequestBody
                         RequestBody emailRequest = RequestBody.create(MediaType.parse("text/plain"), email);
+                        RequestBody countryRequest = RequestBody.create(MediaType.parse("text/plain"), countryname);
                         RequestBody fnameRequest = RequestBody.create(MediaType.parse("text/plain"), fistname + " " + lastname);
                         RequestBody codecounRequest = RequestBody.create(MediaType.parse("text/plain"), Codecountry);
                         RequestBody phNumberRequest = RequestBody.create(MediaType.parse("text/plain"), phNumber);
@@ -284,7 +285,7 @@ public class Signup extends AppCompatActivity {
 
                                 Retrofit retrofit = retrofitHead.headOfGetorPostReturnRes();
                                 WhoCallerApi whoCallerApi = retrofit.create(WhoCallerApi.class);
-                                Call<ResultModel> register_user = whoCallerApi.registeruser(codecounRequest, phNumberRequest, fnameRequest, emailRequest, fileToUpload, LoginMethodRequest, facebookProfileLinkRequest, devicenameRequest, AndroidVersioncounRequest);//,devicename,AndroidVersion
+                                Call<ResultModel> register_user = whoCallerApi.registeruser(codecounRequest, phNumberRequest, fnameRequest, emailRequest,countryRequest, fileToUpload, LoginMethodRequest, facebookProfileLinkRequest, devicenameRequest, AndroidVersioncounRequest);//,devicename,AndroidVersion
 
                                 register_user.enqueue(new Callback<ResultModel>() {
                                     @Override
@@ -307,7 +308,7 @@ public class Signup extends AppCompatActivity {
                                                     Log.w("success", user.getApi_token());
 
                                                     //if respone retreive img name it mean user upload img
-                                                    if (user.getImg() != null) {
+                                                    /*if (user.getImg() != null) {
                                                         Log.w("success", user.getImg());
                                                         if (bitmap != null) {
                                                             //convert img to string to save it
@@ -320,7 +321,7 @@ public class Signup extends AppCompatActivity {
                                                         //user not upload img
                                                         UserProfImgInString = "NoImageHere";
                                                         Log.w("Noimguser", "noimg");
-                                                    }
+                                                    }*/
 
 
                                                     //retreive img and convert from string to bitmap to display it
@@ -349,8 +350,9 @@ public class Signup extends AppCompatActivity {
                                                     if (user.getImg() != null) {
                                                         editor.putString("User_img_profile", "http://whocaller.net/uploads/" + user.getImg());
                                                     }
-                                                    //editor.putString("User_img_profile", UserProfImgInString);
-                                                    editor.putString("UserCountry", countryname);
+                                                    if (user.getCountry() != null) {
+                                                        editor.putString("UserCountry", user.getCountry());
+                                                    }
                                                     editor.apply();
 
                                                     //uploadFirebaseToken
@@ -800,7 +802,7 @@ public class Signup extends AppCompatActivity {
                     public void onResponse(Call<TokenDataReceived> call, Response<TokenDataReceived> response) {
                         if (response.isSuccessful())
                         {
-                            Log.d("dadaadwwqfz",response.body().getMsg());
+                            Log.d("firebaseCodeSent",response.body().getMsg());
                         }
                     }
 

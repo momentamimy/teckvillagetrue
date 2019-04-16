@@ -4,6 +4,7 @@ import android.app.AlertDialog;
 import android.content.DialogInterface;
 import android.content.Intent;
 import android.content.SharedPreferences;
+import android.support.design.widget.Snackbar;
 import android.support.v7.app.AppCompatActivity;
 import android.os.Bundle;
 import android.util.Log;
@@ -11,6 +12,7 @@ import android.view.View;
 import android.widget.ImageView;
 import android.widget.Toast;
 
+import com.sdsmdg.tastytoast.TastyToast;
 import com.sinch.verification.CodeInterceptionException;
 import com.sinch.verification.Config;
 import com.sinch.verification.InitiationResult;
@@ -27,35 +29,72 @@ public class Missed_Call_Verification extends AppCompatActivity {
     SharedPreferences sharedPreferences;
     String coincode;
     String number;
+    String numberwithcode;
     String contryname;
 
     @Override
     protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
         setContentView(R.layout.activity_missed__call__verification);
+        Log.w("plp","lol");
+        try {
 
-        number=getIntent().getStringExtra("num");
-        coincode=getIntent().getStringExtra("codenum");
-        contryname=getIntent().getStringExtra("contryname");
-        //Log.w("code",coincode);
+            //Check wifi or data available
+            if (CheckNetworkConnection.hasInternetConnection(Missed_Call_Verification.this)) {
 
-        if(number.isEmpty()) {
-            Toast.makeText(getApplicationContext(), "Phone number cannot be empty!",Toast.LENGTH_LONG).show();
-        }
-        else {
-            startVerification(number);
-        }
+                //Check internet Access
+                if (ConnectionDetector.hasInternetConnection(Missed_Call_Verification.this)) {
 
-        /*ImageView dd=findViewById(R.id.centerparent);
-        dd.setOnClickListener(new View.OnClickListener() {
-            @Override
-            public void onClick(View v) {
-                Intent intent = new Intent(getApplicationContext(), Signup.class);
-                startActivity(intent);
-                finish();
+                        number=getIntent().getStringExtra("num");
+                        coincode=getIntent().getStringExtra("codenum");
+                        contryname=getIntent().getStringExtra("contryname");
+                        numberwithcode=getIntent().getStringExtra("numwtihcode");
+                        //Log.w("code",coincode);
+
+                        if(numberwithcode.isEmpty()) {
+                            Toast.makeText(getApplicationContext(), "Phone number cannot be empty!",Toast.LENGTH_LONG).show();
+                        }
+                        else {
+                            startVerification(numberwithcode);
+                        }
+
+                } else {
+                    /*View parentLayout = findViewById(android.R.id.content);
+                    Snackbar.make(parentLayout, "Internet not access Please connect to the internet", Snackbar.LENGTH_LONG)
+                            .setAction("CLOSE", new View.OnClickListener() {
+                                @Override
+                                public void onClick(View view) {
+                                    Intent intent = new Intent(getApplicationContext(), LoginActivity.class);
+                                    startActivity(intent);
+                                    finish();
+                                }
+                            })
+                            .setActionTextColor(getResources().getColor(android.R.color.white ))
+                            .show();*/
+                    View parentLayout = findViewById(android.R.id.content);
+                    Snackbar.make(parentLayout, "You're offline. Please connect to the internet", Snackbar.LENGTH_LONG)
+                            .setActionTextColor(getResources().getColor(android.R.color.white ))
+                            .show();
+                    //TastyToast.makeText(Missed_Call_Verification.this, "Internet not access Please connect to the internet", TastyToast.LENGTH_LONG, TastyToast.ERROR);
+                    thread.start();
+
+                }
+            } else {
+                View parentLayout = findViewById(android.R.id.content);
+                Snackbar.make(parentLayout, "You're offline. Please connect to the internet", Snackbar.LENGTH_LONG)
+                        .setActionTextColor(getResources().getColor(android.R.color.white ))
+                        .show();
+                //TastyToast.makeText(Missed_Call_Verification.this, "You're offline. Please connect to the internet", TastyToast.LENGTH_LONG, TastyToast.ERROR);
+                thread.start();
             }
-        });*/
+
+        }catch (Exception e){
+            e.printStackTrace();
+        }
+
     }
+
+
     private void startVerification(String phoneNumber) {
         Config config = SinchVerification.config().applicationKey(APPLICATION_KEY).context(getApplicationContext()).build();
         VerificationListener listener = new MyVerificationListener();
@@ -75,9 +114,9 @@ public class Missed_Call_Verification extends AppCompatActivity {
             if (e instanceof InvalidInputException) {
                 Toast.makeText(getApplicationContext(),"Incorrect number provided",Toast.LENGTH_LONG).show();
             } else if (e instanceof ServiceErrorException) {
-                Toast.makeText(getApplicationContext(),"Sinch service error",Toast.LENGTH_LONG).show();
+                Toast.makeText(getApplicationContext(),"service error",Toast.LENGTH_LONG).show();
             } else {
-                Toast.makeText(getApplicationContext(),"Other system error, check your network state", Toast.LENGTH_LONG).show();
+                Toast.makeText(getApplicationContext(),"Check your network state", Toast.LENGTH_LONG).show();
             }
         }
 
@@ -98,6 +137,7 @@ public class Missed_Call_Verification extends AppCompatActivity {
             intent.putExtra("contryname",contryname);
             startActivity(intent);
             finish();
+
         }
 
         @Override
@@ -105,9 +145,9 @@ public class Missed_Call_Verification extends AppCompatActivity {
             if (e instanceof CodeInterceptionException) {
                 Toast.makeText(getApplicationContext(),"Intercepting the verification call automatically failed",Toast.LENGTH_LONG).show();
             } else if (e instanceof ServiceErrorException) {
-                Toast.makeText(getApplicationContext(), "Sinch service error",Toast.LENGTH_LONG).show();
+                Toast.makeText(getApplicationContext(), "service error",Toast.LENGTH_LONG).show();
             } else {
-                Toast.makeText(getApplicationContext(),"Other system error, check your network state", Toast.LENGTH_LONG).show();
+                Toast.makeText(getApplicationContext(),"Check your network state", Toast.LENGTH_LONG).show();
             }
         }
 
@@ -116,4 +156,21 @@ public class Missed_Call_Verification extends AppCompatActivity {
 
         }
     }
+
+    //timer
+    Thread thread = new Thread(){
+        @Override
+        public void run() {
+            try {
+                Thread.sleep(3400); // As I am using LENGTH_LONG in Toast
+                Intent intent=new Intent(Missed_Call_Verification.this,SplashScreen.class);
+                startActivity(intent);
+                Missed_Call_Verification.this.finish();
+            } catch (Exception e) {
+                e.printStackTrace();
+            }
+        }
+    };
+
+
 }
