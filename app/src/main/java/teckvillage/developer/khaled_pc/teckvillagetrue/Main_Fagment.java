@@ -1558,6 +1558,7 @@ public class Main_Fagment extends Fragment implements OnBackPressedListener , Lo
         firstclick = false;
     }
 
+
     @Override
     public void onClickEditNumber(String value) {
         openDialPadWithNumber(value);
