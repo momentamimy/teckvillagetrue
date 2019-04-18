@@ -9,6 +9,7 @@ import android.support.annotation.NonNull;
 import android.support.design.widget.FloatingActionButton;
 import android.support.v4.app.Fragment;
 import android.support.v7.widget.LinearLayoutManager;
+import android.util.Log;
 import android.view.LayoutInflater;
 import android.view.View;
 import android.view.ViewGroup;
@@ -41,6 +42,9 @@ public class Contacts extends Fragment implements OnBackPressedListener  {
     private List<AlphabetItem> mAlphabetItems;
     FloatingActionButton add_user_contacts;
     RelativeLayout searchLayout;
+    boolean shouldExecuteOnResume;
+
+
     public Contacts() {
         // Required empty public constructor
     }
@@ -50,6 +54,8 @@ public class Contacts extends Fragment implements OnBackPressedListener  {
     public View onCreateView(@NonNull LayoutInflater inflater, ViewGroup container, Bundle savedInstanceState) {
         // Inflate the layout for this fragment
         View view = inflater.inflate(R.layout.fragment_contacts, container, false);
+
+        shouldExecuteOnResume = false;
 
         //Initial recycleview
         mRecyclerView =  view.findViewById(R.id.fast_scroller_recycler);
@@ -206,6 +212,16 @@ public class Contacts extends Fragment implements OnBackPressedListener  {
 
     }
 
+    @Override
+    public void onResume() {
+        super.onResume();
+        if (shouldExecuteOnResume) {
 
+            mRecyclerView.setAdapter(new UserContactsAdapters(getActivity(),addAlphabets(new LetterComparator().sortList(get_user_contacts.getContactListContactsRecycleview()))));
+
+        } else {
+            shouldExecuteOnResume = true;
+        }
+    }
 
 }

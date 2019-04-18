@@ -265,16 +265,15 @@
                 >
 
                 <ImageView
-                    android:layout_marginStart="6dp"
                     android:padding="10dp"
                     android:id="@+id/add_Contact"
-                    android:layout_width="42dp"
+                    android:layout_width="43dp"
                     android:layout_height="42dp"
                     android:layout_centerVertical="true"
-                    android:layout_marginRight="6dp"
                     android:background="@drawable/ic_filter_state"
                     android:src="@drawable/add_contact"
-                    android:layout_marginLeft="3dp" />
+                    android:layout_marginStart="2dp"
+                    android:layout_marginLeft="2dp" />
 
                 <teckvillage.developer.khaled_pc.teckvillagetrue.View.KeyboardlessEditText
                     android:textColor="#0089c0"
@@ -282,9 +281,8 @@
                     android:singleLine="true"
                     android:ellipsize="end"
                     android:layout_width="wrap_content"
-                    android:layout_height="wrap_content"
+                    android:layout_height="42dp"
                     android:layout_alignParentTop="true"
-                    android:layout_marginRight="10dp"
                     android:layout_toLeftOf="@+id/backspace_imageView"
                     android:layout_toRightOf="@+id/add_Contact"
                     android:ems="1"
@@ -303,12 +301,12 @@
                 <ImageView
                     android:padding="10dp"
                     android:id="@+id/backspace_imageView"
-                    android:layout_width="45dp"
-                    android:layout_height="45dp"
+                    android:layout_width="43dp"
+                    android:layout_height="42dp"
                     android:layout_alignParentRight="true"
                     android:layout_centerVertical="true"
-                    android:layout_marginEnd="15dp"
-                    android:layout_marginRight="15dp"
+                    android:layout_marginEnd="3dp"
+                    android:layout_marginRight="3dp"
                     android:background="@drawable/ic_filter_state"
                     android:src="@drawable/ic_backspace_black_24dp" />
             </RelativeLayout>
@@ -330,6 +328,7 @@
                 android:layout_above="@+id/dialpad_bottom_rl"
                 android:numColumns="3"
                 android:listSelector="#00000000"
+
                 >
 
             </GridView>

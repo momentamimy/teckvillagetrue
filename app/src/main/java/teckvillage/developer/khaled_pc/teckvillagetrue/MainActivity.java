@@ -69,6 +69,8 @@ import teckvillage.developer.khaled_pc.teckvillagetrue.Model.SharedPreference.ge
 import teckvillage.developer.khaled_pc.teckvillagetrue.View.Signup;
 
 
+
+
 public class MainActivity extends AppCompatActivity implements NavigationView.OnNavigationItemSelectedListener {
 
     private static final String TAG ="fields" ;
@@ -94,7 +96,8 @@ public class MainActivity extends AppCompatActivity implements NavigationView.On
 
     boolean SMSNotification=false;
     Dialog dialogcameraresult;
-    private OpenDialPad openDialPad;
+    public OpenDialPad openDialPad;
+    private MyInterface listener ;
 
     @Override
     protected void onCreate(final Bundle savedInstanceState) {
@@ -164,6 +167,7 @@ public class MainActivity extends AppCompatActivity implements NavigationView.On
                 return;
             }
             Main_Fagment fragment_1=new Main_Fagment();
+            setListener(fragment_1);//Open Dialpad From Activity
             fragmentTransaction.add(R.id.fragment_container_main,fragment_1,null);
             fragmentTransaction.commit();
         }
@@ -696,8 +700,7 @@ public class MainActivity extends AppCompatActivity implements NavigationView.On
 
     }
 
-
-    public void showDialogChooseTYPESIM(final String number){
+    public  void showDialogChooseTYPESIM(final String number){
 
         try {
 
@@ -710,36 +713,38 @@ public class MainActivity extends AppCompatActivity implements NavigationView.On
                     "Etisala",
                     "WE"};
 
-
-                SIMDialog.setItems(SIMDialogItems, new DialogInterface.OnClickListener() {
-                            @Override
-                            public void onClick(DialogInterface dialog, int which) {
-                                switch (which) {
-                                    case 0:
-                                        dialogcameraresult.dismiss();
-                                        String chargingNumberorage="#"+number+"*102*";
-
-                                        break;
-                                    case 1:
-                                        dialogcameraresult.dismiss();
-                                        String chargingNumbervoda="#"+number+"*858*";
-                                        break;
-                                    case 2:
-                                        dialogcameraresult.dismiss();
-                                        String chargingNumberetisilat="*555*"+number+"#";
-                                        break;
-                                    case 3:
-                                        dialogcameraresult.dismiss();
-                                        String chargingNumberWe="#"+number+"*555*";
-                                        break;
-                                }
-                            }
-                        });
-                SIMDialog.show();
+            SIMDialog.setItems(SIMDialogItems, new DialogInterface.OnClickListener() {
+                @Override
+                public void onClick(DialogInterface dialog, int which) {
+                    switch (which) {
+                        case 0:
+                            dialogcameraresult.dismiss();
+                            String chargingNumberorage="#"+number+"*102*";
+                            listener.myAction(chargingNumberorage);
+                            break;
+                        case 1:
+                            dialogcameraresult.dismiss();
+                            String chargingNumbervoda="#"+number+"*858*";
+                            listener.myAction(chargingNumbervoda);
+                            break;
+                        case 2:
+                            dialogcameraresult.dismiss();
+                            String chargingNumberetisilat="*555*"+number+"#";
+                            listener.myAction(chargingNumberetisilat);
+                            break;
+                        case 3:
+                            dialogcameraresult.dismiss();
+                            String chargingNumberWe="#"+number+"*555*";
+                            listener.myAction(chargingNumberWe);
+                            break;
+                    }
+                }
+            });
+            SIMDialog.show();
 
             //Toast.makeText(this, "Camera Permission Error", Toast.LENGTH_SHORT).show();
         } catch (Exception e) {
-            Toast.makeText(this, "Error", Toast.LENGTH_SHORT).show();
+
             e.printStackTrace();
         }
     }
@@ -1022,5 +1027,10 @@ public class MainActivity extends AppCompatActivity implements NavigationView.On
         Intent mIntent = new Intent(this, UploadTopTenContactsService.class);
         UploadTopTenContactsService.enqueueWork(this, mIntent);
 
+    }
+
+    public void setListener(MyInterface listener)
+    {
+        this.listener = listener ;
     }
 }

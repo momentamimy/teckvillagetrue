@@ -6,4 +6,6 @@ package teckvillage.developer.khaled_pc.teckvillagetrue;
 
 public interface OpenDialPad {
     void onClickEditNumber (String value);
+
+    //void onClickChargeCodeNumber (String value);
 }

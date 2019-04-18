@@ -55,6 +55,7 @@ import android.view.ViewGroup;
 import android.view.Window;
 import android.widget.AbsListView;
 import android.widget.AdapterView;
+import android.widget.Button;
 import android.widget.EditText;
 import android.widget.GridView;
 import android.widget.ImageView;
@@ -92,7 +93,7 @@ import static android.app.Activity.RESULT_OK;
 /**
  * A simple {@link Fragment} subclass.
  */
-public class Main_Fagment extends Fragment implements OnBackPressedListener , LoaderManager.LoaderCallbacks<Cursor>,OpenDialPad {
+public class Main_Fagment extends Fragment implements OnBackPressedListener , LoaderManager.LoaderCallbacks<Cursor>,OpenDialPad,MyInterface {
 
     String lastnum = "0";
     int numbersofcall = 1;
@@ -155,8 +156,8 @@ public class Main_Fagment extends Fragment implements OnBackPressedListener , Lo
     ImageView firstimagwaiting, secimagwaiting;
     TextView textwaiting;
     TextView noLogcalltext;
-
-
+    public static OpenDialPad openDialPad;
+    private MyInterface listener ;
 
     public Main_Fagment() {
         // Required empty public constructor
@@ -1170,7 +1171,6 @@ public class Main_Fagment extends Fragment implements OnBackPressedListener , Lo
     }
 
 
-
     @Override
     public Loader onCreateLoader(int id, Bundle args) {
         Uri CONTACT_URI = CallLog.Calls.CONTENT_URI;
@@ -1549,8 +1549,7 @@ public class Main_Fagment extends Fragment implements OnBackPressedListener , Lo
     MyDialogDualSim.show();
     }
 
-    public void openDialPadWithNumber(String num)
-    {
+    public void openDialPadWithNumber(String num) {
         callButtonAnim(0);
         phone_num_edt.setText(num);
         writeAnim(0);
@@ -1565,4 +1564,9 @@ public class Main_Fagment extends Fragment implements OnBackPressedListener , Lo
     }
 
 
+
+    @Override
+    public void myAction(String value) {
+        openDialPadWithNumber(value);
+    }
 }
