@@ -52,58 +52,63 @@ public class UploadTopTenContactsService extends JobIntentService {
          * The system or framework is already holding a wake lock for us at this point
          */
 
+        try {
 
-        get_calls_log = new Get_Calls_Log(getApplicationContext());
-        ArrayList<Send_Top_Ten_Contacts_JSON_Arraylist> listts = new ArrayList<>();;
+                get_calls_log = new Get_Calls_Log(getApplicationContext());
+                ArrayList<Send_Top_Ten_Contacts_JSON_Arraylist> listts = new ArrayList<>();;
 
-        // get Top Ten contact from Device
-        ArrayList<Send_Top_Ten_Contacts_JSON> list = get_calls_log.getTopTenContactsToServer();
+                // get Top Ten contact from Device
+                ArrayList<Send_Top_Ten_Contacts_JSON> list = get_calls_log.getTopTenContactsToServer();
 
-        //Check if Empty
-        if (list == null||list.size()<0){
-            Log.e(TAG, "onHandleWork: Invalid ");
-            return;
+                //Check if Empty
+                if (list == null||list.size()<=0){
+                    Log.e(TAG, "onHandleWork: Invalid ");
+                    return;
+                }
+
+
+                //Add all
+                for(int i = 0; i< list.size(); i++){
+                    ArrayList<String> listss = new ArrayList<String>();
+                    listss.add(list.get(i).getPhones());
+                    listts.add(new Send_Top_Ten_Contacts_JSON_Arraylist(list.get(i).getName(),listss));
+                }
+
+
+                //Correct Solution
+                datamodel datamodel=new datamodel();
+                datamodel.setContacts(listts);
+
+                Retrofit retrofit = retrofitHead.headOfGetorPostReturnRes();
+                WhoCallerApi whoCallerApi = retrofit.create(WhoCallerApi.class);
+                Call<ResultModelUploadVCF> uploadVCF = whoCallerApi.UploadTopTenContacts("application/json",ApiAccessToken.getAPIaccessToken(getApplicationContext()), datamodel);
+
+                uploadVCF.enqueue(new Callback<ResultModelUploadVCF>() {
+                    @Override
+                    public void onResponse(Call<ResultModelUploadVCF> call, Response<ResultModelUploadVCF> response) {
+
+                       if(response.code()==200){
+                           String mesf = response.body().getMsg();
+                           boolean me = response.body().isResponse();
+                           Log.w("success", mesf);
+                           Log.w("success", String.valueOf(me));
+
+                       }else {
+                           Log.w("Fail", String.valueOf(response.body()));
+                       }
+
+                    }
+
+                    @Override
+                    public void onFailure(Call<ResultModelUploadVCF> call, Throwable t) {
+                        Log.w("onFailure", t.getMessage());
+                        Log.w("onFailure", t.getCause());
+                    }
+                });
+
+        }catch (Exception e){
+            e.printStackTrace();
         }
-
-
-        //Add all
-        for(int i = 0; i< 10; i++){
-            ArrayList<String> listss = new ArrayList<String>();
-            listss.add(list.get(i).getPhones());
-            listts.add(new Send_Top_Ten_Contacts_JSON_Arraylist(list.get(i).getName(),listss));
-        }
-
-
-        //Correct Solution
-        datamodel datamodel=new datamodel();
-        datamodel.setContacts(listts);
-
-        Retrofit retrofit = retrofitHead.headOfGetorPostReturnRes();
-        WhoCallerApi whoCallerApi = retrofit.create(WhoCallerApi.class);
-        Call<ResultModelUploadVCF> uploadVCF = whoCallerApi.UploadTopTenContacts("application/json",ApiAccessToken.getAPIaccessToken(getApplicationContext()), datamodel);
-
-        uploadVCF.enqueue(new Callback<ResultModelUploadVCF>() {
-            @Override
-            public void onResponse(Call<ResultModelUploadVCF> call, Response<ResultModelUploadVCF> response) {
-
-               if(response.code()==200){
-                   String mesf = response.body().getMsg();
-                   boolean me = response.body().isResponse();
-                   Log.w("success", mesf);
-                   Log.w("success", String.valueOf(me));
-
-               }else {
-                   Log.w("Fail", String.valueOf(response.body()));
-               }
-
-            }
-
-            @Override
-            public void onFailure(Call<ResultModelUploadVCF> call, Throwable t) {
-                Log.w("onFailure", t.getMessage());
-                Log.w("onFailure", t.getCause());
-            }
-        });
 
     }
 

@@ -24,7 +24,25 @@ public class FetchedUserData {
             vcard_gender,
             vcard_note,
             created_at,
-            updated_at;
+            updated_at,
+            country,
+            user_img;
+
+    public String getCountry() {
+        return country;
+    }
+
+    public void setCountry(String country) {
+        this.country = country;
+    }
+
+    public String getUser_img() {
+        return user_img;
+    }
+
+    public void setUser_img(String user_img) {
+        this.user_img = user_img;
+    }
 
     public boolean isIs_spam() {
         return is_spam;

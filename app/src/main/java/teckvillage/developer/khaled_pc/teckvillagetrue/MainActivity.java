@@ -66,6 +66,8 @@ import teckvillage.developer.khaled_pc.teckvillagetrue.Services.UploadTopTenCont
 import teckvillage.developer.khaled_pc.teckvillagetrue.View.BlockList;
 import teckvillage.developer.khaled_pc.teckvillagetrue.View.ChatFragment;
 import teckvillage.developer.khaled_pc.teckvillagetrue.Model.SharedPreference.getSharedPreferenceValue;
+import teckvillage.developer.khaled_pc.teckvillagetrue.View.CheckNetworkConnection;
+import teckvillage.developer.khaled_pc.teckvillagetrue.View.ConnectionDetector;
 import teckvillage.developer.khaled_pc.teckvillagetrue.View.Signup;
 
 
@@ -377,18 +379,29 @@ public class MainActivity extends AppCompatActivity implements NavigationView.On
                     });
         }
 
-        //Upload VCF File
-        if(isFirstTime()){
-            try {
-                Log.w("first","first");
 
-                UploadTopTenContacts();
-            }catch (Exception e){
-                e.printStackTrace();
+        //Check wifi or data available
+        if (CheckNetworkConnection.hasInternetConnection(MainActivity.this)) {
+
+            //Check internet Access
+            if (ConnectionDetector.hasInternetConnection(MainActivity.this)) {
+
+                //Upload VCF File
+                //Upload Top Ten Contacts
+                if (isFirstTime()) {
+                    try {
+                        UploadTopTenContacts();
+                        Upload_VCF_File_Background();
+                    } catch (Exception e) {
+                        e.printStackTrace();
+                    }
+                }
+
             }
         }
 
-        Upload_VCF_File_Background();
+
+       // Upload_VCF_File_Background();
 
     }
 

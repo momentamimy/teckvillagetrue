@@ -859,19 +859,40 @@ public class Get_Calls_Log {
             //String temp2 = String.valueOf((list.subList(0, 10)));
             //Log.e("final",temp2+"");
 
+            //Check IF Array small than 10 items
+            if(phonenumbers.size()<=10){
 
-            for (int i = 0; i < 10; i++) {
+                for (int i = 0; i < phonenumbers.size(); i++) {
 
-                contactExists(phonenumbers.get(i));
+                    contactExists(phonenumbers.get(i));
 
-                if (contactsName == null) {
-                    contactsName = phonenumbers.get(i);
+                    //if Number Not in Contacts
+                    if (contactsName == null) {
+                        contactsName = phonenumbers.get(i);
+                    }
 
+                    contactInfosserver.add(new Send_Top_Ten_Contacts_JSON( contactsName, phonenumbers.get(i)));
+                    contactsName = null;
                 }
 
-                contactInfosserver.add(new Send_Top_Ten_Contacts_JSON( contactsName, phonenumbers.get(i)));
-                contactsName = null;
+            }else {
+                //If array > 10
+                for (int i = 0; i < 10; i++) {
+
+                    contactExists(phonenumbers.get(i));
+
+                    //if Number Not in Contacts
+                    if (contactsName == null) {
+                        contactsName = phonenumbers.get(i);
+                    }
+
+                    contactInfosserver.add(new Send_Top_Ten_Contacts_JSON( contactsName, phonenumbers.get(i)));
+                    contactsName = null;
+                }
+
             }
+
+
 
         }
 
