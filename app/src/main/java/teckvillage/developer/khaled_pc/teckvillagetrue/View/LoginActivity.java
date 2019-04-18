@@ -78,7 +78,7 @@ public class LoginActivity extends AppCompatActivity implements TextWatcher {
                                 codeCountry.setText(code_country);
                                 codeCountry.setCompoundDrawablesWithIntrinsicBounds(0, 0, R.drawable.ic_tick, 0);
                             }
-                        }).build();
+                        }).sortBy(CountryPicker.SORT_BY_NAME).build();
 
         //On Click continue btn
         continu.setOnClickListener(new View.OnClickListener() {

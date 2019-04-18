@@ -6,8 +6,9 @@
 
     <string name="action_settings">Settings</string>
 
-    <string name="facebook_app_id">2229608230587626</string>
-    <string name="fb_login_protocol_scheme">fb2229608230587626</string>
+    <!-- 2229608230587626   <string name="fb_login_protocol_scheme">fb2229608230587626</string>!-->
+    <string name="facebook_app_id">428543467880364</string>
+    <string name="fb_login_protocol_scheme">fb428543467880364</string>
 
     <!-- TODO: Remove or change this placeholder text -->
     <string name="hello_blank_fragment">Hello blank fragment</string>

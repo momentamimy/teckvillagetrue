@@ -47,7 +47,7 @@ public class SplashScreen extends AppCompatActivity implements EasyPermissions.P
                 Manifest.permission.RECEIVE_SMS,
                 Manifest.permission.READ_EXTERNAL_STORAGE,
                 Manifest.permission.WRITE_EXTERNAL_STORAGE,
-                Manifest.permission.CAMERA,
+                //Manifest.permission.CAMERA,
                 Manifest.permission.PROCESS_OUTGOING_CALLS
         };
 
@@ -129,7 +129,7 @@ public class SplashScreen extends AppCompatActivity implements EasyPermissions.P
                 Manifest.permission.RECEIVE_SMS,
                 Manifest.permission.READ_EXTERNAL_STORAGE,
                 Manifest.permission.WRITE_EXTERNAL_STORAGE,
-                Manifest.permission.CAMERA,
+                //Manifest.permission.CAMERA,
                 Manifest.permission.PROCESS_OUTGOING_CALLS
         };
         if (EasyPermissions.hasPermissions(getApplicationContext(),perms))

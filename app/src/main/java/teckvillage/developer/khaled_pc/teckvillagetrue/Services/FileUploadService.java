@@ -38,7 +38,7 @@ public class FileUploadService extends JobIntentService {
     private static final String TAG = "FileUploadService";
     Context context;
     String  vfile = "/ContactWhoCaller.vcf";
-    ArrayList<String> vCard ;
+    ArrayList<String> vCard = new ArrayList<String>();  // Its global....;
     private Cursor cursor;
     boolean stateVcf;
 
@@ -113,7 +113,7 @@ public class FileUploadService extends JobIntentService {
 
 
     private void getVcardString()throws IOException {
-        vCard = new ArrayList<String>();  // Its global....
+
         cursor = getContentResolver().query(ContactsContract.CommonDataKinds.Phone.CONTENT_URI, null, null, null, null);
         if(cursor!=null&&cursor.getCount()>0)
         {
@@ -174,7 +174,7 @@ public class FileUploadService extends JobIntentService {
             Toast.makeText(getApplicationContext(), "Information not available to create CSV.", Toast.LENGTH_SHORT).show();
         }
 
-        return CSVFile;
+        return CSVFile2;
     }
 
 

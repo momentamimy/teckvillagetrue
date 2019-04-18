@@ -24,7 +24,9 @@ import com.squareup.picasso.Picasso;
 import java.util.ArrayList;
 import java.util.List;
 
+import teckvillage.developer.khaled_pc.teckvillagetrue.Main_Fagment;
 import teckvillage.developer.khaled_pc.teckvillagetrue.Make_Phone_Call;
+import teckvillage.developer.khaled_pc.teckvillagetrue.OpenDialPad;
 import teckvillage.developer.khaled_pc.teckvillagetrue.R;
 import teckvillage.developer.khaled_pc.teckvillagetrue.SMS_MessagesChat;
 import teckvillage.developer.khaled_pc.teckvillagetrue.View.LogHolder;
@@ -38,8 +40,14 @@ public class LogAdapter extends RecyclerView.Adapter<LogHolder> {
     private Context context;
     int numofcallvar;
 
+    private OpenDialPad openDialPad;
 
 
+    public LogAdapter(Context context, List<LogInfo> itemList,OpenDialPad openDialPad) {
+        this.context = context;
+        this.itemList = itemList;
+        this.openDialPad = openDialPad;
+    }
 
     public LogAdapter(Context context, List<LogInfo> itemList) {
         this.context = context;
@@ -258,6 +266,9 @@ public class LogAdapter extends RecyclerView.Adapter<LogHolder> {
                   //open Dialer padd and set number
                     String number =itemList.get(position).getNumber();
                     Log.w("nmindialerpad",number);
+                    //open dial pad
+                    openDialPad.onClickEditNumber(number);
+
 
                 }else if(Option[which].equals("Delete from call log")) {
                     DeleteCallLogByCall_ID(itemList.get(position).getCall_idarray());

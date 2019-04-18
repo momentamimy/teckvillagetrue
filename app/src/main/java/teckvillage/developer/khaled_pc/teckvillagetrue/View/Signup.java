@@ -19,6 +19,7 @@ import android.os.Build;
 import android.os.Environment;
 import android.provider.MediaStore;
 import android.support.design.widget.TextInputLayout;
+import android.support.v4.app.ActivityCompat;
 import android.support.v4.content.ContextCompat;
 import android.support.v7.app.AlertDialog;
 import android.support.v7.app.AppCompatActivity;
@@ -94,6 +95,7 @@ public class Signup extends AppCompatActivity {
     private static final String IMAGE_DIRECTORY = "/WhoCaller";
     private static final int RC_SIGN_IN = 255;
     private static final String TAG = "signIn";
+    private static final int MY_CAMERA_REQUEST_CODE = 143;
     ImageView add_personal_photo;
     TextView FirstName, LastName, Email;
     TextInputLayout FirstNameError, LastNameError, EmailError;
@@ -218,16 +220,14 @@ public class Signup extends AppCompatActivity {
             continue_btn.setOnClickListener(new View.OnClickListener() {
                 @Override
                 public void onClick(View v) {
-                    Log.w("methodlogin", LoginMethod);
+
                     String fistname = FirstName.getText().toString().trim();
                     String lastname = LastName.getText().toString().trim();
                     String email = Email.getText().toString().trim();
-                    //Bitmap image=((BitmapDrawable)add_personal_photo.getDrawable()).getBitmap();
 
                     File file = null;
                     MultipartBody.Part fileToUpload = null;
                     RequestBody mFile = null;
-
 
                     try {
 
@@ -323,7 +323,6 @@ public class Signup extends AppCompatActivity {
                                                         Log.w("Noimguser", "noimg");
                                                     }*/
 
-
                                                     //retreive img and convert from string to bitmap to display it
                                                     //add_personal_photo.setImageBitmap(decodeBase64(UserProfImgInString));
 
@@ -384,8 +383,6 @@ public class Signup extends AppCompatActivity {
 
                                         Log.w("onFailure", t.toString());
                                         Toast.makeText(getApplicationContext(), "Failure,Please try again", Toast.LENGTH_SHORT).show();
-                                        //View parentLayout = findViewById(R.id.layoutsignuo);
-                                        //Snackbar.make(parentLayout, "Failure,Please try again", Snackbar.LENGTH_LONG);
                                     }
                                 });
 
@@ -442,9 +439,14 @@ public class Signup extends AppCompatActivity {
         }else {
             EmailError.setErrorEnabled(false);
         }
+        if (!android.util.Patterns.EMAIL_ADDRESS.matcher(email).matches()) {
+            EmailError.setError("Enter Correct Email address");
+            return false;
+        }else {
+            EmailError.setErrorEnabled(false);
+        }
 
-
-      return  true;
+        return  true;
     }
 
 
@@ -453,8 +455,8 @@ public class Signup extends AppCompatActivity {
         AlertDialog.Builder pictureDialog = new AlertDialog.Builder(this);
         pictureDialog.setTitle("Select Action");
         String[] pictureDialogItems = {
-                "Select photo from gallery",
-                "Capture photo from camera" };
+                "Select Photo From Gallery",
+                "Capture Photo From Camera" };
         PackageManager pm = getPackageManager();
         int hasPerm = pm.checkPermission(Manifest.permission.CAMERA, getPackageName());
         if (hasPerm == PackageManager.PERMISSION_GRANTED) {
@@ -474,9 +476,10 @@ public class Signup extends AppCompatActivity {
                 });
         pictureDialog.show();
         } else
-            Toast.makeText(this, "Camera Permission error", Toast.LENGTH_SHORT).show();
+            ActivityCompat.requestPermissions(Signup.this, new String[]{android.Manifest.permission.CAMERA}, MY_CAMERA_REQUEST_CODE);
+            //Toast.makeText(this, "Camera Permission Error", Toast.LENGTH_SHORT).show();
     } catch (Exception e) {
-        Toast.makeText(this, "Camera Permission error", Toast.LENGTH_SHORT).show();
+        Toast.makeText(this, "Camera Permission Error", Toast.LENGTH_SHORT).show();
         e.printStackTrace();
     }
     }
@@ -515,7 +518,7 @@ public class Signup extends AppCompatActivity {
                 Uri contentURI = data.getData();
                 try {
                     Bitmap bitmap = MediaStore.Images.Media.getBitmap(this.getContentResolver(), contentURI);
-                    String path = saveImage(bitmap);
+                    //String path = saveImage(bitmap);
                     //Toast.makeText(Signup.this, "Image Saved!", Toast.LENGTH_SHORT).show();
                     add_personal_photo.setImageBitmap(bitmap);
                     add_personal_photo.setPadding(20,20,20,20);
@@ -529,7 +532,7 @@ public class Signup extends AppCompatActivity {
             Bitmap thumbnail = (Bitmap) data.getExtras().get("data");
             add_personal_photo.setImageBitmap(thumbnail);
             add_personal_photo.setPadding(20,20,20,20);
-            saveImage(thumbnail);
+            //saveImage(thumbnail);
             //Toast.makeText(Signup.this, "Image Saved!", Toast.LENGTH_SHORT).show();
         }
     }
@@ -563,7 +566,7 @@ public class Signup extends AppCompatActivity {
         return "";
     }
 
-    //**********************************************************user data from login facebook***********************************************************************
+    //*******************user data from login facebook************************************
     private void setFacebookData(final LoginResult loginResult)
     {
         GraphRequest request = GraphRequest.newMeRequest(
@@ -787,8 +790,7 @@ public class Signup extends AppCompatActivity {
                 .decodeByteArray(decodedByte, 0, decodedByte.length);
     }
 
-    public void uploadFirebaseToken()
-    {
+    public void uploadFirebaseToken() {
         if (CheckNetworkConnection.hasInternetConnection(Signup.this)) {
 
             //Check internet Access
@@ -814,4 +816,6 @@ public class Signup extends AppCompatActivity {
             }
         }
     }
+
+
 }

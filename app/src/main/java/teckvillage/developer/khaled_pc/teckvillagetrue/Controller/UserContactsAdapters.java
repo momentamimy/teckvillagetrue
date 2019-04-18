@@ -39,7 +39,7 @@ public class UserContactsAdapters extends RecyclerView.Adapter<UserContactsAdapt
     Context context;
     private List<UserContactData> mDataArray;
     private ArrayList<Integer> mSectionPositions;
-    private String mSections =Character.toString((char)0x2605)+ "#ABCDEFGHIJKLMNOPQRSTUVWXYZ";
+    private String mSections = "#ABCDEFGHIJKLMNOPQRSTUVWXYZ";//Character.toString((char)0x2605)+
     Intent intent;
 
     public UserContactsAdapters(Context context,List<UserContactData> mDataArray) {

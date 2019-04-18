@@ -289,7 +289,7 @@
                     android:layout_toRightOf="@+id/add_Contact"
                     android:ems="1"
                     android:gravity="center"
-                    android:textSize="30dp"
+                    android:textSize="26dp"
                     android:text=""
                     android:inputType="none"
                     android:textIsSelectable="true"

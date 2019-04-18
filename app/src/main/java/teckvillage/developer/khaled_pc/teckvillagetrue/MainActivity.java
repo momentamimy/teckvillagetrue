@@ -1,5 +1,6 @@
 package teckvillage.developer.khaled_pc.teckvillagetrue;
 
+import android.Manifest;
 import android.app.Activity;
 import android.app.Dialog;
 import android.content.ContentResolver;
@@ -65,6 +66,7 @@ import teckvillage.developer.khaled_pc.teckvillagetrue.Services.UploadTopTenCont
 import teckvillage.developer.khaled_pc.teckvillagetrue.View.BlockList;
 import teckvillage.developer.khaled_pc.teckvillagetrue.View.ChatFragment;
 import teckvillage.developer.khaled_pc.teckvillagetrue.Model.SharedPreference.getSharedPreferenceValue;
+import teckvillage.developer.khaled_pc.teckvillagetrue.View.Signup;
 
 
 public class MainActivity extends AppCompatActivity implements NavigationView.OnNavigationItemSelectedListener {
@@ -74,7 +76,7 @@ public class MainActivity extends AppCompatActivity implements NavigationView.On
     public static FragmentManager fragmentManager;
     FrameLayout mainframeLayout,messageframeLayout,contactframeLayout,chatframeLayout;
     private static final String TAG_ANDROID_CONTACTS = "ANDROID_CONTACTS";
-    String Email ="work20188888@gmail.com";
+    String Email ="WhoCaller@gmail.com";
     private static final int MY_CAMERA_REQUEST_CODE = 109;
     private static final String PUBLIC_STATIC_STRING_IDENTIFIER = "com.techvillage";
 
@@ -91,6 +93,9 @@ public class MainActivity extends AppCompatActivity implements NavigationView.On
     boolean stateVcf;
 
     boolean SMSNotification=false;
+    Dialog dialogcameraresult;
+    private OpenDialPad openDialPad;
+
     @Override
     protected void onCreate(final Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
@@ -616,14 +621,14 @@ public class MainActivity extends AppCompatActivity implements NavigationView.On
         LayoutInflater layoutInflater = (LayoutInflater) this.getSystemService(Context.LAYOUT_INFLATER_SERVICE);
         View row = layoutInflater.inflate(R.layout.result_dialog_text_recognition, null);
 
-        final Dialog dialog = new Dialog(MainActivity.this);
-        dialog.requestWindowFeature(Window.FEATURE_NO_TITLE);
-        dialog.setContentView(row);
+        dialogcameraresult = new Dialog(MainActivity.this);
+        dialogcameraresult.requestWindowFeature(Window.FEATURE_NO_TITLE);
+        dialogcameraresult.setContentView(row);
 
         ColorDrawable transparent = new ColorDrawable(Color.TRANSPARENT);
         InsetDrawable inset = new InsetDrawable(transparent, 5);//margin for Dilaog
-        dialog.getWindow().setBackgroundDrawable(inset);
-        dialog.show();
+        dialogcameraresult.getWindow().setBackgroundDrawable(inset);
+        dialogcameraresult.show();
 
         final TextView number=row.findViewById(R.id.name_call_num);
         number.setText(newText);
@@ -655,7 +660,7 @@ public class MainActivity extends AppCompatActivity implements NavigationView.On
             @Override
             public void onClick(View v) {
                 //newText
-                dialog.dismiss();
+                dialogcameraresult.dismiss();
                 Intent intent = new Intent(MainActivity.this,SMS_MessagesChat.class);
                 intent.putExtra("LogSMSName",newText);
                 intent.putExtra("LogSMSAddress",newText);
@@ -669,12 +674,74 @@ public class MainActivity extends AppCompatActivity implements NavigationView.On
             @Override
             public void onClick(View v) {
 
-                dialog.dismiss();
+                dialogcameraresult.dismiss();
                 Intent i = new Intent(MainActivity.this,Camera_Recognition.class);
                 startActivityForResult(i, STATIC_INTEGER_VALUE);
 
             }
         });
+
+
+        //On Click Charge Card
+        RelativeLayout chargecard = row.findViewById(R.id.chargecard);
+        chargecard.setOnClickListener(new View.OnClickListener() {
+            @Override
+            public void onClick(View v) {
+                //newText
+                //dialog.dismiss();
+                showDialogChooseTYPESIM(newText);
+
+            }
+        });
+
+    }
+
+
+    public void showDialogChooseTYPESIM(final String number){
+
+        try {
+
+            AlertDialog.Builder SIMDialog = new AlertDialog.Builder(this);
+            SIMDialog.setTitle("Select Your SIM");
+            SIMDialog.setIcon(R.drawable.ic_sim);
+            String[] SIMDialogItems = {
+                    "Orange",
+                    "Vodafone",
+                    "Etisala",
+                    "WE"};
+
+
+                SIMDialog.setItems(SIMDialogItems, new DialogInterface.OnClickListener() {
+                            @Override
+                            public void onClick(DialogInterface dialog, int which) {
+                                switch (which) {
+                                    case 0:
+                                        dialogcameraresult.dismiss();
+                                        String chargingNumberorage="#"+number+"*102*";
+
+                                        break;
+                                    case 1:
+                                        dialogcameraresult.dismiss();
+                                        String chargingNumbervoda="#"+number+"*858*";
+                                        break;
+                                    case 2:
+                                        dialogcameraresult.dismiss();
+                                        String chargingNumberetisilat="*555*"+number+"#";
+                                        break;
+                                    case 3:
+                                        dialogcameraresult.dismiss();
+                                        String chargingNumberWe="#"+number+"*555*";
+                                        break;
+                                }
+                            }
+                        });
+                SIMDialog.show();
+
+            //Toast.makeText(this, "Camera Permission Error", Toast.LENGTH_SHORT).show();
+        } catch (Exception e) {
+            Toast.makeText(this, "Error", Toast.LENGTH_SHORT).show();
+            e.printStackTrace();
+        }
     }
 
 

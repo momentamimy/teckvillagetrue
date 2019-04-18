@@ -4,6 +4,7 @@ package teckvillage.developer.khaled_pc.teckvillagetrue;
 import android.Manifest;
 import android.animation.AnimatorSet;
 import android.animation.ObjectAnimator;
+import android.annotation.SuppressLint;
 import android.app.Dialog;
 import android.app.ProgressDialog;
 import android.content.Context;
@@ -91,7 +92,7 @@ import static android.app.Activity.RESULT_OK;
 /**
  * A simple {@link Fragment} subclass.
  */
-public class Main_Fagment extends Fragment implements OnBackPressedListener , LoaderManager.LoaderCallbacks<Cursor> {
+public class Main_Fagment extends Fragment implements OnBackPressedListener , LoaderManager.LoaderCallbacks<Cursor>,OpenDialPad {
 
     String lastnum = "0";
     int numbersofcall = 1;
@@ -156,9 +157,11 @@ public class Main_Fagment extends Fragment implements OnBackPressedListener , Lo
     TextView noLogcalltext;
 
 
+
     public Main_Fagment() {
         // Required empty public constructor
     }
+
 
 
     @Override
@@ -617,7 +620,7 @@ public class Main_Fagment extends Fragment implements OnBackPressedListener , Lo
         logs.setLayoutManager(lLayout1);
         logs.setItemAnimator(new DefaultItemAnimator());
         logs.hasFixedSize();
-        adapter1 = new LogAdapter(getActivity(), loglist103);
+        adapter1 = new LogAdapter(getActivity(), loglist103, this);
         logs.setAdapter(adapter1);
         //adapter1.notifyDataSetChanged();
 
@@ -1154,7 +1157,7 @@ public class Main_Fagment extends Fragment implements OnBackPressedListener , Lo
 
                     SharedPreferences.Editor editor = sharedPreferences.edit();
                     editor.putString("#" + grid_num_tv.getText().toString(), phone);
-                    editor.commit();
+                    editor.apply();
                     MyDialogSpeedDial.dismiss();
                 }
             } catch (Exception e) {
@@ -1424,7 +1427,7 @@ public class Main_Fagment extends Fragment implements OnBackPressedListener , Lo
             callLogInfos = loglist103;
 
             Log.d("size", String.valueOf(loglist103.size()));
-            adapter1 = new LogAdapter(getActivity(), groupListByDate.groupListByDate(loglist103));
+            adapter1 = new LogAdapter(getActivity(), groupListByDate.groupListByDate(loglist103),this);
             logs.setAdapter(adapter1);
             adapter1.notifyDataSetChanged();
             toggleEmptyLogRecycle(loglist103);
@@ -1554,4 +1557,11 @@ public class Main_Fagment extends Fragment implements OnBackPressedListener , Lo
         SortSearchCallList(num);
         firstclick = false;
     }
+
+    @Override
+    public void onClickEditNumber(String value) {
+        openDialPadWithNumber(value);
+    }
+
+
 }
