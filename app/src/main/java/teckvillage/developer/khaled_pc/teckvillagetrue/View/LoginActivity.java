@@ -67,6 +67,7 @@ public class LoginActivity extends AppCompatActivity implements TextWatcher {
             @Override
             public void onClick(View v) {
                 countryPicker.showDialog(getSupportFragmentManager());
+                //countryPicker.sort
             }
         });
 

@@ -16,8 +16,11 @@ import android.widget.ImageView;
 import android.widget.LinearLayout;
 import android.widget.RadioButton;
 import android.widget.RadioGroup;
+import android.widget.RelativeLayout;
 import android.widget.TextView;
 import android.widget.Toast;
+
+import com.squareup.picasso.Picasso;
 
 import java.util.ArrayList;
 import java.util.List;
@@ -53,6 +56,8 @@ public class User_Contact_Profile_From_log_list extends AppCompatActivity {
     boolean Bloceduser=false;
     private RadioButton radioSelectedButton;
     boolean isfrommycontact=false;
+    TextView country,email;
+    RelativeLayout countrylay,emaillay,phonelay;
 
     @Override
     protected void onCreate(Bundle savedInstanceState) {
@@ -71,6 +76,12 @@ public class User_Contact_Profile_From_log_list extends AppCompatActivity {
         phonenumee=findViewById(R.id.contactuserphonenumber);
         blockimagemake=findViewById(R.id.blockimagered);
         blockred=findViewById(R.id.blocktextred);
+        country=findViewById(R.id.location);
+        countrylay=findViewById(R.id.loactionlayout);
+        email=findViewById(R.id.emailusercontact);
+        emaillay=findViewById(R.id.emaillayoutcontanier);
+
+
         db=new Database_Helper(this);
         BlockInfo=new ArrayList<block>();
 
@@ -89,12 +100,10 @@ public class User_Contact_Profile_From_log_list extends AppCompatActivity {
                 isfrommycontact=false;
                 nameofcontact.setText(number);
                 phonenumee.setText(number);
-                UpdateDataAfterRequest(number);
+
             }
 
-
-
-
+            UpdateDataAfterRequest(number);
 
         }
 
@@ -333,32 +342,70 @@ public class User_Contact_Profile_From_log_list extends AppCompatActivity {
                 userDataCall.enqueue(new Callback<FetchedUserData>() {
                     @Override
                     public void onResponse(Call<FetchedUserData> call, Response<FetchedUserData> response) {
-                        if (response.isSuccessful())
-                        {
+
+                        if (response.isSuccessful()) {
+
                             FetchedUserData fetchedUserData =response.body();
 
-                            if(fetchedUserData.getUser_name()!=null){
-                                Log.w("sues",fetchedUserData.getUser_name());
-                                nameofcontact.setText(fetchedUserData.getUser_name());
-
-                            }else {
-                                if(fetchedUserData.getName()!=null){
-                                    Log.w("sues",fetchedUserData.getName());
-                                    nameofcontact.setText(fetchedUserData.getName());
+                            if(!isfrommycontact){
+                                //Update UI UserName
+                                if(fetchedUserData.getUser_name()!=null){
+                                    Log.w("sues",fetchedUserData.getUser_name());
+                                    nameofcontact.setText(fetchedUserData.getUser_name());
                                 }else {
-                                    nameofcontact.setText(number);
+                                    if(fetchedUserData.getName()!=null){
+                                        Log.w("sues",fetchedUserData.getName());
+                                        nameofcontact.setText(fetchedUserData.getName());
+                                    }else {
+                                        nameofcontact.setText(number);
+                                    }
                                 }
                             }
+
+
+
+                            //Update UI Email
                             if(fetchedUserData.getVcard_email()!=null){
-                                Log.w("sues",fetchedUserData.getVcard_email());
+                               emaillay.setVisibility(View.VISIBLE);
+                               email.setText(fetchedUserData.getVcard_email());
+                            }else {
+                                emaillay.setVisibility(View.GONE);
+                            }
+
+                            //Update UI Country
+                            if(fetchedUserData.getCountry()!=null){
+                                countrylay.setVisibility(View.VISIBLE);
+                                country.setText(fetchedUserData.getCountry());
+                            }else {
+                                countrylay.setVisibility(View.GONE);
+                            }
+
+                            //Update UI Image
+                            if(fetchedUserData.getUser_img()!=null){
+                                Picasso.with(User_Contact_Profile_From_log_list.this)
+                                        .load("http://whocaller.net/uploads/" +fetchedUserData.getUser_img())
+                                        .into(profile_pic, new com.squareup.picasso.Callback() {
+                                            @Override
+                                            public void onSuccess() {
+
+                                            }
+
+                                            @Override
+                                            public void onError() {
+
+                                            }
+                                        });
+                            }else {
+                                if(fetchedUserData.isIs_spam()){
+                                    profile_pic.setImageDrawable(getResources().getDrawable(R.drawable.ic_nurse_red));
+                                }
                             }
 
 
                             Log.w("sues",fetchedUserData.getPhone());
                             //updateUI(fetchedUserData.getVcard_email());
-                        }
-                        else
-                        {
+
+                        } else {
 
                         }
                     }

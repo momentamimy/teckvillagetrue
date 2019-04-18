@@ -17,8 +17,11 @@ import android.util.Log;
 import android.view.View;
 import android.widget.ImageView;
 import android.widget.LinearLayout;
+import android.widget.RelativeLayout;
 import android.widget.TextView;
 import android.widget.Toast;
+
+import com.squareup.picasso.Picasso;
 
 import java.util.ArrayList;
 import java.util.List;
@@ -52,6 +55,9 @@ public class User_Contact_Profile extends AppCompatActivity {
     List<block> BlockInfo;
     boolean Bloceduser=false;
     boolean Userhasimg=false;
+    TextView country,email;
+    RelativeLayout countrylay,emaillay;
+
 
 
     @Override
@@ -70,6 +76,11 @@ public class User_Contact_Profile extends AppCompatActivity {
         phonenumee=findViewById(R.id.contactuserphonenumber);
         blockimagemake=findViewById(R.id.blockimagered);
         blockred=findViewById(R.id.blocktextred);
+        country=findViewById(R.id.location);
+        countrylay=findViewById(R.id.loactionlayout);
+        email=findViewById(R.id.emailusercontact);
+        emaillay=findViewById(R.id.emaillayoutcontanier);
+
         db=new Database_Helper(this);
 
         BlockInfo=new ArrayList<block>();
@@ -314,8 +325,8 @@ public class User_Contact_Profile extends AppCompatActivity {
             userDataCall.enqueue(new Callback<FetchedUserData>() {
                 @Override
                 public void onResponse(Call<FetchedUserData> call, Response<FetchedUserData> response) {
-                    if (response.isSuccessful())
-                    {
+                    if (response.isSuccessful()) {
+
                         FetchedUserData fetchedUserData =response.body();
 
                         if(fetchedUserData.getName()!=null){
@@ -323,6 +334,49 @@ public class User_Contact_Profile extends AppCompatActivity {
                         }
                         if(fetchedUserData.getVcard_email()!=null){
                             Log.w("sues",fetchedUserData.getVcard_email());
+                        }
+
+                        //Update UI Email
+                        if(fetchedUserData.getVcard_email()!=null){
+                            emaillay.setVisibility(View.VISIBLE);
+                            email.setText(fetchedUserData.getVcard_email());
+                        }else {
+                            emaillay.setVisibility(View.GONE);
+                        }
+
+
+                        //Update UI Country
+                        if(fetchedUserData.getCountry()!=null){
+                            countrylay.setVisibility(View.VISIBLE);
+                            country.setText(fetchedUserData.getCountry());
+                        }else {
+                            countrylay.setVisibility(View.GONE);
+                        }
+
+                        //Load pic if Contact didnt have image
+                        if(!Userhasimg){
+
+                            //Update UI Image
+                            if(fetchedUserData.getUser_img()!=null){
+                                Picasso.with(User_Contact_Profile.this)
+                                        .load("http://whocaller.net/uploads/" +fetchedUserData.getUser_img())
+                                        .into(profile_pic, new com.squareup.picasso.Callback() {
+                                            @Override
+                                            public void onSuccess() {
+
+                                            }
+
+                                            @Override
+                                            public void onError() {
+
+                                            }
+                                        });
+                            }else {
+                                if(fetchedUserData.isIs_spam()){
+                                    profile_pic.setImageDrawable(getResources().getDrawable(R.drawable.ic_nurse_red));
+                                }
+                            }
+
                         }
 
 

@@ -28,6 +28,9 @@ public class FetchedUserData {
             country,
             user_img;
 
+
+
+
     public String getCountry() {
         return country;
     }
