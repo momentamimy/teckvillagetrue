@@ -5,23 +5,47 @@ package teckvillage.developer.khaled_pc.teckvillagetrue.Model.retrofit.JSON_Mapp
  */
 
 public class MessageChatModel {
- int id,sender_id,receiver_id,group_id;String text,seen, created_at, updated_at;
 
-    public MessageChatModel(int receiver_id, String text,String created_at) {
+ int id,sender_id,receiver_id,group_id,chat_rooms_id;String text,created_at, updated_at;
+ DataReceived sender;
+
+    public MessageChatModel(int id, int sender_id, int receiver_id, int group_id, int chat_rooms_id, String text, String created_at, String updated_at, DataReceived sender, boolean status, boolean showDayDate) {
+        this.id = id;
+        this.sender_id = sender_id;
+        this.receiver_id = receiver_id;
+        this.group_id = group_id;
+        this.chat_rooms_id = chat_rooms_id;
+        this.text = text;
+        this.created_at = created_at;
+        this.updated_at = updated_at;
+        this.sender = sender;
+        Status = status;
+        ShowDayDate = showDayDate;
+    }
+
+    public MessageChatModel(int receiver_id, String text, String created_at) {
         this.receiver_id = receiver_id;
         this.text = text;
         this.created_at=created_at;
     }
 
-    public MessageChatModel(int id, int sender_id, int receiver_id, int group_id, String text, String seen, String created_at, String updated_at) {
+    public MessageChatModel(int id, int sender_id, int receiver_id, int group_id,int chat_rooms_id, String text, String created_at, String updated_at) {
         this.id = id;
         this.sender_id = sender_id;
         this.receiver_id = receiver_id;
         this.group_id = group_id;
+        this.chat_rooms_id=chat_rooms_id;
         this.text = text;
-        this.seen = seen;
         this.created_at = created_at;
         this.updated_at = updated_at;
+    }
+
+    public DataReceived getSender() {
+        return sender;
+    }
+
+    public void setSender(DataReceived sender) {
+        this.sender = sender;
     }
 
     public int getId() {
@@ -52,6 +76,14 @@ public class MessageChatModel {
         return group_id;
     }
 
+    public int getChat_rooms_id() {
+        return chat_rooms_id;
+    }
+
+    public void setChat_rooms_id(int chat_rooms_id) {
+        this.chat_rooms_id = chat_rooms_id;
+    }
+
     public void setGroup_id(int group_id) {
         this.group_id = group_id;
     }
@@ -64,13 +96,6 @@ public class MessageChatModel {
         this.text = text;
     }
 
-    public String getSeen() {
-        return seen;
-    }
-
-    public void setSeen(String seen) {
-        this.seen = seen;
-    }
 
     public String getCreated_at() {
         return created_at;

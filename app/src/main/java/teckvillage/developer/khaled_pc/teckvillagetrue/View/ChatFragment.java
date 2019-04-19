@@ -6,28 +6,45 @@ import android.os.Bundle;
 import android.support.annotation.NonNull;
 import android.support.annotation.Nullable;
 import android.support.design.widget.FloatingActionButton;
+import android.support.design.widget.TabLayout;
 import android.support.v4.app.Fragment;
+import android.support.v4.view.ViewPager;
 import android.support.v7.widget.LinearLayoutManager;
 import android.support.v7.widget.RecyclerView;
+import android.util.Log;
 import android.view.LayoutInflater;
 import android.view.View;
 import android.view.ViewGroup;
 
 import java.util.ArrayList;
+import java.util.Collections;
+import java.util.List;
 
+import retrofit2.Call;
+import retrofit2.Callback;
+import retrofit2.Response;
+import retrofit2.Retrofit;
+import teckvillage.developer.khaled_pc.teckvillagetrue.Controller.CustomChatViewAdapter;
 import teckvillage.developer.khaled_pc.teckvillagetrue.Controller.CustomRecyclerViewChatAdapter;
+import teckvillage.developer.khaled_pc.teckvillagetrue.Controller.SendToChatContactsAdapters;
+import teckvillage.developer.khaled_pc.teckvillagetrue.Model.retrofit.ApiAccessToken;
+import teckvillage.developer.khaled_pc.teckvillagetrue.Model.retrofit.JSON_Mapping.DataReceivedChatUsers;
+import teckvillage.developer.khaled_pc.teckvillagetrue.Model.retrofit.JSON_Mapping.LastMessageModel;
+import teckvillage.developer.khaled_pc.teckvillagetrue.Model.retrofit.JSON_Mapping.RoomModel;
+import teckvillage.developer.khaled_pc.teckvillagetrue.Model.retrofit.WhoCallerApi;
+import teckvillage.developer.khaled_pc.teckvillagetrue.Model.retrofit.retrofitHead;
 import teckvillage.developer.khaled_pc.teckvillagetrue.R;
 import teckvillage.developer.khaled_pc.teckvillagetrue.Model.MessageInfo;
+
+import static teckvillage.developer.khaled_pc.teckvillagetrue.Chat_MessagesChat.ChatStatusChanged;
 
 /**
  * A simple {@link Fragment} subclass.
  */
 public class ChatFragment extends Fragment {
 
-    ArrayList<MessageInfo> chatMessageInfos=new ArrayList<>();
-    RecyclerView chatRecyclerView;
-    // ArrayAdapter arrayAdapter;
-    CustomRecyclerViewChatAdapter customRecyclerViewChatAdapter;
+    TabLayout tabs;
+    ViewPager viewPager;
     FloatingActionButton fab;
 
     public ChatFragment() {
@@ -46,6 +63,16 @@ public class ChatFragment extends Fragment {
     public void onViewCreated(@NonNull View view, @Nullable Bundle savedInstanceState) {
         super.onViewCreated(view, savedInstanceState);
 
+        tabs=view.findViewById(R.id.tabs);
+        viewPager=view.findViewById(R.id.appViewPager);
+
+        CustomChatViewAdapter adapter=new CustomChatViewAdapter(getChildFragmentManager());
+
+        //add style for transforming of viewpager
+        viewPager.setPageTransformer(true, adapter);
+        viewPager.setAdapter(adapter);
+        viewPager.addOnPageChangeListener(new TabLayout.TabLayoutOnPageChangeListener(tabs));
+        tabs.addOnTabSelectedListener(new TabLayout.ViewPagerOnTabSelectedListener(viewPager));
 
         fab=view.findViewById(R.id.fab);
         fab.setOnClickListener(new View.OnClickListener() {
@@ -54,23 +81,8 @@ public class ChatFragment extends Fragment {
                 startActivity(new Intent(getContext(),SendToChatActivity.class));
             }
         });
-        MessageInfo info=new MessageInfo("", "mo'men", "tyb",0, "464545","1");
-        info.setType("2");
-        MessageInfo info1=new MessageInfo("", "mo'men", "7ader",0, "4546045","1");
-        info1.setType("2");
-        MessageInfo info2=new MessageInfo("", "mo'men", "mashy",0, "454546","1");
-        info2.setType("2");
-
-        chatMessageInfos.add(info);
-        chatMessageInfos.add(info1);
-        chatMessageInfos.add(info2);
-
-        chatRecyclerView=view.findViewById(R.id.ChatRecycler);
-        chatRecyclerView.setVisibility(View.GONE);
-        customRecyclerViewChatAdapter=new CustomRecyclerViewChatAdapter(chatMessageInfos,getActivity());
-
-        chatRecyclerView.setLayoutManager(new LinearLayoutManager(getActivity()));
-        chatRecyclerView.setAdapter(customRecyclerViewChatAdapter);
-
     }
+
+
+
 }

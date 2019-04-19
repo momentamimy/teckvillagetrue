@@ -1,6 +1,7 @@
 package teckvillage.developer.khaled_pc.teckvillagetrue;
 
 import android.Manifest;
+import android.app.ProgressDialog;
 import android.content.Intent;
 import android.content.pm.PackageManager;
 import android.net.Uri;
@@ -40,6 +41,7 @@ import retrofit2.Callback;
 import retrofit2.Response;
 import retrofit2.Retrofit;
 
+import teckvillage.developer.khaled_pc.teckvillagetrue.Model.retrofit.JSON_Mapping.DataReceived;
 import teckvillage.developer.khaled_pc.teckvillagetrue.View.CheckNetworkConnection;
 import teckvillage.developer.khaled_pc.teckvillagetrue.View.ConnectionDetector;
 import teckvillage.developer.khaled_pc.teckvillagetrue.Model.retrofit.ApiAccessToken;
@@ -69,7 +71,7 @@ public class Chat_MessagesChat extends AppCompatActivity {
     FloatingActionButton send;
 
     String name, address;
-    int receiverID;
+    int receiverID,chatRoomId;
 
     ImageView callIcon, settingIcon;
 
@@ -79,7 +81,9 @@ public class Chat_MessagesChat extends AppCompatActivity {
 
     private static Chat_MessagesChat inst;
 
-    ArrayList<String> UsersNames_IDs=new ArrayList<>();
+    ProgressDialog mProgressDialog;
+
+    public static boolean ChatStatusChanged=false;
     @Override
     public void onStart() {
         super.onStart();
@@ -107,6 +111,8 @@ public class Chat_MessagesChat extends AppCompatActivity {
             }
         });
 
+        mProgressDialog = new ProgressDialog(Chat_MessagesChat.this);
+
         Cant_Replay_Layout = findViewById(R.id.Cant_Replay_Layout);
         Message_Container = findViewById(R.id.messageContainer);
 
@@ -122,13 +128,12 @@ public class Chat_MessagesChat extends AppCompatActivity {
         name = getIntent().getStringExtra("UserName");
         address = getIntent().getStringExtra("UserAddress");
         receiverID = getIntent().getIntExtra("UserID",0);
+        chatRoomId = getIntent().getIntExtra("ChatID",0);
         if (address.equals("GroupChat"))
         {
-            UsersNames_IDs=getIntent().getStringArrayListExtra("userList");
             isGroup=true;
             callIcon.setVisibility(View.GONE);
             settingIcon.setVisibility(View.GONE);
-            Log.d("ya3mya3m",UsersNames_IDs.get(0));
         }
 
         userName.setText(name);
@@ -161,7 +166,7 @@ public class Chat_MessagesChat extends AppCompatActivity {
                         JSONObject js= jsonObject.getJSONObject("message");
                         Log.d("paaalleeeeezla",js.getString("receiver_id"));
 
-                        final MessageChatModel messageChatModel=new MessageChatModel(Integer.parseInt(js.getString("id")), Integer.parseInt(js.getString("sender_id")), Integer.parseInt(js.getString("receiver_id")), -1, js.getString("text"), "1", js.getString("created_at"), js.getString("updated_at"));
+                        final MessageChatModel messageChatModel=new MessageChatModel(Integer.parseInt(js.getString("id")), Integer.parseInt(js.getString("sender_id")), Integer.parseInt(js.getString("receiver_id")), -1,Integer.parseInt(js.getString("chat_rooms_id")), js.getString("text"), js.getString("created_at"), js.getString("updated_at"));
                         runOnUiThread(new Runnable() {
 
                             @Override
@@ -171,6 +176,7 @@ public class Chat_MessagesChat extends AppCompatActivity {
                                 sortDate();
                                 chatAdapter.notifyDataSetChanged();
                                 chat_RecyclerView.smoothScrollToPosition(messageChatInfos.size()-1);
+                                ChatStatusChanged=true;
                             }
                         });
 
@@ -196,7 +202,10 @@ public class Chat_MessagesChat extends AppCompatActivity {
 
                         if (Integer.parseInt(js.getString("sender_id"))!=ApiAccessToken.getID(getApplicationContext()))
                         {
-                            final MessageChatModel messageChatModel=new MessageChatModel(Integer.parseInt(js.getString("id")), Integer.parseInt(js.getString("sender_id")), -1, Integer.parseInt(js.getString("group_id")), js.getString("text"), "1", js.getString("created_at"), js.getString("updated_at"));
+                            final MessageChatModel messageChatModel=new MessageChatModel(Integer.parseInt(js.getString("id")), Integer.parseInt(js.getString("sender_id")), -1, Integer.parseInt(js.getString("group_id")),Integer.parseInt(js.getString("chat_rooms_id")), js.getString("text"), js.getString("created_at"), js.getString("updated_at"));
+                            DataReceived sender =new DataReceived();
+                            sender.setName(name);
+                            messageChatModel.setSender(sender);
                             runOnUiThread(new Runnable() {
 
                                 @Override
@@ -206,6 +215,7 @@ public class Chat_MessagesChat extends AppCompatActivity {
                                     sortDate();
                                     chatAdapter.notifyDataSetChanged();
                                     chat_RecyclerView.smoothScrollToPosition(messageChatInfos.size()-1);
+                                    ChatStatusChanged=true;
                                 }
                             });
 
@@ -271,24 +281,29 @@ public class Chat_MessagesChat extends AppCompatActivity {
                             messageChatModel.setId((int) System.currentTimeMillis());
                             messageChatModel.setStatus(true);
                             messageChatInfos.add(messageChatModel);
-                            final int index =messageChatInfos.indexOf(messageChatModel);
                             sortDate();
-                            chatAdapter.notifyItemInserted(index);
-                            chat_RecyclerView.smoothScrollToPosition(index);
+                            final int index =messageChatInfos.indexOf(messageChatModel);
+                            chatAdapter.notifyDataSetChanged();
+                            chat_RecyclerView.smoothScrollToPosition(messageChatInfos.size()-1);
 
                             //Check internet Access
                             if (ConnectionDetector.hasInternetConnection(Chat_MessagesChat.this)) {
                                 Retrofit retrofit = retrofitHead.headOfGetorPostReturnRes();
                                 WhoCallerApi whoCallerApi = retrofit.create(WhoCallerApi.class);
-                                Call<MessageChatModel> sendMessage = whoCallerApi.sendMessage(ApiAccessToken.getAPIaccessToken(Chat_MessagesChat.this), new MessageBodyModel(receiverID, message));
+                                Call<MessageChatModel> sendMessage = whoCallerApi.sendMessage(ApiAccessToken.getAPIaccessToken(Chat_MessagesChat.this), new MessageBodyModel(receiverID, chatRoomId,message));
 
                                 sendMessage.enqueue(new Callback<MessageChatModel>() {
                                     @Override
                                     public void onResponse(Call<MessageChatModel> call, Response<MessageChatModel> response) {
-                                        messageChatInfos.set(index, response.body());
-                                        sortDate();
-                                        chatAdapter.notifyDataSetChanged();
-                                        chat_RecyclerView.smoothScrollToPosition(messageChatInfos.size() - 1);
+                                        if (response.isSuccessful())
+                                        {
+                                            messageChatInfos.set(index, response.body());
+                                            sortDate();
+                                            chatAdapter.notifyDataSetChanged();
+                                            chat_RecyclerView.smoothScrollToPosition(messageChatInfos.size() - 1);
+                                            ChatStatusChanged=true;
+                                        }
+
                                     }
 
                                     @Override
@@ -296,8 +311,8 @@ public class Chat_MessagesChat extends AppCompatActivity {
                                         Log.d("tybtybtbyfsf", t.getMessage());
                                         messageChatInfos.remove(messageChatModel);
                                         sortDate();
-                                        chatAdapter.notifyItemRemoved(messageChatInfos.size() - 1);
-                                        chat_RecyclerView.smoothScrollToPosition(messageChatInfos.size() - 1);
+                                        chatAdapter.notifyDataSetChanged();
+                                        //chat_RecyclerView.smoothScrollToPosition(messageChatInfos.size() - 1);
                                     }
                                 });
                             }
@@ -317,22 +332,30 @@ public class Chat_MessagesChat extends AppCompatActivity {
                             messageChatInfos.add(messageChatModel);
                             sortDate();
                             final int index =messageChatInfos.indexOf(messageChatModel);
-                            chatAdapter.notifyItemInserted(index);
-                            chat_RecyclerView.smoothScrollToPosition(index);
+                            chatAdapter.notifyDataSetChanged();
+                            chat_RecyclerView.smoothScrollToPosition(messageChatInfos.size()-1);
 
                             //Check internet Access
                             if (ConnectionDetector.hasInternetConnection(Chat_MessagesChat.this)) {
                                 Retrofit retrofit = retrofitHead.headOfGetorPostReturnRes();
                                 WhoCallerApi whoCallerApi = retrofit.create(WhoCallerApi.class);
-                                Call<MessageChatModel> sendMessage = whoCallerApi.sendGroupMessage(ApiAccessToken.getAPIaccessToken(Chat_MessagesChat.this), new MessageGroupBodyModel(receiverID, message));
+                                Call<MessageChatModel> sendMessage = whoCallerApi.sendGroupMessage(ApiAccessToken.getAPIaccessToken(Chat_MessagesChat.this), new MessageGroupBodyModel(receiverID,chatRoomId,message));
 
                                 sendMessage.enqueue(new Callback<MessageChatModel>() {
                                     @Override
                                     public void onResponse(Call<MessageChatModel> call, Response<MessageChatModel> response) {
-                                        messageChatInfos.set(index, response.body());
-                                        sortDate();
-                                        chatAdapter.notifyDataSetChanged();
-                                        chat_RecyclerView.smoothScrollToPosition(messageChatInfos.size() - 1);
+                                        if (response.isSuccessful()) {
+                                            Log.d("tybtybtbyfsf", response.toString());
+                                            messageChatInfos.set(index, response.body());
+                                            sortDate();
+                                            chatAdapter.notifyDataSetChanged();
+                                            chat_RecyclerView.smoothScrollToPosition(messageChatInfos.size() - 1);
+                                            ChatStatusChanged = true;
+                                        }
+                                        else
+                                        {
+                                            Log.d("tybtybtbyfsf", "failed");
+                                        }
                                     }
 
                                     @Override
@@ -341,7 +364,7 @@ public class Chat_MessagesChat extends AppCompatActivity {
                                         messageChatInfos.remove(messageChatModel);
                                         sortDate();
                                         chatAdapter.notifyItemRemoved(messageChatInfos.size() - 1);
-                                        chat_RecyclerView.smoothScrollToPosition(messageChatInfos.size() - 1);
+                                        //chat_RecyclerView.smoothScrollToPosition(messageChatInfos.size() - 1);
                                     }
                                 });
                             }
@@ -366,11 +389,17 @@ public class Chat_MessagesChat extends AppCompatActivity {
                 if (!isGroup) {
                     Retrofit retrofit = retrofitHead.headOfGetorPostReturnRes();
                     WhoCallerApi whoCallerApi = retrofit.create(WhoCallerApi.class);
-                    Call<ListMessagesChatModel> MessageWhenOpenChat = whoCallerApi.getMessageWhenOpenChat(ApiAccessToken.getAPIaccessToken(Chat_MessagesChat.this), String.valueOf(receiverID));
+                    Call<ListMessagesChatModel> MessageWhenOpenChat = whoCallerApi.getMessageWhenOpenChat(ApiAccessToken.getAPIaccessToken(Chat_MessagesChat.this), String.valueOf(receiverID),String.valueOf(chatRoomId));
 
+                    mProgressDialog = new ProgressDialog(Chat_MessagesChat.this);
+                    mProgressDialog.setIndeterminate(true);
+                    mProgressDialog.setMessage("Loading...");
+                    mProgressDialog.show();
                     MessageWhenOpenChat.enqueue(new Callback<ListMessagesChatModel>() {
                         @Override
                         public void onResponse(Call<ListMessagesChatModel> call, Response<ListMessagesChatModel> response) {
+                            if (mProgressDialog.isShowing())
+                                mProgressDialog.dismiss();
                             messageChatInfos = response.body().getMessages();
                             sortDate();
                             chatAdapter = new messages_list_chat_adapter(Chat_MessagesChat.this, messageChatInfos, ApiAccessToken.getID(getApplicationContext()));
@@ -382,7 +411,8 @@ public class Chat_MessagesChat extends AppCompatActivity {
 
                         @Override
                         public void onFailure(Call<ListMessagesChatModel> call, Throwable t) {
-
+                            if (mProgressDialog.isShowing())
+                                mProgressDialog.dismiss();
                         }
                     });
                 }
@@ -390,14 +420,21 @@ public class Chat_MessagesChat extends AppCompatActivity {
                 {
                     Retrofit retrofit = retrofitHead.headOfGetorPostReturnRes();
                     WhoCallerApi whoCallerApi = retrofit.create(WhoCallerApi.class);
-                    Call<ListMessagesChatModel> MessageWhenOpenGroupChat = whoCallerApi.getMessageWhenOpenGroupChat(ApiAccessToken.getAPIaccessToken(Chat_MessagesChat.this), String.valueOf(receiverID));
+                    Call<ListMessagesChatModel> MessageWhenOpenGroupChat = whoCallerApi.getMessageWhenOpenGroupChat(ApiAccessToken.getAPIaccessToken(Chat_MessagesChat.this), String.valueOf(receiverID),String.valueOf(chatRoomId));
+
+                    mProgressDialog = new ProgressDialog(Chat_MessagesChat.this);
+                    mProgressDialog.setIndeterminate(true);
+                    mProgressDialog.setMessage("Loading...");
+                    mProgressDialog.show();
 
                     MessageWhenOpenGroupChat.enqueue(new Callback<ListMessagesChatModel>() {
                         @Override
                         public void onResponse(Call<ListMessagesChatModel> call, Response<ListMessagesChatModel> response) {
+                            if (mProgressDialog.isShowing())
+                                mProgressDialog.dismiss();
                             messageChatInfos = response.body().getMessages();
                             sortDate();
-                            chatAdapter = new messages_list_chat_adapter(Chat_MessagesChat.this, messageChatInfos, ApiAccessToken.getID(getApplicationContext()),UsersNames_IDs);
+                            chatAdapter = new messages_list_chat_adapter(Chat_MessagesChat.this, messageChatInfos, ApiAccessToken.getID(getApplicationContext()),true);
                             LinearLayoutManager linearLayoutManager = new LinearLayoutManager(getApplicationContext());
                             linearLayoutManager.setStackFromEnd(true);
                             chat_RecyclerView.setLayoutManager(linearLayoutManager);
@@ -406,7 +443,8 @@ public class Chat_MessagesChat extends AppCompatActivity {
 
                         @Override
                         public void onFailure(Call<ListMessagesChatModel> call, Throwable t) {
-
+                            if (mProgressDialog.isShowing())
+                                mProgressDialog.dismiss();
                         }
                     });
                 }

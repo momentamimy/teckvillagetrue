@@ -8,6 +8,15 @@ int chatRoomId;
         String img;
         String message;
         DateModel date;
+        String phone;
+
+    public String getPhone() {
+        return phone;
+    }
+
+    public void setPhone(String phone) {
+        this.phone = phone;
+    }
 
     public int getChatRoomId() {
         return chatRoomId;

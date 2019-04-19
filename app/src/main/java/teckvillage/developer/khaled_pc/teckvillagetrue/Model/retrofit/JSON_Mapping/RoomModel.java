@@ -6,6 +6,15 @@ public class RoomModel {
             int id;
             String name;
             String img;
+            String phone;
+
+    public String getPhone() {
+        return phone;
+    }
+
+    public void setPhone(String phone) {
+        this.phone = phone;
+    }
 
     public int getChatRoomId() {
         return chatRoomId;

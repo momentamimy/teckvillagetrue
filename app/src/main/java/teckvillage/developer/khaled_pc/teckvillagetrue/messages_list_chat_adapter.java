@@ -21,6 +21,7 @@ import java.util.Date;
 import java.util.List;
 
 
+import teckvillage.developer.khaled_pc.teckvillagetrue.Model.retrofit.JSON_Mapping.DataReceived;
 import teckvillage.developer.khaled_pc.teckvillagetrue.Model.retrofit.JSON_Mapping.MessageChatModel;
 
 /**
@@ -32,7 +33,7 @@ public class messages_list_chat_adapter extends RecyclerView.Adapter<messages_li
     private Context context;
     private List<MessageChatModel> contact_list;
     private int contactID;
-    ArrayList<String> UsersNames_IDs=null;
+    boolean isGroup=false;
 
     public class MyViewHolder extends RecyclerView.ViewHolder {
         public TextView text_sms;
@@ -56,16 +57,16 @@ public class messages_list_chat_adapter extends RecyclerView.Adapter<messages_li
         this.context = context;
         this.contact_list = contact_list;
         this.contactID=contactID;
-        Log.d("TomyConstructor","run");
     }
 
-    public messages_list_chat_adapter(Context context, List<MessageChatModel> contact_list,int contactID,ArrayList<String> UsersNames_IDs) {
+
+    public messages_list_chat_adapter(Context context, List<MessageChatModel> contact_list,int contactID,boolean isGroup) {
         this.context = context;
         this.contact_list = contact_list;
         this.contactID=contactID;
-        this.UsersNames_IDs=UsersNames_IDs;
-        Log.d("TomyConstructor","run");
+        this.isGroup=isGroup;
     }
+
 
 
     @Override
@@ -131,25 +132,17 @@ public class messages_list_chat_adapter extends RecyclerView.Adapter<messages_li
             {
                 holder.text_sms.setText(data.getText());
             }
-            else if (holder.getItemViewType()==0 && UsersNames_IDs!=null)
+            else if (holder.getItemViewType()==0 && isGroup)
             {
-                for (int i=0;i<UsersNames_IDs.size();i++)
-                {
-                    String[] strings= UsersNames_IDs.get(i).split("::");
-                    String UserName=strings[0];
-                    String ID=strings[1];
-                    if (data.getSender_id()==Integer.parseInt(ID))
-                    {
-                        Spannable spannable = new SpannableString(UserName+"\n"+data.getText());
+                DataReceived sender=data.getSender();
+                 Spannable spannable = new SpannableString(sender.getName()+"\n"+data.getText());
 
                         spannable.setSpan(new ForegroundColorSpan(context.getResources().getColor(R.color.colorPrimaryDark)),
-                                (UserName+":\n"+data.getText()).indexOf(UserName),
-                                (UserName+":\n"+data.getText()).indexOf(UserName) + UserName.length(),
+                                (sender.getName()+":\n"+data.getText()).indexOf(sender.getName()),
+                                (sender.getName()+":\n"+data.getText()).indexOf(sender.getName()) + sender.getName().length(),
                                 Spannable.SPAN_EXCLUSIVE_EXCLUSIVE);
 
                         holder.text_sms.setText(spannable, TextView.BufferType.SPANNABLE);
-                    }
-                }
             }
             else
             {

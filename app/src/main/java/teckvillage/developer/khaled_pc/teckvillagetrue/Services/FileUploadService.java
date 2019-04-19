@@ -66,12 +66,12 @@ public class FileUploadService extends JobIntentService {
          */
 
 
-        try {
+        /*try {
             getVcardString();
 
         } catch (IOException e) {
 
-        }
+        }*/
 
 
         File file = null;

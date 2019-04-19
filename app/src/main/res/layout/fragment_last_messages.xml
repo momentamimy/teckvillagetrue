@@ -1,0 +1,40 @@
+<?xml version="1.0" encoding="utf-8"?>
+<FrameLayout xmlns:android="http://schemas.android.com/apk/res/android"
+    xmlns:tools="http://schemas.android.com/tools"
+    android:layout_width="match_parent"
+    android:layout_height="match_parent"
+    xmlns:app="http://schemas.android.com/apk/res-auto"
+    tools:context=".View.ChatFragment">
+    <RelativeLayout
+        android:layout_width="match_parent"
+        android:layout_height="match_parent">
+
+        <TextView
+            android:id="@+id/NoResult"
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:text="no result check internet connection"
+            android:layout_centerInParent="true"
+            android:textSize="15dp"
+            android:visibility="gone"/>
+
+        <ImageView
+            android:id="@+id/refresh"
+            android:layout_margin="20dp"
+            android:layout_width="60dp"
+            android:layout_height="60dp"
+            android:layout_centerHorizontal="true"
+            android:layout_below="@+id/NoResult"
+            android:src="@drawable/ic_rotate"
+            android:background="?android:attr/selectableItemBackground"
+            android:visibility="gone"/>
+
+        <android.support.v7.widget.RecyclerView
+            android:layout_below="@id/toolbar"
+            android:id="@+id/ChatRecycler"
+            android:layout_width="match_parent"
+            android:layout_height="match_parent">
+        </android.support.v7.widget.RecyclerView>
+
+    </RelativeLayout>
+</FrameLayout>

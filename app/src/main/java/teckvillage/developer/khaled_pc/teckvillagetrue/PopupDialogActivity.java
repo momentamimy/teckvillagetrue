@@ -1,28 +1,41 @@
 package teckvillage.developer.khaled_pc.teckvillagetrue;
 
+import android.Manifest;
 import android.app.Activity;
 import android.app.Dialog;
 import android.content.Context;
 import android.content.DialogInterface;
+import android.content.Intent;
+import android.content.pm.PackageManager;
 import android.graphics.Bitmap;
 import android.graphics.Color;
 import android.graphics.drawable.BitmapDrawable;
 import android.graphics.drawable.ColorDrawable;
+import android.graphics.drawable.Drawable;
+import android.net.Uri;
 import android.os.Build;
+import android.provider.ContactsContract;
 import android.renderscript.Allocation;
 import android.renderscript.Element;
 import android.renderscript.RenderScript;
 import android.renderscript.ScriptIntrinsicBlur;
 import android.os.Bundle;
+import android.support.v4.app.ActivityCompat;
 import android.support.v7.widget.Toolbar;
 import android.text.TextUtils;
 import android.util.Log;
 import android.util.TypedValue;
 import android.view.View;
 import android.view.Window;
+import android.widget.Button;
 import android.widget.ImageView;
+import android.widget.ProgressBar;
 import android.widget.RelativeLayout;
 import android.widget.TextView;
+import android.widget.Toast;
+
+import com.squareup.picasso.Picasso;
+import com.squareup.picasso.Target;
 
 import retrofit2.Call;
 import retrofit2.Callback;
@@ -36,9 +49,9 @@ import teckvillage.developer.khaled_pc.teckvillagetrue.Model.retrofit.WhoCallerA
 import teckvillage.developer.khaled_pc.teckvillagetrue.Model.retrofit.retrofitHead;
 import teckvillage.developer.khaled_pc.teckvillagetrue.View.CheckNetworkConnection;
 import teckvillage.developer.khaled_pc.teckvillagetrue.View.ConnectionDetector;
+import teckvillage.developer.khaled_pc.teckvillagetrue.View.User_Contact_Profile_From_log_list;
 
 public class PopupDialogActivity extends Activity {
-
 
 
     TextView CallerName;
@@ -50,13 +63,18 @@ public class PopupDialogActivity extends Activity {
     TextView CallerNumber;
     TextView CallerNumberType;
 
+    RelativeLayout IconCall, IconMessage, IconSave, IconBlock;
+    Button viewProfile;
+
+    ImageView CallerImageProgress;
+    ProgressBar CallerProgress;
     Get_Calls_Log get_calls_log;
 
     @Override
     protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
         setContentView(R.layout.activity_popup_dialog);
-        String number=getIntent().getStringExtra("Number");
+        String number = getIntent().getStringExtra("Number");
         MyCustomAssignNumDialog(number);
         WhoCallerDialog.setOnDismissListener(new DialogInterface.OnDismissListener() {
             @Override
@@ -68,35 +86,97 @@ public class PopupDialogActivity extends Activity {
     }
 
     Dialog WhoCallerDialog;
+
     public void MyCustomAssignNumDialog(final String number) {
-        WhoCallerDialog= new Dialog(this, R.style.DialogTheme);
+        WhoCallerDialog = new Dialog(this, R.style.DialogTheme);
         WhoCallerDialog.requestWindowFeature(Window.FEATURE_NO_TITLE);
         WhoCallerDialog.setContentView(R.layout.who_caller_dialog);
         WhoCallerDialog.show();
         Window window = WhoCallerDialog.getWindow();
         window.setLayout(Toolbar.LayoutParams.MATCH_PARENT, Toolbar.LayoutParams.WRAP_CONTENT);
         WhoCallerDialog.getWindow().setBackgroundDrawable(new ColorDrawable(Color.TRANSPARENT));
-        CallerName=WhoCallerDialog.findViewById(R.id.Caller_Name);
-        CallerCountry=WhoCallerDialog.findViewById(R.id.Caller_Country);
-        ProfileBlurLayOut=WhoCallerDialog.findViewById(R.id.ProfileBlurLayOut);
-        CallerImage=WhoCallerDialog.findViewById(R.id.Caller_Image);
-        CloseDialog=WhoCallerDialog.findViewById(R.id.Close_Dialog);
+        CallerName = WhoCallerDialog.findViewById(R.id.Caller_Name);
+        CallerCountry = WhoCallerDialog.findViewById(R.id.Caller_Country);
+        ProfileBlurLayOut = WhoCallerDialog.findViewById(R.id.ProfileBlurLayOut);
+        CallerImage = WhoCallerDialog.findViewById(R.id.Caller_Image);
+        CloseDialog = WhoCallerDialog.findViewById(R.id.Close_Dialog);
 
-        CallerNumber=WhoCallerDialog.findViewById(R.id.Caller_Number);
-        CallerNumberType=WhoCallerDialog.findViewById(R.id.Caller_Number_Type);
+        CallerNumber = WhoCallerDialog.findViewById(R.id.Caller_Number);
+        CallerNumberType = WhoCallerDialog.findViewById(R.id.Caller_Number_Type);
+
+        CallerImageProgress = WhoCallerDialog.findViewById(R.id.progress_contact_img);
+        CallerProgress = WhoCallerDialog.findViewById(R.id.progress);
+
+        IconCall = WhoCallerDialog.findViewById(R.id.Call_Icon_Layout);
+        IconMessage = WhoCallerDialog.findViewById(R.id.Message_Icon_Layout);
+        IconSave = WhoCallerDialog.findViewById(R.id.Save_Icon_Layout);
+        IconBlock = WhoCallerDialog.findViewById(R.id.Block_Icon_Layout);
+        viewProfile=WhoCallerDialog.findViewById(R.id.ViewProfile);
+
+        viewProfile.setOnClickListener(new View.OnClickListener() {
+            @Override
+            public void onClick(View v) {
+                Intent intent = new Intent(getApplicationContext(), User_Contact_Profile_From_log_list.class);
+                    intent.putExtra("ContactNUm",number);
+                    startActivity(intent);
+                }
+        });
+
+        IconCall.setOnClickListener(new View.OnClickListener() {
+            @Override
+            public void onClick(View v) {
+                if (ActivityCompat.checkSelfPermission(getApplicationContext(), Manifest.permission.CALL_PHONE) == PackageManager.PERMISSION_GRANTED) {
+                    Intent intent = new Intent(Intent.ACTION_CALL);
+                    intent.setData(Uri.parse("tel:" + number));
+                    startActivity(intent);
+                }
+            }
+        });
+
+        IconMessage.setOnClickListener(new View.OnClickListener() {
+            @Override
+            public void onClick(View v) {
+                get_calls_log=new Get_Calls_Log(getApplicationContext());
+                String contactName= (String) get_calls_log.getContactName(number);
+                Intent intent=new Intent(getApplicationContext(), SMS_MessagesChat.class);
+                if (TextUtils.isEmpty(contactName)) {
+                    intent.putExtra("LogSMSName",number);
+                }else {
+                    intent.putExtra("LogSMSName",contactName);
+                }
+                intent.putExtra("LogSMSAddress",number);
+                startActivity(intent);
+            }
+        });
+
+        IconSave.setOnClickListener(new View.OnClickListener() {
+            @Override
+            public void onClick(View v) {
+                Intent intent = new Intent(ContactsContract.Intents.Insert.ACTION);
+                intent.setType(ContactsContract.RawContacts.CONTENT_TYPE);
+                intent.putExtra(ContactsContract.Intents.Insert.PHONE, number);
+                if (!CallerName.getText().toString().equals(number))
+                {
+                    intent.putExtra(ContactsContract.Intents.Insert.NAME, CallerName.getText().toString());
+                }
+                startActivity(intent);
+            }
+        });
+
+        IconBlock.setOnClickListener(new View.OnClickListener() {
+            @Override
+            public void onClick(View v) {
+                //khaled
+                WhoCallerDialog.dismiss();
+            }
+        });
 
         get_calls_log=new Get_Calls_Log(this);
         String contactName= (String) get_calls_log.getContactName(number);
         Bitmap contactPhoto=  get_calls_log.retrieveContactPhoto(number);
-        FetchedUserData userData=getUserDataApi(getApplicationContext(),number);
         if (!TextUtils.isEmpty(contactName))
         {
             CallerName.setText(contactName);
-            CallerNumber.setText(number);
-        }
-        if (userData!=null)
-        {
-            CallerName.setText(userData.getName());
             CallerNumber.setText(number);
         }
         else
@@ -112,7 +192,13 @@ public class PopupDialogActivity extends Activity {
             CallerImage.setImageBitmap(contactPhoto);
             Bitmap resultBmp = blurBuilder.blur(this, contactPhoto);
             ProfileBlurLayOut.setBackgroundDrawable(new BitmapDrawable(resultBmp));
-
+        }
+        //khaled Block
+        boolean isBlock=false;
+        if (number.length()<=4||isBlock)
+        {
+            ProfileBlurLayOut.setBackgroundColor(getResources().getColor(R.color.redColor));
+            CallerImage.setImageResource(R.drawable.ic_nurse_red);
         }
 
         CloseDialog.setOnClickListener(new View.OnClickListener() {
@@ -122,7 +208,7 @@ public class PopupDialogActivity extends Activity {
             }
         });
 
-
+        getUserDataApi(getApplicationContext(),number);
     }
 
 
@@ -131,7 +217,7 @@ public class PopupDialogActivity extends Activity {
     }
 
 
-    public class BlurBuilder {
+    public static class BlurBuilder {
 
         private static final float BITMAP_SCALE = 0.15f;
         private static final float BLUR_RADIUS = 15f;
@@ -163,8 +249,8 @@ public class PopupDialogActivity extends Activity {
         }
     }
 
-    public FetchedUserData getUserDataApi(Context context, String number) {
-        final FetchedUserData[] UserData = {null};
+    public void getUserDataApi(Context context, String number) {
+
         if (CheckNetworkConnection.hasInternetConnection(context)) {
 
             //Check internet Access
@@ -175,39 +261,93 @@ public class PopupDialogActivity extends Activity {
                 WhoCallerApi whoCallerApi = retrofit.create(WhoCallerApi.class);
                 Call<FetchedUserData> userDataCall = whoCallerApi.fetchUserData(ApiAccessToken.getAPIaccessToken(context), bodyNumberModel);
 
+                CallerImageProgress.setVisibility(View.VISIBLE);
+                CallerProgress.setVisibility(View.VISIBLE);
+
                 userDataCall.enqueue(new Callback<FetchedUserData>() {
                     @Override
                     public void onResponse(Call<FetchedUserData> call, Response<FetchedUserData> response) {
                         if (response.isSuccessful())
                         {
                             Log.d("userNamePaleeez", response.body().getName());
-                            UserData[0] =response.body();
-                            updateCard(UserData[0]);
+                            FetchedUserData resp =response.body();
+                            updateCard(resp);
+
                         }
                         else
                         {
-                            UserData[0]=null;
+                            Log.d("onFailure", "other error");
+                            CallerImageProgress.setVisibility(View.GONE);
+                            CallerProgress.setVisibility(View.GONE);
                         }
                     }
 
                     @Override
                     public void onFailure(Call<FetchedUserData> call, Throwable t) {
-                        UserData[0]=null;
+                        Log.d("onFailure", t.getMessage());
+                        CallerImageProgress.setVisibility(View.GONE);
+                        CallerProgress.setVisibility(View.GONE);
                     }
                 });
             }else {
-                UserData[0]=null;
+
             }
         }else{
-            UserData[0]=null;
+
         }
-        return UserData[0];
+
     }
 
-    public void updateCard(FetchedUserData userData)
+    public void updateCard(final FetchedUserData userData)
     {
+        if (userData.isIs_spam())
+        {
+            ProfileBlurLayOut.setBackgroundColor(getResources().getColor(R.color.redColor));
+        }
 
         CallerName.setText(userData.getName());
         CallerNumber.setText(userData.getFull_phone());
+        CallerCountry.setText(userData.getCountry());
+        Picasso.with(getApplicationContext()).load("http://whocaller.net/uploads/"+userData.getUser_img())
+                .into(CallerImage, new com.squareup.picasso.Callback() {
+                    @Override
+                    public void onSuccess() {
+                        CallerImageProgress.setVisibility(View.GONE);
+                        CallerProgress.setVisibility(View.GONE);
+                    }
+
+                    @Override
+                    public void onError() {
+                        if (userData.isIs_spam())
+                        {
+                            CallerImage.setImageResource(R.drawable.ic_nurse_red);
+                        }
+                        else
+                        {
+                            CallerImage.setImageResource(R.drawable.ic_nurse);
+                        }
+                        CallerImageProgress.setVisibility(View.GONE);
+                        CallerProgress.setVisibility(View.GONE);
+                    }
+                });
+        Target target = new Target() {
+            @Override
+            public void onBitmapLoaded(Bitmap bitmap, Picasso.LoadedFrom from) {
+                // Bitmap is loaded, use image here
+                BlurBuilder blurBuilder=new BlurBuilder();
+                Bitmap resultBmp = blurBuilder.blur(getApplicationContext(), bitmap);
+                ProfileBlurLayOut.setBackgroundDrawable(new BitmapDrawable(resultBmp));
+            }
+
+            @Override
+            public void onBitmapFailed(Drawable errorDrawable) {
+
+            }
+            @Override
+            public void onPrepareLoad(Drawable placeHolderDrawable) {
+
+            }
+        };
+        Picasso.with(getApplicationContext()).load("http://whocaller.net/uploads/"+userData.getUser_img()).into(target);
     }
 }

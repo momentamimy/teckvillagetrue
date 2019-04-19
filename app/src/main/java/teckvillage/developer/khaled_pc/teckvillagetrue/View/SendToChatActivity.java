@@ -1,6 +1,7 @@
 package teckvillage.developer.khaled_pc.teckvillagetrue.View;
 
 import android.app.Dialog;
+import android.app.ProgressDialog;
 import android.content.Context;
 import android.content.Intent;
 import android.graphics.Color;
@@ -65,10 +66,14 @@ public class SendToChatActivity extends AppCompatActivity {
     static TextView textHint;
     static FloatingActionButton fab;
 
+    ProgressDialog mProgressDialog;
+
     @Override
     protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
         setContentView(R.layout.activity_send_to_chat);
+
+        mProgressDialog = new ProgressDialog(SendToChatActivity.this);
         //getUserDataApi(getApplicationContext(),"0121122");
         MultipleRecivers=false;
         userContactsData=new ArrayList<>();
@@ -113,6 +118,7 @@ public class SendToChatActivity extends AppCompatActivity {
             public void onClick(View v) {
                 if (!MultipleRecivers)
                 {
+                    /*
                     String num=sendToEditText.getText().toString().replace(" ","");
                     String name= (String) get_user_contacts.getContactName(num,getApplicationContext());
 
@@ -127,6 +133,7 @@ public class SendToChatActivity extends AppCompatActivity {
                         intent.putExtra("LogSMSName",name);
                     }
                     startActivity(intent);
+                    */
                 }
                 else
                 {
@@ -135,8 +142,9 @@ public class SendToChatActivity extends AppCompatActivity {
                         RoomModel user=addingUserContactsData.get(0);
                         Intent intent=new Intent(getApplicationContext(), Chat_MessagesChat.class);
                         intent.putExtra("UserName", user.getName());
-                        //intent.putExtra("UserAddress", user.getFull_phone());
+                        intent.putExtra("UserAddress", user.getPhone());
                         intent.putExtra("UserID", user.getId());
+                        intent.putExtra("ChatID", user.getChatRoomId());
                         startActivity(intent);
                     }
                     else
@@ -206,26 +214,43 @@ public class SendToChatActivity extends AppCompatActivity {
                 WhoCallerApi whoCallerApi = retrofit.create(WhoCallerApi.class);
                 Call<DataReceivedChatUsers> MessageWhenOpenChat = whoCallerApi.getallChatContact(ApiAccessToken.getAPIaccessToken(SendToChatActivity.this));
 
+                mProgressDialog = new ProgressDialog(SendToChatActivity.this);
+                mProgressDialog.setIndeterminate(true);
+                mProgressDialog.setMessage("Loading...");
+                mProgressDialog.show();
+
                 MessageWhenOpenChat.enqueue(new Callback<DataReceivedChatUsers>() {
                     @Override
                     public void onResponse(Call<DataReceivedChatUsers> call, Response<DataReceivedChatUsers> response) {
                         if (response.isSuccessful())
                         {
+                            if (mProgressDialog.isShowing())
+                                mProgressDialog.dismiss();
 
                             Log.d("dadadawqffsxzdf","sucees");
-                            userContactsData= response.body().getRoom();
+                            userContactsData= new ArrayList<>();
+
+                            for (int i=0;i<response.body().getRoom().size();i++) {
+                                RoomModel roomModel=response.body().getRoom().get(i);
+                                if (roomModel.getType().equals("user")) { userContactsData.add(roomModel); }
+                            }
+
                             sendToContactsAdapters=new SendToChatContactsAdapters(getApplicationContext(),userContactsData);
                             mRecyclerView.setLayoutManager(new LinearLayoutManager(getApplicationContext()));
                             mRecyclerView.setAdapter(sendToContactsAdapters);
                         }
                         else
                         {
+                            if (mProgressDialog.isShowing())
+                                mProgressDialog.dismiss();
                             Log.d("dadadawqffsxzdf","failed");
                         }
                     }
 
                     @Override
                     public void onFailure(Call<DataReceivedChatUsers> call, Throwable t) {
+                        if (mProgressDialog.isShowing())
+                            mProgressDialog.dismiss();
                         Log.d("dadadawqffsxzdf","failure");
                     }
                 });
@@ -318,20 +343,31 @@ public class SendToChatActivity extends AppCompatActivity {
                 Retrofit retrofit = retrofitHead.headOfGetorPostReturnRes();
                 WhoCallerApi whoCallerApi = retrofit.create(WhoCallerApi.class);
                 Call<GroupChatResultModel> GroupChat = whoCallerApi.createGroup(ApiAccessToken.getAPIaccessToken(SendToChatActivity.this),bodyModel);
+                        mProgressDialog = new ProgressDialog(SendToChatActivity.this);
+                        mProgressDialog.setIndeterminate(true);
+                        mProgressDialog.setMessage("Loading...");
+                        mProgressDialog.show();
                 GroupChat.enqueue(new Callback<GroupChatResultModel>() {
                     @Override
                     public void onResponse(Call<GroupChatResultModel> call, Response<GroupChatResultModel> response) {
+                        if (mProgressDialog.isShowing())
+                            mProgressDialog.dismiss();
                         Log.d("meeeeesheeey22", response.body().getGroup().getName());
                         GroupChatModel groupChatModel=response.body().getGroup();
+                        int chatRoomId=Integer.parseInt(response.body().getChat_rooms_id());
                         Intent intent=new Intent(getApplicationContext(), Chat_MessagesChat.class);
+                        Log.d("meeeeesheafafeey22", String.valueOf(response.body().getGroup().getId()));
                         intent.putExtra("UserName", groupChatModel.getName());
                         intent.putExtra("UserAddress", "GroupChat");
                         intent.putExtra("UserID", groupChatModel.getId());
+                        intent.putExtra("ChatID", chatRoomId);
                         startActivity(intent);
                     }
 
                     @Override
                     public void onFailure(Call<GroupChatResultModel> call, Throwable t) {
+                        if (mProgressDialog.isShowing())
+                            mProgressDialog.dismiss();
                         Log.d("meeeeesheeey22", t.getMessage());
                     }
                 });

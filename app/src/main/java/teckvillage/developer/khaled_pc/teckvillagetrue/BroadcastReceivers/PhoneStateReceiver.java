@@ -13,6 +13,7 @@ import android.database.Cursor;
 import android.graphics.Bitmap;
 import android.graphics.PixelFormat;
 import android.graphics.drawable.BitmapDrawable;
+import android.graphics.drawable.Drawable;
 import android.media.AudioManager;
 import android.media.RingtoneManager;
 import android.net.Uri;
@@ -35,11 +36,14 @@ import android.view.View;
 import android.view.WindowManager;
 import android.widget.ImageView;
 import android.widget.LinearLayout;
+import android.widget.ProgressBar;
 import android.widget.RelativeLayout;
 import android.widget.TextView;
 import android.widget.Toast;
 
 
+import com.squareup.picasso.Picasso;
+import com.squareup.picasso.Target;
 
 import java.lang.reflect.Method;
 import java.util.Date;
@@ -69,6 +73,7 @@ import teckvillage.developer.khaled_pc.teckvillagetrue.View.ConnectionDetector;
 import teckvillage.developer.khaled_pc.teckvillagetrue.View.SendToChatActivity;
 
 import static android.content.Context.MODE_PRIVATE;
+import static com.facebook.FacebookSdk.getApplicationContext;
 
 public class PhoneStateReceiver extends BroadcastReceiver {
 
@@ -81,6 +86,9 @@ public class PhoneStateReceiver extends BroadcastReceiver {
 
     TextView CallerNumber ;
     TextView CallerNumberType ;
+
+    ImageView CallerImageProgress;
+    ProgressBar CallerProgress;
 
     private static final String TAG = "State";
     public static WindowManager wm = null;
@@ -181,8 +189,6 @@ public class PhoneStateReceiver extends BroadcastReceiver {
 
     public void DisplayDialogOverApps(Context context, String Number) {
 
-
-
         wm = (WindowManager) context.getSystemService(Context.WINDOW_SERVICE);
         int LAYOUT_FLAG;
         if (Build.VERSION.SDK_INT >= Build.VERSION_CODES.O) {
@@ -209,16 +215,29 @@ public class PhoneStateReceiver extends BroadcastReceiver {
 
         CallerNumber = view1.findViewById(R.id.Caller_Number);
         CallerNumberType = view1.findViewById(R.id.Caller_Number_Type);
-        getUserDataApi(context,Number);
+
+        CallerImageProgress=view1.findViewById(R.id.progress_contact_img);
+        CallerProgress=view1.findViewById(R.id.progress);
+
+
         String contactName= (String) get_calls_log.getContactName(Number);
         if (get_calls_log.contactExists(Number))
         {
             CallerName.setText(contactName);
+            CallerNumber.setText(Number);
         }
         else
         {
             CallerName.setText(Number);
             CallerNumber.setText(Number);
+        }
+
+        //khaled Block
+        boolean isBlock=false;
+        if (Number.length()<=4||isBlock)
+        {
+            CallerProfileLayout.setBackgroundColor(context.getResources().getColor(R.color.redColor));
+            CallerImage.setImageResource(R.drawable.ic_nurse_red);
         }
 
         Bitmap contactPhoto =get_calls_log.retrieveContactPhoto(Number);
@@ -254,6 +273,8 @@ public class PhoneStateReceiver extends BroadcastReceiver {
         }
         wm.addView(view1, params1);
         viewIsAdded = true;
+
+        getUserDataApi(context,Number);
     }
 
     public int dpToPx(float dp, Context context) {
@@ -719,7 +740,7 @@ public class PhoneStateReceiver extends BroadcastReceiver {
         }
     }
 
-    public void getUserDataApi(Context context, String number) {
+    public void getUserDataApi(final Context context, String number) {
 
         if (CheckNetworkConnection.hasInternetConnection(context)) {
 
@@ -731,6 +752,9 @@ public class PhoneStateReceiver extends BroadcastReceiver {
                 WhoCallerApi whoCallerApi = retrofit.create(WhoCallerApi.class);
                 Call<FetchedUserData> userDataCall = whoCallerApi.fetchUserData(ApiAccessToken.getAPIaccessToken(context), bodyNumberModel);
 
+                CallerImageProgress.setVisibility(View.VISIBLE);
+                CallerProgress.setVisibility(View.VISIBLE);
+
                 userDataCall.enqueue(new Callback<FetchedUserData>() {
                     @Override
                     public void onResponse(Call<FetchedUserData> call, Response<FetchedUserData> response) {
@@ -739,16 +763,21 @@ public class PhoneStateReceiver extends BroadcastReceiver {
                             Log.d("userNamePaleeez", response.body().getName());
                             FetchedUserData resp =response.body();
                             updateCard(resp);
+
                         }
                         else
                         {
                             Log.d("onFailure", "other error");
+                            CallerImageProgress.setVisibility(View.GONE);
+                            CallerProgress.setVisibility(View.GONE);
                         }
                     }
 
                     @Override
                     public void onFailure(Call<FetchedUserData> call, Throwable t) {
                         Log.d("onFailure", t.getMessage());
+                        CallerImageProgress.setVisibility(View.GONE);
+                        CallerProgress.setVisibility(View.GONE);
                     }
                 });
             }else {
@@ -760,10 +789,56 @@ public class PhoneStateReceiver extends BroadcastReceiver {
 
     }
 
-    public void updateCard(FetchedUserData userData)
+    public void updateCard(final FetchedUserData userData)
     {
+        if (userData.isIs_spam())
+        {
+            CallerProfileLayout.setBackgroundColor(getApplicationContext().getResources().getColor(R.color.redColor));
+        }
 
         CallerName.setText(userData.getName());
         CallerNumber.setText(userData.getFull_phone());
+        CallerCountry.setText(userData.getCountry());
+        Picasso.with(getApplicationContext()).load("http://whocaller.net/uploads/"+userData.getUser_img())
+                .into(CallerImage, new com.squareup.picasso.Callback() {
+                    @Override
+                    public void onSuccess() {
+                        CallerImageProgress.setVisibility(View.GONE);
+                        CallerProgress.setVisibility(View.GONE);
+                    }
+
+                    @Override
+                    public void onError() {
+                        if (userData.isIs_spam())
+                        {
+                            CallerImage.setImageResource(R.drawable.ic_nurse_red);
+                        }
+                        else
+                        {
+                            CallerImage.setImageResource(R.drawable.ic_nurse);
+                        }
+                        CallerImageProgress.setVisibility(View.GONE);
+                        CallerProgress.setVisibility(View.GONE);
+                    }
+                });
+        Target target = new Target() {
+            @Override
+            public void onBitmapLoaded(Bitmap bitmap, Picasso.LoadedFrom from) {
+                // Bitmap is loaded, use image here
+                PopupDialogActivity.BlurBuilder blurBuilder=new PopupDialogActivity.BlurBuilder();
+                Bitmap resultBmp = blurBuilder.blur(getApplicationContext(), bitmap);
+                CallerProfileLayout.setBackgroundDrawable(new BitmapDrawable(resultBmp));
+            }
+
+            @Override
+            public void onBitmapFailed(Drawable errorDrawable) {
+
+            }
+            @Override
+            public void onPrepareLoad(Drawable placeHolderDrawable) {
+
+            }
+        };
+        Picasso.with(getApplicationContext()).load("http://whocaller.net/uploads/"+userData.getUser_img()).into(target);
     }
 }

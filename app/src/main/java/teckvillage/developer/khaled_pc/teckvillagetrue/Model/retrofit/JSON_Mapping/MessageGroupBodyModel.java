@@ -14,12 +14,12 @@ public class MessageGroupBodyModel {
     public void setText(String text) {
         this.text = text;
     }
-    int group_id;
+    int group_id,chat_rooms_id;
     String text;
 
-    public MessageGroupBodyModel(int group_id, String text) {
+    public MessageGroupBodyModel(int group_id, int chat_rooms_id, String text) {
         this.group_id = group_id;
+        this.chat_rooms_id = chat_rooms_id;
         this.text = text;
     }
-
 }

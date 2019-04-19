@@ -11,35 +11,40 @@ import android.view.ViewGroup;
 import android.widget.ImageView;
 import android.widget.TextView;
 
+import com.squareup.picasso.Picasso;
+
+import java.text.ParseException;
+import java.text.SimpleDateFormat;
 import java.util.ArrayList;
 import java.util.Calendar;
+import java.util.Date;
+import java.util.List;
 
 import teckvillage.developer.khaled_pc.teckvillagetrue.Chat_MessagesChat;
+import teckvillage.developer.khaled_pc.teckvillagetrue.Model.retrofit.JSON_Mapping.LastMessageModel;
 import teckvillage.developer.khaled_pc.teckvillagetrue.R;
 import teckvillage.developer.khaled_pc.teckvillagetrue.Model.MessageInfo;
 import teckvillage.developer.khaled_pc.teckvillagetrue.SMS_MessagesChat;
 
 public class CustomRecyclerViewChatAdapter extends RecyclerView.Adapter<CustomRecyclerViewChatAdapter.ViewHolder>{
 
-    private ArrayList<MessageInfo> dataSet;
+    private List<LastMessageModel> dataSet;
     Context mContext;
 
-    public CustomRecyclerViewChatAdapter(ArrayList<MessageInfo> data, Context context) {
+    public CustomRecyclerViewChatAdapter(List<LastMessageModel> data, Context context) {
         this.dataSet = data;
         this.mContext = context;
     }
 
     @Override
     public int getItemViewType(int position) {
-        MessageInfo info=dataSet.get(position);
+        LastMessageModel info=dataSet.get(position);
 
-        if (info.type.equals("5"))
-            return 2;
-        else if (info.read.equals("0"))
-            return 0;
-        else if (info.read.equals("1"))
+        if (info.getType().equals("group"))
             return 1;
-        else return 1;
+        else if (info.getType().equals("user"))
+            return 0;
+        else return 0;
     }
 
     @Override
@@ -51,13 +56,12 @@ public class CustomRecyclerViewChatAdapter extends RecyclerView.Adapter<CustomRe
     }
 
     @Override
-    public void onBindViewHolder(ViewHolder holder, final int position) {
-        MessageInfo dataModel =dataSet.get(position);
-        holder.logName.setText(dataModel.logName);
-        holder.textMessage.setText(dataModel.logMessage);
+    public void onBindViewHolder(final ViewHolder holder, final int position) {
+        final LastMessageModel dataModel =dataSet.get(position);
+        holder.logName.setText(dataModel.getName());
+        holder.textMessage.setText(dataModel.getMessage());
 
-        Calendar calendar=Calendar.getInstance();
-        calendar.setTimeInMillis(dataModel.logDate);
+        Calendar calendar=covertTime(dataModel.getDate().getDate());
         Calendar calendar1=Calendar.getInstance();
         if (calendar.get(Calendar.DAY_OF_YEAR) == calendar1.get(Calendar.DAY_OF_YEAR) &&
                 calendar.get(Calendar.YEAR) == calendar1.get(Calendar.YEAR))
@@ -79,33 +83,48 @@ public class CustomRecyclerViewChatAdapter extends RecyclerView.Adapter<CustomRe
             holder.messageDate.setText(String.format("%1$tb %1$td %1$tY", calendar));
         }
 
-        Log.d("dada5wqeqe", dataModel.read);
-        if (holder.getItemViewType()==1) {
-            Log.d("dada5wqeqe", "true");
-            holder.logName.setTypeface(holder.logName.getTypeface(), Typeface.NORMAL);
-            holder.textMessage.setTypeface(holder.textMessage.getTypeface(), Typeface.NORMAL);
-            holder.messageDate.setTypeface(holder.messageDate.getTypeface(), Typeface.NORMAL);
-            holder.dot.setVisibility(View.GONE);
-        } else if (holder.getItemViewType()==0) {
-            Log.d("dada5wqeqe", "false");
-            holder.logName.setTypeface(holder.logName.getTypeface(), Typeface.BOLD);
-            holder.textMessage.setTypeface(holder.textMessage.getTypeface(), Typeface.BOLD);
-            holder.messageDate.setTypeface(holder.messageDate.getTypeface(), Typeface.BOLD);
-            holder.dot.setVisibility(View.VISIBLE);
-        } else if (holder.getItemViewType()==2) {
-            holder.notSentIcon.setVisibility(View.VISIBLE);
+        if (holder.getItemViewType()==0)
+        {
+
+            Picasso.with(mContext).load("http://whocaller.net/uploads/"+dataModel.getImg())
+                    .into(holder.contactPhoto, new com.squareup.picasso.Callback() {
+                        @Override
+                        public void onSuccess() {
+
+                        }
+
+                        @Override
+                        public void onError() {
+                            holder.contactPhoto.setImageResource(R.drawable.ic_nurse);
+                        }
+                    });
         }
-
-
+        else
+        {
+            holder.contactPhoto.setImageResource(R.drawable.ic_groupchat);
+        }
 
         holder.itemView.setOnClickListener(new View.OnClickListener() {
             @Override
             public void onClick(View v) {
-                Intent intent=new Intent(mContext, SMS_MessagesChat.class);
-                intent.putExtra("LogSMSName",dataSet.get(position).logName);
-                intent.putExtra("LogSMSAddress",dataSet.get(position).logAddress);
-                intent.putExtra("LogSMSThreadID",dataSet.get(position).thread_id);
-                mContext.startActivity(intent);
+                if (holder.getItemViewType()==0)
+                {
+                    Intent intent = new Intent(mContext, Chat_MessagesChat.class);
+                    intent.putExtra("UserName", dataModel.getName());
+                    intent.putExtra("UserAddress", dataModel.getPhone());
+                    intent.putExtra("UserID", dataModel.getId());
+                    intent.putExtra("ChatID", dataModel.getChatRoomId());
+                    mContext.startActivity(intent);
+                }
+                else if (holder.getItemViewType()==1)
+                {
+                    Intent intent = new Intent(mContext, Chat_MessagesChat.class);
+                    intent.putExtra("UserName", dataModel.getName());
+                    intent.putExtra("UserAddress", "GroupChat");
+                    intent.putExtra("UserID", dataModel.getId());
+                    intent.putExtra("ChatID", dataModel.getChatRoomId());
+                    mContext.startActivity(intent);
+                }
             }
         });
     }
@@ -133,5 +152,18 @@ public class CustomRecyclerViewChatAdapter extends RecyclerView.Adapter<CustomRe
             notSentIcon = itemView.findViewById(R.id.NotSent_Icon);
             contactPhoto=itemView.findViewById(R.id.contact_img_log_recycle);
         }
+    }
+    public Calendar covertTime(String strDate)
+    {
+        SimpleDateFormat sdf = new SimpleDateFormat("yyyy-MM-dd HH:mm:ss");
+        Date date = null;
+        try {
+            date = sdf.parse(strDate);
+        } catch (ParseException e) {
+            e.printStackTrace();
+        }
+        Calendar cal = Calendar.getInstance();
+        cal.setTime(date);
+        return cal;
     }
 }

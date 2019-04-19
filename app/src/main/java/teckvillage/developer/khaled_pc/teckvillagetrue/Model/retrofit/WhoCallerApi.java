@@ -134,13 +134,15 @@ public interface WhoCallerApi {
     @GET("getMessages?")
     Call<ListMessagesChatModel> getMessageWhenOpenChat(
             @Query("api_token") String ApiAccessToken,
-            @Query("user_id") String id);
+            @Query("user_id") String id,
+            @Query("chat_rooms_id") String chatId);
 
 
     @GET("getMessages?")
     Call<ListMessagesChatModel> getMessageWhenOpenGroupChat(
             @Query("api_token") String ApiAccessToken,
-            @Query("group_id") String id);
+            @Query("group_id") String id,
+            @Query("chat_rooms_id") String chatId);
 
 
     @POST("updateUserMobileToken?")

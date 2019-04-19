@@ -4,56 +4,29 @@ public class FetchedUserData {
 
 
     int id;
-    String phone_code;
-    String phone;
-    String full_phone;
-    String name;
-    int tag_id;
-    int user_id;
-    String user_name;
-    int user_tag_id;
-    int spam_count;
-    boolean is_spam;
-    String vcard_fullname,
-            vcard_dob,
-            vcard_email,
-            vcard_phone,
-            vcard_address,
-            vcard_organization,
-            vcard_title,
-            vcard_gender,
-            vcard_note,
-            created_at,
-            updated_at,
-            country,
-            user_img;
-
-
-
-
-    public String getCountry() {
-        return country;
-    }
-
-    public void setCountry(String country) {
-        this.country = country;
-    }
-
-    public String getUser_img() {
-        return user_img;
-    }
-
-    public void setUser_img(String user_img) {
-        this.user_img = user_img;
-    }
-
-    public boolean isIs_spam() {
-        return is_spam;
-    }
-
-    public void setIs_spam(boolean is_spam) {
-        this.is_spam = is_spam;
-    }
+            String phone_code;
+            String phone;
+            String full_phone;
+            String name;
+            String country;
+            int tag_id;
+            int user_id;
+            String user_name;
+            String user_img;
+            int user_tag_id;
+            int spam_count;
+            String vcard_fullname;
+            String vcard_dob;
+            String vcard_email;
+            String vcard_phone;
+            String vcard_address;
+            String vcard_organization;
+            String vcard_title;
+            String vcard_gender;
+            String vcard_note;
+            String created_at;
+            String updated_at;
+            boolean is_spam;
 
     public int getId() {
         return id;
@@ -93,6 +66,14 @@ public class FetchedUserData {
 
     public void setName(String name) {
         this.name = name;
+    }
+
+    public String getCountry() {
+        return country;
+    }
+
+    public void setCountry(String country) {
+        this.country = country;
     }
 
     public int getTag_id() {
@@ -221,5 +202,21 @@ public class FetchedUserData {
 
     public void setUpdated_at(String updated_at) {
         this.updated_at = updated_at;
+    }
+
+    public boolean isIs_spam() {
+        return is_spam;
+    }
+
+    public void setIs_spam(boolean is_spam) {
+        this.is_spam = is_spam;
+    }
+
+    public String getUser_img() {
+        return user_img;
+    }
+
+    public void setUser_img(String user_img) {
+        this.user_img = user_img;
     }
 }
