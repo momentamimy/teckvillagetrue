@@ -63,6 +63,7 @@ public class ChatFragment extends Fragment {
     public void onViewCreated(@NonNull View view, @Nullable Bundle savedInstanceState) {
         super.onViewCreated(view, savedInstanceState);
 
+
         tabs=view.findViewById(R.id.tabs);
         viewPager=view.findViewById(R.id.appViewPager);
 

@@ -61,6 +61,7 @@ public class AllChatRoomsFragment extends Fragment {
     public void onViewCreated(@NonNull View view, @Nullable Bundle savedInstanceState) {
         super.onViewCreated(view, savedInstanceState);
 
+
         mProgressDialog = new ProgressDialog(getContext());
         noResult=view.findViewById(R.id.NoResult);
         allChatRoomsRecyclerView=view.findViewById(R.id.All_Chat_Rooms_RecyclerView);

@@ -50,6 +50,7 @@ public class LastMessasgesFragment extends Fragment {
     List<LastMessageModel> chatMessageInfos=new ArrayList<>();
     RecyclerView chatRecyclerView;
     // ArrayAdapter arrayAdapter;
+
     CustomRecyclerViewChatAdapter customRecyclerViewChatAdapter;
     TextView noResult;
     ImageView refreshButton;
