@@ -68,20 +68,6 @@
 
                 </RelativeLayout>
 
-                <ImageView
-                    android:id="@+id/threedots"
-                    android:layout_width="wrap_content"
-                    android:layout_height="match_parent"
-                    android:src="@drawable/ic_more"
-                    android:layout_alignParentEnd="true"
-                    android:layout_alignParentRight="true"
-                    android:paddingEnd="11dp"
-                    android:paddingRight="11dp"
-                    android:paddingStart="11dp"
-                    android:paddingLeft="11dp"
-                    android:contentDescription="Option" />
-
-
             </RelativeLayout>
 
 
@@ -128,8 +114,8 @@
         <android.support.design.widget.FloatingActionButton
             android:id="@+id/fab"
             android:layout_marginBottom="20dp"
-            android:layout_marginEnd="40dp"
-            android:layout_marginRight="40dp"
+            android:layout_marginEnd="20dp"
+            android:layout_marginRight="20dp"
             android:layout_width="wrap_content"
             android:layout_height="wrap_content"
             app:elevation="6dp"

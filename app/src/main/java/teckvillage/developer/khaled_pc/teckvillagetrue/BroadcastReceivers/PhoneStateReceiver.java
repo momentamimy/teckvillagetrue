@@ -90,6 +90,7 @@ public class PhoneStateReceiver extends BroadcastReceiver {
     ImageView CallerImageProgress;
     ProgressBar CallerProgress;
 
+    boolean isBlock;
     private static final String TAG = "State";
     public static WindowManager wm = null;
     private WindowManager.LayoutParams params1;
@@ -234,7 +235,19 @@ public class PhoneStateReceiver extends BroadcastReceiver {
 
         //khaled Block
         boolean isBlock=false;
-        if (Number.length()<=4||isBlock)
+        //Block List Phone numbers
+        BlockNumbers = RetreiveAllNumberInBlockList(context);
+
+        if (BlockNumbers.size() > 0) {
+            for (int i = 0; i < BlockNumbers.size(); i++) {
+                if ((BlockNumbers.get(i) != null) && BlockNumbers.get(i).equalsIgnoreCase(Number
+                )) {
+                    isBlock=true;
+                }
+            }
+        }
+
+            if (Number.length()<=4||isBlock)
         {
             CallerProfileLayout.setBackgroundColor(context.getResources().getColor(R.color.redColor));
             CallerImage.setImageResource(R.drawable.ic_nurse_red);
@@ -798,7 +811,15 @@ public class PhoneStateReceiver extends BroadcastReceiver {
 
         CallerName.setText(userData.getName());
         CallerNumber.setText(userData.getFull_phone());
-        CallerCountry.setText(userData.getCountry());
+        if (!TextUtils.isEmpty(userData.getCountry()))
+        {
+            CallerCountry.setText(userData.getCountry());
+            CallerCountry.setVisibility(View.GONE);
+        }
+        else
+        {
+            CallerCountry.setVisibility(View.GONE);
+        }
         Picasso.with(getApplicationContext()).load("http://whocaller.net/uploads/"+userData.getUser_img())
                 .into(CallerImage, new com.squareup.picasso.Callback() {
                     @Override

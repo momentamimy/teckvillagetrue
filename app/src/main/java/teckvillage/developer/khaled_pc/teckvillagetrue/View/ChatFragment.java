@@ -15,6 +15,8 @@ import android.util.Log;
 import android.view.LayoutInflater;
 import android.view.View;
 import android.view.ViewGroup;
+import android.widget.ImageView;
+import android.widget.RelativeLayout;
 
 import java.util.ArrayList;
 import java.util.Collections;
@@ -27,6 +29,7 @@ import retrofit2.Retrofit;
 import teckvillage.developer.khaled_pc.teckvillagetrue.Controller.CustomChatViewAdapter;
 import teckvillage.developer.khaled_pc.teckvillagetrue.Controller.CustomRecyclerViewChatAdapter;
 import teckvillage.developer.khaled_pc.teckvillagetrue.Controller.SendToChatContactsAdapters;
+import teckvillage.developer.khaled_pc.teckvillagetrue.MainActivity;
 import teckvillage.developer.khaled_pc.teckvillagetrue.Model.retrofit.ApiAccessToken;
 import teckvillage.developer.khaled_pc.teckvillagetrue.Model.retrofit.JSON_Mapping.DataReceivedChatUsers;
 import teckvillage.developer.khaled_pc.teckvillagetrue.Model.retrofit.JSON_Mapping.LastMessageModel;
@@ -35,6 +38,7 @@ import teckvillage.developer.khaled_pc.teckvillagetrue.Model.retrofit.WhoCallerA
 import teckvillage.developer.khaled_pc.teckvillagetrue.Model.retrofit.retrofitHead;
 import teckvillage.developer.khaled_pc.teckvillagetrue.R;
 import teckvillage.developer.khaled_pc.teckvillagetrue.Model.MessageInfo;
+import teckvillage.developer.khaled_pc.teckvillagetrue.SearchActivity;
 
 import static teckvillage.developer.khaled_pc.teckvillagetrue.Chat_MessagesChat.ChatStatusChanged;
 
@@ -46,7 +50,7 @@ public class ChatFragment extends Fragment {
     TabLayout tabs;
     ViewPager viewPager;
     FloatingActionButton fab;
-
+    RelativeLayout searchLayout;
     public ChatFragment() {
         // Required empty public constructor
     }
@@ -80,6 +84,23 @@ public class ChatFragment extends Fragment {
             @Override
             public void onClick(View v) {
                 startActivity(new Intent(getContext(),SendToChatActivity.class));
+            }
+        });
+
+        searchLayout=view.findViewById(R.id.search_layout);
+        searchLayout.setOnClickListener(new View.OnClickListener() {
+            @Override
+            public void onClick(View v) {
+                startActivity(new Intent(getContext(), SearchActivity.class));
+            }
+        });
+        ImageView icon=view.findViewById(R.id.iconnnn);
+
+        icon.setOnClickListener(new View.OnClickListener() {
+            @Override
+            public void onClick(View v) {
+
+                ((MainActivity) getActivity()).openDrawer();
             }
         });
     }

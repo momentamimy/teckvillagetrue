@@ -89,6 +89,7 @@ public class AllChatRoomsAdapters extends RecyclerView.Adapter<AllChatRoomsAdapt
                             intent.putExtra("UserAddress", data.getPhone());
                             intent.putExtra("UserID", data.getId());
                             intent.putExtra("ChatID", data.getChatRoomId());
+                            intent.putExtra("UserImage", data.getImg());
                             context.startActivity(intent);
                         }
                         else if (holder.getItemViewType()==1)

@@ -19,6 +19,7 @@ import java.util.ArrayList;
 import java.util.Calendar;
 import java.util.Date;
 import java.util.List;
+import java.util.TimeZone;
 
 import teckvillage.developer.khaled_pc.teckvillagetrue.Chat_MessagesChat;
 import teckvillage.developer.khaled_pc.teckvillagetrue.Model.retrofit.JSON_Mapping.LastMessageModel;
@@ -114,6 +115,7 @@ public class CustomRecyclerViewChatAdapter extends RecyclerView.Adapter<CustomRe
                     intent.putExtra("UserAddress", dataModel.getPhone());
                     intent.putExtra("UserID", dataModel.getId());
                     intent.putExtra("ChatID", dataModel.getChatRoomId());
+                    intent.putExtra("UserImage", dataModel.getImg());
                     mContext.startActivity(intent);
                 }
                 else if (holder.getItemViewType()==1)
@@ -158,7 +160,9 @@ public class CustomRecyclerViewChatAdapter extends RecyclerView.Adapter<CustomRe
         SimpleDateFormat sdf = new SimpleDateFormat("yyyy-MM-dd HH:mm:ss");
         Date date = null;
         try {
+            sdf.setTimeZone(TimeZone.getTimeZone("UTC"));
             date = sdf.parse(strDate);
+            Log.d("OPEN", String.valueOf(date));
         } catch (ParseException e) {
             e.printStackTrace();
         }
@@ -166,4 +170,6 @@ public class CustomRecyclerViewChatAdapter extends RecyclerView.Adapter<CustomRe
         cal.setTime(date);
         return cal;
     }
+
+
 }

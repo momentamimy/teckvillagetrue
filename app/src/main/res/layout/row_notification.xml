@@ -4,7 +4,11 @@
         xmlns:tools="http://schemas.android.com/tools"
         android:layout_width="match_parent"
         android:layout_height="wrap_content"
-    android:padding="15dp">
+    android:paddingLeft="15dp"
+    android:paddingRight="15dp"
+    android:paddingTop="8dp"
+    android:paddingBottom="8dp"
+    >
 
     <TextView
         android:layout_marginStart="20dp"
@@ -16,7 +20,7 @@
         android:layout_height="wrap_content"
         android:text="Video Call!"
         android:textColor="@android:color/black"
-        android:textSize="18sp"
+        android:textSize="20sp"
         android:background="?android:attr/selectableItemBackground"
         android:layout_toStartOf="@+id/date_notifcation_message"
         android:layout_toLeftOf="@+id/date_notifcation_message" />
@@ -43,4 +47,11 @@
         android:text="02:00 AM"
         android:layout_alignParentEnd="true"
         android:layout_alignParentRight="true" />
+    <View
+        android:layout_marginTop="10dp"
+        android:layout_width="match_parent"
+        android:layout_height="0.5dp"
+        android:background="@color/Tomyacolor"
+        android:layout_below="@id/text_sms_message"/>
+
     </RelativeLayout>

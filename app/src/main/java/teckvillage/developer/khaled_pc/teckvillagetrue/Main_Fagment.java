@@ -1010,7 +1010,7 @@ public class Main_Fagment extends Fragment implements OnBackPressedListener , Lo
         if (shouldExecuteOnResume) {
             Log.d("mesheyyyy", "onresume");
 
-            loglist103.clear();
+//            loglist103.clear();
             //Uri CONTACT_URI =CallLog.Calls.CONTENT_URI;
             //getLoaderManager().restartLoader(0, null, this);
             //getContext().getContentResolver().notifyChange(CONTACT_URI, null);
@@ -1216,7 +1216,7 @@ public class Main_Fagment extends Fragment implements OnBackPressedListener , Lo
         if (!cursor.moveToNext())
         {
             Log.e("GOPAL", "Empty Cursor");
-            callLogInfos=get_calls_log.getCallDetails();
+            callLogInfos=loglist103;
         }
         else {
             do {
@@ -1550,11 +1550,25 @@ public class Main_Fagment extends Fragment implements OnBackPressedListener , Lo
     }
 
     public void openDialPadWithNumber(String num) {
-        callButtonAnim(0);
-        phone_num_edt.setText(num);
-        writeAnim(0);
-        SortSearchCallList(num);
-        firstclick = false;
+        if (!aBoolean) {
+            callButtonAnim(0);
+            phone_num_edt.setText(num);
+            writeAnim(0);
+            SortSearchCallList(num);
+            firstclick = false;
+        } else if (firstclick) {
+            phone_num_edt.setText(num);
+            writeAnim(0);
+            SortSearchCallList(num);
+            firstclick = false;
+        } else if (scroll) {
+            scrollOpenAnim(0);
+            phone_num_edt.setText(num);
+            SortSearchCallList(num);
+        } else {
+            phone_num_edt.setText(num);
+            SortSearchCallList(num);
+        }
     }
 
 

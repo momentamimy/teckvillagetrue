@@ -37,11 +37,14 @@ import android.widget.Toast;
 import com.squareup.picasso.Picasso;
 import com.squareup.picasso.Target;
 
+import java.util.List;
+
 import retrofit2.Call;
 import retrofit2.Callback;
 import retrofit2.Response;
 import retrofit2.Retrofit;
 import teckvillage.developer.khaled_pc.teckvillagetrue.Model.Get_Calls_Log;
+import teckvillage.developer.khaled_pc.teckvillagetrue.Model.database.Database_Helper;
 import teckvillage.developer.khaled_pc.teckvillagetrue.Model.retrofit.ApiAccessToken;
 import teckvillage.developer.khaled_pc.teckvillagetrue.Model.retrofit.JSON_Mapping.BodyNumberModel;
 import teckvillage.developer.khaled_pc.teckvillagetrue.Model.retrofit.JSON_Mapping.FetchedUserData;
@@ -69,6 +72,8 @@ public class PopupDialogActivity extends Activity {
     ImageView CallerImageProgress;
     ProgressBar CallerProgress;
     Get_Calls_Log get_calls_log;
+    List<String> BlockNumbers;
+    Database_Helper db;
 
     @Override
     protected void onCreate(Bundle savedInstanceState) {
@@ -112,6 +117,12 @@ public class PopupDialogActivity extends Activity {
         IconSave = WhoCallerDialog.findViewById(R.id.Save_Icon_Layout);
         IconBlock = WhoCallerDialog.findViewById(R.id.Block_Icon_Layout);
         viewProfile=WhoCallerDialog.findViewById(R.id.ViewProfile);
+
+        get_calls_log=new Get_Calls_Log(getApplicationContext());
+        if (get_calls_log.contactExists(number))
+        {
+            IconSave.setVisibility(View.GONE);
+        }
 
         viewProfile.setOnClickListener(new View.OnClickListener() {
             @Override
@@ -168,6 +179,8 @@ public class PopupDialogActivity extends Activity {
             public void onClick(View v) {
                 //khaled
                 WhoCallerDialog.dismiss();
+                String contactName=CallerName.getText().toString();
+                Insert_Number_To_Blocklist( number,contactName );
             }
         });
 
@@ -195,6 +208,17 @@ public class PopupDialogActivity extends Activity {
         }
         //khaled Block
         boolean isBlock=false;
+        //Block List Phone numbers
+        BlockNumbers = RetreiveAllNumberInBlockList(PopupDialogActivity.this);
+
+        if (BlockNumbers.size() > 0) {
+            for (int i = 0; i < BlockNumbers.size(); i++) {
+                if ((BlockNumbers.get(i) != null) && BlockNumbers.get(i).equalsIgnoreCase(number
+                )) {
+                    isBlock=true;
+                }
+            }
+        }
         if (number.length()<=4||isBlock)
         {
             ProfileBlurLayOut.setBackgroundColor(getResources().getColor(R.color.redColor));
@@ -349,5 +373,23 @@ public class PopupDialogActivity extends Activity {
             }
         };
         Picasso.with(getApplicationContext()).load("http://whocaller.net/uploads/"+userData.getUser_img()).into(target);
+    }
+
+    public List<String> RetreiveAllNumberInBlockList(Context context) {
+
+        List<String> BlockNumbersH;
+        db = new Database_Helper(context);
+        BlockNumbersH = db.getAllBlocklistNumbers();
+
+        return BlockNumbersH;
+
+    }
+
+    void Insert_Number_To_Blocklist(String num,String name){
+
+        if(num != null&& !num.isEmpty()){
+            db.insertBlock(name,num,"Person");
+        }
+
     }
 }

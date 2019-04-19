@@ -27,6 +27,7 @@ import com.pusher.client.Pusher;
 import com.pusher.client.PusherOptions;
 import com.pusher.client.channel.Channel;
 import com.pusher.client.channel.SubscriptionEventListener;
+import com.squareup.picasso.Picasso;
 
 import java.text.ParseException;
 import java.text.SimpleDateFormat;
@@ -34,6 +35,7 @@ import java.util.ArrayList;
 import java.util.Calendar;
 import java.util.Date;
 import java.util.List;
+import java.util.TimeZone;
 
 import de.hdodenhof.circleimageview.CircleImageView;
 import retrofit2.Call;
@@ -70,7 +72,7 @@ public class Chat_MessagesChat extends AppCompatActivity {
     EditText messageSend;
     FloatingActionButton send;
 
-    String name, address;
+    String name, address,Image;
     int receiverID,chatRoomId;
 
     ImageView callIcon, settingIcon;
@@ -127,15 +129,32 @@ public class Chat_MessagesChat extends AppCompatActivity {
 
         name = getIntent().getStringExtra("UserName");
         address = getIntent().getStringExtra("UserAddress");
+        Image = getIntent().getStringExtra("UserImage");
         receiverID = getIntent().getIntExtra("UserID",0);
         chatRoomId = getIntent().getIntExtra("ChatID",0);
+
         if (address.equals("GroupChat"))
         {
             isGroup=true;
             callIcon.setVisibility(View.GONE);
             settingIcon.setVisibility(View.GONE);
         }
+        else
+        {
+            settingIcon.setVisibility(View.GONE);
+            Picasso.with(getApplicationContext()).load("http://whocaller.net/uploads/"+Image)
+                    .into(userImg, new com.squareup.picasso.Callback() {
+                        @Override
+                        public void onSuccess() {
 
+                        }
+
+                        @Override
+                        public void onError() {
+                            userImg.setImageResource(R.drawable.ic_nurse);
+                        }
+                    });
+        }
         userName.setText(name);
 
         messageSend = findViewById(R.id.Message_Send);
@@ -481,16 +500,14 @@ public class Chat_MessagesChat extends AppCompatActivity {
         SimpleDateFormat sdf = new SimpleDateFormat("yyyy-MM-dd HH:mm:ss");
         Date date = null;
         try {
+            sdf.setTimeZone(TimeZone.getTimeZone("UTC"));
             date = sdf.parse(strDate);
+            Log.d("OPEN", String.valueOf(date));
         } catch (ParseException e) {
             e.printStackTrace();
         }
         Calendar cal = Calendar.getInstance();
         cal.setTime(date);
-        Log.d("calendar",cal.get(Calendar.YEAR)+"-"+cal.get(Calendar.MONTH)+"-"+cal.get(Calendar.DAY_OF_MONTH)
-                +"-"+cal.get(Calendar.HOUR_OF_DAY)+"-"+cal.get(Calendar.MINUTE)+"-"+cal.get(Calendar.SECOND)+"-"+cal.get(Calendar.AM_PM));
-        Log.d("caldaldkaldajlkj",cal.get(Calendar.YEAR)+"-"+cal.get(Calendar.MONTH)+"-"+cal.get(Calendar.DAY_OF_MONTH)
-                +"-"+cal.get(Calendar.HOUR)+"-"+cal.get(Calendar.MINUTE)+"-"+cal.get(Calendar.SECOND));
         return cal;
     }
 }

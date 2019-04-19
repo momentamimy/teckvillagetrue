@@ -19,6 +19,7 @@ import java.util.ArrayList;
 import java.util.Calendar;
 import java.util.Date;
 import java.util.List;
+import java.util.TimeZone;
 
 
 import teckvillage.developer.khaled_pc.teckvillagetrue.Model.retrofit.JSON_Mapping.DataReceived;
@@ -181,7 +182,9 @@ public class messages_list_chat_adapter extends RecyclerView.Adapter<messages_li
         SimpleDateFormat sdf = new SimpleDateFormat("yyyy-MM-dd HH:mm:ss");
         Date date = null;
         try {
+            sdf.setTimeZone(TimeZone.getTimeZone("UTC"));
             date = sdf.parse(strDate);
+            Log.d("OPEN", String.valueOf(date));
         } catch (ParseException e) {
             e.printStackTrace();
         }

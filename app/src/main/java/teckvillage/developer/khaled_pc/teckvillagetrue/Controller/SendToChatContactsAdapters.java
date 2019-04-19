@@ -61,12 +61,13 @@ public class SendToChatContactsAdapters extends RecyclerView.Adapter<SendToChatC
                     @Override
                     public void onClick(View v) {
                         if (MultipleRecivers == false) {
-                            final String num = get_user_contacts.getPhoneNumber(mDataArray.get(position).getName(), context).replace(" ", "");
+
                             Intent intent = new Intent(context, Chat_MessagesChat.class);
                             intent.putExtra("UserName", data.getName());
                             intent.putExtra("UserAddress", data.getPhone());
                             intent.putExtra("UserID", data.getId());
                             intent.putExtra("ChatID", data.getChatRoomId());
+                            intent.putExtra("UserImage", data.getImg());
                             context.startActivity(intent);
 
                         } else if (MultipleRecivers = true) {
