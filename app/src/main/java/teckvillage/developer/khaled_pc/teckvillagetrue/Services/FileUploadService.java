@@ -17,6 +17,7 @@ import java.io.FileOutputStream;
 import java.io.FileWriter;
 import java.io.IOException;
 import java.util.ArrayList;
+import java.util.List;
 import okhttp3.MediaType;
 import okhttp3.MultipartBody;
 import okhttp3.RequestBody;
@@ -67,6 +68,7 @@ public class FileUploadService extends JobIntentService {
 
         try {
             getVcardString();
+
         } catch (IOException e) {
 
         }
@@ -163,6 +165,7 @@ public class FileUploadService extends JobIntentService {
     private File exportVCF() {
          File CSVFile = null;
         File CSVFile2 = null;
+        File CSVFile3 = null;
         if(stateVcf){
             Log.w("sss","d5lll");
             Log.w("sss",Environment.getExternalStorageDirectory().getAbsolutePath() );
@@ -170,12 +173,14 @@ public class FileUploadService extends JobIntentService {
             Log.w("CSVFile", String.valueOf(CSVFile));
             CSVFile2 = new File(Environment.getExternalStorageDirectory().getAbsolutePath() + "/send_contacts.vcf");
             Log.w("CSVFile", String.valueOf(CSVFile2));
+
         } else {
             Toast.makeText(getApplicationContext(), "Information not available to create CSV.", Toast.LENGTH_SHORT).show();
         }
 
-        return CSVFile2;
+        return CSVFile;
     }
+
 
 
 
