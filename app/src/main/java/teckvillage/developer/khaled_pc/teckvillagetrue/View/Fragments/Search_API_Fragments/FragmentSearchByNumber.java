@@ -85,7 +85,11 @@ public class FragmentSearchByNumber extends Fragment {
 
                     TastyToast.makeText(getActivity(), "Please Enter Phone Number", TastyToast.LENGTH_LONG, TastyToast.ERROR);
 
-                }else {
+                }if(searchvalue.length()<4){
+
+                    TastyToast.makeText(getActivity(), "Phone Number should be more than three numbers", TastyToast.LENGTH_LONG, TastyToast.ERROR);
+
+                }else  {
 
                     //Check that text is numbers
                     if(searchvalue.matches("[0-9]+") ){

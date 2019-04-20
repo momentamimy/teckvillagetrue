@@ -20,6 +20,11 @@ import com.mukesh.countrypicker.CountryPicker;
 import com.mukesh.countrypicker.OnCountryPickerListener;
 import com.sdsmdg.tastytoast.TastyToast;
 
+import java.util.ArrayList;
+import java.util.Collections;
+import java.util.Comparator;
+import java.util.List;
+
 import teckvillage.developer.khaled_pc.teckvillagetrue.R;
 import teckvillage.developer.khaled_pc.teckvillagetrue.verification;
 
@@ -66,8 +71,20 @@ public class LoginActivity extends AppCompatActivity implements TextWatcher {
         codeCountry.setOnClickListener(new View.OnClickListener() {
             @Override
             public void onClick(View v) {
-                countryPicker.showDialog(getSupportFragmentManager());
-                //countryPicker.sort
+
+                //Sort Countries
+                List<Country> countryArrayList = new ArrayList<>();
+                countryArrayList = countryPicker.getAllCountries();
+                Collections.sort(countryArrayList, new Comparator<Country>() {
+                    @Override
+                    public int compare(Country country1, Country country2) {
+                        return country1.getName().trim().compareToIgnoreCase(country2.getName().trim());
+                    }
+                });
+
+                countryPicker.sortCountries(countryArrayList);//Set Sorted list Of Countries
+                countryPicker.showDialog(getSupportFragmentManager());//Show Dialog
+
             }
         });
 
@@ -79,7 +96,7 @@ public class LoginActivity extends AppCompatActivity implements TextWatcher {
                                 codeCountry.setText(code_country);
                                 codeCountry.setCompoundDrawablesWithIntrinsicBounds(0, 0, R.drawable.ic_tick, 0);
                             }
-                        }).sortBy(CountryPicker.SORT_BY_NAME).build();
+                        }).build();
 
         //On Click continue btn
         continu.setOnClickListener(new View.OnClickListener() {

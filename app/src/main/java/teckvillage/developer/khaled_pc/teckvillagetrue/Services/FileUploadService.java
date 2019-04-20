@@ -5,17 +5,22 @@ import android.content.Intent;
 import android.content.res.AssetFileDescriptor;
 import android.database.Cursor;
 import android.net.Uri;
+import android.os.Build;
 import android.os.Environment;
+import android.os.ParcelFileDescriptor;
 import android.provider.ContactsContract;
+import android.provider.Settings;
 import android.support.annotation.NonNull;
 import android.support.v4.app.JobIntentService;
 import android.util.Log;
 import android.widget.Toast;
 import java.io.File;
 import java.io.FileInputStream;
+import java.io.FileNotFoundException;
 import java.io.FileOutputStream;
 import java.io.FileWriter;
 import java.io.IOException;
+import java.io.OutputStream;
 import java.util.ArrayList;
 import java.util.List;
 import okhttp3.MediaType;
@@ -39,14 +44,14 @@ public class FileUploadService extends JobIntentService {
     private static final String TAG = "FileUploadService";
     Context context;
     String  vfile = "/ContactWhoCaller.vcf";
-    ArrayList<String> vCard = new ArrayList<String>();  // Its global....;
+    ArrayList<String> vCard ;
     private Cursor cursor;
     boolean stateVcf;
 
     /**
      * Unique job ID for this service.
      */
-    private static final int JOB_ID = 101;
+    private static final int JOB_ID = 131;
 
     public static void enqueueWork(Context context, Intent intent) {
         enqueueWork(context, FileUploadService.class, JOB_ID, intent);
@@ -66,12 +71,19 @@ public class FileUploadService extends JobIntentService {
          */
 
 
-        /*try {
+
+        try {
+
             getVcardString();
 
         } catch (IOException e) {
+            Log.w("Error",e.getCause());
+            Log.w("Error",e.getMessage());
 
-        }*/
+        }catch (Exception e) {
+            Log.w("Other Error",e.getMessage());
+            Log.w("Other Error",e.getCause());
+        }
 
 
         File file = null;
@@ -115,9 +127,9 @@ public class FileUploadService extends JobIntentService {
 
 
     private void getVcardString()throws IOException {
-
+        vCard = new ArrayList<String>();  // Its global....;
         cursor = getContentResolver().query(ContactsContract.CommonDataKinds.Phone.CONTENT_URI, null, null, null, null);
-        if(cursor!=null&&cursor.getCount()>0)
+        if(cursor!=null&& cursor.moveToFirst()&&cursor.getCount()>0)
         {
             stateVcf=true;
             int i;
@@ -126,9 +138,17 @@ public class FileUploadService extends JobIntentService {
             cursor.moveToFirst();
             for(i = 0;i<cursor.getCount();i++)
             {
-                get(cursor);
-                Log.d("TAGVCF", "Contact "+(i+1)+"VcF String is"+vCard.get(i));
+
+
+                if (Build.VERSION.SDK_INT > Build.VERSION_CODES.M) {
+                    getOreo(cursor);
+                }else {
+                    get(cursor);
+                }
+
                 cursor.moveToNext();
+                Log.d("TAGVCF", "Contact "+(i+1)+"VcF String is"+vCard.get(i));
+
                 mFileOutputStream.write(vCard.get(i).toString().getBytes());
             }
             mFileOutputStream.close();
@@ -142,32 +162,13 @@ public class FileUploadService extends JobIntentService {
     }
 
 
-    public void get(Cursor cursor)
-    {
-        String lookupKey = cursor.getString(cursor.getColumnIndex(ContactsContract.Contacts.LOOKUP_KEY));
-        Uri uri = Uri.withAppendedPath(ContactsContract.Contacts.CONTENT_VCARD_URI, lookupKey);
-        AssetFileDescriptor fd;
-        try {
-            fd = this.getContentResolver().openAssetFileDescriptor(uri, "r");
 
-            FileInputStream fis = fd.createInputStream();
-            byte[] buf = new byte[(int) fd.getDeclaredLength()];
-            fis.read(buf);
-            String vcardstring= new String(buf);
-            vCard.add(vcardstring);
-        } catch (Exception e1)
-        {
-            // TODO Auto-generated catch block
-            e1.printStackTrace();
-        }
-    }
 
     private File exportVCF() {
          File CSVFile = null;
         File CSVFile2 = null;
         File CSVFile3 = null;
         if(stateVcf){
-            Log.w("sss","d5lll");
             Log.w("sss",Environment.getExternalStorageDirectory().getAbsolutePath() );
             CSVFile = new File( Environment.getExternalStorageDirectory().getAbsolutePath() +  vfile);
             Log.w("CSVFile", String.valueOf(CSVFile));
@@ -175,13 +176,67 @@ public class FileUploadService extends JobIntentService {
             Log.w("CSVFile", String.valueOf(CSVFile2));
 
         } else {
-            Toast.makeText(getApplicationContext(), "Information not available to create CSV.", Toast.LENGTH_SHORT).show();
+            //Toast.makeText(getApplicationContext(), "Information not available to create CSV.", Toast.LENGTH_SHORT).show();
+            Log.w("meassage","Information not available to create CSV.");
         }
 
         return CSVFile;
     }
 
+   public synchronized void get(Cursor cursor) {
+
+        String lookupKey = cursor.getString(cursor.getColumnIndex(ContactsContract.Contacts.LOOKUP_KEY));
+        Uri uri = Uri.withAppendedPath(ContactsContract.Contacts.CONTENT_VCARD_URI, lookupKey);
+        AssetFileDescriptor fd;
+        try {
+            if(this.getContentResolver().openAssetFileDescriptor(uri, "r")!=null){
+                fd = this.getContentResolver().openAssetFileDescriptor(uri, "r");
+
+                FileInputStream fis = fd.createInputStream();
+                byte[] buf = new byte[(int) fd.getDeclaredLength()];
+                fis.read(buf);
+                String vcardstring= new String(buf);
+                vCard.add(vcardstring);
+            }
+
+        } catch (Exception e1)
+        {
+            // TODO Auto-generated catch block
+            e1.printStackTrace();
+        }
+    }
+
+    public void getOreo(Cursor cursor) {
 
 
+        String lookupKey = cursor.getString(cursor.getColumnIndex(ContactsContract.Contacts.LOOKUP_KEY));
+        Log.w("lookkey",lookupKey);
+        Log.w("lookket", cursor.getString(cursor.getColumnIndex(ContactsContract.Contacts.DISPLAY_NAME)));
+        Uri uri = Uri.withAppendedPath(ContactsContract.Contacts.CONTENT_VCARD_URI, lookupKey);
+        Log.w("URI", String.valueOf(uri));
+        ParcelFileDescriptor fd;
+        try {
+
+
+            fd = this.getContentResolver().openFileDescriptor(uri, "r");
+            // Your Complex Code and you used function without loop so how can you get all Contacts Vcard.??
+
+            FileInputStream fis = new FileInputStream(fd.getFileDescriptor());
+            byte[] buf = new byte[fis.available()];
+            fis.read(buf);
+            String vcardstring = new String(buf);
+            vCard.add(vcardstring);
+
+            String storage_path = Environment.getExternalStorageDirectory().toString() + vfile;
+            FileOutputStream mFileOutputStream = new FileOutputStream(storage_path, false);
+            mFileOutputStream.write(vcardstring.toString().getBytes());
+
+    } catch (FileNotFoundException e) {
+            Log.e(TAG, "Vcard for the contact " + lookupKey + " not found", e);
+    } catch (Exception e1) {
+            // TODO Auto-generated catch block
+            e1.printStackTrace();
+        }
+    }
 
 }
