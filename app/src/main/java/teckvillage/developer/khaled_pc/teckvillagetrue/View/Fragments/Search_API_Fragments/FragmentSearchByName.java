@@ -14,6 +14,7 @@ import android.view.ViewGroup;
 import android.widget.Button;
 import android.widget.EditText;
 import android.widget.ImageView;
+import android.widget.Toast;
 
 import com.mukesh.countrypicker.Country;
 import com.mukesh.countrypicker.CountryPicker;
@@ -84,12 +85,13 @@ public class FragmentSearchByName extends Fragment {
 
                 if(searchvalue.isEmpty() || searchvalue == null ){
 
-                    TastyToast.makeText(getActivity(), "Please Enter Name", TastyToast.LENGTH_LONG, TastyToast.ERROR);
+                    //TastyToast.makeText(getActivity(), "Please Enter Name", TastyToast.LENGTH_LONG, TastyToast.ERROR);
+                    Toast.makeText(getActivity(),"Please Enter Name",Toast.LENGTH_LONG).show();
 
                 }else {
 
                     //Check if Text Letter and numbers
-                    if(searchvalue.matches("[a-zA-Z0-9\\s.]*") ){
+                    //if(searchvalue.matches("[a-zA-Z0-9\\s.-]*") ){
 
                         //For Country code
                         if(myCountry==null){
@@ -123,9 +125,10 @@ public class FragmentSearchByName extends Fragment {
                         }
 
 
-                    }else {
-                        TastyToast.makeText(getActivity(), "Please Enter Correct Name", TastyToast.LENGTH_LONG, TastyToast.ERROR);
-                    }
+                    /*}else {
+                       // TastyToast.makeText(getActivity(), "Please Enter Correct Name", TastyToast.LENGTH_LONG, TastyToast.ERROR);
+                        Toast.makeText(getActivity(),"Please Enter Correct Name",Toast.LENGTH_LONG).show();
+                    }*/
 
 
 

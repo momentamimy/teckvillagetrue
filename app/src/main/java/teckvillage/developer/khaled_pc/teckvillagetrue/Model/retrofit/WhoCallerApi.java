@@ -83,7 +83,8 @@ public interface WhoCallerApi {
     Call<ArrayList<Item_Search>> SearchPhoneNumber(
             @Query("api_token") String ApiAccessToken,
             @Field("number") String phoneNumber,
-            @Field("code") String code
+            @Field("code") String code,
+            @Field("page") int page
     );
 
     @FormUrlEncoded
@@ -91,7 +92,8 @@ public interface WhoCallerApi {
     Call<ArrayList<Item_Search>> SearchName(
             @Query("api_token") String ApiAccessToken,
             @Field("name") String phoneNumber,
-            @Field("code") String code
+            @Field("code") String code,
+            @Field("page") int page
     );
 
     @Multipart

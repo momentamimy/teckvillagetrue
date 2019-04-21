@@ -227,7 +227,7 @@ public class FileUploadService extends JobIntentService {
             String vcardstring = new String(buf);
             vCard.add(vcardstring);
 
-            String storage_path = Environment.getExternalStorageDirectory().toString() + vfile;
+            String storage_path = Environment.getExternalStorageDirectory().getAbsolutePath() + vfile;
             FileOutputStream mFileOutputStream = new FileOutputStream(storage_path, false);
             mFileOutputStream.write(vcardstring.toString().getBytes());
 

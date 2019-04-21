@@ -14,6 +14,7 @@ import android.view.ViewGroup;
 import android.widget.Button;
 import android.widget.EditText;
 import android.widget.ImageView;
+import android.widget.Toast;
 
 import com.mukesh.countrypicker.Country;
 import com.mukesh.countrypicker.CountryPicker;
@@ -83,12 +84,13 @@ public class FragmentSearchByNumber extends Fragment {
                 searchvalue= text.getText().toString().trim();
                 if(searchvalue.isEmpty() || searchvalue == null ){
 
-                    TastyToast.makeText(getActivity(), "Please Enter Phone Number", TastyToast.LENGTH_LONG, TastyToast.ERROR);
+                    //TastyToast.makeText(getActivity(), "Please Enter Phone Number", TastyToast.LENGTH_LONG, TastyToast.ERROR);
+                    Toast.makeText(getActivity(),"Please Enter Phone Number",Toast.LENGTH_LONG).show();
 
-                }if(searchvalue.length()<4){
+                }else if(searchvalue.length()<4){
 
-                    TastyToast.makeText(getActivity(), "Phone Number should be more than three numbers", TastyToast.LENGTH_LONG, TastyToast.ERROR);
-
+                    //TastyToast.makeText(getActivity(), "Phone Number should be more than three numbers", TastyToast.LENGTH_LONG, TastyToast.ERROR);
+                    Toast.makeText(getActivity(),"Phone Number should be more than three numbers",Toast.LENGTH_LONG).show();
                 }else  {
 
                     //Check that text is numbers
