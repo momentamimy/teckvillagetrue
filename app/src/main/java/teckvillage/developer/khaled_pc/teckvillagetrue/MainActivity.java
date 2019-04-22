@@ -400,7 +400,7 @@ public class MainActivity extends AppCompatActivity implements NavigationView.On
             }
         }
 
-        //Upload_VCF_File_Background();
+        Upload_VCF_File_Background();
 
 
     }

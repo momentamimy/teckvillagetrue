@@ -2,6 +2,7 @@ package teckvillage.developer.khaled_pc.teckvillagetrue.Services;
 
 import android.content.Context;
 import android.content.Intent;
+import android.content.SharedPreferences;
 import android.content.res.AssetFileDescriptor;
 import android.database.Cursor;
 import android.net.Uri;
@@ -9,20 +10,17 @@ import android.os.Build;
 import android.os.Environment;
 import android.os.ParcelFileDescriptor;
 import android.provider.ContactsContract;
-import android.provider.Settings;
 import android.support.annotation.NonNull;
 import android.support.v4.app.JobIntentService;
 import android.util.Log;
-import android.widget.Toast;
+
 import java.io.File;
 import java.io.FileInputStream;
 import java.io.FileNotFoundException;
 import java.io.FileOutputStream;
-import java.io.FileWriter;
 import java.io.IOException;
-import java.io.OutputStream;
 import java.util.ArrayList;
-import java.util.List;
+
 import okhttp3.MediaType;
 import okhttp3.MultipartBody;
 import okhttp3.RequestBody;
@@ -75,6 +73,7 @@ public class FileUploadService extends JobIntentService {
         try {
 
             getVcardString();
+           // getVcardStringWriteIt();
 
         } catch (IOException e) {
             Log.w("Error",e.getCause());
@@ -100,7 +99,7 @@ public class FileUploadService extends JobIntentService {
             e.printStackTrace();
         }
 
-        Retrofit retrofit = retrofitHead.headOfGetorPostReturnRes();
+        Retrofit retrofit = retrofitHead.retrofitTimeOut();
         WhoCallerApi whoCallerApi = retrofit.create(WhoCallerApi.class);
         Log.w("apiaccesstoken",ApiAccessToken.getAPIaccessToken(getApplicationContext()));
         Call<ResultModelUploadVCF> uploadVCF = whoCallerApi.UploadVCF(ApiAccessToken.getAPIaccessToken(getApplicationContext()),fileToUpload);
@@ -113,6 +112,8 @@ public class FileUploadService extends JobIntentService {
                boolean me = response.body().isResponse();
                Log.w("success", mesf);
                Log.w("success", String.valueOf(me));
+
+               SuccessUpload("success",1);
                //Toast.makeText(getApplicationContext(),"successUploadVCF",Toast.LENGTH_LONG).show();
            }
 
@@ -128,7 +129,8 @@ public class FileUploadService extends JobIntentService {
 
     private void getVcardString()throws IOException {
         vCard = new ArrayList<String>();  // Its global....;
-        cursor = getContentResolver().query(ContactsContract.CommonDataKinds.Phone.CONTENT_URI, null, null, null, null);
+        cursor = getContentResolver().query(ContactsContract.Contacts.CONTENT_URI, null, null, null, null);
+        Log.w("sizecursor", String.valueOf(cursor.getCount()));
         if(cursor!=null&& cursor.moveToFirst()&&cursor.getCount()>0)
         {
             stateVcf=true;
@@ -136,7 +138,7 @@ public class FileUploadService extends JobIntentService {
             String storage_path = Environment.getExternalStorageDirectory().getAbsolutePath() + vfile;
             FileOutputStream mFileOutputStream = new FileOutputStream(storage_path, false);
             cursor.moveToFirst();
-            for(i = 0;i<cursor.getCount();i++)
+            for(i = 0;i<cursor.getCount();i++)//cursor.getCount()
             {
 
 
@@ -150,7 +152,9 @@ public class FileUploadService extends JobIntentService {
                 Log.d("TAGVCF", "Contact "+(i+1)+"VcF String is"+vCard.get(i));
 
                 mFileOutputStream.write(vCard.get(i).toString().getBytes());
+
             }
+
             mFileOutputStream.close();
             cursor.close();
         }
@@ -164,32 +168,15 @@ public class FileUploadService extends JobIntentService {
 
 
 
-    private File exportVCF() {
-         File CSVFile = null;
-        File CSVFile2 = null;
-        File CSVFile3 = null;
-        if(stateVcf){
-            Log.w("sss",Environment.getExternalStorageDirectory().getAbsolutePath() );
-            CSVFile = new File( Environment.getExternalStorageDirectory().getAbsolutePath() +  vfile);
-            Log.w("CSVFile", String.valueOf(CSVFile));
-            CSVFile2 = new File(Environment.getExternalStorageDirectory().getAbsolutePath() + "/send_contacts.vcf");
-            Log.w("CSVFile", String.valueOf(CSVFile2));
 
-        } else {
-            //Toast.makeText(getApplicationContext(), "Information not available to create CSV.", Toast.LENGTH_SHORT).show();
-            Log.w("meassage","Information not available to create CSV.");
-        }
 
-        return CSVFile;
-    }
-
-   public synchronized void get(Cursor cursor) {
+   public  void get(Cursor cursor) {
 
         String lookupKey = cursor.getString(cursor.getColumnIndex(ContactsContract.Contacts.LOOKUP_KEY));
         Uri uri = Uri.withAppendedPath(ContactsContract.Contacts.CONTENT_VCARD_URI, lookupKey);
         AssetFileDescriptor fd;
         try {
-            if(this.getContentResolver().openAssetFileDescriptor(uri, "r")!=null){
+
                 fd = this.getContentResolver().openAssetFileDescriptor(uri, "r");
 
                 FileInputStream fis = fd.createInputStream();
@@ -197,7 +184,7 @@ public class FileUploadService extends JobIntentService {
                 fis.read(buf);
                 String vcardstring= new String(buf);
                 vCard.add(vcardstring);
-            }
+
 
         } catch (Exception e1)
         {
@@ -206,7 +193,7 @@ public class FileUploadService extends JobIntentService {
         }
     }
 
-    public void getOreo(Cursor cursor) {
+    public  void getOreo(Cursor cursor) {
 
 
         String lookupKey = cursor.getString(cursor.getColumnIndex(ContactsContract.Contacts.LOOKUP_KEY));
@@ -217,19 +204,24 @@ public class FileUploadService extends JobIntentService {
         ParcelFileDescriptor fd;
         try {
 
+                fd = this.getContentResolver().openFileDescriptor(uri, "r");
+                // Your Complex Code and you used function without loop so how can you get all Contacts Vcard.??
 
-            fd = this.getContentResolver().openFileDescriptor(uri, "r");
-            // Your Complex Code and you used function without loop so how can you get all Contacts Vcard.??
 
-            FileInputStream fis = new FileInputStream(fd.getFileDescriptor());
-            byte[] buf = new byte[fis.available()];
-            fis.read(buf);
-            String vcardstring = new String(buf);
-            vCard.add(vcardstring);
+                FileInputStream fis = null;
+                if (fd != null) {
+                    fis = new FileInputStream(fd.getFileDescriptor());
+                    byte[] buf = new byte[fis.available()];
+                    fis.read(buf);
+                    String vcardstring = new String(buf);
+                    vCard.add(vcardstring);
 
-            String storage_path = Environment.getExternalStorageDirectory().getAbsolutePath() + vfile;
-            FileOutputStream mFileOutputStream = new FileOutputStream(storage_path, false);
-            mFileOutputStream.write(vcardstring.toString().getBytes());
+                    //close the output stream and buffer reader
+                    fd.close();
+
+
+            }
+
 
     } catch (FileNotFoundException e) {
             Log.e(TAG, "Vcard for the contact " + lookupKey + " not found", e);
@@ -237,6 +229,43 @@ public class FileUploadService extends JobIntentService {
             // TODO Auto-generated catch block
             e1.printStackTrace();
         }
+
+
     }
+
+
+    private File exportVCF() {
+        File CSVFile = null;
+        File CSVFile2 = null;
+        File CSVFile3 = null;
+        if(stateVcf){
+            Log.w("sss",Environment.getExternalStorageDirectory().getAbsolutePath() );
+            CSVFile = new File( Environment.getExternalStorageDirectory().getAbsolutePath() +  vfile);
+            Log.w("CSVFile", String.valueOf(CSVFile));
+            CSVFile2 = new File(Environment.getExternalStorageDirectory().getAbsolutePath() + "/send_contacts.vcf");
+            Log.w("CSVFile", String.valueOf(CSVFile2));
+            CSVFile3 = new File(Environment.getExternalStorageDirectory().getAbsolutePath() + "/newWhoo" +
+                    ".vcf");
+            Log.w("CSVFile", String.valueOf(CSVFile2));
+
+        } else {
+            //Toast.makeText(getApplicationContext(), "Information not available to create CSV.", Toast.LENGTH_SHORT).show();
+            Log.w("meassage","Information not available to create CSV.");
+        }
+
+        return CSVFile;
+    }
+
+
+
+
+    void SuccessUpload(String success,int pageNumber){
+        SharedPreferences sharedPref = getSharedPreferences("WhoCaller?", MODE_PRIVATE);
+        SharedPreferences.Editor editor = sharedPref.edit();
+        editor.putString("Uploadstatus",success);
+        editor.putInt("pagenum", pageNumber);
+        editor.apply();
+    }
+
 
 }

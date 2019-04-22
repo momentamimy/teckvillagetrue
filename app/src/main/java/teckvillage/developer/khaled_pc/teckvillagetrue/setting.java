@@ -37,7 +37,7 @@ public class setting extends AppCompatActivity {
             public void onCheckedChanged(CompoundButton buttonView, boolean isChecked) {
                 SharedPreferences.Editor editor=preferences.edit();
                 editor.putBoolean("SwitchOutgoing",isChecked);
-                editor.commit();
+                editor.apply();
             }
         });
 
@@ -46,7 +46,7 @@ public class setting extends AppCompatActivity {
             public void onCheckedChanged(CompoundButton buttonView, boolean isChecked) {
                 SharedPreferences.Editor editor=preferences.edit();
                 editor.putBoolean("switchIncoming",isChecked);
-                editor.commit();
+                editor.apply();
 
             }
         });
@@ -59,7 +59,7 @@ public class setting extends AppCompatActivity {
                 {
                     case R.id.radioButton:
                         editor.putString("DialogPosition","Top");
-                        editor.commit();
+                        editor.apply();
                         Toast.makeText(getApplicationContext(),"Top",Toast.LENGTH_LONG).show();
                         break;
                     case R.id.radioButton2:
