@@ -285,6 +285,10 @@
             android:name=".Services.UploadBlockListService"
             android:permission="android.permission.BIND_JOB_SERVICE" />
 
+        <service
+            android:name=".Services.GetInitialService"
+            android:permission="android.permission.BIND_JOB_SERVICE" />
+
         <activity android:name=".RecycleviewResult_SearchAPI"></activity>
 
         <service

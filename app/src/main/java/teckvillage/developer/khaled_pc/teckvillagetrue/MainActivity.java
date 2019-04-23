@@ -62,6 +62,7 @@ import java.util.HashSet;
 import de.hdodenhof.circleimageview.CircleImageView;
 import teckvillage.developer.khaled_pc.teckvillagetrue.Camera_Recognition_package.Camera_Recognition;
 import teckvillage.developer.khaled_pc.teckvillagetrue.Services.FileUploadService;
+import teckvillage.developer.khaled_pc.teckvillagetrue.Services.GetInitialService;
 import teckvillage.developer.khaled_pc.teckvillagetrue.Services.UploadBlockListService;
 import teckvillage.developer.khaled_pc.teckvillagetrue.Services.UploadTopTenContactsService;
 import teckvillage.developer.khaled_pc.teckvillagetrue.View.BlockList;
@@ -422,10 +423,14 @@ public class MainActivity extends AppCompatActivity implements NavigationView.On
                     UploadBlocklistNumbers();
                 }
 
+
+                //Get Tags Data
+                GetItinitail();
+
             }
         }
 
-       // Upload_VCF_File_Background();
+
 
 
     }
@@ -1064,6 +1069,13 @@ public class MainActivity extends AppCompatActivity implements NavigationView.On
     void UploadTopTenContacts(){
         Intent mIntent = new Intent(this, UploadTopTenContactsService.class);
         UploadTopTenContactsService.enqueueWork(this, mIntent);
+
+    }
+
+
+    void GetItinitail(){
+        Intent mIntent = new Intent(this, GetInitialService.class);
+        GetInitialService.enqueueWork(this, mIntent);
 
     }
 
