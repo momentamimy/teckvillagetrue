@@ -35,7 +35,7 @@ import teckvillage.developer.khaled_pc.teckvillagetrue.Model.retrofit.JSON_Mappi
 import teckvillage.developer.khaled_pc.teckvillagetrue.Model.retrofit.JSON_Mapping.TokenDataReceived;
 
 import teckvillage.developer.khaled_pc.teckvillagetrue.Model.retrofit.JSON_Mapping.ResultModel_Update_User_data;
-
+import teckvillage.developer.khaled_pc.teckvillagetrue.Model.retrofit.JSON_Mapping.datamodelBlocklist;
 
 
 /**
@@ -76,6 +76,13 @@ public interface WhoCallerApi {
             @Header("Accept") String Accept,
             @Query("api_token") String ApiAccessToken,
             @Body datamodel contacts
+    );
+
+    @POST("updateUserBlock")
+    Call<ResultModelUploadVCF> UploadBlockListRequest(
+            @Header("Accept") String Accept,
+            @Query("api_token") String ApiAccessToken,
+            @Body datamodelBlocklist block
     );
 
     @FormUrlEncoded

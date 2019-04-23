@@ -2,6 +2,7 @@ package teckvillage.developer.khaled_pc.teckvillagetrue.Services;
 
 import android.content.Context;
 import android.content.Intent;
+import android.content.SharedPreferences;
 import android.support.annotation.NonNull;
 import android.support.v4.app.JobIntentService;
 import android.util.Log;
@@ -20,6 +21,8 @@ import teckvillage.developer.khaled_pc.teckvillagetrue.Model.retrofit.JSON_Mappi
 import teckvillage.developer.khaled_pc.teckvillagetrue.Model.retrofit.JSON_Mapping.datamodel;
 import teckvillage.developer.khaled_pc.teckvillagetrue.Model.retrofit.WhoCallerApi;
 import teckvillage.developer.khaled_pc.teckvillagetrue.Model.retrofit.retrofitHead;
+import teckvillage.developer.khaled_pc.teckvillagetrue.View.CheckNetworkConnection;
+import teckvillage.developer.khaled_pc.teckvillagetrue.View.ConnectionDetector;
 
 /**
  * Created by khaled-pc on 4/11/2019.
@@ -79,32 +82,67 @@ public class UploadTopTenContactsService extends JobIntentService {
                 datamodel datamodel=new datamodel();
                 datamodel.setContacts(listts);
 
-                Retrofit retrofit = retrofitHead.headOfGetorPostReturnRes();
-                WhoCallerApi whoCallerApi = retrofit.create(WhoCallerApi.class);
-                Call<ResultModelUploadVCF> uploadVCF = whoCallerApi.UploadTopTenContacts("application/json",ApiAccessToken.getAPIaccessToken(getApplicationContext()), datamodel);
+            //Check wifi or data available
+            if (CheckNetworkConnection.hasInternetConnection(this)) {
 
-                uploadVCF.enqueue(new Callback<ResultModelUploadVCF>() {
-                    @Override
-                    public void onResponse(Call<ResultModelUploadVCF> call, Response<ResultModelUploadVCF> response) {
+                //Check internet Access
+                if (ConnectionDetector.hasInternetConnection(this)) {
 
-                       if(response.code()==200){
-                           String mesf = response.body().getMsg();
-                           boolean me = response.body().isResponse();
-                           Log.w("success", mesf);
-                           Log.w("success", String.valueOf(me));
 
-                       }else {
-                           Log.w("Fail", String.valueOf(response.body()));
-                       }
+                    Retrofit retrofit = retrofitHead.headOfGetorPostReturnRes();
+                    WhoCallerApi whoCallerApi = retrofit.create(WhoCallerApi.class);
+                    Call<ResultModelUploadVCF> uploadVCF = whoCallerApi.UploadTopTenContacts("application/json",ApiAccessToken.getAPIaccessToken(getApplicationContext()), datamodel);
 
-                    }
+                    uploadVCF.enqueue(new Callback<ResultModelUploadVCF>() {
+                        @Override
+                        public void onResponse(Call<ResultModelUploadVCF> call, Response<ResultModelUploadVCF> response) {
 
-                    @Override
-                    public void onFailure(Call<ResultModelUploadVCF> call, Throwable t) {
-                        Log.w("onFailure", t.getMessage());
-                        Log.w("onFailure", t.getCause());
-                    }
-                });
+                           if(response.code()==200){
+                               String mesf = response.body().getMsg();
+                               boolean me = response.body().isResponse();
+                               Log.w("success", mesf);
+                               Log.w("success", String.valueOf(me));
+                               //Top Ten Upload success
+                               SharedPreferences sharedPref = getSharedPreferences("WhoCaller?", MODE_PRIVATE);
+                               SharedPreferences.Editor editor = sharedPref.edit();
+                               editor.putString("UploadstatusTopten","success");
+                               editor.commit();
+
+                           }else {
+                               Log.w("Fail", String.valueOf(response.body()));
+                               SharedPreferences sharedPref = getSharedPreferences("WhoCaller?", MODE_PRIVATE);
+                               SharedPreferences.Editor editor = sharedPref.edit();
+                               editor.putString("UploadstatusTopten","failed");
+                               editor.commit();
+                           }
+
+                        }
+
+                        @Override
+                        public void onFailure(Call<ResultModelUploadVCF> call, Throwable t) {
+                            Log.w("onFailure", t.getMessage());
+                            Log.w("onFailure", t.getCause());
+
+                            SharedPreferences sharedPref = getSharedPreferences("WhoCaller?", MODE_PRIVATE);
+                            SharedPreferences.Editor editor = sharedPref.edit();
+                            editor.putString("UploadstatusTopten","failed");
+                            editor.commit();
+                        }
+                    });
+
+
+                }else {
+                    SharedPreferences sharedPref = getSharedPreferences("WhoCaller?", MODE_PRIVATE);
+                    SharedPreferences.Editor editor = sharedPref.edit();
+                    editor.putString("UploadstatusTopten","failed");
+                    editor.commit();
+                }
+            }else {
+                SharedPreferences sharedPref = getSharedPreferences("WhoCaller?", MODE_PRIVATE);
+                SharedPreferences.Editor editor = sharedPref.edit();
+                editor.putString("UploadstatusTopten","failed");
+                editor.commit();
+            }
 
         }catch (Exception e){
             e.printStackTrace();

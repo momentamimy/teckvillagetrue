@@ -62,6 +62,7 @@ import java.util.HashSet;
 import de.hdodenhof.circleimageview.CircleImageView;
 import teckvillage.developer.khaled_pc.teckvillagetrue.Camera_Recognition_package.Camera_Recognition;
 import teckvillage.developer.khaled_pc.teckvillagetrue.Services.FileUploadService;
+import teckvillage.developer.khaled_pc.teckvillagetrue.Services.UploadBlockListService;
 import teckvillage.developer.khaled_pc.teckvillagetrue.Services.UploadTopTenContactsService;
 import teckvillage.developer.khaled_pc.teckvillagetrue.View.BlockList;
 import teckvillage.developer.khaled_pc.teckvillagetrue.View.ChatFragment;
@@ -100,6 +101,10 @@ public class MainActivity extends AppCompatActivity implements NavigationView.On
     Dialog dialogcameraresult;
     public OpenDialPad openDialPad;
     private MyInterface listener ;
+    String isContactsUpload,isTopTencontactsUpload;
+    boolean UploadBlockList;
+
+
 
     @Override
     protected void onCreate(final Bundle savedInstanceState) {
@@ -380,6 +385,7 @@ public class MainActivity extends AppCompatActivity implements NavigationView.On
         }
 
 
+
         //Check wifi or data available
         if (CheckNetworkConnection.hasInternetConnection(MainActivity.this)) {
 
@@ -387,20 +393,39 @@ public class MainActivity extends AppCompatActivity implements NavigationView.On
             if (ConnectionDetector.hasInternetConnection(MainActivity.this)) {
 
                 //Upload VCF File
-                //Upload Top Ten Contacts
-                if (isFirstTime()) {
+                isContactsUpload=getSharedPreferenceValue.getUploadVCFStatus(MainActivity.this);
+                if(isContactsUpload.equals("failed")){
                     try {
-                        UploadTopTenContacts();
+                        Log.w("UploadVcfTime","UploadVcfOneTime");
                         Upload_VCF_File_Background();
                     } catch (Exception e) {
                         e.printStackTrace();
                     }
                 }
 
+
+                //Upload Top Ten Contacts
+                isTopTencontactsUpload=getSharedPreferenceValue.getUploadToptenContactsStatus(MainActivity.this);
+                if (isTopTencontactsUpload.equals("failed")) {
+                    try {
+                        Log.w("UploadTopTenOneTime","UploadTopTenOneTime");
+                        UploadTopTenContacts();
+                    } catch (Exception e) {
+                        e.printStackTrace();
+                    }
+                }
+
+                UploadBlockList=getSharedPreferenceValue.getBlockListUploadStatus(MainActivity.this);
+                if(UploadBlockList){
+                    Log.w("Uploadblocklistnow","request");
+                    //UploadBlocklistNumbers();
+
+                }
+
             }
         }
 
-        Upload_VCF_File_Background();
+       // Upload_VCF_File_Background();
 
 
     }
@@ -1039,6 +1064,12 @@ public class MainActivity extends AppCompatActivity implements NavigationView.On
     void UploadTopTenContacts(){
         Intent mIntent = new Intent(this, UploadTopTenContactsService.class);
         UploadTopTenContactsService.enqueueWork(this, mIntent);
+
+    }
+
+    void UploadBlocklistNumbers(){
+        Intent mIntent = new Intent(this, UploadBlockListService.class);
+        UploadBlockListService.enqueueWork(this, mIntent);
 
     }
 

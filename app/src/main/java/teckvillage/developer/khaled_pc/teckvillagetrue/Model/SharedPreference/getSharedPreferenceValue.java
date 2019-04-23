@@ -69,4 +69,25 @@ public class getSharedPreferenceValue {
         return sharedPref.getString("User_Website","add website");
     }
 
+    public static int getPageUploadcontacts(Context context){
+        SharedPreferences sharedPref = context.getSharedPreferences("WhoCaller?", MODE_PRIVATE);
+        return sharedPref.getInt("pagenum",1);
+    }
+
+    public static String getUploadVCFStatus(Context context){
+        SharedPreferences sharedPref = context.getSharedPreferences("WhoCaller?", MODE_PRIVATE);
+        return sharedPref.getString("Uploadstatus","failed");
+    }
+
+    public static String getUploadToptenContactsStatus(Context context){
+        SharedPreferences sharedPref = context.getSharedPreferences("WhoCaller?", MODE_PRIVATE);
+        return sharedPref.getString("UploadstatusTopten","failed");
+    }
+
+
+    public static boolean getBlockListUploadStatus(Context context){
+        SharedPreferences sharedPref = context.getSharedPreferences("WhoCaller?", MODE_PRIVATE);
+        return sharedPref.getBoolean("UploadBlockList",false);
+    }
+
 }

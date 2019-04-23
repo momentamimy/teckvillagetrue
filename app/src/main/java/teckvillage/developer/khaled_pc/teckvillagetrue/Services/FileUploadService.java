@@ -28,10 +28,14 @@ import retrofit2.Call;
 import retrofit2.Callback;
 import retrofit2.Response;
 import retrofit2.Retrofit;
+import teckvillage.developer.khaled_pc.teckvillagetrue.MainActivity;
+import teckvillage.developer.khaled_pc.teckvillagetrue.Model.SharedPreference.getSharedPreferenceValue;
 import teckvillage.developer.khaled_pc.teckvillagetrue.Model.retrofit.ApiAccessToken;
 import teckvillage.developer.khaled_pc.teckvillagetrue.Model.retrofit.JSON_Mapping.ResultModelUploadVCF;
 import teckvillage.developer.khaled_pc.teckvillagetrue.Model.retrofit.WhoCallerApi;
 import teckvillage.developer.khaled_pc.teckvillagetrue.Model.retrofit.retrofitHead;
+import teckvillage.developer.khaled_pc.teckvillagetrue.View.CheckNetworkConnection;
+import teckvillage.developer.khaled_pc.teckvillagetrue.View.ConnectionDetector;
 
 /**
  * Created by khaled-pc on 4/11/2019.
@@ -45,6 +49,10 @@ public class FileUploadService extends JobIntentService {
     ArrayList<String> vCard ;
     private Cursor cursor;
     boolean stateVcf;
+    static int page;
+    Boolean Isfinised=false;
+
+
 
     /**
      * Unique job ID for this service.
@@ -85,78 +93,114 @@ public class FileUploadService extends JobIntentService {
         }
 
 
-        File file = null;
-        MultipartBody.Part fileToUpload=null;
-        RequestBody mFile=null;
-
-        try {
-
-        file= exportVCF();
-        mFile = RequestBody.create(MediaType.parse("multipart/form-data"), file);
-        fileToUpload = MultipartBody.Part.createFormData("contacts", file.getName(), mFile);
-
-        }catch (Exception e){
-            e.printStackTrace();
-        }
-
-        Retrofit retrofit = retrofitHead.retrofitTimeOut();
-        WhoCallerApi whoCallerApi = retrofit.create(WhoCallerApi.class);
-        Log.w("apiaccesstoken",ApiAccessToken.getAPIaccessToken(getApplicationContext()));
-        Call<ResultModelUploadVCF> uploadVCF = whoCallerApi.UploadVCF(ApiAccessToken.getAPIaccessToken(getApplicationContext()),fileToUpload);
-
-       uploadVCF.enqueue(new Callback<ResultModelUploadVCF>() {
-           @Override
-           public void onResponse(Call<ResultModelUploadVCF> call, Response<ResultModelUploadVCF> response) {
-
-               String mesf = response.body().getMsg();
-               boolean me = response.body().isResponse();
-               Log.w("success", mesf);
-               Log.w("success", String.valueOf(me));
-
-               SuccessUpload("success",1);
-               //Toast.makeText(getApplicationContext(),"successUploadVCF",Toast.LENGTH_LONG).show();
-           }
-
-           @Override
-           public void onFailure(Call<ResultModelUploadVCF> call, Throwable t) {
-               Log.w("onFailure", t.getMessage());
-               Log.w("onFailure", t.getCause());
-           }
-       });
-
     }
 
 
     private void getVcardString()throws IOException {
         vCard = new ArrayList<String>();  // Its global....;
+
+        page= getSharedPreferenceValue.getPageUploadcontacts(this);
+
+        //staaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaical;sjdnlfn;sl
+        int take=1000;
+        int skip=(page-1)*take;
+
         cursor = getContentResolver().query(ContactsContract.Contacts.CONTENT_URI, null, null, null, null);
         Log.w("sizecursor", String.valueOf(cursor.getCount()));
+
         if(cursor!=null&& cursor.moveToFirst()&&cursor.getCount()>0)
         {
-            stateVcf=true;
-            int i;
-            String storage_path = Environment.getExternalStorageDirectory().getAbsolutePath() + vfile;
-            FileOutputStream mFileOutputStream = new FileOutputStream(storage_path, false);
-            cursor.moveToFirst();
-            for(i = 0;i<cursor.getCount();i++)//cursor.getCount()
-            {
+
+            if(cursor.getCount()>1000){
 
 
-                if (Build.VERSION.SDK_INT > Build.VERSION_CODES.M) {
-                    getOreo(cursor);
+                if(skip> cursor.getCount()){
+                    Log.w("finishrequest","finishrequest");
+
                 }else {
-                    get(cursor);
+
+
+                    //More than 1000 Contacts
+                    stateVcf=true;
+                    int i;
+                    String storage_path = Environment.getExternalStorageDirectory().getAbsolutePath() + vfile;
+                    FileOutputStream mFileOutputStream = new FileOutputStream(storage_path, false);
+                    cursor.moveToFirst();
+                    cursor.moveToPosition(skip);
+                    for(i=0 ;i<1000;i++)//cursor.getCount()
+                    {
+
+                        //index not exists
+                        if(cursor.isLast()){
+                            //last item add it
+                            if (Build.VERSION.SDK_INT > Build.VERSION_CODES.M) {
+                                getOreo(cursor);
+                            }else {
+                                get(cursor);
+                            }
+                            Log.d("TAGVCF", "Contact "+(i+1)+"VcF String is"+vCard.get(i));
+
+                            mFileOutputStream.write(vCard.get(i).toString().getBytes());
+
+                            Isfinised=true;
+                            break;
+                        }
+
+
+                        if (Build.VERSION.SDK_INT > Build.VERSION_CODES.M) {
+                            getOreo(cursor);
+                        }else {
+                            get(cursor);
+                        }
+
+                        //pro
+                        cursor.moveToNext();
+                        Log.d("TAGVCF", "Contact "+(i+1)+"VcF String is"+vCard.get(i));
+
+                        mFileOutputStream.write(vCard.get(i).toString().getBytes());
+
+                    }
+
+                    mFileOutputStream.close();
+                    cursor.close();
+
+                    //Send request
+                    SendRequest();
+
                 }
 
-                cursor.moveToNext();
-                Log.d("TAGVCF", "Contact "+(i+1)+"VcF String is"+vCard.get(i));
+            }else {
 
-                mFileOutputStream.write(vCard.get(i).toString().getBytes());
+                //Less than 1000 Contacts
+                stateVcf=true;
+                int i;
+                String storage_path = Environment.getExternalStorageDirectory().getAbsolutePath() + vfile;
+                FileOutputStream mFileOutputStream = new FileOutputStream(storage_path, false);
+                cursor.moveToFirst();
+                for(i = 0;i<cursor.getCount();i++)//cursor.getCount()
+                {
 
+
+                    if (Build.VERSION.SDK_INT > Build.VERSION_CODES.M) {
+                        getOreo(cursor);
+                    }else {
+                        get(cursor);
+                    }
+
+                    cursor.moveToNext();
+                    Log.d("TAGVCF", "Contact "+(i+1)+"VcF String is"+vCard.get(i));
+
+                    mFileOutputStream.write(vCard.get(i).toString().getBytes());
+
+                }
+
+                mFileOutputStream.close();
+                cursor.close();
+
+                //Send request
+                SendOneRequest();
             }
 
-            mFileOutputStream.close();
-            cursor.close();
         }
         else
         {
@@ -266,6 +310,182 @@ public class FileUploadService extends JobIntentService {
         editor.putInt("pagenum", pageNumber);
         editor.apply();
     }
+
+
+    void SendRequest(){
+
+
+        File file = null;
+        MultipartBody.Part fileToUpload=null;
+        RequestBody mFile=null;
+
+        try {
+
+            file= exportVCF();
+            mFile = RequestBody.create(MediaType.parse("multipart/form-data"), file);
+            fileToUpload = MultipartBody.Part.createFormData("contacts", file.getName(), mFile);
+
+        }catch (Exception e){
+            e.printStackTrace();
+        }
+
+        //Check wifi or data available
+        if (CheckNetworkConnection.hasInternetConnection(this)) {
+
+            //Check internet Access
+            if (ConnectionDetector.hasInternetConnection(this)) {
+
+                Retrofit retrofit = retrofitHead.retrofitTimeOut();
+                WhoCallerApi whoCallerApi = retrofit.create(WhoCallerApi.class);
+                Call<ResultModelUploadVCF> uploadVCF = whoCallerApi.UploadVCF(ApiAccessToken.getAPIaccessToken(getApplicationContext()), fileToUpload);
+
+                uploadVCF.enqueue(new Callback<ResultModelUploadVCF>() {
+                    @Override
+                    public void onResponse(Call<ResultModelUploadVCF> call, Response<ResultModelUploadVCF> response) {
+
+                        if(response.isSuccessful()){
+
+                            String mesf = response.body().getMsg();
+                            boolean me = response.body().isResponse();
+                            Log.w("success", mesf);
+                            Log.w("success", String.valueOf(me));
+
+                            //problemmmmmmmmmmmmmmmmm
+                            page= getSharedPreferenceValue.getPageUploadcontacts(getApplicationContext());
+                            Log.w("slogpref", String.valueOf(page));
+                            page++;
+
+                            Log.w("slogplussss", String.valueOf(page));
+                            SharedPreferences sharedPref = getSharedPreferences("WhoCaller?", MODE_PRIVATE);
+                            SharedPreferences.Editor editor = sharedPref.edit();
+                            editor.putString("Uploadstatus","failed");
+                            editor.putInt("pagenum", page);
+                            editor.commit();
+
+                            //SuccessUpload("failed",page);
+                            Log.w("page", String.valueOf(page));
+
+                            if(!Isfinised){
+                                try {
+                                    getVcardString();
+                                } catch (IOException e) {
+                                    e.printStackTrace();
+                                }
+                            }else {
+
+                                SharedPreferences sharedPref2 = getSharedPreferences("WhoCaller?", MODE_PRIVATE);
+                                SharedPreferences.Editor editor2 = sharedPref2.edit();
+                                editor2.putString("Uploadstatus","success");
+                                editor2.putInt("pagenum", page);
+                                editor2.commit();
+                            }
+
+
+
+                        }else {
+                            //SuccessUpload("failed",page);
+                            page= getSharedPreferenceValue.getPageUploadcontacts(getApplicationContext());
+                            SharedPreferences sharedPref = getSharedPreferences("WhoCaller?", MODE_PRIVATE);
+                            SharedPreferences.Editor editor = sharedPref.edit();
+                            editor.putString("Uploadstatus","failed");
+                            editor.putInt("pagenum", page);
+                            editor.commit();
+                        }
+
+                    }
+
+                    @Override
+                    public void onFailure(Call<ResultModelUploadVCF> call, Throwable t) {
+                        Log.w("onFailure", t.getMessage());
+                        Log.w("onFailure", t.getCause());
+
+                        page= getSharedPreferenceValue.getPageUploadcontacts(getApplicationContext());
+                        SharedPreferences sharedPref = getSharedPreferences("WhoCaller?", MODE_PRIVATE);
+                        SharedPreferences.Editor editor = sharedPref.edit();
+                        editor.putString("Uploadstatus","failed");
+                        editor.putInt("pagenum", page);
+                        editor.commit();
+                    }
+                });
+            }else {
+                page= getSharedPreferenceValue.getPageUploadcontacts(getApplicationContext());
+                SharedPreferences sharedPref = getSharedPreferences("WhoCaller?", MODE_PRIVATE);
+                SharedPreferences.Editor editor = sharedPref.edit();
+                editor.putString("Uploadstatus","failed");
+                editor.putInt("pagenum", page);
+                editor.commit();
+            }
+        }else {
+            page= getSharedPreferenceValue.getPageUploadcontacts(getApplicationContext());
+            SharedPreferences sharedPref = getSharedPreferences("WhoCaller?", MODE_PRIVATE);
+            SharedPreferences.Editor editor = sharedPref.edit();
+            editor.putString("Uploadstatus","failed");
+            editor.putInt("pagenum", page);
+            editor.commit();
+        }
+
+    }
+
+    void SendOneRequest(){
+
+
+        File file = null;
+        MultipartBody.Part fileToUpload=null;
+        RequestBody mFile=null;
+
+        try {
+
+            file= exportVCF();
+            mFile = RequestBody.create(MediaType.parse("multipart/form-data"), file);
+            fileToUpload = MultipartBody.Part.createFormData("contacts", file.getName(), mFile);
+
+        }catch (Exception e){
+            e.printStackTrace();
+        }
+
+        //Check wifi or data available
+        if (CheckNetworkConnection.hasInternetConnection(this)) {
+
+            //Check internet Access
+            if (ConnectionDetector.hasInternetConnection(this)) {
+
+                Retrofit retrofit = retrofitHead.retrofitTimeOut();
+                WhoCallerApi whoCallerApi = retrofit.create(WhoCallerApi.class);
+                Log.w("apiaccesstoken", ApiAccessToken.getAPIaccessToken(getApplicationContext()));
+                Call<ResultModelUploadVCF> uploadVCF = whoCallerApi.UploadVCF(ApiAccessToken.getAPIaccessToken(getApplicationContext()), fileToUpload);
+
+                uploadVCF.enqueue(new Callback<ResultModelUploadVCF>() {
+                    @Override
+                    public void onResponse(Call<ResultModelUploadVCF> call, Response<ResultModelUploadVCF> response) {
+
+                        String mesf = response.body().getMsg();
+                        boolean me = response.body().isResponse();
+                        Log.w("success", mesf);
+                        Log.w("success", String.valueOf(me));
+
+
+                        SuccessUpload("success",1);
+
+                        //Toast.makeText(getApplicationContext(),"successUploadVCF",Toast.LENGTH_LONG).show();
+                    }
+
+                    @Override
+                    public void onFailure(Call<ResultModelUploadVCF> call, Throwable t) {
+                        Log.w("onFailure", t.getMessage());
+                        Log.w("onFailure", t.getCause());
+                        SuccessUpload("failed",1);
+                    }
+                });
+            }else {
+                SuccessUpload("failed",1);
+            }
+        }else {
+            SuccessUpload("failed",1);
+        }
+
+    }
+
+
 
 
 }
