@@ -3,6 +3,7 @@ package teckvillage.developer.khaled_pc.teckvillagetrue.View;
 import android.Manifest;
 import android.content.DialogInterface;
 import android.content.Intent;
+import android.content.SharedPreferences;
 import android.content.pm.PackageManager;
 import android.graphics.Color;
 import android.os.Bundle;
@@ -55,7 +56,7 @@ public class User_Contact_Profile_From_log_list extends AppCompatActivity {
     List<block> BlockInfo;
     boolean Bloceduser=false;
     private RadioButton radioSelectedButton;
-    boolean isfrommycontact=false;
+    static boolean  isfrommycontact;
     TextView country,email;
     RelativeLayout countrylay,emaillay,phonelay;
 
@@ -100,7 +101,6 @@ public class User_Contact_Profile_From_log_list extends AppCompatActivity {
                 isfrommycontact=false;
                 nameofcontact.setText(number);
                 phonenumee.setText(number);
-
             }
 
             UpdateDataAfterRequest(number);
@@ -256,7 +256,7 @@ public class User_Contact_Profile_From_log_list extends AppCompatActivity {
                 .setPositiveButton("BLOCK", new DialogInterface.OnClickListener() {
                     public void onClick(DialogInterface dialog, int id) {
 
-                        Insert_Number_To_Blocklist("Person");
+                        Insert_Number_To_Blocklist("Personal");
 
                     }
                 })
@@ -293,13 +293,33 @@ public class User_Contact_Profile_From_log_list extends AppCompatActivity {
             String name=nameofcontact.getText().toString();
 
             if(num != null&& !num.isEmpty()){
-                db.insertBlock(name,num,Type);
-                blockimagemake.setImageResource(R.drawable.ic_rejected_call);
-                blockred.setTextColor(Color.parseColor("#f53131"));
-                Bloceduser=true;
-                Toast.makeText(User_Contact_Profile_From_log_list.this, "added to your block list", Toast.LENGTH_SHORT).show();
+                //change Person to person
+                if(Type.equals("Personal")){
+                    Type="personal";
+                }if(Type.equals("Business")){
+                    Type="business";
+                }
+
+                long inserted= db.insertBlock(name,num,Type);
+                //ensure that item inserted in database
+                if(inserted != -1){
+                    ChangePreVariableUploadBlockList();//upload block list in mainActivity
+                    blockimagemake.setImageResource(R.drawable.ic_rejected_call);
+                    blockred.setTextColor(Color.parseColor("#f53131"));
+                    Bloceduser=true;
+                    Toast.makeText(User_Contact_Profile_From_log_list.this, "added to your block list", Toast.LENGTH_SHORT).show();
+                }
+
             }
 
+    }
+
+
+    void ChangePreVariableUploadBlockList(){
+        SharedPreferences sharedPref = getSharedPreferences("WhoCaller?", MODE_PRIVATE);
+        SharedPreferences.Editor editor = sharedPref.edit();
+        editor.putBoolean("UploadBlockList",true);
+        editor.commit();
     }
 
 

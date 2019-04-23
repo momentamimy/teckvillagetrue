@@ -392,6 +392,7 @@ public class MainActivity extends AppCompatActivity implements NavigationView.On
             //Check internet Access
             if (ConnectionDetector.hasInternetConnection(MainActivity.this)) {
 
+                /*
                 //Upload VCF File
                 isContactsUpload=getSharedPreferenceValue.getUploadVCFStatus(MainActivity.this);
                 if(isContactsUpload.equals("failed")){
@@ -413,13 +414,12 @@ public class MainActivity extends AppCompatActivity implements NavigationView.On
                     } catch (Exception e) {
                         e.printStackTrace();
                     }
-                }
+                }*/
+
 
                 UploadBlockList=getSharedPreferenceValue.getBlockListUploadStatus(MainActivity.this);
                 if(UploadBlockList){
-                    Log.w("Uploadblocklistnow","request");
-                    //UploadBlocklistNumbers();
-
+                    UploadBlocklistNumbers();
                 }
 
             }

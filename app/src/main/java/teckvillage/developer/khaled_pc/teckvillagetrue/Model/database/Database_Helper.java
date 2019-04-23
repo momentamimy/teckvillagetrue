@@ -11,6 +11,7 @@ import java.util.List;
 
 import teckvillage.developer.khaled_pc.teckvillagetrue.Model.database.tables.BlockListHistory;
 import teckvillage.developer.khaled_pc.teckvillagetrue.Model.database.tables.block;
+import teckvillage.developer.khaled_pc.teckvillagetrue.Model.retrofit.JSON_Mapping.Send_BlockList_JSON_Arraylist;
 
 /**
  * Created by khaled-pc on 3/30/2019.
@@ -91,6 +92,34 @@ public class Database_Helper extends SQLiteOpenHelper {
                 block1.setId(cursor.getInt(cursor.getColumnIndex(block.COLUMN_ID)));
                 block1.setName(cursor.getString(cursor.getColumnIndex(block.COLUMN_NAME)));
                 block1.setNumber(cursor.getString(cursor.getColumnIndex(block.COLUMN_NUMBER)));
+
+                courtsList.add(block1);
+            } while (cursor.moveToNext());
+        }
+
+        // close db connection
+        db.close();
+
+        // return Court list
+        return courtsList;
+    }
+
+
+    public ArrayList<Send_BlockList_JSON_Arraylist> getAllBlocklistUpload() {
+        ArrayList<Send_BlockList_JSON_Arraylist> courtsList = new ArrayList<>();
+
+        // Select All Query
+        String selectQuery = "SELECT  * FROM " + block.TABLE_NAME;
+
+        SQLiteDatabase db = this.getReadableDatabase();
+        Cursor cursor = db.rawQuery(selectQuery, null);
+
+        // looping through all rows and adding to list
+        if (cursor.moveToFirst()) {
+            do {
+                Send_BlockList_JSON_Arraylist block1 = new Send_BlockList_JSON_Arraylist();
+                block1.setPhone(cursor.getString(cursor.getColumnIndex(block.COLUMN_NUMBER)));
+                block1.setType(cursor.getString(cursor.getColumnIndex(block.COLUMN_TYPE)));
 
                 courtsList.add(block1);
             } while (cursor.moveToNext());

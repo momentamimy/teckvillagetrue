@@ -458,13 +458,30 @@ public class FileUploadService extends JobIntentService {
                     @Override
                     public void onResponse(Call<ResultModelUploadVCF> call, Response<ResultModelUploadVCF> response) {
 
-                        String mesf = response.body().getMsg();
-                        boolean me = response.body().isResponse();
-                        Log.w("success", mesf);
-                        Log.w("success", String.valueOf(me));
+                       if(response.isSuccessful()){
+                           String mesf = response.body().getMsg();
+                           boolean me = response.body().isResponse();
+                           Log.w("success", mesf);
+                           Log.w("success", String.valueOf(me));
 
 
-                        SuccessUpload("success",1);
+                           //SuccessUpload("success",1);
+                           SharedPreferences sharedPref = getSharedPreferences("WhoCaller?", MODE_PRIVATE);
+                           SharedPreferences.Editor editor = sharedPref.edit();
+                           editor.putString("Uploadstatus","success");
+                           editor.putInt("pagenum", 1);
+                           editor.apply();
+                       }else {
+                           //SuccessUpload("success",1);
+                           SharedPreferences sharedPref = getSharedPreferences("WhoCaller?", MODE_PRIVATE);
+                           SharedPreferences.Editor editor = sharedPref.edit();
+                           editor.putString("Uploadstatus","failed");
+                           editor.putInt("pagenum", 1);
+                           editor.apply();
+
+                       }
+
+
 
                         //Toast.makeText(getApplicationContext(),"successUploadVCF",Toast.LENGTH_LONG).show();
                     }
@@ -473,14 +490,26 @@ public class FileUploadService extends JobIntentService {
                     public void onFailure(Call<ResultModelUploadVCF> call, Throwable t) {
                         Log.w("onFailure", t.getMessage());
                         Log.w("onFailure", t.getCause());
-                        SuccessUpload("failed",1);
+                        SharedPreferences sharedPref = getSharedPreferences("WhoCaller?", MODE_PRIVATE);
+                        SharedPreferences.Editor editor = sharedPref.edit();
+                        editor.putString("Uploadstatus","failed");
+                        editor.putInt("pagenum", 1);
+                        editor.apply();
                     }
                 });
             }else {
-                SuccessUpload("failed",1);
+                SharedPreferences sharedPref = getSharedPreferences("WhoCaller?", MODE_PRIVATE);
+                SharedPreferences.Editor editor = sharedPref.edit();
+                editor.putString("Uploadstatus","failed");
+                editor.putInt("pagenum", 1);
+                editor.apply();
             }
         }else {
-            SuccessUpload("failed",1);
+            SharedPreferences sharedPref = getSharedPreferences("WhoCaller?", MODE_PRIVATE);
+            SharedPreferences.Editor editor = sharedPref.edit();
+            editor.putString("Uploadstatus","failed");
+            editor.putInt("pagenum", 1);
+            editor.apply();
         }
 
     }

@@ -8,12 +8,15 @@ import android.support.v4.app.JobIntentService;
 import android.util.Log;
 
 import java.util.ArrayList;
+import java.util.List;
 
 import retrofit2.Call;
 import retrofit2.Callback;
 import retrofit2.Response;
 import retrofit2.Retrofit;
 import teckvillage.developer.khaled_pc.teckvillagetrue.Model.Get_Calls_Log;
+import teckvillage.developer.khaled_pc.teckvillagetrue.Model.database.Database_Helper;
+import teckvillage.developer.khaled_pc.teckvillagetrue.Model.database.tables.block;
 import teckvillage.developer.khaled_pc.teckvillagetrue.Model.retrofit.ApiAccessToken;
 import teckvillage.developer.khaled_pc.teckvillagetrue.Model.retrofit.JSON_Mapping.ResultModelUploadVCF;
 import teckvillage.developer.khaled_pc.teckvillagetrue.Model.retrofit.JSON_Mapping.Send_BlockList_JSON_Arraylist;
@@ -33,7 +36,7 @@ import teckvillage.developer.khaled_pc.teckvillagetrue.View.ConnectionDetector;
 public class UploadBlockListService extends JobIntentService {
 
     private static final String TAG = "UploadBlockListNumber";
-
+    Database_Helper db;
 
     /**
      * Unique job ID for this service.
@@ -60,22 +63,30 @@ public class UploadBlockListService extends JobIntentService {
         try {
 
 
-            ArrayList<Send_BlockList_JSON_Arraylist> listts = new ArrayList<>();;
+            db=new Database_Helper(this);
 
-            /*
+            ArrayList<Send_BlockList_JSON_Arraylist> listts = new ArrayList<>();
+
+            ArrayList<Send_BlockList_JSON_Arraylist> Blocklist = new ArrayList<>();;
+
+            //Get data from database
+            Blocklist=db.getAllBlocklistUpload();
+
             //Check if Empty
-            if (list == null||list.size()<=0){
+            if (Blocklist == null||Blocklist.size()<=0){
                 Log.e(TAG, "onHandleWork: Invalid ");
+                //Make add Block
+                SharedPreferences sharedPref = getSharedPreferences("WhoCaller?", MODE_PRIVATE);
+                SharedPreferences.Editor editor = sharedPref.edit();
+                editor.putBoolean("UploadBlockList",false);
+                editor.apply();
                 return;
             }
 
-
             //Add all
-            for(int i = 0; i< list.size(); i++){
-                ArrayList<String> listss = new ArrayList<String>();
-                listss.add(list.get(i).getPhones());
-                listts.add(new Send_Top_Ten_Contacts_JSON_Arraylist(list.get(i).getName(),listss));
-            }*/
+            for(int i = 0; i< Blocklist.size(); i++){
+                listts.add(new Send_BlockList_JSON_Arraylist(Blocklist.get(i).getPhone(),Blocklist.get(i).getType()));
+            }
 
 
             //Correct Solution

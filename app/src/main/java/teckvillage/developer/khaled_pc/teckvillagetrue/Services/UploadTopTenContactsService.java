@@ -58,7 +58,7 @@ public class UploadTopTenContactsService extends JobIntentService {
         try {
 
                 get_calls_log = new Get_Calls_Log(getApplicationContext());
-                ArrayList<Send_Top_Ten_Contacts_JSON_Arraylist> listts = new ArrayList<>();;
+                ArrayList<Send_Top_Ten_Contacts_JSON_Arraylist> listts = new ArrayList<>();
 
                 // get Top Ten contact from Device
                 ArrayList<Send_Top_Ten_Contacts_JSON> list = get_calls_log.getTopTenContactsToServer();
