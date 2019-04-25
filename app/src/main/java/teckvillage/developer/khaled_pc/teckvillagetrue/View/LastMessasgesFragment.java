@@ -78,18 +78,18 @@ public class LastMessasgesFragment extends Fragment {
         refreshButton.setOnClickListener(new View.OnClickListener() {
             @Override
             public void onClick(View v) {
-                mProgressDialog = new ProgressDialog(getContext());
                 mProgressDialog.setIndeterminate(true);
                 mProgressDialog.setMessage("Loading...");
+                mProgressDialog.setCancelable(false);
                 mProgressDialog.show();
                 getAllLastMessages();
             }
         });
         if (CheckNetworkConnection.hasInternetConnection(getContext())) {
             if (ConnectionDetector.hasInternetConnection(getContext())) {
-                mProgressDialog = new ProgressDialog(getContext());
                 mProgressDialog.setIndeterminate(true);
                 mProgressDialog.setMessage("Loading...");
+                mProgressDialog.setCancelable(false);
                 mProgressDialog.show();
             }
         }

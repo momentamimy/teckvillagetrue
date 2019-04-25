@@ -1,9 +1,12 @@
 package teckvillage.developer.khaled_pc.teckvillagetrue;
 
 import android.Manifest;
+import android.app.Dialog;
 import android.app.ProgressDialog;
 import android.content.Intent;
 import android.content.pm.PackageManager;
+import android.graphics.Color;
+import android.graphics.drawable.ColorDrawable;
 import android.net.Uri;
 import android.os.Bundle;
 import android.support.design.widget.FloatingActionButton;
@@ -12,12 +15,15 @@ import android.support.v7.app.AppCompatActivity;
 import android.support.v7.widget.LinearLayoutManager;
 import android.support.v7.widget.PopupMenu;
 import android.support.v7.widget.RecyclerView;
+import android.support.v7.widget.Toolbar;
 import android.util.Log;
 import android.view.MenuItem;
 import android.view.View;
+import android.view.Window;
 import android.widget.EditText;
 import android.widget.ImageView;
 import android.widget.LinearLayout;
+import android.widget.ProgressBar;
 import android.widget.RelativeLayout;
 import android.widget.TextView;
 import android.widget.Toast;
@@ -43,7 +49,11 @@ import retrofit2.Callback;
 import retrofit2.Response;
 import retrofit2.Retrofit;
 
+import teckvillage.developer.khaled_pc.teckvillagetrue.Controller.AddContactsToChatGroupAdapter;
+import teckvillage.developer.khaled_pc.teckvillagetrue.Controller.SendToChatContactsAdapters;
 import teckvillage.developer.khaled_pc.teckvillagetrue.Model.retrofit.JSON_Mapping.DataReceived;
+import teckvillage.developer.khaled_pc.teckvillagetrue.Model.retrofit.JSON_Mapping.DataReceivedChatUsers;
+import teckvillage.developer.khaled_pc.teckvillagetrue.Model.retrofit.JSON_Mapping.RoomModel;
 import teckvillage.developer.khaled_pc.teckvillagetrue.View.CheckNetworkConnection;
 import teckvillage.developer.khaled_pc.teckvillagetrue.View.ConnectionDetector;
 import teckvillage.developer.khaled_pc.teckvillagetrue.Model.retrofit.ApiAccessToken;
@@ -53,15 +63,18 @@ import teckvillage.developer.khaled_pc.teckvillagetrue.Model.retrofit.JSON_Mappi
 import teckvillage.developer.khaled_pc.teckvillagetrue.Model.retrofit.JSON_Mapping.MessageGroupBodyModel;
 import teckvillage.developer.khaled_pc.teckvillagetrue.Model.retrofit.WhoCallerApi;
 import teckvillage.developer.khaled_pc.teckvillagetrue.Model.retrofit.retrofitHead;
+import teckvillage.developer.khaled_pc.teckvillagetrue.View.SendToChatActivity;
 
 import org.json.JSONException;
 import org.json.JSONObject;
 
 public class Chat_MessagesChat extends AppCompatActivity {
 
+    ProgressBar progressPage;
     RecyclerView chat_RecyclerView;
     List<MessageChatModel> messageChatInfos;
     messages_list_chat_adapter chatAdapter;
+    LinearLayoutManager llayout;
 
     TextView userName;
     CircleImageView userImg;
@@ -73,7 +86,8 @@ public class Chat_MessagesChat extends AppCompatActivity {
     FloatingActionButton send;
 
     String name, address,Image;
-    int receiverID,chatRoomId;
+    int[] groupUsers;
+    int receiverID,chatRoomId,page=1;
 
     ImageView callIcon, settingIcon;
 
@@ -133,11 +147,16 @@ public class Chat_MessagesChat extends AppCompatActivity {
         receiverID = getIntent().getIntExtra("UserID",0);
         chatRoomId = getIntent().getIntExtra("ChatID",0);
 
+
         if (address.equals("GroupChat"))
         {
             isGroup=true;
             callIcon.setVisibility(View.GONE);
             settingIcon.setVisibility(View.GONE);
+            userImg.setImageResource(R.drawable.ic_groupchat);
+            groupUsers = getIntent().getIntArrayExtra("UserIDsList");
+            Log.d("affafafa", String.valueOf(groupUsers[0]));
+
         }
         else
         {
@@ -161,10 +180,16 @@ public class Chat_MessagesChat extends AppCompatActivity {
         send = findViewById(R.id.fab);
         messageSend.setHint("");
 
+        progressPage=findViewById(R.id.progressPage);
         chat_RecyclerView = findViewById(R.id.chat_SMS_messages);
-
-
         messageChatInfos=new ArrayList<>();
+        chatAdapter = new messages_list_chat_adapter(Chat_MessagesChat.this, messageChatInfos, ApiAccessToken.getID(getApplicationContext()));
+        llayout= new LinearLayoutManager(getApplicationContext());
+        chat_RecyclerView.setLayoutManager(llayout);
+        llayout.setStackFromEnd(true);
+        chat_RecyclerView.setAdapter(chatAdapter);
+
+
         //getmessages();
 
 
@@ -223,7 +248,7 @@ public class Chat_MessagesChat extends AppCompatActivity {
                         {
                             final MessageChatModel messageChatModel=new MessageChatModel(Integer.parseInt(js.getString("id")), Integer.parseInt(js.getString("sender_id")), -1, Integer.parseInt(js.getString("group_id")),Integer.parseInt(js.getString("chat_rooms_id")), js.getString("text"), js.getString("created_at"), js.getString("updated_at"));
                             DataReceived sender =new DataReceived();
-                            sender.setName(name);
+                            sender.setName(jsonObject.getString("sender"));
                             messageChatModel.setSender(sender);
                             runOnUiThread(new Runnable() {
 
@@ -270,8 +295,9 @@ public class Chat_MessagesChat extends AppCompatActivity {
                     public boolean onMenuItemClick(MenuItem item) {
 
                         switch (item.getItemId()) {
-                            case R.id.Block_Spam:
+                            case R.id.add_contact_to_chat:
                                 // item one clicked
+                                //openContactsDialog();
                                 return true;
                         }
                         return false;
@@ -397,9 +423,39 @@ public class Chat_MessagesChat extends AppCompatActivity {
             }
         });
 
+        page=1;
+        chat_RecyclerView.addOnScrollListener(new RecyclerView.OnScrollListener() {
+            @Override
+            public void onScrolled(RecyclerView recyclerView, int dx, int dy) {
+                LinearLayoutManager layoutManager=LinearLayoutManager.class.cast(recyclerView.getLayoutManager());
+                int totalItemCount = layoutManager.getItemCount();
+                int lastVisible = layoutManager.findFirstVisibleItemPosition();
+                numberOfVisibleItems=layoutManager.findLastVisibleItemPosition()-layoutManager.findFirstVisibleItemPosition();
+                    Log.d("ya3mya3myaaaa", lastVisible+"    "+totalItemCount);
+                    if (lastVisible==0&&!Stop_Pages)
+                    {
+                        progressPage.setVisibility(View.VISIBLE);
+                        page++;
+                        getMessagesAPI();
+                    }
+                    else
+                    {
+                        progressPage.setVisibility(View.GONE);
+                    }
 
+            }
+        });
 
-
+        mProgressDialog.setIndeterminate(true);
+        mProgressDialog.setMessage("Loading...");
+        mProgressDialog.setCancelable(false);
+        mProgressDialog.show();
+        getMessagesAPI();
+    }
+    int numberOfVisibleItems=0;
+    boolean Stop_Pages=false;
+    public void  getMessagesAPI()
+    {
         //Api_getChatMessages
         if (CheckNetworkConnection.hasInternetConnection(Chat_MessagesChat.this)) {
 
@@ -408,69 +464,100 @@ public class Chat_MessagesChat extends AppCompatActivity {
                 if (!isGroup) {
                     Retrofit retrofit = retrofitHead.headOfGetorPostReturnRes();
                     WhoCallerApi whoCallerApi = retrofit.create(WhoCallerApi.class);
-                    Call<ListMessagesChatModel> MessageWhenOpenChat = whoCallerApi.getMessageWhenOpenChat(ApiAccessToken.getAPIaccessToken(Chat_MessagesChat.this), String.valueOf(receiverID),String.valueOf(chatRoomId));
+                    Call<ListMessagesChatModel> MessageWhenOpenChat = whoCallerApi.getMessageWhenOpenChat(ApiAccessToken.getAPIaccessToken(Chat_MessagesChat.this), String.valueOf(receiverID),String.valueOf(chatRoomId),String.valueOf(page));
 
-                    mProgressDialog = new ProgressDialog(Chat_MessagesChat.this);
-                    mProgressDialog.setIndeterminate(true);
-                    mProgressDialog.setMessage("Loading...");
-                    mProgressDialog.show();
+
                     MessageWhenOpenChat.enqueue(new Callback<ListMessagesChatModel>() {
                         @Override
                         public void onResponse(Call<ListMessagesChatModel> call, Response<ListMessagesChatModel> response) {
+                            int size=messageChatInfos.size()-1;
                             if (mProgressDialog.isShowing())
                                 mProgressDialog.dismiss();
-                            messageChatInfos = response.body().getMessages();
-                            sortDate();
-                            chatAdapter = new messages_list_chat_adapter(Chat_MessagesChat.this, messageChatInfos, ApiAccessToken.getID(getApplicationContext()));
-                            LinearLayoutManager linearLayoutManager = new LinearLayoutManager(getApplicationContext());
-                            linearLayoutManager.setStackFromEnd(true);
-                            chat_RecyclerView.setLayoutManager(linearLayoutManager);
-                            chat_RecyclerView.setAdapter(chatAdapter);
+                            if (response.isSuccessful())
+                            {
+                                if (response.body().getMessages().size()==0)
+                                {
+                                    Stop_Pages=true;
+                                    progressPage.setVisibility(View.GONE);
+                                }
+                                else
+                                {
+                                    messageChatInfos.addAll(0,response.body().getMessages());
+                                    sortDate();
+                                    if (page==1)
+                                    {
+                                        chatAdapter.notifyDataSetChanged();
+                                    }
+                                    else
+                                    {
+                                        chatAdapter.notifyItemRangeInserted(0,messageChatInfos.size()-1-size);
+                                    }
+                                    progressPage.setVisibility(View.GONE);
+                                }
+                            }
+                            else
+                                progressPage.setVisibility(View.GONE);
                         }
 
                         @Override
                         public void onFailure(Call<ListMessagesChatModel> call, Throwable t) {
                             if (mProgressDialog.isShowing())
                                 mProgressDialog.dismiss();
-                        }
+                            progressPage.setVisibility(View.GONE);}
+
                     });
                 }
                 else
                 {
                     Retrofit retrofit = retrofitHead.headOfGetorPostReturnRes();
                     WhoCallerApi whoCallerApi = retrofit.create(WhoCallerApi.class);
-                    Call<ListMessagesChatModel> MessageWhenOpenGroupChat = whoCallerApi.getMessageWhenOpenGroupChat(ApiAccessToken.getAPIaccessToken(Chat_MessagesChat.this), String.valueOf(receiverID),String.valueOf(chatRoomId));
+                    Call<ListMessagesChatModel> MessageWhenOpenGroupChat = whoCallerApi.getMessageWhenOpenGroupChat(ApiAccessToken.getAPIaccessToken(Chat_MessagesChat.this), String.valueOf(receiverID),String.valueOf(chatRoomId),String.valueOf(page));
 
-                    mProgressDialog = new ProgressDialog(Chat_MessagesChat.this);
-                    mProgressDialog.setIndeterminate(true);
-                    mProgressDialog.setMessage("Loading...");
-                    mProgressDialog.show();
 
                     MessageWhenOpenGroupChat.enqueue(new Callback<ListMessagesChatModel>() {
                         @Override
                         public void onResponse(Call<ListMessagesChatModel> call, Response<ListMessagesChatModel> response) {
                             if (mProgressDialog.isShowing())
                                 mProgressDialog.dismiss();
-                            messageChatInfos = response.body().getMessages();
-                            sortDate();
-                            chatAdapter = new messages_list_chat_adapter(Chat_MessagesChat.this, messageChatInfos, ApiAccessToken.getID(getApplicationContext()),true);
-                            LinearLayoutManager linearLayoutManager = new LinearLayoutManager(getApplicationContext());
-                            linearLayoutManager.setStackFromEnd(true);
-                            chat_RecyclerView.setLayoutManager(linearLayoutManager);
-                            chat_RecyclerView.setAdapter(chatAdapter);
+                            int size=messageChatInfos.size()-1;
+                            if (response.isSuccessful())
+                            {
+                                if (response.body().getMessages().size()==0)
+                                {
+                                    Stop_Pages=true;
+                                    progressPage.setVisibility(View.GONE);
+                                }
+                                else
+                                {
+                                    messageChatInfos.addAll(response.body().getMessages());
+                                    sortDate();
+                                    sortDate();
+                                    if (page==1)
+                                    {
+                                        chatAdapter.notifyDataSetChanged();
+                                    }
+                                    else
+                                    {
+                                        chatAdapter.notifyItemRangeInserted(0,messageChatInfos.size()-1-size);
+                                    }
+                                    progressPage.setVisibility(View.GONE);
+                                }
+                            }
+                            else
+                                progressPage.setVisibility(View.GONE);
                         }
 
                         @Override
                         public void onFailure(Call<ListMessagesChatModel> call, Throwable t) {
                             if (mProgressDialog.isShowing())
                                 mProgressDialog.dismiss();
+                            progressPage.setVisibility(View.GONE);
                         }
                     });
                 }
             }
         }
     }
-
     public void sortDate()
     {
         for (int i = 0; i < messageChatInfos.size(); i++) {
@@ -509,6 +596,72 @@ public class Chat_MessagesChat extends AppCompatActivity {
         Calendar cal = Calendar.getInstance();
         cal.setTime(date);
         return cal;
+    }
+
+    Dialog AddUserDialog;
+    RecyclerView mRecyclerViewContacts;
+    public AddContactsToChatGroupAdapter addContactsAdapters;
+    List<RoomModel>userContactsData;
+    public void openContactsDialog()
+    {
+        AddUserDialog = new Dialog(Chat_MessagesChat.this);
+        AddUserDialog.requestWindowFeature(Window.FEATURE_NO_TITLE);
+        AddUserDialog.setContentView(R.layout.add_user_chat_group);
+        Window window = AddUserDialog.getWindow();
+        window.setLayout(Toolbar.LayoutParams.WRAP_CONTENT, Toolbar.LayoutParams.WRAP_CONTENT);
+        AddUserDialog.getWindow().setBackgroundDrawable(new ColorDrawable(Color.TRANSPARENT));
+
+        mRecyclerViewContacts=AddUserDialog.findViewById(R.id.Send_To_RecyclerView);
+        userContactsData=new ArrayList<>();
+
+        //API Request
+        //Check wifi or data available
+        if (CheckNetworkConnection.hasInternetConnection(Chat_MessagesChat.this)) {
+
+            //Check internet Access
+            if (ConnectionDetector.hasInternetConnection(Chat_MessagesChat.this)) {
+                Retrofit retrofit = retrofitHead.headOfGetorPostReturnRes();
+                WhoCallerApi whoCallerApi = retrofit.create(WhoCallerApi.class);
+                Call<DataReceivedChatUsers> MessageWhenOpenChat = whoCallerApi.getallChatContact(ApiAccessToken.getAPIaccessToken(Chat_MessagesChat.this));
+
+                MessageWhenOpenChat.enqueue(new Callback<DataReceivedChatUsers>() {
+                    @Override
+                    public void onResponse(Call<DataReceivedChatUsers> call, Response<DataReceivedChatUsers> response) {
+                        if (response.isSuccessful())
+                        {
+                            if (mProgressDialog.isShowing())
+                                mProgressDialog.dismiss();
+
+                            Log.d("dadadawqffsxzdf","sucees");
+                            userContactsData= new ArrayList<>();
+
+                            for (int i=0;i<response.body().getRoom().size();i++) {
+                                RoomModel roomModel=response.body().getRoom().get(i);
+                                if (roomModel.getType().equals("user")) { userContactsData.add(roomModel); }
+                            }
+
+                            addContactsAdapters=new AddContactsToChatGroupAdapter(getApplicationContext(),userContactsData,groupUsers,receiverID,name,AddUserDialog);
+                            mRecyclerViewContacts.setLayoutManager(new LinearLayoutManager(getApplicationContext()));
+                            mRecyclerViewContacts.setAdapter(addContactsAdapters);
+                        }
+                        else
+                        {
+                            if (mProgressDialog.isShowing())
+                                mProgressDialog.dismiss();
+                            Log.d("dadadawqffsxzdf","failed");
+                        }
+                    }
+
+                    @Override
+                    public void onFailure(Call<DataReceivedChatUsers> call, Throwable t) {
+                        if (mProgressDialog.isShowing())
+                            mProgressDialog.dismiss();
+                        Log.d("dadadawqffsxzdf","failure");
+                    }
+                });
+            }
+        }
+        AddUserDialog.show();
     }
 }
 

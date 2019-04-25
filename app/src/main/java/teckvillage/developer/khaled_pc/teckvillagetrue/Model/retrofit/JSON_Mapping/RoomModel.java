@@ -7,6 +7,7 @@ public class RoomModel {
             String name;
             String img;
             String phone;
+            int[] groupUsers;
 
     public String getPhone() {
         return phone;
@@ -54,5 +55,13 @@ public class RoomModel {
 
     public void setImg(String img) {
         this.img = img;
+    }
+
+    public int[] getGroupUsers() {
+        return groupUsers;
+    }
+
+    public void setGroupUsers(int[] groupUsers) {
+        this.groupUsers = groupUsers;
     }
 }

@@ -217,6 +217,7 @@ public class SendToChatActivity extends AppCompatActivity {
                 mProgressDialog = new ProgressDialog(SendToChatActivity.this);
                 mProgressDialog.setIndeterminate(true);
                 mProgressDialog.setMessage("Loading...");
+                mProgressDialog.setCancelable(false);
                 mProgressDialog.show();
 
                 MessageWhenOpenChat.enqueue(new Callback<DataReceivedChatUsers>() {
@@ -346,6 +347,7 @@ public class SendToChatActivity extends AppCompatActivity {
                         mProgressDialog = new ProgressDialog(SendToChatActivity.this);
                         mProgressDialog.setIndeterminate(true);
                         mProgressDialog.setMessage("Loading...");
+                        mProgressDialog.setCancelable(false);
                         mProgressDialog.show();
                 GroupChat.enqueue(new Callback<GroupChatResultModel>() {
                     @Override

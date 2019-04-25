@@ -9,6 +9,9 @@ int chatRoomId;
         String message;
         DateModel date;
         String phone;
+        int senderId;
+        int seen;
+        int[]groupUsers;
 
     public String getPhone() {
         return phone;
@@ -72,5 +75,29 @@ int chatRoomId;
 
     public void setDate(DateModel date) {
         this.date = date;
+    }
+
+    public int getSenderId() {
+        return senderId;
+    }
+
+    public void setSenderId(int senderId) {
+        this.senderId = senderId;
+    }
+
+    public int getSeen() {
+        return seen;
+    }
+
+    public void setSeen(int seen) {
+        this.seen = seen;
+    }
+
+    public int[] getGroupUsers() {
+        return groupUsers;
+    }
+
+    public void setGroupUsers(int[] groupUsers) {
+        this.groupUsers = groupUsers;
     }
 }

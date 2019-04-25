@@ -62,6 +62,7 @@ public class AllChatRoomsAdapters extends RecyclerView.Adapter<AllChatRoomsAdapt
             {
 
                 Picasso.with(context).load("http://whocaller.net/uploads/"+data.getImg())
+                        .fit().centerInside()
                         .into(holder.contactCircleImageView2, new com.squareup.picasso.Callback() {
                             @Override
                             public void onSuccess() {
@@ -99,6 +100,7 @@ public class AllChatRoomsAdapters extends RecyclerView.Adapter<AllChatRoomsAdapt
                             intent.putExtra("UserAddress", "GroupChat");
                             intent.putExtra("UserID", data.getId());
                             intent.putExtra("ChatID", data.getChatRoomId());
+                            intent.putExtra("UserIDsList",data.getGroupUsers());
                             context.startActivity(intent);
                         }
 

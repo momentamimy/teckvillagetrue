@@ -9,6 +9,8 @@ import android.view.ViewGroup;
 import android.widget.ImageView;
 import android.widget.TextView;
 
+import com.squareup.picasso.Picasso;
+
 import java.util.List;
 
 import de.hdodenhof.circleimageview.CircleImageView;
@@ -57,6 +59,14 @@ public class SendToChatContactsAdapters extends RecyclerView.Adapter<SendToChatC
         else {
             if (holder.contactName2 != null) {
                 final RoomModel data = mDataArray.get(position);
+                Picasso.with(context).load("http://whocaller.net/uploads/"+data.getImg())
+                        .fit().centerInside()
+                        .into(holder.contactCircleImageView2, new com.squareup.picasso.Callback() {
+                            @Override
+                            public void onSuccess() { }
+                            @Override
+                            public void onError() { holder.contactCircleImageView2.setImageResource(R.drawable.ic_nurse); }
+                        });
                 holder.itemView.setOnClickListener(new View.OnClickListener() {
                     @Override
                     public void onClick(View v) {

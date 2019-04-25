@@ -70,17 +70,17 @@ public class AllChatRoomsFragment extends Fragment {
         refreshButton.setOnClickListener(new View.OnClickListener() {
             @Override
             public void onClick(View v) {
-                mProgressDialog = new ProgressDialog(getContext());
                 mProgressDialog.setIndeterminate(true);
                 mProgressDialog.setMessage("Loading...");
+                mProgressDialog.setCancelable(false);
                 mProgressDialog.show();
                 getAllChatRooms();
             }
         });
 
-        mProgressDialog = new ProgressDialog(getContext());
         mProgressDialog.setIndeterminate(true);
         mProgressDialog.setMessage("Loading...");
+        mProgressDialog.setCancelable(false);
         mProgressDialog.show();
         getAllChatRooms();
 

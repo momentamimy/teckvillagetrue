@@ -91,6 +91,7 @@ public class Message_Fragment extends Fragment implements LoaderManager.LoaderCa
 
         ImageView icon=view.findViewById(R.id.iconnnn);
         final ImageView threedots=view.findViewById(R.id.threedots);
+        threedots.setVisibility(View.GONE);
 
 
         if(ContextCompat.checkSelfPermission(getActivity().getBaseContext(), "android.permission.READ_SMS") == PackageManager.PERMISSION_GRANTED) {

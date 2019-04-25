@@ -15,8 +15,10 @@ import retrofit2.http.Header;
 import retrofit2.http.Multipart;
 import retrofit2.http.POST;
 import retrofit2.http.Part;
+import retrofit2.http.Path;
 import retrofit2.http.Query;
 import teckvillage.developer.khaled_pc.teckvillagetrue.Model.retrofit.JSON_Mapping.BodyNumberModel;
+import teckvillage.developer.khaled_pc.teckvillagetrue.Model.retrofit.JSON_Mapping.BodyUpdateGroup;
 import teckvillage.developer.khaled_pc.teckvillagetrue.Model.retrofit.JSON_Mapping.DataReceivedChatUsers;
 import teckvillage.developer.khaled_pc.teckvillagetrue.Model.retrofit.JSON_Mapping.FetchedUserData;
 import teckvillage.developer.khaled_pc.teckvillagetrue.Model.retrofit.JSON_Mapping.InitialDataModel;
@@ -149,14 +151,22 @@ public interface WhoCallerApi {
     Call<ListMessagesChatModel> getMessageWhenOpenChat(
             @Query("api_token") String ApiAccessToken,
             @Query("user_id") String id,
-            @Query("chat_rooms_id") String chatId);
+            @Query("chat_rooms_id") String chatId,
+            @Query("page") String page);
 
 
     @GET("getMessages?")
     Call<ListMessagesChatModel> getMessageWhenOpenGroupChat(
             @Query("api_token") String ApiAccessToken,
             @Query("group_id") String id,
-            @Query("chat_rooms_id") String chatId);
+            @Query("chat_rooms_id") String chatId,
+            @Query("page") String page);
+
+    @POST("updateGroup/{ID}?")
+    Call<GroupChatResultModel> updateGroupChat(
+            @Path("ID") int id,
+            @Query("api_token") String ApiAccessToken,
+            @Body BodyUpdateGroup bodyUpdateGroup);
 
 
     @POST("updateUserMobileToken?")

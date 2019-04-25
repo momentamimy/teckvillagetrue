@@ -27,6 +27,8 @@ import teckvillage.developer.khaled_pc.teckvillagetrue.R;
 import teckvillage.developer.khaled_pc.teckvillagetrue.Model.MessageInfo;
 import teckvillage.developer.khaled_pc.teckvillagetrue.SMS_MessagesChat;
 
+import static teckvillage.developer.khaled_pc.teckvillagetrue.Chat_MessagesChat.ChatStatusChanged;
+
 public class CustomRecyclerViewChatAdapter extends RecyclerView.Adapter<CustomRecyclerViewChatAdapter.ViewHolder>{
 
     private List<LastMessageModel> dataSet;
@@ -40,11 +42,14 @@ public class CustomRecyclerViewChatAdapter extends RecyclerView.Adapter<CustomRe
     @Override
     public int getItemViewType(int position) {
         LastMessageModel info=dataSet.get(position);
-
-        if (info.getType().equals("group"))
-            return 1;
-        else if (info.getType().equals("user"))
+        if (info.getType().equals("user")&&info.getSenderId()!=info.getId())
             return 0;
+        else if (info.getType().equals("user")&&info.getSeen()==1)
+            return 0;
+        else if (info.getType().equals("user")&&info.getSeen()==0)
+            return 1;
+        else if (info.getType().equals("group"))
+            return 2;
         else return 0;
     }
 
@@ -86,8 +91,8 @@ public class CustomRecyclerViewChatAdapter extends RecyclerView.Adapter<CustomRe
 
         if (holder.getItemViewType()==0)
         {
-
             Picasso.with(mContext).load("http://whocaller.net/uploads/"+dataModel.getImg())
+                    .fit().centerInside()
                     .into(holder.contactPhoto, new com.squareup.picasso.Callback() {
                         @Override
                         public void onSuccess() {
@@ -100,7 +105,22 @@ public class CustomRecyclerViewChatAdapter extends RecyclerView.Adapter<CustomRe
                         }
                     });
         }
-        else
+        else if (holder.getItemViewType()==1)
+        {
+            Picasso.with(mContext).load("http://whocaller.net/uploads/"+dataModel.getImg())
+                    .fit().centerInside()
+                    .into(holder.contactPhoto, new com.squareup.picasso.Callback() {
+                        @Override
+                        public void onSuccess() { }
+                        @Override
+                        public void onError() { holder.contactPhoto.setImageResource(R.drawable.ic_nurse); }
+                    });
+
+            holder.logName.setTypeface(holder.logName.getTypeface(), Typeface.BOLD);
+            holder.textMessage.setTypeface(holder.textMessage.getTypeface(), Typeface.BOLD);
+            holder.messageDate.setTypeface(holder.messageDate.getTypeface(), Typeface.BOLD);
+        }
+        else if (holder.getItemViewType()==2)
         {
             holder.contactPhoto.setImageResource(R.drawable.ic_groupchat);
         }
@@ -120,11 +140,23 @@ public class CustomRecyclerViewChatAdapter extends RecyclerView.Adapter<CustomRe
                 }
                 else if (holder.getItemViewType()==1)
                 {
+                    ChatStatusChanged=true;
+                    Intent intent = new Intent(mContext, Chat_MessagesChat.class);
+                    intent.putExtra("UserName", dataModel.getName());
+                    intent.putExtra("UserAddress", dataModel.getPhone());
+                    intent.putExtra("UserID", dataModel.getId());
+                    intent.putExtra("ChatID", dataModel.getChatRoomId());
+                    intent.putExtra("UserImage", dataModel.getImg());
+                    mContext.startActivity(intent);
+                }
+                else if (holder.getItemViewType()==2)
+                {
                     Intent intent = new Intent(mContext, Chat_MessagesChat.class);
                     intent.putExtra("UserName", dataModel.getName());
                     intent.putExtra("UserAddress", "GroupChat");
                     intent.putExtra("UserID", dataModel.getId());
                     intent.putExtra("ChatID", dataModel.getChatRoomId());
+                    intent.putExtra("UserIDsList",dataModel.getGroupUsers());
                     mContext.startActivity(intent);
                 }
             }
