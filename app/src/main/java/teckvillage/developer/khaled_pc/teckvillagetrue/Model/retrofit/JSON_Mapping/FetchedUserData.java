@@ -13,7 +13,7 @@ public class FetchedUserData {
             int user_id;
             String user_name;
             String user_img;
-            int user_tag_id;
+            String user_tag_id;
             int spam_count;
             String vcard_fullname;
             String vcard_dob;
@@ -109,11 +109,11 @@ public class FetchedUserData {
         this.user_name = user_name;
     }
 
-    public int getUser_tag_id() {
+    public String getUser_tag_id() {
         return user_tag_id;
     }
 
-    public void setUser_tag_id(int user_tag_id) {
+    public void setUser_tag_id(String user_tag_id) {
         this.user_tag_id = user_tag_id;
     }
 

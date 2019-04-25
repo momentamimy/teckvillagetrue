@@ -469,6 +469,15 @@ public class User_Contact_Profile_From_log_list extends AppCompatActivity {
 
                             }
 
+
+                            //Update Tag UI
+                            if(fetchedUserData.getTag_id()!=0){
+                                Log.w("sues",fetchedUserData.getUser_tag_id());
+                                tag.setVisibility(View.VISIBLE);
+                            }else {
+                                tag.setVisibility(View.GONE);
+                            }
+
                             //Update UI Country
                             if(fetchedUserData.getCountry()!=null){
                                 countrylay.setVisibility(View.VISIBLE);

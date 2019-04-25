@@ -66,6 +66,7 @@
                             android:textColor="@android:color/white"
                             />
                         <TextView
+                            android:visibility="gone"
                             android:layout_marginTop="10dp"
                             android:id="@+id/Caller_Country"
                             android:layout_width="wrap_content"
@@ -124,16 +125,17 @@
                         />
                     <Button
                         android:id="@+id/ViewProfile"
-                        android:layout_width="50dp"
-                        android:layout_height="30dp"
+                        android:layout_width="45dp"
+                        android:layout_height="25dp"
                         android:background="@drawable/glory_button"
                         android:src="@drawable/who_caller_text_logo"
                         android:text="view"
+                        android:textSize="12sp"
                         android:layout_alignParentEnd="true"
                         android:layout_alignParentRight="true"
                         android:textColor="@color/colorPrimary"
                         android:layout_centerVertical="true"
-                        android:layout_marginHorizontal="10dp"/>
+                        android:layout_marginHorizontal="20dp"/>
                 </RelativeLayout>
             </RelativeLayout>
             <RelativeLayout

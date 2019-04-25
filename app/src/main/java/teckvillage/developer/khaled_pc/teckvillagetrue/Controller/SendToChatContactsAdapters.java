@@ -78,6 +78,7 @@ public class SendToChatContactsAdapters extends RecyclerView.Adapter<SendToChatC
                             intent.putExtra("UserID", data.getId());
                             intent.putExtra("ChatID", data.getChatRoomId());
                             intent.putExtra("UserImage", data.getImg());
+                            intent.addFlags(Intent.FLAG_ACTIVITY_NEW_TASK);
                             context.startActivity(intent);
 
                         } else if (MultipleRecivers = true) {

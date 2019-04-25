@@ -39,6 +39,7 @@ dependencies {
     implementation 'com.sdsmdg.tastytoast:tastytoast:0.1.1'
     implementation 'com.github.IntruderShanky:Squint:3.0.1'
     implementation 'net.steamcrafted:load-toast:1.0.12'
+
     //Camera Recogition
     implementation 'com.google.android.gms:play-services-vision:17.0.2'
     //retrofit

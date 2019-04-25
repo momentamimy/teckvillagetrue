@@ -373,6 +373,7 @@ public class MainActivity extends AppCompatActivity implements NavigationView.On
             progressBar.setVisibility(View.VISIBLE);
             Picasso.with(this)
                     .load(USer_Image)
+                    .fit().centerInside()
                     .into(userImageprofile, new com.squareup.picasso.Callback() {
                         @Override
                         public void onSuccess() {
@@ -398,7 +399,8 @@ public class MainActivity extends AppCompatActivity implements NavigationView.On
             //Check internet Access
             if (ConnectionDetector.hasInternetConnection(MainActivity.this)) {
 
-                /*
+
+
                 //Upload VCF File
                 isContactsUpload=getSharedPreferenceValue.getUploadVCFStatus(MainActivity.this);
                 if(isContactsUpload.equals("failed")){
@@ -420,7 +422,7 @@ public class MainActivity extends AppCompatActivity implements NavigationView.On
                     } catch (Exception e) {
                         e.printStackTrace();
                     }
-                }*/
+                }
 
 
                 UploadBlockList=getSharedPreferenceValue.getBlockListUploadStatus(MainActivity.this);

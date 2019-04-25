@@ -103,8 +103,13 @@ public class FileUploadService extends JobIntentService {
 
         int take=1000;
         int skip=(page-1)*take;
+        if (Build.VERSION.SDK_INT > Build.VERSION_CODES.M) {
+            cursor = getContentResolver().query(ContactsContract.Contacts.CONTENT_URI, null, null, null, null);
+        }else {
+            cursor = getContentResolver().query(ContactsContract.CommonDataKinds.Phone.CONTENT_URI, null, null, null, null);
+        }
 
-        cursor = getContentResolver().query(ContactsContract.Contacts.CONTENT_URI, null, null, null, null);
+
         Log.w("sizecursor", String.valueOf(cursor.getCount()));
 
         if(cursor!=null&& cursor.moveToFirst()&&cursor.getCount()>0)
@@ -228,7 +233,7 @@ public class FileUploadService extends JobIntentService {
                 String vcardstring= new String(buf);
                 vCard.add(vcardstring);
 
-                fd.close();
+               fis.close();
 
         } catch (Exception e1)
         {

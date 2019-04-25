@@ -8,6 +8,7 @@ import android.view.LayoutInflater;
 import android.view.View;
 import android.view.ViewGroup;
 import android.widget.RelativeLayout;
+import android.widget.Toast;
 
 import java.util.ArrayList;
 import java.util.List;
@@ -88,40 +89,80 @@ public class RecycleviewResult_SearchAPIAdapter extends  RecyclerView.Adapter<Re
                 if(itemList.get(position).getPhone()!=null&&itemList.get(position).getPhone().length()>0){
                     ContactVH.countryy.setVisibility(View.VISIBLE);
                     ContactVH.countryy.setText(itemList.get(position).getPhone());//Display phone or country
-                    ContactVH.contactNamee.setText(itemList.get(position).getName());//Display name
-                    // if false remove center:
-                    layoutParams.addRule(RelativeLayout.CENTER_IN_PARENT, 0);
-                    ContactVH.contactNamee.setLayoutParams(layoutParams);
+                    if(itemList.get(position).getName()!=null){
+                        ContactVH.contactNamee.setText(itemList.get(position).getName());//Display name
+                        // if false remove center:
+                        layoutParams.addRule(RelativeLayout.CENTER_IN_PARENT, 0);
+                        ContactVH.contactNamee.setLayoutParams(layoutParams);
+
+                    }
 
                 }else {
                     ContactVH.countryy.setVisibility(View.GONE);
-                    ContactVH.contactNamee.setText(itemList.get(position).getName());//Display name
-                    //set contactName Center in parent if country visiable
-                    layoutParams.addRule(RelativeLayout.CENTER_IN_PARENT, RelativeLayout.TRUE);
-                    ContactVH.contactNamee.setLayoutParams(layoutParams);
+                    if(itemList.get(position).getName()!=null){
+                        ContactVH.contactNamee.setText(itemList.get(position).getName());//Display name
+                        //set contactName Center in parent if country visiable
+                        layoutParams.addRule(RelativeLayout.CENTER_IN_PARENT, RelativeLayout.TRUE);
+                        ContactVH.contactNamee.setLayoutParams(layoutParams);
+                    }
+
                 }
 
 
 
-                ContactVH.container_chaticon.setOnClickListener(new View.OnClickListener() {
-                    @Override
-                    public void onClick(View v) {
-                        Intent intent = new Intent(context,SMS_MessagesChat.class);
-                        intent.putExtra("LogSMSName",itemList.get(position).getName());
-                        intent.putExtra("LogSMSAddress",itemList.get(position).getPhone());
-                        context.startActivity(intent);
+                if(itemList.get(position).getPhone()!=null&&itemList.get(position).getPhone().length()>0){
 
-                    }
-                });
+                    ContactVH.container_chaticon.setOnClickListener(new View.OnClickListener() {
+                        @Override
+                        public void onClick(View v) {
+                            Intent intent = new Intent(context,SMS_MessagesChat.class);
+                            intent.putExtra("LogSMSName",itemList.get(position).getName());
+                            intent.putExtra("LogSMSAddress",itemList.get(position).getPhone());
+                            context.startActivity(intent);
 
-                ContactVH.openProfile.setOnClickListener(new View.OnClickListener() {
-                    @Override
-                    public void onClick(View v) {
-                        Intent intent2 = new Intent(context,User_Contact_Profile_From_log_list.class);
-                        intent2.putExtra("ContactNUm",itemList.get(position).getPhone());
-                        context.startActivity(intent2);
+                        }
+                    });
+
+                    ContactVH.openProfile.setOnClickListener(new View.OnClickListener() {
+                        @Override
+                        public void onClick(View v) {
+                            Intent intent2 = new Intent(context,User_Contact_Profile_From_log_list.class);
+                            intent2.putExtra("ContactNUm",itemList.get(position).getPhone());
+                            context.startActivity(intent2);
+                        }
+                    });
+
+
+
+                }else {
+
+                    if(itemList.get(position).getFull_phone()!=null&&itemList.get(position).getFull_phone().length()>0){
+                        ContactVH.container_chaticon.setOnClickListener(new View.OnClickListener() {
+                            @Override
+                            public void onClick(View v) {
+                                Intent intent = new Intent(context,SMS_MessagesChat.class);
+                                intent.putExtra("LogSMSName",itemList.get(position).getName());
+                                intent.putExtra("LogSMSAddress",itemList.get(position).getFull_phone());
+                                context.startActivity(intent);
+
+                            }
+                        });
+
+                        ContactVH.openProfile.setOnClickListener(new View.OnClickListener() {
+                            @Override
+                            public void onClick(View v) {
+                                Intent intent2 = new Intent(context,User_Contact_Profile_From_log_list.class);
+                                intent2.putExtra("ContactNUm",itemList.get(position).getFull_phone());
+                                context.startActivity(intent2);
+                            }
+                        });
+
+                    }else {
+                        Toast.makeText(context,"No Phone Number To This Name",Toast.LENGTH_SHORT).show();
                     }
-                });
+
+                }
+
 
 
                 break;

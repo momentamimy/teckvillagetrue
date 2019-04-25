@@ -526,7 +526,14 @@ public class RecycleviewResult_SearchAPI extends AppCompatActivity {
                         for(int i = 0; i< resultList.size(); i++){
 
                             Log.w("success", resultList.get(i).getName());
-                            Log.w("success", resultList.get(i).getPhone());
+                            if(resultList.get(i).getPhone()!=null){
+                                Log.w("success", resultList.get(i).getPhone());
+                            }else {
+                                if(resultList.get(i).getFull_phone()!=null){
+                                    Log.w("success", resultList.get(i).getFull_phone());
+                                }
+                            }
+
                             Log.w("success", String.valueOf(resultList.get(i).getId()));
                         }
                         Log.w("firstloadsuecress","firstloadsuecress");

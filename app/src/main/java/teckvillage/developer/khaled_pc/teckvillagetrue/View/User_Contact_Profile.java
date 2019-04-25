@@ -484,6 +484,13 @@ public class User_Contact_Profile extends AppCompatActivity {
                             Log.w("sues",fetchedUserData.getVcard_email());
                         }
 
+                        if(fetchedUserData.getTag_id()!=0){
+                            Log.w("sues",fetchedUserData.getUser_tag_id());
+                            tag.setVisibility(View.VISIBLE);
+                        }else {
+                            tag.setVisibility(View.GONE);
+                        }
+
                         //Update UI Email
                         //First check User Email
                         if(fetchedUserData.getUser_email()!=null){

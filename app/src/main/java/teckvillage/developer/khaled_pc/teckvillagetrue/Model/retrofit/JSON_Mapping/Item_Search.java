@@ -6,7 +6,16 @@ package teckvillage.developer.khaled_pc.teckvillagetrue.Model.retrofit.JSON_Mapp
 
 public class Item_Search {
     long id;
-    String name,phone;
+    String name,phone,full_phone;
+
+
+    public String getFull_phone() {
+        return full_phone;
+    }
+
+    public void setFull_phone(String full_phone) {
+        this.full_phone = full_phone;
+    }
 
     public long getId() {
         return id;

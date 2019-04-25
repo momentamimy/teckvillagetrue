@@ -734,7 +734,7 @@ public class Signup extends AppCompatActivity {
     public String saveToInternalStorage(Bitmap bitmapImage){
         ContextWrapper cw = new ContextWrapper(getApplicationContext());
         // path to /data/data/yourapp/app_data/imageDir
-        File directory = cw.getDir("imageDir", Context.MODE_PRIVATE);
+        File directory = cw.getDir("imageDire", Context.MODE_PRIVATE);
         // Create imageDir
         File mypath=new File(directory,"profile.jpg");
 
