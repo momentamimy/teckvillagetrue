@@ -193,7 +193,7 @@ public class Signup extends AppCompatActivity {
 
             //loginButton.setReadPermissions(Arrays.asList(EMAIL,PROFILE_PIC,USER_FRIEND));
             //LoginManager.getInstance().logInWithReadPermissions(this, Arrays.asList("public_profile"));
-            // If you are using in a fragment, call loginButton.setFragment(this);
+            //If you are using in a fragment, call loginButton.setFragment(this);
 
             // Callback registration
             LoginManager.getInstance().registerCallback(callbackManager, new FacebookCallback<LoginResult>() {
@@ -742,7 +742,7 @@ public class Signup extends AppCompatActivity {
         try {
             fos = new FileOutputStream(mypath);
             // Use the compress method on the BitMap object to write image to the OutputStream
-            bitmapImage.compress(Bitmap.CompressFormat.PNG, 100, fos);
+            bitmapImage.compress(Bitmap.CompressFormat.PNG, 50, fos);
         } catch (Exception e) {
             e.printStackTrace();
         } finally {
