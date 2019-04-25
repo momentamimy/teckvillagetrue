@@ -10,6 +10,7 @@ import android.content.Intent;
 import android.content.SharedPreferences;
 import android.content.pm.PackageManager;
 import android.content.res.AssetFileDescriptor;
+import android.database.ContentObserver;
 import android.database.Cursor;
 import android.graphics.Bitmap;
 import android.graphics.BitmapFactory;
@@ -106,6 +107,20 @@ public class MainActivity extends AppCompatActivity implements NavigationView.On
     boolean UploadBlockList;
 
 
+    // Constants
+    // Content provider scheme
+    public static final String SCHEME = "content://";
+    // Content provider authority
+    public static final String AUTHORITY = "com.example.android.datasync.provider";
+    // Path for the content provider table
+    public static final String TABLE_PATH = "data_table";
+    // Account
+    public static final String ACCOUNT = "default_account";
+    // Global variables
+    // A content URI for the content provider's data table
+    Uri uri;
+    // A content resolver for accessing the provider
+    ContentResolver mResolver;
 
     @Override
     protected void onCreate(final Bundle savedInstanceState) {
@@ -113,8 +128,8 @@ public class MainActivity extends AppCompatActivity implements NavigationView.On
         setContentView(R.layout.activity_main);
         Toolbar toolbar = (Toolbar) findViewById(R.id.toolbar);
         setSupportActionBar(toolbar);
-        FirebaseMessaging.getInstance().subscribeToTopic("all")
-                .addOnCompleteListener(new OnCompleteListener<Void>() {
+
+        FirebaseMessaging.getInstance().subscribeToTopic("all").addOnCompleteListener(new OnCompleteListener<Void>() {
                     @Override
                     public void onComplete(@NonNull Task<Void> task) {
                         if (!task.isSuccessful()) {
@@ -133,16 +148,6 @@ public class MainActivity extends AppCompatActivity implements NavigationView.On
         intent.putExtra(TelecomManager.EXTRA_CHANGE_DEFAULT_DIALER_PACKAGE_NAME, getPackageName());
         startActivity(intent);*/
 
-
-
-        /*
-        sharedPreferences = getSharedPreferences("WhoCaller?", Context.MODE_PRIVATE);
-        String namesss= sharedPreferences.getString("User_name", "");
-        String numsss = sharedPreferences.getString("User_phone","false");
-        String emass = sharedPreferences.getString("User_email","false");
-        String apiaxx = sharedPreferences.getString("User_API_token","false");
-        Log.w("wlakolwla",namesss+"  ||  "+numsss);
-        Log.w("wlakolwla2",emass+"  ||  "+apiaxx);*/
 
         
         SMSNotification=getIntent().getBooleanExtra("NOTIFICATION",false);
@@ -432,6 +437,22 @@ public class MainActivity extends AppCompatActivity implements NavigationView.On
 
 
 
+
+        //****************************************************Change in Contacts*****************************************
+        // Get the content resolver object for your app
+        // mResolver = getContentResolver();
+
+        /*
+         * Create a content observer object.
+         * Its code does not mutate the provider, so set
+         * selfChange to "false"
+         */
+        //TableObserver observer = new TableObserver();
+        /*
+         * Register the observer for the data table. The table's path
+         * and any of its subpaths trigger the observer.
+         */
+        //mResolver.registerContentObserver(ContactsContract.Contacts.CONTENT_URI, true, observer);
 
     }
 
@@ -1089,4 +1110,7 @@ public class MainActivity extends AppCompatActivity implements NavigationView.On
     {
         this.listener = listener ;
     }
+
+
+
 }

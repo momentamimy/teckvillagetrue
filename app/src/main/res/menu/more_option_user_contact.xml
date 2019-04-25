@@ -1,0 +1,46 @@
+<?xml version="1.0" encoding="utf-8"?>
+<menu xmlns:android="http://schemas.android.com/apk/res/android">
+
+
+    <item
+        android:id="@+id/sharecontact"
+        android:title="Share"
+        />
+
+
+    <item
+        android:id="@+id/editcontact"
+        android:title="Edit"
+        />
+
+
+    <item
+        android:id="@+id/copyname"
+        android:title="Copy Name"
+        />
+
+    <item
+        android:id="@+id/copynumber"
+        android:title="Copy Number"
+        />
+
+
+    <item
+        android:id="@+id/copycontact"
+        android:title="Copy Contact"
+        />
+
+
+
+    <item
+        android:id="@+id/searchonweb"
+        android:title="Search the Web"
+        />
+
+
+    <item
+        android:id="@+id/remove"
+        android:title="Remove Contact"
+        />
+
+</menu>

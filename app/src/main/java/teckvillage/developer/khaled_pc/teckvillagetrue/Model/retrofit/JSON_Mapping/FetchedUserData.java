@@ -17,6 +17,7 @@ public class FetchedUserData {
             int spam_count;
             String vcard_fullname;
             String vcard_dob;
+            String user_email;
             String vcard_email;
             String vcard_phone;
             String vcard_address;
@@ -27,6 +28,14 @@ public class FetchedUserData {
             String created_at;
             String updated_at;
             boolean is_spam;
+
+    public String getUser_email() {
+        return user_email;
+    }
+
+    public void setUser_email(String user_email) {
+        this.user_email = user_email;
+    }
 
     public int getId() {
         return id;

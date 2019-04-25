@@ -81,7 +81,7 @@ public class FileUploadService extends JobIntentService {
         try {
 
             getVcardString();
-           // getVcardStringWriteIt();
+
 
         } catch (IOException e) {
             Log.w("Error",e.getCause());
@@ -101,7 +101,6 @@ public class FileUploadService extends JobIntentService {
 
         page= getSharedPreferenceValue.getPageUploadcontacts(this);
 
-        //staaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaical;sjdnlfn;sl
         int take=1000;
         int skip=(page-1)*take;
 
@@ -229,6 +228,7 @@ public class FileUploadService extends JobIntentService {
                 String vcardstring= new String(buf);
                 vCard.add(vcardstring);
 
+                fd.close();
 
         } catch (Exception e1)
         {
@@ -350,7 +350,7 @@ public class FileUploadService extends JobIntentService {
                             Log.w("success", mesf);
                             Log.w("success", String.valueOf(me));
 
-                            //problemmmmmmmmmmmmmmmmm
+
                             page= getSharedPreferenceValue.getPageUploadcontacts(getApplicationContext());
                             Log.w("slogpref", String.valueOf(page));
                             page++;

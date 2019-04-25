@@ -91,8 +91,8 @@ public class GetInitialService extends JobIntentService {
 
                         @Override
                         public void onFailure(Call<InitialDataModel> call, Throwable t) {
-                            Log.w("onFailure", t.getMessage());
-                            Log.w("onFailure", t.getCause());
+                           // Log.w("onFailure", t.getMessage());
+                           // Log.w("onFailure", t.getCause());
                         }
                     });
 

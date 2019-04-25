@@ -159,7 +159,20 @@ public class Database_Helper extends SQLiteOpenHelper {
         return courtsList;
     }
 
+    // Getting single contact
+    public  boolean CheckPhoneNumberInBlockList(String number) {
+        SQLiteDatabase db = this.getReadableDatabase();
 
+        Cursor cursor = db.query(block.TABLE_NAME, new String[] { block.COLUMN_NUMBER}, block.COLUMN_NUMBER + "=?",
+                new String[] { number }, null, null, null, null);
+
+
+        if(cursor.getCount()>0){
+            return true;
+        }else {
+            return false;
+        }
+    }
 
 
     public int getblockCount() {

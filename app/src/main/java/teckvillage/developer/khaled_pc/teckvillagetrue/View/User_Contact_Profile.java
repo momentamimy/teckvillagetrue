@@ -1,29 +1,45 @@
 package teckvillage.developer.khaled_pc.teckvillagetrue.View;
 
 import android.Manifest;
+import android.app.SearchManager;
+import android.content.ClipData;
+import android.content.ClipboardManager;
+import android.content.ContentProviderOperation;
+import android.content.ContentResolver;
+import android.content.Context;
 import android.content.DialogInterface;
 import android.content.Intent;
+import android.content.OperationApplicationException;
 import android.content.SharedPreferences;
 import android.content.pm.PackageManager;
 import android.database.Cursor;
 import android.graphics.Color;
 import android.net.Uri;
+import android.os.RemoteException;
+import android.provider.Contacts;
 import android.provider.ContactsContract;
 import android.support.v4.app.ActivityCompat;
 import android.support.v4.content.ContextCompat;
 import android.support.v7.app.AlertDialog;
 import android.support.v7.app.AppCompatActivity;
 import android.os.Bundle;
+import android.support.v7.widget.LinearLayoutCompat;
+import android.text.Editable;
 import android.util.Log;
+import android.view.LayoutInflater;
+import android.view.MenuItem;
 import android.view.View;
 import android.widget.ImageView;
 import android.widget.LinearLayout;
+import android.widget.PopupMenu;
 import android.widget.RelativeLayout;
 import android.widget.TextView;
 import android.widget.Toast;
 
 import com.squareup.picasso.Picasso;
 
+import java.io.UnsupportedEncodingException;
+import java.net.URLEncoder;
 import java.util.ArrayList;
 import java.util.List;
 
@@ -53,13 +69,15 @@ public class User_Contact_Profile extends AppCompatActivity {
     Database_Helper db;
     ImageView blockimagemake;
     TextView blockred;
-    List<block> BlockInfo;
+
     boolean Bloceduser=false;
     boolean Userhasimg=false;
-    TextView country,email;
+    TextView country,email,phonenumberfield;
     RelativeLayout countrylay,emaillay;
-
-
+    ArrayList<String> alContactsPhoneNumbers = new ArrayList<String>();
+    RelativeLayout child;
+    TextView phone;
+    RelativeLayout moreoptionusercontact,backarrowlay;
 
     @Override
     protected void onCreate(Bundle savedInstanceState) {
@@ -72,7 +90,7 @@ public class User_Contact_Profile extends AppCompatActivity {
         makecall=findViewById(R.id.makecall);
         sendmessage=findViewById(R.id.sendmessage);
         makeblock=findViewById(R.id.makeblock);
-        backarrow=findViewById(R.id.backarrow);
+        backarrowlay=findViewById(R.id.contacnerbackarrow);
         moreoption=findViewById(R.id.moreoptionusercontact);
         phonenumee=findViewById(R.id.contactuserphonenumber);
         blockimagemake=findViewById(R.id.blockimagered);
@@ -81,10 +99,10 @@ public class User_Contact_Profile extends AppCompatActivity {
         countrylay=findViewById(R.id.loactionlayout);
         email=findViewById(R.id.emailusercontact);
         emaillay=findViewById(R.id.emaillayoutcontanier);
+        moreoptionusercontact=findViewById(R.id.contacnerMoreoption);
 
         db=new Database_Helper(this);
 
-        BlockInfo=new ArrayList<block>();
 
 
         id=getIntent().getLongExtra("ContactID",0);
@@ -98,20 +116,57 @@ public class User_Contact_Profile extends AppCompatActivity {
         }
 
 
-        BlockInfo=db.getAllBlocklist();
 
-        for(int i=0;i < BlockInfo.size();i++){
+        for(int i=0;i < alContactsPhoneNumbers.size();i++){
 
-            if(phonenumee.getText().toString().equalsIgnoreCase(BlockInfo.get(i).getNumber())){
+            if(db.CheckPhoneNumberInBlockList(alContactsPhoneNumbers.get(i))){
                 blockimagemake.setImageResource(R.drawable.ic_rejected_call);
                 blockred.setTextColor(Color.parseColor("#f53131"));
                 Bloceduser=true;
+                break;
             }
+
+
         }
 
 
 
-        backarrow.setOnClickListener(new View.OnClickListener() {
+        //Three Dots
+        moreoptionusercontact.setOnClickListener(new View.OnClickListener() {
+            @Override
+            public void onClick(View v) {
+
+                PopupMenu popupMenu=new PopupMenu(User_Contact_Profile.this,moreoptionusercontact);
+                popupMenu.getMenuInflater().inflate(R.menu.more_option_user_contact,popupMenu.getMenu());
+                popupMenu.setOnMenuItemClickListener(new PopupMenu.OnMenuItemClickListener() {
+                    @Override
+                    public boolean onMenuItemClick(MenuItem item) {
+                        if(item.getTitle().equals("Remove Contact")){
+                            DeleteContact(String.valueOf(id),nameofcontact.getText().toString());
+                        }else  if(item.getTitle().equals("Share")){
+                            shareContact(String.valueOf(id),nameofcontact.getText().toString());
+                        }else  if(item.getTitle().equals("Copy Name")){
+                            copyName(nameofcontact.getText().toString());
+                        } else  if(item.getTitle().equals("Search the Web")){
+                            searchOnWeb(nameofcontact.getText().toString());
+                        } else  if(item.getTitle().equals("Edit")){
+                            EditContact(String.valueOf(id));
+                        }else  if(item.getTitle().equals("Copy Contact")){
+                            CopyContact(nameofcontact.getText().toString(),alContactsPhoneNumbers);
+                        } else  if(item.getTitle().equals("Copy Number")){
+                            CopyNumber(alContactsPhoneNumbers);
+                        }
+
+                        return false;
+                    }
+                });
+                popupMenu.show();
+
+            }
+        });
+
+
+        backarrowlay.setOnClickListener(new View.OnClickListener() {
             @Override
             public void onClick(View v) {
                 finish();
@@ -122,14 +177,15 @@ public class User_Contact_Profile extends AppCompatActivity {
             @Override
             public void onClick(View v) {
 
-                if(phonenumee.getText().toString()!=null&&phonenumee.getText().toString().length()>0){
+                if(alContactsPhoneNumbers!=null&alContactsPhoneNumbers.size()>0){
 
                     if (ContextCompat.checkSelfPermission(User_Contact_Profile.this, Manifest.permission.CALL_PHONE) != PackageManager.PERMISSION_GRANTED) {
                         ActivityCompat.requestPermissions(User_Contact_Profile.this, new String[]{Manifest.permission.CALL_PHONE},12);
                     }
                     else
                     {
-                        Make_Phone_Call.makephonecall(User_Contact_Profile.this,phonenumee.getText().toString());
+                        DisplayArraylistOfPhonenumberDialogForCall(alContactsPhoneNumbers, nameofcontact.getText().toString());
+
                     }
                 }
 
@@ -142,15 +198,10 @@ public class User_Contact_Profile extends AppCompatActivity {
         sendmessage.setOnClickListener(new View.OnClickListener() {
             @Override
             public void onClick(View v) {
-                Intent intent = new Intent(User_Contact_Profile.this,SMS_MessagesChat.class);
-                intent.putExtra("LogSMSName",nameofcontact.getText().toString());
-                String num=phonenumee.getText().toString();
-                if(num != null&& !num.isEmpty()){
-                    intent.putExtra("LogSMSAddress",num);
-                    startActivity(intent);
-                }else {
-                    Toast.makeText(User_Contact_Profile.this, "Can't send message to this number", Toast.LENGTH_LONG).show();
+                if(alContactsPhoneNumbers!=null&alContactsPhoneNumbers.size()>0){
+                    DisplayArraylistOfPhonenumberDialogForMessage(alContactsPhoneNumbers,nameofcontact.getText().toString());
                 }
+
             }
         });
 
@@ -174,19 +225,43 @@ public class User_Contact_Profile extends AppCompatActivity {
 
     }
 
+    private void CopyContact(String s, ArrayList<String> alContactsPhoneNumbers) {
+        StringBuilder rBuilder = new StringBuilder();
+        for(int i=0;i<alContactsPhoneNumbers.size();i++){
+            rBuilder.append(alContactsPhoneNumbers.get(i)+",");
+        }
+
+        String text=s+","+rBuilder.toString();
+        ClipboardManager clipboard = (ClipboardManager) getSystemService(Context.CLIPBOARD_SERVICE);
+        ClipData clip = ClipData.newPlainText("Copied Text", text);
+        clipboard.setPrimaryClip(clip);
+        Toast.makeText(this,"Copied to clipboard",Toast.LENGTH_SHORT).show();
+    }
+
+    private void CopyNumber( ArrayList<String> alContactsPhoneNumbers) {
+        StringBuilder rBuilder = new StringBuilder();
+        for(int i=0;i<alContactsPhoneNumbers.size();i++){
+            rBuilder.append(alContactsPhoneNumbers.get(i)+",");
+        }
+
+        ClipboardManager clipboard = (ClipboardManager) getSystemService(Context.CLIPBOARD_SERVICE);
+        ClipData clip = ClipData.newPlainText("Copied Text", rBuilder.toString());
+        clipboard.setPrimaryClip(clip);
+        Toast.makeText(this,"Copied to clipboard",Toast.LENGTH_SHORT).show();
+    }
+
     public void getContactDetails(long contactId) {
         String phoneNumber=null;
         String name=null;
         String avatarUri=null;
         Log.d("Details", "---");
         Log.d("Details", "Contact : " + contactId);
-        final Cursor phoneCursor = getContentResolver().query(
-                ContactsContract.CommonDataKinds.Phone.CONTENT_URI,
-                new String[] {
+        final Cursor phoneCursor = getContentResolver().query(ContactsContract.CommonDataKinds.Phone.CONTENT_URI, new String[] {
                         ContactsContract.CommonDataKinds.Phone.DISPLAY_NAME,
                         ContactsContract.CommonDataKinds.Phone.NUMBER,
+                        ContactsContract.CommonDataKinds.Phone.TYPE,
                         ContactsContract.CommonDataKinds.Phone.PHOTO_URI,
-                },
+                        ContactsContract.CommonDataKinds.Phone.HAS_PHONE_NUMBER},
                 ContactsContract.Data.CONTACT_ID + "=?",
                 new String[] {String.valueOf(contactId)}, null);
 
@@ -195,13 +270,59 @@ public class User_Contact_Profile extends AppCompatActivity {
             final int idxName = phoneCursor.getColumnIndexOrThrow(ContactsContract.CommonDataKinds.Phone.DISPLAY_NAME);
             final int idxPhone = phoneCursor.getColumnIndexOrThrow(ContactsContract.CommonDataKinds.Phone.NUMBER);
 
-
+            int type;
             while (phoneCursor.moveToNext()) {
-                phoneNumber = phoneCursor.getString(idxPhone);
-                 name = phoneCursor.getString(idxName);
-                 avatarUri = phoneCursor.getString(idxAvatarUri);
+                //Check Contact has Phone Numbers
+                if(Integer.parseInt(phoneCursor.getString(phoneCursor.getColumnIndex(ContactsContract.CommonDataKinds.Phone.HAS_PHONE_NUMBER))) > 0) {
 
-                Log.d("Details", "Phone number: " + phoneNumber);
+                    type=phoneCursor.getInt(phoneCursor.getColumnIndex(ContactsContract.CommonDataKinds.Phone.TYPE));
+                    phoneNumber = phoneCursor.getString(idxPhone);
+                    phoneNumber = phoneNumber.replaceAll("\\s", "");
+                    phoneNumber = phoneNumber.replace("-", "");
+
+                    if (!alContactsPhoneNumbers.contains(phoneNumber))
+                    {
+                        //List Of Phone Numbers
+                        alContactsPhoneNumbers.add(phoneNumber);
+                        Log.d("Details", "Phone number: " + phoneNumber);
+
+                        //add new TExtview
+                        LinearLayoutCompat main_layout = (LinearLayoutCompat)findViewById(R.id.phonenumberparent);
+                        LayoutInflater inflater = (LayoutInflater)getSystemService(Context.LAYOUT_INFLATER_SERVICE);
+                        child = (RelativeLayout) inflater.inflate(R.layout.phone_number_item, null);
+                        phone=child.findViewById(R.id.contactuserphonenumber);
+                        TextView phonetype=child.findViewById(R.id.typephone);
+                        //set type
+                        switch (type) {
+                            case ContactsContract.CommonDataKinds.Phone.TYPE_MOBILE:
+                                phonetype.setText("Mobile");
+                                break;
+                            case ContactsContract.CommonDataKinds.Phone.TYPE_HOME:
+                                phonetype.setText("Home");
+                                break;
+                            case ContactsContract.CommonDataKinds.Phone.TYPE_WORK:
+                                phonetype.setText("Work");
+                                break;
+                            case ContactsContract.CommonDataKinds.Phone.TYPE_OTHER:
+                                phonetype.setText("Other");
+                                break;
+                            default:
+                                phonetype.setText("Other");
+                                break;
+                        }
+
+                        phone.setText(phoneNumber);
+                        main_layout.addView(child);
+
+                    }
+
+
+                }
+
+                name = phoneCursor.getString(idxName);
+                avatarUri = phoneCursor.getString(idxAvatarUri);
+
+
                 Log.d("Details", "Name: " + name);
                 Log.d("Details", "Avatar URI: " + avatarUri);
 
@@ -212,13 +333,17 @@ public class User_Contact_Profile extends AppCompatActivity {
         }
 
         nameofcontact.setText(name);
-        phonenumee.setText(phoneNumber);
+        //phonenumee.setText(phoneNumber);
         if(avatarUri!=null&&!avatarUri.isEmpty()){
             profile_pic.setImageURI(Uri.parse(avatarUri));
             Userhasimg=true;
         }
+
         //request
-        UpdateDataAfterRequest(phoneNumber);
+        if(alContactsPhoneNumbers.size()>0){
+            UpdateDataAfterRequest(alContactsPhoneNumbers.get(0));
+        }
+
 
 
 
@@ -267,25 +392,36 @@ public class User_Contact_Profile extends AppCompatActivity {
     }
 
     private void Delete_Number_From_BlockListhere() {
-        db.deleteBlockByID((int) id);
-        blockimagemake.setImageResource(R.drawable.ic_block_primary_24dp);
-        blockred.setTextColor(Color.parseColor("#0089c0"));
-        Bloceduser=false;
-        Toast.makeText(User_Contact_Profile.this, "Number removed from your block list", Toast.LENGTH_SHORT).show();
+        if(alContactsPhoneNumbers != null&&alContactsPhoneNumbers.size()>0){
+            //remove all numbers belong to this contact from blocklist
+            for(int i=0;i<alContactsPhoneNumbers.size();i++){
+                 db.deleteBlockByNumber(alContactsPhoneNumbers.get(i));
+            }
+
+            blockimagemake.setImageResource(R.drawable.ic_block_primary_24dp);
+            blockred.setTextColor(Color.parseColor("#0089c0"));
+            Bloceduser=false;
+            Toast.makeText(User_Contact_Profile.this, "Number removed from your block list", Toast.LENGTH_SHORT).show();
+
+        }
 
     }
 
     void Insert_Number_To_Blocklist(){
 
-        String num=phonenumee.getText().toString();
+
         String name=nameofcontact.getText().toString();
-        if(num != null&& !num.isEmpty()){
-            long inserted= db.insertBlock(name,num,"personal");
+        long inserted = 0;
+        if(alContactsPhoneNumbers != null&&alContactsPhoneNumbers.size()>0){
+            for(int i=0;i<alContactsPhoneNumbers.size();i++){
+                inserted= db.insertBlock(name,alContactsPhoneNumbers.get(i),"personal");
+            }
             if(inserted != -1){
                 ChangePreVariableUploadBlockList();//upload block list in mainActivity
                 blockimagemake.setImageResource(R.drawable.ic_rejected_call);
                 blockred.setTextColor(Color.parseColor("#f53131"));
                 Bloceduser=true;
+                Toast.makeText(User_Contact_Profile.this, "added to your block list", Toast.LENGTH_SHORT).show();
             }
 
         }
@@ -349,12 +485,22 @@ public class User_Contact_Profile extends AppCompatActivity {
                         }
 
                         //Update UI Email
-                        if(fetchedUserData.getVcard_email()!=null){
+                        //First check User Email
+                        if(fetchedUserData.getUser_email()!=null){
                             emaillay.setVisibility(View.VISIBLE);
-                            email.setText(fetchedUserData.getVcard_email());
+                            email.setText(fetchedUserData.getUser_email());
+
                         }else {
-                            emaillay.setVisibility(View.GONE);
+
+                            if(fetchedUserData.getVcard_email()!=null){
+                                emaillay.setVisibility(View.VISIBLE);
+                                email.setText(fetchedUserData.getVcard_email());
+                            }else {
+                                emaillay.setVisibility(View.GONE);
+                            }
+
                         }
+
 
 
                         //Update UI Country
@@ -395,10 +541,7 @@ public class User_Contact_Profile extends AppCompatActivity {
                         Log.w("sues",fetchedUserData.getPhone());
                         //updateUI(fetchedUserData.getVcard_email());
                     }
-                    else
-                    {
 
-                    }
                 }
 
                 @Override
@@ -406,12 +549,149 @@ public class User_Contact_Profile extends AppCompatActivity {
 
                 }
             });
-        }else {
-
         }
-    }else{
+    }
 
     }
+
+
+    void DisplayArraylistOfPhonenumberDialogForCall(ArrayList<String> phonenumbers,String name){
+
+        //Create sequence of items
+        final CharSequence[] phonenums = phonenumbers.toArray(new String[phonenumbers.size()]);
+        AlertDialog.Builder dialogBuilder = new AlertDialog.Builder(this);
+        dialogBuilder.setTitle("Call - "+name);
+        dialogBuilder.setItems(phonenums, new DialogInterface.OnClickListener() {
+            public void onClick(DialogInterface dialog, int item) {
+                //String selectedText = phonenums[item].toString();
+                //Selected item in listview
+                //Open Dialog With Phone Number That is Selected From This Dialog
+                Make_Phone_Call.makephonecall(User_Contact_Profile.this,phonenums[item].toString());//make call
+
+            }
+        });
+        //Create alert dialog object via builder
+        AlertDialog alertDialogObject = dialogBuilder.create();
+        //Show the dialog
+        alertDialogObject.show();
+
+    }
+
+
+    void DisplayArraylistOfPhonenumberDialogForMessage(ArrayList<String> phonenumbers, final String name){
+
+        //Create sequence of items
+        final CharSequence[] phonenums = phonenumbers.toArray(new String[phonenumbers.size()]);
+        AlertDialog.Builder dialogBuilder = new AlertDialog.Builder(this);
+        dialogBuilder.setTitle("Send Message - "+name);
+        dialogBuilder.setItems(phonenums, new DialogInterface.OnClickListener() {
+            public void onClick(DialogInterface dialog, int item) {
+                //String selectedText = phonenums[item].toString();
+                //Selected item in listview
+                //Open Dialog With Phone Number That is Selected From This Dialog
+                Intent intent = new Intent(User_Contact_Profile.this,SMS_MessagesChat.class);
+                intent.putExtra("LogSMSName",name);
+                intent.putExtra("LogSMSAddress",phonenums[item].toString());
+                startActivity(intent);
+
+
+            }
+        });
+        //Create alert dialog object via builder
+        AlertDialog alertDialogObject = dialogBuilder.create();
+        //Show the dialog
+        alertDialogObject.show();
+
+    }
+
+
+    void DeleteContact(final String id, String name){
+
+        DialogInterface.OnClickListener dialogClickListener = new DialogInterface.OnClickListener() {
+            @Override
+            public void onClick(DialogInterface dialog, int which) {
+                switch (which){
+                    case DialogInterface.BUTTON_POSITIVE:
+                        //Yes button clicked
+                        background_process(id);
+                        break;
+
+                    case DialogInterface.BUTTON_NEGATIVE:
+                        //No button clicked
+                        dialog.dismiss();
+                        break;
+                }
+            }
+        };
+        AlertDialog.Builder builder = new AlertDialog.Builder(this);
+        builder.setTitle("Delete "+name).setMessage("Are you Sure you want to delete this contact?").setPositiveButton("Yes", dialogClickListener).setNegativeButton("No", dialogClickListener).show();
+
+
+    }
+
+    private void background_process(String id) {
+        ArrayList ops = new ArrayList(); String[] args = new String[] {id};
+        // if id is raw contact id
+        ops.add(ContentProviderOperation.newDelete(ContactsContract.RawContacts.CONTENT_URI).withSelection(ContactsContract.RawContacts._ID + "=?", args) .build());
+
+        // if id is contact id
+        ops.add(ContentProviderOperation.newDelete(ContactsContract.RawContacts.CONTENT_URI).withSelection(ContactsContract.RawContacts.CONTACT_ID + "=?", args) .build());
+        try {
+            getContentResolver().applyBatch(ContactsContract.AUTHORITY, ops);
+            Toast.makeText(this,"The Contact has been removed from your contacts",Toast.LENGTH_SHORT).show();
+            finish();//finish activity
+        } catch (RemoteException e) {
+            e.printStackTrace();
+        } catch (OperationApplicationException e) {
+            e.printStackTrace();
+        }
+    }
+
+
+    private void shareContact(String id,String name) {
+        String lookupKey="";
+        Cursor cur = getContentResolver().query(ContactsContract.Contacts.CONTENT_URI, new String[] { ContactsContract.Contacts.LOOKUP_KEY }, ContactsContract.Contacts._ID + " = " + id, null, null);
+
+        if(cur!=null&& cur.moveToFirst()&&cur.getCount()>0)
+        {
+            lookupKey = cur.getString(cur.getColumnIndex(ContactsContract.Contacts.LOOKUP_KEY));
+        }
+
+        Uri uri = Uri.withAppendedPath(ContactsContract.Contacts.CONTENT_VCARD_URI, lookupKey);
+        cur.close();
+        Intent intent = new Intent(Intent.ACTION_SEND);
+        intent.setType(ContactsContract.Contacts.CONTENT_VCARD_TYPE);
+        intent.putExtra(Intent.EXTRA_STREAM, uri );
+        intent.putExtra(Intent.EXTRA_SUBJECT, name); // put the name of the contact here
+        startActivity(intent);
+    }
+
+
+    void  copyName(String name) {
+        ClipboardManager clipboard = (ClipboardManager) getSystemService(Context.CLIPBOARD_SERVICE);
+        ClipData clip = ClipData.newPlainText("Copied Text", name);
+        clipboard.setPrimaryClip(clip);
+        Toast.makeText(this,"Copied to clipboard",Toast.LENGTH_SHORT).show();
+    }
+
+    void searchOnWeb(String name){
+
+        String escapedQuery = null;
+        try {
+            escapedQuery = URLEncoder.encode(name, "UTF-8");
+        } catch (UnsupportedEncodingException e) {
+            e.printStackTrace();
+        }
+        Uri uri = Uri.parse("http://www.google.com/#q=" + escapedQuery);
+        Intent intent = new Intent(Intent.ACTION_VIEW, uri);
+        startActivity(intent);
+    }
+
+    void EditContact(String contactID){
+        Intent intent = new Intent(Intent.ACTION_VIEW);
+        Uri uri = Uri.withAppendedPath(ContactsContract.Contacts.CONTENT_URI, String.valueOf(contactID));
+        intent.setData(uri);
+        startActivity(intent);
 
     }
 

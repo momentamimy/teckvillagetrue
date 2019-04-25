@@ -809,12 +809,18 @@ public class PhoneStateReceiver extends BroadcastReceiver {
             CallerProfileLayout.setBackgroundColor(getApplicationContext().getResources().getColor(R.color.redColor));
         }
 
-        CallerName.setText(userData.getName());
-        CallerNumber.setText(userData.getFull_phone());
+        if(userData.getName()!=null){
+          CallerName.setText(userData.getName());
+        }
+
+        if(userData.getFull_phone()!=null){
+            CallerNumber.setText(userData.getFull_phone());
+        }
+
         if (!TextUtils.isEmpty(userData.getCountry()))
         {
             CallerCountry.setText(userData.getCountry());
-            CallerCountry.setVisibility(View.GONE);
+            CallerCountry.setVisibility(View.VISIBLE);
         }
         else
         {

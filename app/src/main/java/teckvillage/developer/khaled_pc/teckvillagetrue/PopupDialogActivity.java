@@ -293,7 +293,7 @@ public class PopupDialogActivity extends Activity {
                     public void onResponse(Call<FetchedUserData> call, Response<FetchedUserData> response) {
                         if (response.isSuccessful())
                         {
-                            Log.d("userNamePaleeez", response.body().getName());
+
                             FetchedUserData resp =response.body();
                             updateCard(resp);
 
@@ -313,11 +313,7 @@ public class PopupDialogActivity extends Activity {
                         CallerProgress.setVisibility(View.GONE);
                     }
                 });
-            }else {
-
             }
-        }else{
-
         }
 
     }
@@ -329,9 +325,21 @@ public class PopupDialogActivity extends Activity {
             ProfileBlurLayOut.setBackgroundColor(getResources().getColor(R.color.redColor));
         }
 
-        CallerName.setText(userData.getName());
-        CallerNumber.setText(userData.getFull_phone());
-        CallerCountry.setText(userData.getCountry());
+        if(userData.getName()!=null){
+            CallerName.setText(userData.getName());
+        }
+        if(userData.getPhone()!=null){
+            CallerNumber.setText(userData.getPhone());
+        }
+        if(userData.getCountry()!=null){
+            CallerCountry.setText(userData.getCountry());
+            CallerCountry.setVisibility(View.VISIBLE);
+        }else {
+            CallerCountry.setVisibility(View.GONE);
+        }
+
+
+
         Picasso.with(getApplicationContext()).load("http://whocaller.net/uploads/"+userData.getUser_img())
                 .into(CallerImage, new com.squareup.picasso.Callback() {
                     @Override
@@ -388,7 +396,7 @@ public class PopupDialogActivity extends Activity {
     void Insert_Number_To_Blocklist(String num,String name){
 
         if(num != null&& !num.isEmpty()){
-            db.insertBlock(name,num,"Person");
+            db.insertBlock(name,num,"personal");
         }
 
     }
