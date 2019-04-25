@@ -86,7 +86,7 @@ public class Chat_MessagesChat extends AppCompatActivity {
     FloatingActionButton send;
 
     String name, address,Image;
-    int[] groupUsers;
+    //int[] groupUsers;
     int receiverID,chatRoomId,page=1;
 
     ImageView callIcon, settingIcon;
@@ -154,8 +154,7 @@ public class Chat_MessagesChat extends AppCompatActivity {
             callIcon.setVisibility(View.GONE);
             settingIcon.setVisibility(View.GONE);
             userImg.setImageResource(R.drawable.ic_groupchat);
-            groupUsers = getIntent().getIntArrayExtra("UserIDsList");
-            Log.d("affafafa", String.valueOf(groupUsers[0]));
+            //groupUsers = getIntent().getIntArrayExtra("UserIDsList");
 
         }
         else
@@ -598,7 +597,7 @@ public class Chat_MessagesChat extends AppCompatActivity {
         return cal;
     }
 
-    Dialog AddUserDialog;
+    /*Dialog AddUserDialog;
     RecyclerView mRecyclerViewContacts;
     public AddContactsToChatGroupAdapter addContactsAdapters;
     List<RoomModel>userContactsData;
@@ -662,6 +661,6 @@ public class Chat_MessagesChat extends AppCompatActivity {
             }
         }
         AddUserDialog.show();
-    }
+    }*/
 }
 

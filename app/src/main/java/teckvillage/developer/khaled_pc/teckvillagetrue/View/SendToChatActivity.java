@@ -335,6 +335,8 @@ public class SendToChatActivity extends AppCompatActivity {
         Ok.setOnClickListener(new View.OnClickListener() {
             @Override
             public void onClick(View v) {
+
+                MyDialogCreatGroup.dismiss();
                 if (CheckNetworkConnection.hasInternetConnection(SendToChatActivity.this)) {
 
                     //Check internet Access
