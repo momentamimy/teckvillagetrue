@@ -82,8 +82,7 @@ public class messages_list_chat_adapter extends RecyclerView.Adapter<messages_li
                     .inflate(R.layout.row_sms_chat_send, parent, false);
             return new MyViewHolder(itemView);
         } else if (viewType == 0){
-            View itemView = LayoutInflater.from(parent.getContext())
-                    .inflate(R.layout.row_sms_chat_receive, parent, false);
+            View itemView = LayoutInflater.from(parent.getContext()).inflate(R.layout.row_sms_chat_receive, parent, false);
             return new MyViewHolder(itemView);
         }
         View itemView = LayoutInflater.from(parent.getContext())

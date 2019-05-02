@@ -760,44 +760,45 @@ public class PhoneStateReceiver extends BroadcastReceiver {
             //Check internet Access
             if (ConnectionDetector.hasInternetConnection(context)) {
 
-                BodyNumberModel bodyNumberModel = new BodyNumberModel(number);
-                Retrofit retrofit = retrofitHead.headOfGetorPostReturnRes();
-                WhoCallerApi whoCallerApi = retrofit.create(WhoCallerApi.class);
-                Call<FetchedUserData> userDataCall = whoCallerApi.fetchUserData(ApiAccessToken.getAPIaccessToken(context), bodyNumberModel);
+                if(!ApiAccessToken.getAPIaccessToken(context).equals("NoAPIACCESS")){
 
-                CallerImageProgress.setVisibility(View.VISIBLE);
-                CallerProgress.setVisibility(View.VISIBLE);
+                    BodyNumberModel bodyNumberModel = new BodyNumberModel(number);
+                    Retrofit retrofit = retrofitHead.headOfGetorPostReturnRes();
+                    WhoCallerApi whoCallerApi = retrofit.create(WhoCallerApi.class);
+                    Call<FetchedUserData> userDataCall = whoCallerApi.fetchUserData(ApiAccessToken.getAPIaccessToken(context), bodyNumberModel);
 
-                userDataCall.enqueue(new Callback<FetchedUserData>() {
-                    @Override
-                    public void onResponse(Call<FetchedUserData> call, Response<FetchedUserData> response) {
-                        if (response.isSuccessful())
-                        {
-                            Log.d("userNamePaleeez", response.body().getName());
-                            FetchedUserData resp =response.body();
-                            updateCard(resp);
+                    CallerImageProgress.setVisibility(View.VISIBLE);
+                    CallerProgress.setVisibility(View.VISIBLE);
 
+                    userDataCall.enqueue(new Callback<FetchedUserData>() {
+                        @Override
+                        public void onResponse(Call<FetchedUserData> call, Response<FetchedUserData> response) {
+                            if (response.isSuccessful())
+                            {
+                                Log.d("userNamePaleeez", response.body().getName());
+                                FetchedUserData resp =response.body();
+                                updateCard(resp);
+
+                            }
+                            else
+                            {
+                                Log.d("onFailure", "other error");
+                                CallerImageProgress.setVisibility(View.GONE);
+                                CallerProgress.setVisibility(View.GONE);
+                            }
                         }
-                        else
-                        {
-                            Log.d("onFailure", "other error");
+
+                        @Override
+                        public void onFailure(Call<FetchedUserData> call, Throwable t) {
+                            Log.d("onFailure", t.getMessage());
                             CallerImageProgress.setVisibility(View.GONE);
                             CallerProgress.setVisibility(View.GONE);
                         }
-                    }
+                    });
 
-                    @Override
-                    public void onFailure(Call<FetchedUserData> call, Throwable t) {
-                        Log.d("onFailure", t.getMessage());
-                        CallerImageProgress.setVisibility(View.GONE);
-                        CallerProgress.setVisibility(View.GONE);
-                    }
-                });
-            }else {
+                }
 
             }
-        }else{
-
         }
 
     }

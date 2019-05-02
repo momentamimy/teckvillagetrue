@@ -86,6 +86,7 @@ import teckvillage.developer.khaled_pc.teckvillagetrue.Model.retrofit.JSON_Mappi
 import teckvillage.developer.khaled_pc.teckvillagetrue.Model.retrofit.JSON_Mapping.TokenDataReceived;
 import teckvillage.developer.khaled_pc.teckvillagetrue.Model.retrofit.WhoCallerApi;
 import teckvillage.developer.khaled_pc.teckvillagetrue.Model.retrofit.retrofitHead;
+import teckvillage.developer.khaled_pc.teckvillagetrue.UserProfileActivity;
 
 import static android.media.MediaRecorder.VideoSource.CAMERA;
 
@@ -242,6 +243,9 @@ public class Signup extends AppCompatActivity {
 
 
                                 file = loadImageFromStorage(saveToInternalStorage(bitmap));
+                                //resizeAndCompressImageBeforeSend(Signup.this,file.getPath(),file.getName());
+                                //file =new File(saveImage(bitmap));
+                                file=new File(Signup.resizeAndCompressImageBeforeSend(Signup.this,file.getPath(),file.getName()));
                                 mFile = RequestBody.create(MediaType.parse("image/*"), file);
                                 fileToUpload = MultipartBody.Part.createFormData("img", file.getName(), mFile);
 
@@ -347,7 +351,7 @@ public class Signup extends AppCompatActivity {
                                                         editor.putString("User_email", user.getEmail());
                                                     }
                                                     if (user.getImg() != null) {
-                                                        editor.putString("User_img_profile", "http://whocaller.net/uploads/" + user.getImg());
+                                                        editor.putString("User_img_profile", "http://whocaller.net/whocallerAdmin/uploads/" + user.getImg());
                                                     }
                                                     if (user.getCountry() != null) {
                                                         editor.putString("UserCountry", user.getCountry());
@@ -409,7 +413,7 @@ public class Signup extends AppCompatActivity {
             });
 
         }catch (Exception e){
-
+            e.printStackTrace();
         }
     }
 
@@ -540,7 +544,7 @@ public class Signup extends AppCompatActivity {
 
     public String saveImage(Bitmap myBitmap) {
         ByteArrayOutputStream bytes = new ByteArrayOutputStream();
-        myBitmap.compress(Bitmap.CompressFormat.JPEG, 90, bytes);
+        myBitmap.compress(Bitmap.CompressFormat.JPEG, 100, bytes);
         File wallpaperDirectory = new File(Environment.getExternalStorageDirectory() + IMAGE_DIRECTORY);
         // have the object build the directory structure, if needed.
         if (!wallpaperDirectory.exists()) {
@@ -656,8 +660,10 @@ public class Signup extends AppCompatActivity {
 
     private void updateUI(GoogleSignInAccount account) {
         if(account!=null){
-            Picasso.with(Signup.this).load(account.getPhotoUrl().toString()).into(add_personal_photo);
-            add_personal_photo.setPadding(20,20,20,20);
+            if(account.getPhotoUrl()!=null){
+                Picasso.with(Signup.this).load(account.getPhotoUrl()).into(add_personal_photo);
+                add_personal_photo.setPadding(20,20,20,20);
+            }
 
             //Put Data in EditText
             FirstName.setText(account.getGivenName());
@@ -736,13 +742,13 @@ public class Signup extends AppCompatActivity {
         // path to /data/data/yourapp/app_data/imageDir
         File directory = cw.getDir("imageDire", Context.MODE_PRIVATE);
         // Create imageDir
-        File mypath=new File(directory,"profile.jpg");
-
+        File mypath=new File(directory,"profile.png");
         FileOutputStream fos = null;
         try {
             fos = new FileOutputStream(mypath);
             // Use the compress method on the BitMap object to write image to the OutputStream
-            bitmapImage.compress(Bitmap.CompressFormat.PNG, 50, fos);
+            bitmapImage.compress(Bitmap.CompressFormat.PNG, 4, fos);
+
         } catch (Exception e) {
             e.printStackTrace();
         } finally {
@@ -758,13 +764,13 @@ public class Signup extends AppCompatActivity {
     public File loadImageFromStorage(String path) {
 
         try {
-            File f=new File(path, "profile.jpg");
-            Bitmap b = BitmapFactory.decodeStream(new FileInputStream(f));
+            File f=new File(path, "profile.png");
+            //Bitmap b = BitmapFactory.decodeStream(new FileInputStream(f));
             //ImageView img=(ImageView)findViewById(R.id.imgPicker);
             //img.setImageBitmap(b);
             return f;
         }
-        catch (FileNotFoundException e)
+        catch (Exception e)
         {
             e.printStackTrace();
         }
@@ -817,5 +823,102 @@ public class Signup extends AppCompatActivity {
         }
     }
 
+    public static String resizeAndCompressImageBeforeSend(Context context,String filePath,String fileName){
+        final int MAX_IMAGE_SIZE = 700 * 1024; // max final file size in kilobytes
+
+        // First decode with inJustDecodeBounds=true to check dimensions of image
+        final BitmapFactory.Options options = new BitmapFactory.Options();
+        options.inJustDecodeBounds = true;
+        BitmapFactory.decodeFile(filePath,options);
+
+        // Calculate inSampleSize(First we are going to resize the image to 800x800 image, in order to not have a big but very low quality image.
+        //resizing the image will already reduce the file size, but after resizing we will check the file size and start to compress image
+        options.inSampleSize = calculateInSampleSize(options, 800, 800);
+
+        // Decode bitmap with inSampleSize set
+        options.inJustDecodeBounds = false;
+        options.inPreferredConfig= Bitmap.Config.ARGB_8888;
+
+        Bitmap bmpPic = BitmapFactory.decodeFile(filePath,options);
+
+
+        int compressQuality = 100; // quality decreasing by 5 every loop.
+        int streamLength;
+        do{
+            ByteArrayOutputStream bmpStream = new ByteArrayOutputStream();
+            Log.d("compressBitmap", "Quality: " + compressQuality);
+            bmpPic.compress(Bitmap.CompressFormat.JPEG, compressQuality, bmpStream);
+            byte[] bmpPicByteArray = bmpStream.toByteArray();
+            streamLength = bmpPicByteArray.length;
+            compressQuality -= 5;
+            Log.d("compressBitmap", "Size: " + streamLength/1024+" kb");
+        }while (streamLength >= MAX_IMAGE_SIZE);
+
+        try {
+            //save the resized and compressed file to disk cache
+            Log.d("compressBitmap","cacheDir: "+context.getCacheDir());
+            FileOutputStream bmpFile = new FileOutputStream(context.getCacheDir()+fileName);
+            bmpPic.compress(Bitmap.CompressFormat.JPEG, compressQuality, bmpFile);
+            bmpFile.flush();
+            bmpFile.close();
+        } catch (Exception e) {
+            Log.e("compressBitmap", "Error on saving file");
+        }
+        //return the path of resized and compressed file
+        return  context.getCacheDir()+fileName;
+    }
+
+
+
+    public static int calculateInSampleSize(BitmapFactory.Options options, int reqWidth, int reqHeight) {
+        String debugTag = "MemoryInformation";
+        // Image nin islenmeden onceki genislik ve yuksekligi
+        final int height = options.outHeight;
+        final int width = options.outWidth;
+        Log.d(debugTag,"image height: "+height+ "---image width: "+ width);
+        int inSampleSize = 1;
+
+        if (height > reqHeight || width > reqWidth) {
+
+            final int halfHeight = height / 2;
+            final int halfWidth = width / 2;
+
+            // Calculate the largest inSampleSize value that is a power of 2 and keeps both
+            // height and width larger than the requested height and width.
+            while ((halfHeight / inSampleSize) > reqHeight && (halfWidth / inSampleSize) > reqWidth) {
+                inSampleSize *= 2;
+            }
+        }
+        Log.d(debugTag,"inSampleSize: "+inSampleSize);
+        return inSampleSize;
+    }
+
+
+
+    @Override
+    public void onRequestPermissionsResult(int requestCode, String permissions[], int[] grantResults) {
+        switch (requestCode) {
+            case MY_CAMERA_REQUEST_CODE : {
+                // If request is cancelled, the result arrays are empty.
+                if (grantResults.length > 0
+                        && grantResults[0] == PackageManager.PERMISSION_GRANTED) {
+
+                    // permission was granted, yay! Do the
+                    // contacts-related task you need to do.
+
+
+                } else {
+
+                    // permission denied, boo! Disable the
+                    // functionality that depends on this permission.
+                    Toast.makeText(getApplicationContext(), "Permission denied", Toast.LENGTH_SHORT).show();
+                }
+                return;
+            }
+
+            // other 'case' lines to check for other
+            // permissions this app might request
+        }
+    }
 
 }

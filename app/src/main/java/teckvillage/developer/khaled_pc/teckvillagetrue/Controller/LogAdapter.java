@@ -1,12 +1,14 @@
 package teckvillage.developer.khaled_pc.teckvillagetrue.Controller;
 
 import android.Manifest;
+import android.annotation.TargetApi;
 import android.app.Activity;
 import android.content.Context;
 import android.content.DialogInterface;
 import android.content.Intent;
 import android.content.pm.PackageManager;
 import android.net.Uri;
+import android.os.Build;
 import android.provider.CallLog;
 import android.support.v4.app.ActivityCompat;
 import android.support.v4.content.ContextCompat;
@@ -30,12 +32,14 @@ import teckvillage.developer.khaled_pc.teckvillagetrue.OpenDialPad;
 import teckvillage.developer.khaled_pc.teckvillagetrue.R;
 import teckvillage.developer.khaled_pc.teckvillagetrue.SMS_MessagesChat;
 import teckvillage.developer.khaled_pc.teckvillagetrue.View.LogHolder;
+import teckvillage.developer.khaled_pc.teckvillagetrue.View.Signup;
 import teckvillage.developer.khaled_pc.teckvillagetrue.View.User_Contact_Profile_From_log_list;
 import teckvillage.developer.khaled_pc.teckvillagetrue.Model.LogInfo;
 
 public class LogAdapter extends RecyclerView.Adapter<LogHolder> {
     private static final int TYPE_DATE = 1;
     private static final int TYPE_ITEM = 2;
+    private static final int MY_WRITE_LOG_REQUEST_CODE =221 ;
     private List<LogInfo> itemList;
     private Context context;
     int numofcallvar;
@@ -302,17 +306,26 @@ public class LogAdapter extends RecyclerView.Adapter<LogHolder> {
 
 
     //For delette speific number from call log
+    @TargetApi(Build.VERSION_CODES.JELLY_BEAN)
     private void DeleteCallLogByCall_ID(ArrayList<Long> arrayList) {
+
         try {
-            for (int i = 0; i < arrayList.size(); i++) {
-                context.getContentResolver().delete(Uri.withAppendedPath(CallLog.Calls.CONTENT_URI, String.valueOf( arrayList.get(i))), "", null);
+            PackageManager pm = context.getPackageManager();
+            int hasPerm = pm.checkPermission(Manifest.permission.WRITE_CALL_LOG, context.getPackageName());
+            if (hasPerm == PackageManager.PERMISSION_GRANTED) {
+                for (int i = 0; i < arrayList.size(); i++) {
+                    context.getContentResolver().delete(Uri.withAppendedPath(CallLog.Calls.CONTENT_URI, String.valueOf(arrayList.get(i))), "", null);
+                }
+                notifyDataSetChanged();
+            }else {
+                ActivityCompat.requestPermissions((Activity) context, new String[]{android.Manifest.permission.WRITE_CALL_LOG}, MY_WRITE_LOG_REQUEST_CODE);
             }
-            notifyDataSetChanged();
         }
         catch (Exception ex) {
             System.out.print("Exception here "+ex.getMessage());
             ex.printStackTrace();
         }
+
     }
 
 

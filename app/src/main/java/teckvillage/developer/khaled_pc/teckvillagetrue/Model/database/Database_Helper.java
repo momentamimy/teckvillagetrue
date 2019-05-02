@@ -10,7 +10,9 @@ import java.util.ArrayList;
 import java.util.List;
 
 import teckvillage.developer.khaled_pc.teckvillagetrue.Model.database.tables.BlockListHistory;
+import teckvillage.developer.khaled_pc.teckvillagetrue.Model.database.tables.Tags;
 import teckvillage.developer.khaled_pc.teckvillagetrue.Model.database.tables.block;
+import teckvillage.developer.khaled_pc.teckvillagetrue.Model.retrofit.JSON_Mapping.ItemsResultInitail;
 import teckvillage.developer.khaled_pc.teckvillagetrue.Model.retrofit.JSON_Mapping.Send_BlockList_JSON_Arraylist;
 
 /**
@@ -20,7 +22,7 @@ import teckvillage.developer.khaled_pc.teckvillagetrue.Model.retrofit.JSON_Mappi
 public class Database_Helper extends SQLiteOpenHelper {
 
     // Database Version
-    private static final int DATABASE_VERSION = 3;
+    private static final int DATABASE_VERSION = 5;
 
     // Database Name
     public static final String DATABASE_NAME = "WhoCaller_db";
@@ -38,6 +40,8 @@ public class Database_Helper extends SQLiteOpenHelper {
         db.execSQL(block.CREATE_TABLE);
         // create Block List History table
         db.execSQL(BlockListHistory.CREATE_TABLE);
+        // create Tags List  table
+        db.execSQL(Tags.CREATE_TABLE);
 
 
     }
@@ -48,7 +52,7 @@ public class Database_Helper extends SQLiteOpenHelper {
         // Drop older table if existed
         db.execSQL("DROP TABLE IF EXISTS " + block.TABLE_NAME);
         db.execSQL("DROP TABLE IF EXISTS " + BlockListHistory.TABLE_NAME);
-
+        db.execSQL("DROP TABLE IF EXISTS " + Tags.TABLE_NAME);
         // Create tables again
         onCreate(db);
     }
@@ -308,6 +312,97 @@ public class Database_Helper extends SQLiteOpenHelper {
         db.close();
         return del>0;
     }
+
+    //TODO:#####################################################3/31/2019  Tags Operation  ########################################################
+
+    public long insertTag(int idtag,String parentid,String tagname) {
+        // get writable database as we want to write data
+        SQLiteDatabase db = this.getWritableDatabase();
+
+        ContentValues values = new ContentValues();
+        // `id`  will be inserted automatically.
+        // no need to add them
+        values.put(Tags.COLUMN_ID, idtag);
+        values.put(Tags.COLUMN_PARENT_ID, parentid);
+        values.put(Tags.COLUMN_NAME, tagname);
+        // insert row
+        long id = db.insert(Tags.TABLE_NAME, null, values);
+
+        // close db connection
+        db.close();
+
+        // return newly inserted row id
+        return id;
+    }
+
+    public void DeleteAllDataTagsTable(){
+
+
+        // get writable database as we want to write data
+        SQLiteDatabase db = this.getWritableDatabase();
+
+        db.delete(Tags.TABLE_NAME, null,null);
+
+
+    }
+
+
+
+    public List<Tags> getAllTagslist() {
+        List<Tags> tagsList = new ArrayList<>();
+
+        // Select All Query
+        String selectQuery = "SELECT  "+Tags.COLUMN_NAME+","+Tags.COLUMN_ID +" FROM " + Tags.TABLE_NAME;
+
+        SQLiteDatabase db = this.getReadableDatabase();
+        Cursor cursor = db.rawQuery(selectQuery, null);
+
+
+        // looping through all rows and adding to list
+        if (cursor.moveToFirst()) {
+            do {
+                int id=cursor.getInt(cursor.getColumnIndex(Tags.COLUMN_ID));
+                String tagname=cursor.getString(cursor.getColumnIndex(Tags.COLUMN_NAME));
+
+                tagsList.add(new Tags(id,tagname));
+
+            } while (cursor.moveToNext());
+        }
+
+        // close db connection
+        db.close();
+
+        // return Tags list
+        return tagsList;
+    }
+
+
+    public Tags getTagtByID(long id) {
+        // get readable database as we are not inserting anything
+        SQLiteDatabase db = this.getReadableDatabase();
+
+        Cursor cursor = db.query(Tags.TABLE_NAME,
+                new String[]{Tags.COLUMN_ID, Tags.COLUMN_NAME},
+                Tags.COLUMN_ID + "=?",
+                new String[]{String.valueOf(id)}, null, null, null, null);
+
+        if (cursor != null)
+            cursor.moveToFirst();
+
+        // prepare case object
+        Tags tags = new Tags(
+                cursor.getInt(cursor.getColumnIndex(Tags.COLUMN_ID)),
+                cursor.getString(cursor.getColumnIndex(Tags.COLUMN_NAME))
+        );
+
+        // close the db connection
+        cursor.close();
+
+        return tags;
+    }
+
+
+
 
 
 

@@ -33,7 +33,7 @@ import teckvillage.developer.khaled_pc.teckvillagetrue.View.ConnectionDetector;
 public class GetInitialService extends JobIntentService {
 
     private static final String TAG = "GETINITIAL";
-
+    Database_Helper db;
 
     /**
      * Unique job ID for this service.
@@ -84,15 +84,26 @@ public class GetInitialService extends JobIntentService {
                                 Log.w("successgetsPamNumbers", String.valueOf(mesf));
                                 Log.w("success", String.valueOf(tags));
 
+                                //set Share preference SpamLimit
+                                setSpamLimitSharedPreference( mesf);
 
+                                if(tags!=null){
+                                    //insert database Tags and delete previous data
+                                    insertTags(tags);
+
+                                }
+
+
+                            }else {
+                                Log.w("onNotSuccess", "sss");
                             }
 
                         }
 
                         @Override
                         public void onFailure(Call<InitialDataModel> call, Throwable t) {
-                           // Log.w("onFailure", t.getMessage());
-                           // Log.w("onFailure", t.getCause());
+                            Log.w("onFailure", t.getMessage());
+                            Log.w("onFailure", t.getCause());
                         }
                     });
 
@@ -103,6 +114,28 @@ public class GetInitialService extends JobIntentService {
         }catch (Exception e){
             e.printStackTrace();
         }
+
+    }
+
+    private void insertTags(List<ItemsResultInitail> tags) {
+        db=new Database_Helper(this);
+        db.DeleteAllDataTagsTable();
+
+        for(int i=0;i<tags.size();i++){
+
+            Log.w("tagsid", String.valueOf(tags.get(i).getId())+" || "+tags.get(i).getName());
+            db.insertTag(tags.get(i).getId(),tags.get(i).getParent_id(),tags.get(i).getName());
+
+        }
+
+    }
+
+
+    void setSpamLimitSharedPreference(int spamlimit){
+        SharedPreferences sharedPref = getSharedPreferences("WhoCaller?", MODE_PRIVATE);
+        SharedPreferences.Editor editor = sharedPref.edit();
+        editor.putInt("SpamLimit", spamlimit);
+        editor.apply();
 
     }
 

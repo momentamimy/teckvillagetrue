@@ -39,6 +39,7 @@ public class SplashScreen extends AppCompatActivity implements EasyPermissions.P
 
         String[] perms={
                 Manifest.permission.READ_CALL_LOG,
+                Manifest.permission.WRITE_CALL_LOG,
                 Manifest.permission.READ_PHONE_STATE,
                 Manifest.permission.CALL_PHONE,
                 Manifest.permission.READ_CONTACTS,
@@ -121,6 +122,7 @@ public class SplashScreen extends AppCompatActivity implements EasyPermissions.P
 
         String[] perms={
                 Manifest.permission.READ_CALL_LOG,
+                Manifest.permission.WRITE_CALL_LOG,
                 Manifest.permission.READ_PHONE_STATE,
                 Manifest.permission.CALL_PHONE,
                 Manifest.permission.READ_CONTACTS,

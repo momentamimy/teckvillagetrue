@@ -44,10 +44,6 @@ public class getSharedPreferenceValue {
         return sharedPref.getString("User_address","Add address");
     }
 
-    public static String getUserCompany(Context context){
-        SharedPreferences sharedPref = context.getSharedPreferences("WhoCaller?", MODE_PRIVATE);
-        return sharedPref.getString("User_company","NoValueStored");
-    }
 
     public static String getUserGender(Context context){
         SharedPreferences sharedPref = context.getSharedPreferences("WhoCaller?", MODE_PRIVATE);
@@ -88,6 +84,24 @@ public class getSharedPreferenceValue {
     public static boolean getBlockListUploadStatus(Context context){
         SharedPreferences sharedPref = context.getSharedPreferences("WhoCaller?", MODE_PRIVATE);
         return sharedPref.getBoolean("UploadBlockList",false);
+    }
+
+
+    public static String getTitle(Context context){
+        SharedPreferences sharedPref = context.getSharedPreferences("WhoCaller?", MODE_PRIVATE);
+        return sharedPref.getString("TitleProfile","Notext");
+    }
+
+
+    public static String getCompany(Context context){
+        SharedPreferences sharedPref = context.getSharedPreferences("WhoCaller?", MODE_PRIVATE);
+        return sharedPref.getString("CompanyProfile","Notext");
+    }
+
+
+    public static int getSpamLimit(Context context){
+        SharedPreferences sharedPref = context.getSharedPreferences("WhoCaller?", MODE_PRIVATE);
+        return sharedPref.getInt("SpamLimit",0);
     }
 
 }

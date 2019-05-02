@@ -35,7 +35,7 @@
             app:gravity="right" />
 
         <de.hdodenhof.circleimageview.CircleImageView
-            android:id="@+id/UserPhoto"
+            android:id="@+id/UserPhotopicssovisableimage"
             android:layout_width="60dp"
             android:layout_height="60dp"
             android:src="@drawable/ic_nurse"
@@ -45,14 +45,18 @@
             />
 
         <de.hdodenhof.circleimageview.CircleImageView
-            android:id="@+id/UserPhotopicssovisableimage"
+            android:id="@+id/UserPhoto"
             android:layout_width="60dp"
             android:layout_height="60dp"
             android:src="@drawable/ic_nurse"
             android:layout_marginStart="30dp"
             android:layout_marginLeft="30dp"
             android:layout_marginTop="67dp"
-            />
+            android:layout_marginEnd="12dp"
+            android:layout_marginRight="12dp"
+           />
+
+
 
         <ProgressBar
             android:id="@+id/progressupdate"
@@ -73,15 +77,53 @@
             android:layout_toEndOf="@id/UserPhoto"
             android:layout_toRightOf="@id/UserPhoto"
             android:layout_alignBaseline="@id/UserPhoto"
-            android:layout_marginStart="12dp"
-            android:layout_marginLeft="12dp"
             android:layout_alignTop="@id/UserPhoto"
-            android:layout_marginTop="20dp"
+            android:layout_marginTop="12dp"
             android:textSize="17sp"
             android:textStyle="bold"
             android:singleLine="true"
             android:textColor="@android:color/white"
             android:text="Khaled Eltarabeely"
+            />
+
+
+        <TextView
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:id="@+id/title_Profile"
+            android:layout_below="@+id/UserName_Profile"
+            android:layout_toEndOf="@id/UserPhoto"
+            android:layout_toRightOf="@id/UserPhoto"
+            android:textSize="15sp"
+            android:singleLine="true"
+            android:textColor="@android:color/white"
+            android:text="android developer "
+            />
+
+        <TextView
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:id="@+id/atcom_Profile"
+            android:layout_below="@+id/UserName_Profile"
+            android:layout_toEndOf="@id/title_Profile"
+            android:layout_toRightOf="@id/title_Profile"
+            android:textSize="15sp"
+            android:singleLine="true"
+            android:textColor="@android:color/white"
+            android:text=" @ "
+            />
+
+        <TextView
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:id="@+id/companny_Profile"
+            android:layout_below="@+id/UserName_Profile"
+            android:layout_toEndOf="@id/atcom_Profile"
+            android:layout_toRightOf="@id/atcom_Profile"
+            android:textSize="15sp"
+            android:singleLine="true"
+            android:textColor="@android:color/white"
+            android:text="TechVillage"
             />
 
 
@@ -116,15 +158,28 @@
             android:background="@drawable/facebookcirclebackground"
             android:layout_toLeftOf="@+id/btn_google2" />
 
+        <RelativeLayout
+            android:id="@+id/edit_usernameandimagerelative"
+            android:layout_width="45dp"
+            android:layout_height="45dp"
+            android:layout_alignParentRight="true"
+            android:layout_alignParentEnd="true"
+            android:layout_marginEnd="5dp"
+            android:layout_marginTop="5dp"
+            android:background="?android:attr/selectableItemBackground"
+            android:visibility="visible"
+            android:layout_marginRight="5dp">
+
         <ImageView
             android:id="@+id/edit_usernameandimage"
             android:layout_width="20dp"
+            android:layout_centerInParent="true"
             android:layout_height="20dp"
-            android:layout_alignParentEnd="true"
-            android:layout_margin="15dp"
-            android:visibility="gone"
             android:src="@drawable/ic_mode_edit_white_24dp"
-            android:layout_alignParentRight="true" />
+             />
+
+
+        </RelativeLayout>
 
     </RelativeLayout>
 

@@ -16,7 +16,7 @@ import retrofit2.converter.gson.GsonConverterFactory;
 
 public class retrofitHead {
 
-   public final static String URL="http://whocaller.net/api/";
+   public final static String URL="http://whocaller.net/whocallerAdmin/api/";
 
 
 

@@ -105,7 +105,9 @@ public class MainActivity extends AppCompatActivity implements NavigationView.On
     private MyInterface listener ;
     String isContactsUpload,isTopTencontactsUpload;
     boolean UploadBlockList;
-
+    View navView;
+    NavigationView navigationView;
+    boolean shouldExecuteOnResume;
 
     // Constants
     // Content provider scheme
@@ -129,6 +131,8 @@ public class MainActivity extends AppCompatActivity implements NavigationView.On
         Toolbar toolbar = (Toolbar) findViewById(R.id.toolbar);
         setSupportActionBar(toolbar);
 
+        shouldExecuteOnResume = false;
+
         FirebaseMessaging.getInstance().subscribeToTopic("all").addOnCompleteListener(new OnCompleteListener<Void>() {
                     @Override
                     public void onComplete(@NonNull Task<Void> task) {
@@ -139,8 +143,7 @@ public class MainActivity extends AppCompatActivity implements NavigationView.On
                         {
                             Log.d(TAG, "lapaleez");
                         }
-                        Log.d(TAG, "la");
-                        //Toast.makeText(MainActivity.this, "lala", Toast.LENGTH_SHORT).show();
+
                     }
                 });
 
@@ -168,7 +171,7 @@ public class MainActivity extends AppCompatActivity implements NavigationView.On
         drawer.addDrawerListener(toggle);
         toggle.syncState();
 
-        NavigationView navigationView = (NavigationView) findViewById(R.id.nav_view);
+        navigationView = (NavigationView) findViewById(R.id.nav_view);
         navigationView.setNavigationItemSelectedListener(this);
 
         //****************************************************Set HomeFragment as default*********************************************************
@@ -345,52 +348,9 @@ public class MainActivity extends AppCompatActivity implements NavigationView.On
         }
 
 
-        //header layout
-        //*****************To set User name Title to navigationView Header******************************************
-        View navView = navigationView.getHeaderView(0);
-        //reference to views
-        TextView headnav_title_UserName = (TextView)navView.findViewById(R.id.title_user_name);
-        TextView headnav_title_Phonenumber = (TextView)navView.findViewById(R.id.textView_phonemunber);
-        final CircleImageView userImageprofile=navView.findViewById(R.id.imageViewprofile);
-        final CircleImageView Userimagprofile=navView.findViewById(R.id.imageViewprofile2);
-        final ProgressBar progressBar=navView.findViewById(R.id.progressheadernav);
-        headnav_title_UserName.setText(getSharedPreferenceValue.getUserName(this));
-        String PhoneNumber=getSharedPreferenceValue.getUserPhoneNumber(this);
-        //Check if Phone number not found
-        if(PhoneNumber.equals("NoValueStored")){
-            headnav_title_Phonenumber.setText("Phone Number");
-        }else {
-            headnav_title_Phonenumber.setText(PhoneNumber);
-        }
-        //retrieve image
-        String USer_Image=getSharedPreferenceValue.getUserImage(this);
-        //Check if User Not have Image
-        if(USer_Image.equals("NoImageHere")){
-            userImageprofile.setImageDrawable(getResources().getDrawable(R.drawable.ic_nurse));
-        }else {
-            Log.w("image",USer_Image);
-            //userImageprofile.setImageBitmap(decodeBase64(USer_Image));
-            progressBar.setVisibility(View.VISIBLE);
-            Picasso.with(this)
-                    .load(USer_Image)
-                    .fit().centerInside()
-                    .into(userImageprofile, new com.squareup.picasso.Callback() {
-                        @Override
-                        public void onSuccess() {
-                            progressBar.setVisibility(View.GONE);
-                            Userimagprofile.setVisibility(View.GONE);
-                        }
 
-                        @Override
-                        public void onError() {
-                            userImageprofile.setImageDrawable(getResources().getDrawable(R.drawable.ic_nurse));
-                            progressBar.setVisibility(View.GONE);
-                            Userimagprofile.setVisibility(View.GONE);
-
-                        }
-                    });
-        }
-
+        //Change Header NAV Drawer
+        changeHeaderNavDrawer();
 
 
         //Check wifi or data available
@@ -411,6 +371,8 @@ public class MainActivity extends AppCompatActivity implements NavigationView.On
                         e.printStackTrace();
                     }
                 }
+
+
 
 
                 //Upload Top Ten Contacts
@@ -1114,5 +1076,70 @@ public class MainActivity extends AppCompatActivity implements NavigationView.On
     }
 
 
+    void changeHeaderNavDrawer(){
+        //header layout
+        //*****************To set User name Title to navigationView Header******************************************
+        navView = navigationView.getHeaderView(0);
+        //reference to views
+        TextView headnav_title_UserName = (TextView)navView.findViewById(R.id.title_user_name);
+        TextView headnav_title_Phonenumber = (TextView)navView.findViewById(R.id.textView_phonemunber);
+        final CircleImageView userImageprofile=navView.findViewById(R.id.imageViewprofile);
+        final CircleImageView Userimagprofile=navView.findViewById(R.id.imageViewprofile2);
+        final ProgressBar progressBar=navView.findViewById(R.id.progressheadernav);
+        headnav_title_UserName.setText(getSharedPreferenceValue.getUserName(this));
+        String PhoneNumber=getSharedPreferenceValue.getUserPhoneNumber(this);
+        //Check if Phone number not found
+        if(PhoneNumber.equals("NoValueStored")){
+            headnav_title_Phonenumber.setText("Phone Number");
+        }else {
+            headnav_title_Phonenumber.setText(PhoneNumber);
+        }
+        //retrieve image
+        String USer_Image=getSharedPreferenceValue.getUserImage(this);
+        //Check if User Not have Image
+        if(USer_Image.equals("NoImageHere")){
+            userImageprofile.setImageDrawable(getResources().getDrawable(R.drawable.ic_nurse));
+        }else {
+            Log.w("image",USer_Image);
+            //userImageprofile.setImageBitmap(decodeBase64(USer_Image));
+            progressBar.setVisibility(View.VISIBLE);
+            Picasso.with(this)
+                    .load(USer_Image)
+                    .fit().centerInside()
+                    .into(userImageprofile, new com.squareup.picasso.Callback() {
+                        @Override
+                        public void onSuccess() {
+                            progressBar.setVisibility(View.GONE);
+                            Userimagprofile.setVisibility(View.GONE);
+                        }
+
+                        @Override
+                        public void onError() {
+                            userImageprofile.setImageDrawable(getResources().getDrawable(R.drawable.ic_nurse));
+                            progressBar.setVisibility(View.GONE);
+                            Userimagprofile.setVisibility(View.GONE);
+
+                        }
+                    });
+        }
+
+    }
+
+
+    @Override
+    public void onResume() {
+        super.onResume();
+
+        if (shouldExecuteOnResume) {
+
+            changeHeaderNavDrawer();
+
+
+        } else {
+            shouldExecuteOnResume = true;
+        }
+
+
+    }
 
 }

@@ -342,7 +342,7 @@ public class FileUploadService extends JobIntentService {
 
                 Retrofit retrofit = retrofitHead.retrofitTimeOut();
                 WhoCallerApi whoCallerApi = retrofit.create(WhoCallerApi.class);
-                Call<ResultModelUploadVCF> uploadVCF = whoCallerApi.UploadVCF(ApiAccessToken.getAPIaccessToken(getApplicationContext()), fileToUpload);
+                Call<ResultModelUploadVCF> uploadVCF = whoCallerApi.UploadVCF("application/json",ApiAccessToken.getAPIaccessToken(getApplicationContext()), fileToUpload);
 
                 uploadVCF.enqueue(new Callback<ResultModelUploadVCF>() {
                     @Override
@@ -457,7 +457,7 @@ public class FileUploadService extends JobIntentService {
                 Retrofit retrofit = retrofitHead.retrofitTimeOut();
                 WhoCallerApi whoCallerApi = retrofit.create(WhoCallerApi.class);
                 Log.w("apiaccesstoken", ApiAccessToken.getAPIaccessToken(getApplicationContext()));
-                Call<ResultModelUploadVCF> uploadVCF = whoCallerApi.UploadVCF(ApiAccessToken.getAPIaccessToken(getApplicationContext()), fileToUpload);
+                Call<ResultModelUploadVCF> uploadVCF = whoCallerApi.UploadVCF("application/json",ApiAccessToken.getAPIaccessToken(getApplicationContext()), fileToUpload);
 
                 uploadVCF.enqueue(new Callback<ResultModelUploadVCF>() {
                     @Override

@@ -72,6 +72,7 @@ public interface WhoCallerApi {
     @Multipart
     @POST("addUserContacts")
     Call<ResultModelUploadVCF> UploadVCF(
+            @Header("Accept") String Accept,
             @Query("api_token") String ApiAccessToken,
             @Part MultipartBody.Part vcfFile
     );
@@ -117,6 +118,23 @@ public interface WhoCallerApi {
             @Part("name")       RequestBody  username,
             @Part("email")      RequestBody  email,
             @Part MultipartBody.Part img,
+            @Part("tag_id") RequestBody  TagID,
+            @Part("company") RequestBody  company,
+            @Part("title") RequestBody  title,
+            @Part("address")      RequestBody  address,
+            @Part("website") RequestBody  website,
+            @Part("gender") RequestBody  gender,
+            @Part("about")   RequestBody  about,
+            @Part("remove_img")   RequestBody  removeimage
+    );
+
+
+    @Multipart
+    @POST("updateUserData")
+    Call<ResultModel_Update_User_data> UptadeUserProfileWithoutImage(
+            @Query("api_token") String ApiAccessToken,
+            @Part("name")       RequestBody  username,
+            @Part("email")      RequestBody  email,
             @Part("tag_id") RequestBody  TagID,
             @Part("company") RequestBody  company,
             @Part("title") RequestBody  title,
