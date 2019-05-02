@@ -111,7 +111,7 @@ public class UserProfileActivity extends AppCompatActivity {
     String USer_Image,UserName,UserEmail,title,company;
     ImageView editbtnimgandusername;
     Button save;
-    TagView tag;
+    TagView tagaaa;
     String UserProfImgInString;
     String genderinreq;
     ProgressBar progressBar;
@@ -139,7 +139,7 @@ public class UserProfileActivity extends AppCompatActivity {
         TagEdit_Layout=findViewById(R.id.tag_Edit_Layout);
         gender=findViewById(R.id.gender_label);
         save=findViewById(R.id.savechangebtn);
-        tag=findViewById(R.id.tagviewprofile);
+        tagaaa=findViewById(R.id.tagviewprofile);
         shortnote=findViewById(R.id.info);
         website=findViewById(R.id.Websie);
         address=findViewById(R.id.home_address);
@@ -349,10 +349,10 @@ public class UserProfileActivity extends AppCompatActivity {
 
     }
 
-
+     Dialog  DialogTagEdit=null;
     private void ShowTagsDialog() {
 
-        final Dialog  DialogTagEdit = new Dialog(this);
+        DialogTagEdit = new Dialog(this);
         DialogTagEdit.requestWindowFeature(Window.FEATURE_NO_TITLE);
         DialogTagEdit.setContentView(R.layout.tags);
         Window window = DialogTagEdit.getWindow();
@@ -368,7 +368,18 @@ public class UserProfileActivity extends AppCompatActivity {
 
             @Override
             public void onTagClick(int position, Tag tag) {
+
                 Toast.makeText(UserProfileActivity.this, "click tag id = " + tag.id + " position = " + position, Toast.LENGTH_SHORT).show();
+                DialogTagEdit.dismiss();
+                Tag tagee = new Tag(tag.text);
+                tagee.id=tag.id ;
+                tagee.tagTextColor = Color.parseColor("#FFFFFF");
+                tagee.layoutColor = Color.parseColor("#0089c0");
+                tagee.radius = 20f;
+                tagee.tagTextSize = 14f;
+                tagee.layoutBorderSize = 1f;
+                tagee.isDeletable = true;
+                tagaaa.addTag(tagee);
             }
         });
         tagdialog.setOnTagDeleteListener(new OnTagDeleteListener() {
@@ -380,9 +391,6 @@ public class UserProfileActivity extends AppCompatActivity {
         });
 
         db=new Database_Helper(this);
-        String[] tagss= getResources().getStringArray(R.array.continents);
-        tagdialog.addTags(tagss);
-
 
         //ADD TAG
         List<Tags> tags = db.getAllTagslist();

@@ -473,53 +473,106 @@ public class Get_Calls_Log {
 
             //String temp2 = String.valueOf((list.subList(0, 10)));
             //Log.e("final",temp2+"");
+            //Check IF Array small than 10 items
+            if(phonenumbers.size()<=10){
+
+                for (int i = 0; i < phonenumbers.size(); i++) {
+
+                    contactExists(phonenumbers.get(i));
+
+                    //if Number Not in Contacts
+                    if (contactsName == null) {
+                        contactsName = phonenumbers.get(i);
+                    }
+
+                    switch (TypeOfNumph) {
+                        case ContactsContract.CommonDataKinds.Phone.TYPE_MOBILE:
+                            typephone = "Mobile";
+                            break;
+                        case ContactsContract.CommonDataKinds.Phone.TYPE_HOME:
+                            typephone = "Home";
+                            break;
+                        case ContactsContract.CommonDataKinds.Phone.TYPE_WORK:
+                            typephone = "Work";
+                            break;
+                        case ContactsContract.CommonDataKinds.Phone.TYPE_FAX_WORK:
+                            typephone = "Work Fax";
+                            break;
+                        case ContactsContract.CommonDataKinds.Phone.TYPE_FAX_HOME:
+                            typephone = "Home Fax";
+                            break;
+                        case ContactsContract.CommonDataKinds.Phone.TYPE_MAIN:
+                            typephone = "Main";
+                            break;
+                        case ContactsContract.CommonDataKinds.Phone.TYPE_PAGER:
+                            typephone = "Pager";
+                            break;
+                        case ContactsContract.CommonDataKinds.Phone.TYPE_CUSTOM:
+                            typephone = "Custom";
+                            break;
+                        case ContactsContract.CommonDataKinds.Phone.TYPE_OTHER:
+                            typephone = "Other";
+                            break;
+                        default:
+                            typephone = "Other";
+                            break;
+                    }
 
 
-            for (int i = 0; i < 10; i++) {
-
-                contactExists(phonenumbers.get(i));
-
-
-                switch (TypeOfNumph) {
-                    case ContactsContract.CommonDataKinds.Phone.TYPE_MOBILE:
-                        typephone = "Mobile";
-                        break;
-                    case ContactsContract.CommonDataKinds.Phone.TYPE_HOME:
-                        typephone = "Home";
-                        break;
-                    case ContactsContract.CommonDataKinds.Phone.TYPE_WORK:
-                        typephone = "Work";
-                        break;
-                    case ContactsContract.CommonDataKinds.Phone.TYPE_FAX_WORK:
-                        typephone = "Work Fax";
-                        break;
-                    case ContactsContract.CommonDataKinds.Phone.TYPE_FAX_HOME:
-                        typephone = "Home Fax";
-                        break;
-                    case ContactsContract.CommonDataKinds.Phone.TYPE_MAIN:
-                        typephone = "Main";
-                        break;
-                    case ContactsContract.CommonDataKinds.Phone.TYPE_PAGER:
-                        typephone = "Pager";
-                        break;
-                    case ContactsContract.CommonDataKinds.Phone.TYPE_CUSTOM:
-                        typephone = "Custom";
-                        break;
-                    case ContactsContract.CommonDataKinds.Phone.TYPE_OTHER:
-                        typephone = "Other";
-                        break;
-                    default:
-                        typephone = "Other";
-                        break;
+                    contactInfos.add(new ContactInfo(null, contactsName, typephone, phonenumbers.get(i)));
+                    contactsName = null;
                 }
 
-                if (contactsName == null) {
-                    contactsName = phonenumbers.get(i);
-                    typephone = "Other";
+            }else {
+
+
+                for (int i = 0; i < 10; i++) {
+
+                    contactExists(phonenumbers.get(i));
+
+
+                    switch (TypeOfNumph) {
+                        case ContactsContract.CommonDataKinds.Phone.TYPE_MOBILE:
+                            typephone = "Mobile";
+                            break;
+                        case ContactsContract.CommonDataKinds.Phone.TYPE_HOME:
+                            typephone = "Home";
+                            break;
+                        case ContactsContract.CommonDataKinds.Phone.TYPE_WORK:
+                            typephone = "Work";
+                            break;
+                        case ContactsContract.CommonDataKinds.Phone.TYPE_FAX_WORK:
+                            typephone = "Work Fax";
+                            break;
+                        case ContactsContract.CommonDataKinds.Phone.TYPE_FAX_HOME:
+                            typephone = "Home Fax";
+                            break;
+                        case ContactsContract.CommonDataKinds.Phone.TYPE_MAIN:
+                            typephone = "Main";
+                            break;
+                        case ContactsContract.CommonDataKinds.Phone.TYPE_PAGER:
+                            typephone = "Pager";
+                            break;
+                        case ContactsContract.CommonDataKinds.Phone.TYPE_CUSTOM:
+                            typephone = "Custom";
+                            break;
+                        case ContactsContract.CommonDataKinds.Phone.TYPE_OTHER:
+                            typephone = "Other";
+                            break;
+                        default:
+                            typephone = "Other";
+                            break;
+                    }
+
+                    if (contactsName == null) {
+                        contactsName = phonenumbers.get(i);
+                        typephone = "Other";
+                    }
+
+                    contactInfos.add(new ContactInfo(null, contactsName, typephone, phonenumbers.get(i)));
+                    contactsName = null;
                 }
 
-                contactInfos.add(new ContactInfo(null, contactsName, typephone, phonenumbers.get(i)));
-                contactsName = null;
             }
 
         }

@@ -49,6 +49,7 @@ import retrofit2.Callback;
 import retrofit2.Response;
 import retrofit2.Retrofit;
 import teckvillage.developer.khaled_pc.teckvillagetrue.Make_Phone_Call;
+import teckvillage.developer.khaled_pc.teckvillagetrue.Model.database.tables.Tags;
 import teckvillage.developer.khaled_pc.teckvillagetrue.Model.retrofit.ApiAccessToken;
 import teckvillage.developer.khaled_pc.teckvillagetrue.Model.retrofit.JSON_Mapping.BodyNumberModel;
 import teckvillage.developer.khaled_pc.teckvillagetrue.Model.retrofit.JSON_Mapping.FetchedUserData;
@@ -66,7 +67,6 @@ public class User_Contact_Profile extends AppCompatActivity {
     LinearLayout makecall,sendmessage,makeblock;
     View backarrow,moreoption;
     long id;
-    Database_Helper db;
     ImageView blockimagemake;
     TextView blockred;
 
@@ -78,6 +78,7 @@ public class User_Contact_Profile extends AppCompatActivity {
     RelativeLayout child;
     TextView phone;
     RelativeLayout moreoptionusercontact,backarrowlay;
+    Database_Helper db;
 
     @Override
     protected void onCreate(Bundle savedInstanceState) {
@@ -484,10 +485,16 @@ public class User_Contact_Profile extends AppCompatActivity {
                             Log.w("sues",fetchedUserData.getVcard_email());
                         }
 
-                        if(fetchedUserData.getTag_id()!=0){
+                        if(fetchedUserData.getUser_tag_id()!=null){
                             Log.w("sues",fetchedUserData.getUser_tag_id());
                             tag.setVisibility(View.VISIBLE);
+                            db=new Database_Helper(User_Contact_Profile.this);
+
+                            Tags tags= db.getTagtByID(Long.parseLong(fetchedUserData.getUser_tag_id()));
+                            tag.setText(tags.getTagname());
+
                         }else {
+
                             tag.setVisibility(View.GONE);
                         }
 
@@ -524,7 +531,7 @@ public class User_Contact_Profile extends AppCompatActivity {
                             //Update UI Image
                             if(fetchedUserData.getUser_img()!=null){
                                 Picasso.with(User_Contact_Profile.this)
-                                        .load("http://whocaller.net/uploads/" +fetchedUserData.getUser_img())
+                                        .load("http://whocaller.net/whocallerAdmin/uploads/" +fetchedUserData.getUser_img())
                                         .into(profile_pic, new com.squareup.picasso.Callback() {
                                             @Override
                                             public void onSuccess() {
@@ -533,7 +540,7 @@ public class User_Contact_Profile extends AppCompatActivity {
 
                                             @Override
                                             public void onError() {
-
+                                                profile_pic.setImageDrawable(getResources().getDrawable(R.drawable.ic_nurse));
                                             }
                                         });
                             }else {
