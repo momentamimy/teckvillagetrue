@@ -178,9 +178,9 @@ public class User_Contact_Profile_From_log_list extends AppCompatActivity {
                         @Override
                         public boolean onMenuItemClick(MenuItem item) {
                             if(item.getTitle().equals("Save")){
-                                save(nameofcontact.getText().toString(),nameofcontact.getText().toString());
+                                save(nameofcontact.getText().toString().trim(),phonenumee.getText().toString().trim());
                             }else  if(item.getTitle().equals("Share")){
-                                shareContact(phonenumee.getText().toString(),phonenumee.getText().toString());
+                                shareContact(nameofcontact.getText().toString(),phonenumee.getText().toString());
                             }else  if(item.getTitle().equals("Search the Web")){
                                 searchOnWeb(nameofcontact.getText().toString());
                             } else  if(item.getTitle().equals("Copy Number")){
