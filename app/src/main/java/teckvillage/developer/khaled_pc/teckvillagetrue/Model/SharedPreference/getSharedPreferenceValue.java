@@ -52,12 +52,12 @@ public class getSharedPreferenceValue {
 
     public static String getUserTagId(Context context){
         SharedPreferences sharedPref = context.getSharedPreferences("WhoCaller?", MODE_PRIVATE);
-        return sharedPref.getString("User_TagID","Email");
+        return sharedPref.getString("User_TagID","Add tag");
     }
 
     public static String getUserShortNote(Context context){
         SharedPreferences sharedPref = context.getSharedPreferences("WhoCaller?", MODE_PRIVATE);
-        return sharedPref.getString("User_ShortNote","Add tag");
+        return sharedPref.getString("User_ShortNote","Add a short text about yourself");
     }
 
     public static String getUserWebsite(Context context){

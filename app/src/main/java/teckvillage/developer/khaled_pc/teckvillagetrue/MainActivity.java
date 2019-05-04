@@ -83,7 +83,7 @@ public class MainActivity extends AppCompatActivity implements NavigationView.On
     public static FragmentManager fragmentManager;
     FrameLayout mainframeLayout,messageframeLayout,contactframeLayout,chatframeLayout;
     private static final String TAG_ANDROID_CONTACTS = "ANDROID_CONTACTS";
-    String Email ="WhoCaller@gmail.com";
+    String Email ="developer@whocaller.net";
     private static final int MY_CAMERA_REQUEST_CODE = 109;
     private static final String PUBLIC_STATIC_STRING_IDENTIFIER = "com.techvillage";
 
@@ -108,6 +108,7 @@ public class MainActivity extends AppCompatActivity implements NavigationView.On
     View navView;
     NavigationView navigationView;
     boolean shouldExecuteOnResume;
+    String urlFAQ = "http://whocaller.net/faq/";
 
     // Constants
     // Content provider scheme
@@ -468,7 +469,7 @@ public class MainActivity extends AppCompatActivity implements NavigationView.On
 
         } else if (id == R.id.nav_FAQ) {
 
-            startActivity(new Intent(this,FAQ.class));
+            openFAQPageWebsite();
 
         } else if (id == R.id.nav_sendfeedback) {
             //****************************send email************************************************
@@ -563,7 +564,11 @@ public class MainActivity extends AppCompatActivity implements NavigationView.On
     }
 
 
-
+    void openFAQPageWebsite(){
+        Intent i = new Intent(Intent.ACTION_VIEW);
+        i.setData(Uri.parse(urlFAQ));
+        startActivity(i);
+    }
 
     // After user select Allow or Deny button in request runtime permission dialog
     // , this method will be invoked.

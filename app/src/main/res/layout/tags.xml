@@ -38,20 +38,12 @@
                 android:paddingRight="10dp">
 
 
-                <me.kaede.tagview.TagView
-                    android:id="@+id/tagview"
-                    android:layout_width="match_parent"
+                <android.support.v7.widget.RecyclerView
+                    android:id="@+id/tagRecyclerView"
+                    android:layout_width="wrap_content"
                     android:layout_height="wrap_content"
-                    android:layout_marginTop="20dp"
-                    android:layout_marginBottom="10dp"
-                    app:tagMargin="5dp"
-                    app:textPaddingBottom="3dp"
-                    app:textPaddingLeft="10dp"
-                    app:textPaddingRight="10dp"
-                    app:textPaddingTop="3dp"
-
-                   >
-                </me.kaede.tagview.TagView>
+                    android:layout_marginBottom="8dp">
+                </android.support.v7.widget.RecyclerView>
 
 
 

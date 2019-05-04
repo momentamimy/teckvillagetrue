@@ -485,6 +485,7 @@ public class Get_Calls_Log {
                         contactsName = phonenumbers.get(i);
                     }
 
+
                     switch (TypeOfNumph) {
                         case ContactsContract.CommonDataKinds.Phone.TYPE_MOBILE:
                             typephone = "Mobile";

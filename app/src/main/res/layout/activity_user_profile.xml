@@ -78,7 +78,7 @@
             android:layout_toRightOf="@id/UserPhoto"
             android:layout_alignBaseline="@id/UserPhoto"
             android:layout_alignTop="@id/UserPhoto"
-            android:layout_marginTop="12dp"
+            android:layout_marginTop="18dp"
             android:textSize="17sp"
             android:textStyle="bold"
             android:singleLine="true"
@@ -421,11 +421,15 @@
                 android:src="@drawable/ic_label_black_24dp" />
 
             <TextView
-                android:textColor="@color/Tomyacolor"
+                android:textColor="@android:color/white"
                 android:id="@+id/tag"
                 android:layout_width="wrap_content"
                 android:layout_height="wrap_content"
                 android:text="Add Tag"
+                android:gravity="center"
+                android:paddingStart="8dp"
+                android:paddingEnd="8dp"
+                android:background="@drawable/tagshape"
                 android:layout_centerVertical="true"
                 android:layout_toEndOf="@+id/tag_icon"
                 android:layout_toRightOf="@+id/tag_icon" />

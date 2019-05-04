@@ -32,6 +32,9 @@ import android.support.v4.app.ActivityCompat;
 import android.support.v7.app.AlertDialog;
 import android.support.v7.app.AppCompatActivity;
 import android.os.Bundle;
+import android.support.v7.widget.DefaultItemAnimator;
+import android.support.v7.widget.LinearLayoutManager;
+import android.support.v7.widget.RecyclerView;
 import android.support.v7.widget.Toolbar;
 import android.text.Editable;
 import android.text.TextUtils;
@@ -53,6 +56,7 @@ import com.google.android.gms.auth.api.signin.GoogleSignIn;
 import com.google.android.gms.auth.api.signin.GoogleSignInAccount;
 import com.google.android.gms.tasks.Task;
 import com.intrusoft.squint.DiagonalView;
+import com.pusher.client.channel.User;
 import com.sdsmdg.tastytoast.TastyToast;
 import com.squareup.picasso.Picasso;
 
@@ -76,6 +80,8 @@ import retrofit2.Call;
 import retrofit2.Callback;
 import retrofit2.Response;
 import retrofit2.Retrofit;
+import teckvillage.developer.khaled_pc.teckvillagetrue.Controller.LogAdapter;
+import teckvillage.developer.khaled_pc.teckvillagetrue.Controller.TagsAdapter;
 import teckvillage.developer.khaled_pc.teckvillagetrue.Model.database.Database_Helper;
 import teckvillage.developer.khaled_pc.teckvillagetrue.Model.database.tables.Tags;
 import teckvillage.developer.khaled_pc.teckvillagetrue.View.CheckNetworkConnection;
@@ -92,11 +98,12 @@ import teckvillage.developer.khaled_pc.teckvillagetrue.Model.retrofit.JSON_Mappi
 import teckvillage.developer.khaled_pc.teckvillagetrue.Model.retrofit.JSON_Mapping.Result_Update_User_Data;
 import teckvillage.developer.khaled_pc.teckvillagetrue.Model.retrofit.WhoCallerApi;
 import teckvillage.developer.khaled_pc.teckvillagetrue.Model.retrofit.retrofitHead;
+import teckvillage.developer.khaled_pc.teckvillagetrue.View.User_Contact_Profile;
 
 import static android.media.MediaRecorder.VideoSource.CAMERA;
 import static teckvillage.developer.khaled_pc.teckvillagetrue.View.Signup.encodeTobase64;
 
-public class UserProfileActivity extends AppCompatActivity {
+public class UserProfileActivity extends AppCompatActivity  implements OnclickRecycleview{
     //CONTACT
     RelativeLayout Phone_Edit_Layout,home_Edit_Layout,Email_Edit_Layout,Websie_Edit_Layout,TagEdit_Layout;
 
@@ -113,7 +120,7 @@ public class UserProfileActivity extends AppCompatActivity {
     Button save;
     TagView tagaaa;
     String UserProfImgInString;
-    String genderinreq;
+    String genderinreq=null;
     ProgressBar progressBar;
     private static final int MY_CAMERA_REQUEST_CODE = 142;
     private static final int GALLERY = 0;
@@ -122,7 +129,9 @@ public class UserProfileActivity extends AppCompatActivity {
     boolean removeImage=false;
     private Random random;
     Database_Helper db;
-
+    TextView tagshape;
+    int tagid=0;
+    List<Tags> tags;
 
     @Override
     protected void onCreate(Bundle savedInstanceState) {
@@ -149,6 +158,7 @@ public class UserProfileActivity extends AppCompatActivity {
         companytextview=findViewById(R.id.companny_Profile);
         titletextview=findViewById(R.id.title_Profile);
         atcom=findViewById(R.id.atcom_Profile);
+        tagshape=findViewById(R.id.tag);
 
         //CHANGE UserName Or Image
         editbtnimgandusername.setOnClickListener(new View.OnClickListener() {
@@ -183,23 +193,46 @@ public class UserProfileActivity extends AppCompatActivity {
             @Override
             public void onClick(View v) {
 
-                ShowTagsDialog();
+                if(tagshape.getText().toString().equals("Add Tag")){
+                    ShowTagsDialog();
+                }else{
+                    showDialogremoveTag();
+                }
+
             }
         });
 
+        //Set intial Tag
+        db=new Database_Helper(UserProfileActivity.this);
+        String validId=getSharedPreferenceValue.getUserTagId(this);
+        if(!validId.equals("Add tag")){
+            Tags tags= db.getTagtByID(Long.parseLong(getSharedPreferenceValue.getUserTagId(this)));
+            tagshape.setText(tags.getTagname());
+        }else {
+            tagshape.setText("Add Tag");
+        }
+
+
+        //Set inital ABout
+        shortnote.setText(getSharedPreferenceValue.getUserShortNote(this));
+
+        //Set Initial Website
         website.setText(getSharedPreferenceValue.getUserWebsite(this));
-        //set gender
+
+
+        //set Initial gender
         String puttedtextgender=getSharedPreferenceValue.getUserGender(this);
         if(puttedtextgender.equals("male")){
             gender.setText("Male");
         }else if(puttedtextgender.equals("female")){
             gender.setText("Female");
-        }if(puttedtextgender.equals("other")){
+        }else if(puttedtextgender.equals("other")){
             gender.setText("Prefer not to say");
         }else {
-            gender.setText(puttedtextgender);
+            gender.setText("Prefer not to say");
         }
 
+        //Set Initial Address
         address.setText(getSharedPreferenceValue.getUseraddress(this));
 
 
@@ -208,7 +241,7 @@ public class UserProfileActivity extends AppCompatActivity {
 
         //retrieve image
          USer_Image= getSharedPreferenceValue.getUserImage(this);
-
+         Log.w("asd",USer_Image);
         //Check if User Not have Image
         if(USer_Image.equals("NoImageHere")){
             userPhoto.setImageDrawable(getResources().getDrawable(R.drawable.ic_nurse));
@@ -358,44 +391,28 @@ public class UserProfileActivity extends AppCompatActivity {
         Window window = DialogTagEdit.getWindow();
         window.setLayout(Toolbar.LayoutParams.MATCH_PARENT, Toolbar.LayoutParams.WRAP_CONTENT);
         DialogTagEdit.getWindow().setBackgroundDrawable(new ColorDrawable(Color.TRANSPARENT));
-        TagView tagdialog;
 
-
-        tagdialog=DialogTagEdit.findViewById(R.id.tagview);
-
-        //SET LISTENER
-        tagdialog.setOnTagClickListener(new OnTagClickListener() {
-
-            @Override
-            public void onTagClick(int position, Tag tag) {
-
-                Toast.makeText(UserProfileActivity.this, "click tag id = " + tag.id + " position = " + position, Toast.LENGTH_SHORT).show();
-                DialogTagEdit.dismiss();
-                Tag tagee = new Tag(tag.text);
-                tagee.id=tag.id ;
-                tagee.tagTextColor = Color.parseColor("#FFFFFF");
-                tagee.layoutColor = Color.parseColor("#0089c0");
-                tagee.radius = 20f;
-                tagee.tagTextSize = 14f;
-                tagee.layoutBorderSize = 1f;
-                tagee.isDeletable = true;
-                tagaaa.addTag(tagee);
-            }
-        });
-        tagdialog.setOnTagDeleteListener(new OnTagDeleteListener() {
-
-            @Override
-            public void onTagDeleted(int position, Tag tag) {
-                Toast.makeText(UserProfileActivity.this, "delete tag id = " + tag.id + " position =" + position, Toast.LENGTH_SHORT).show();
-            }
-        });
+        RecyclerView recyclerView=DialogTagEdit.findViewById(R.id.tagRecyclerView);
+        LinearLayoutManager Layout = new LinearLayoutManager(UserProfileActivity.this);
 
         db=new Database_Helper(this);
 
         //ADD TAG
-        List<Tags> tags = db.getAllTagslist();
+        tags = db.getAllTagslist();
 
-        //String[] colors = this.getResources().getStringArray(R.array.colors);
+        recyclerView.setLayoutManager(Layout);
+        recyclerView.setItemAnimator(new DefaultItemAnimator());
+        TagsAdapter adapter = new TagsAdapter(UserProfileActivity.this, tags);
+        recyclerView.setAdapter(adapter);
+
+
+        /*DialogTagEdit.dismiss();
+        tagshape.setText(tag.text);
+        tagid=tag.id;*/
+
+
+
+       /* //String[] colors = this.getResources().getStringArray(R.array.colors);
         for (int i = 0; i < tags.size(); i++) {
             Tag tag = new Tag(tags.get(i).getTagname());
             tag.id=tags.get(i).getId() ;
@@ -408,13 +425,19 @@ public class UserProfileActivity extends AppCompatActivity {
             tag.isDeletable = true;
             tagdialog.addTag(tag);
         }
-
+         */
 
 
         DialogTagEdit.show();
 
+    }
 
-
+    //On click RecycleView items in Tag Dialog
+    @Override
+    public void ItemClick(int pos) {
+        DialogTagEdit.dismiss();
+        tagshape.setText(tags.get(pos).getTagname());
+        tagid=tags.get(pos).getId();
     }
 
     public class BlurBuilder {
@@ -476,10 +499,10 @@ public class UserProfileActivity extends AppCompatActivity {
         ZibCode=MyDialogHomeEdit.findViewById(R.id.edit_ZIB);
         City=MyDialogHomeEdit.findViewById(R.id.edit_City);
         Country=MyDialogHomeEdit.findViewById(R.id.edit_country);
-        String streetText=Street.getText().toString().trim();
+        /*String streetText=Street.getText().toString().trim();
         String zipcodeTExt=","+ZibCode.getText().toString().trim();
         String CityText=" "+City.getText().toString().trim();
-        String CountryText=Country.getText().toString().trim();
+        String CountryText=Country.getText().toString().trim();*/
 
 
         Country.setText(getSharedPreferenceValue.getUserCountry(UserProfileActivity.this));
@@ -497,7 +520,12 @@ public class UserProfileActivity extends AppCompatActivity {
         Ok.setOnClickListener(new View.OnClickListener() {
             @Override
             public void onClick(View v) {
-                address.setText(Street.getText().toString().trim()+","+ZibCode.getText().toString().trim()+" "+City.getText().toString().trim());
+                if(Street.getText().toString().trim().isEmpty()&&ZibCode.getText().toString().trim().isEmpty()&&City.getText().toString().trim().isEmpty()){
+                    address.setText("Add address");
+                }else {
+                    address.setText(Street.getText().toString().trim()+","+ZibCode.getText().toString().trim()+" "+City.getText().toString().trim());
+                }
+
                 MyDialogHomeEdit.dismiss();
             }
         });
@@ -530,10 +558,12 @@ public class UserProfileActivity extends AppCompatActivity {
 
         final String username=getSharedPreferenceValue.getUserName(UserProfileActivity.this);
         if(!username.equals("User_Name")){
-            String[] tokens = username.split(" ");
+            String firstnm = username.substring(0, username.indexOf(' '));
+            String lastnm = username.substring(username.indexOf(' ') + 1);
+            /*String[] tokens = username.split(" ");
             if(tokens.length!=2){throw new IllegalArgumentException();}
             String firstnm = tokens[0];
-            String lastnm = tokens[1];
+            String lastnm = tokens[1];*/
             fisrtname.setText(firstnm);
             lastname.setText(lastnm);
         }
@@ -626,6 +656,10 @@ public class UserProfileActivity extends AppCompatActivity {
         TextView Cancel,Ok;
 
         Email=MyDialogEmailEdit.findViewById(R.id.edit_Email);
+        String em=getSharedPreferenceValue.getUserEmail(this);
+        if(!em.equals("NoValueStored")){
+            Email.setText(em);
+        }
 
         Cancel=MyDialogEmailEdit.findViewById(R.id.btn_close);
         Ok=MyDialogEmailEdit.findViewById(R.id.btn_submit);
@@ -661,6 +695,11 @@ public class UserProfileActivity extends AppCompatActivity {
 
         Website=MyDialogWebsiteEdit.findViewById(R.id.edit_Websie);
 
+        String web=website.getText().toString().trim();
+        if(!web.equals("add website")){
+            Website.setText(web);
+        }
+
         Cancel=MyDialogWebsiteEdit.findViewById(R.id.btn_close);
         Ok=MyDialogWebsiteEdit.findViewById(R.id.btn_submit);
 
@@ -674,7 +713,13 @@ public class UserProfileActivity extends AppCompatActivity {
         Ok.setOnClickListener(new View.OnClickListener() {
             @Override
             public void onClick(View v) {
-                website.setText(Website.getText().toString().trim());
+                String sar=Website.getText().toString().trim();
+                if(sar.isEmpty()){
+                    website.setText("add website");
+                }else {
+                    website.setText(sar);
+                }
+
                 MyDialogWebsiteEdit.dismiss();
             }
         });
@@ -696,6 +741,13 @@ public class UserProfileActivity extends AppCompatActivity {
 
         ShortText=MyDialogShortTextEdit.findViewById(R.id.edit_short_text);
         NumChar=MyDialogShortTextEdit.findViewById(R.id.Num_Char);
+
+        String shortnoteuser=shortnote.getText().toString().trim();
+        if(!shortnoteuser.equals("Add a short text about yourself")){
+            ShortText.setText(shortnoteuser);
+            int i=160-ShortText.getText().length();
+            NumChar.setText(i+" characters remaining");
+        }
 
         ShortText.addTextChangedListener(new TextWatcher() {
             @Override
@@ -798,6 +850,7 @@ public class UserProfileActivity extends AppCompatActivity {
         MultipartBody.Part fileToUpload = null;
         RequestBody mFile = null;
         RequestBody removeImg = null;
+        RequestBody tagida=null;
         try {
 
 
@@ -839,18 +892,25 @@ public class UserProfileActivity extends AppCompatActivity {
         RequestBody companyRequest=RequestBody.create(MediaType.parse("text/plain"), "");
         RequestBody titleRequest=RequestBody.create(MediaType.parse("text/plain"), "");
         if(companytextview.getVisibility() == View.VISIBLE){
-            companyRequest = RequestBody.create(MediaType.parse("text/plain"), companytextview.getText().toString());
+            companyRequest = RequestBody.create(MediaType.parse("text/plain"), companytextview.getText().toString().trim());
         }
 
         if(titletextview.getVisibility() == View.VISIBLE){
-            titleRequest = RequestBody.create(MediaType.parse("text/plain"), titletextview.getText().toString());
+            titleRequest = RequestBody.create(MediaType.parse("text/plain"), titletextview.getText().toString().trim());
         }
 
 
         //Convert text to RequestBody
-        RequestBody emailRequest = RequestBody.create(MediaType.parse("text/plain"), email.getText().toString());
-        RequestBody fnameRequest = RequestBody.create(MediaType.parse("text/plain"), usernameprofile.getText().toString());
-        RequestBody addressreq = RequestBody.create(MediaType.parse("text/plain"), address.getText().toString());
+        RequestBody emailRequest = RequestBody.create(MediaType.parse("text/plain"), email.getText().toString().trim());
+        RequestBody fnameRequest = RequestBody.create(MediaType.parse("text/plain"), usernameprofile.getText().toString().trim());
+        RequestBody addressreq = RequestBody.create(MediaType.parse("text/plain"), address.getText().toString().trim());
+
+        if(!tagshape.getText().toString().equals("Add Tag")){
+            if(tagid!=0){
+                 tagida = RequestBody.create(MediaType.parse("text/plain"), String.valueOf(tagid));
+            }
+        }
+
 
         if(gender.getText().toString().equals("Male")){
             genderinreq="male";
@@ -859,9 +919,9 @@ public class UserProfileActivity extends AppCompatActivity {
         }if(gender.getText().toString().equals("Prefer not to say")){
             genderinreq="other";
         }
-        RequestBody websiterequest = RequestBody.create(MediaType.parse("text/plain"), website.getText().toString());
+        RequestBody websiterequest = RequestBody.create(MediaType.parse("text/plain"), website.getText().toString().trim());
         RequestBody genderrebody = RequestBody.create(MediaType.parse("text/plain"), genderinreq);
-        RequestBody aboutreq = RequestBody.create(MediaType.parse("text/plain"), shortnote.getText().toString());
+        RequestBody aboutreq = RequestBody.create(MediaType.parse("text/plain"), shortnote.getText().toString().trim());
 
 
         //Check wifi or data available
@@ -880,7 +940,7 @@ public class UserProfileActivity extends AppCompatActivity {
 
                     Retrofit retrofit = retrofitHead.headOfGetorPostReturnRes();
                     WhoCallerApi whoCallerApi = retrofit.create(WhoCallerApi.class);
-                    Call<ResultModel_Update_User_data> updateUserdata = whoCallerApi.UptadeUserProfile(ApiAccessToken.getAPIaccessToken(UserProfileActivity.this), fnameRequest, emailRequest, fileToUpload,null, companyRequest, titleRequest, addressreq, websiterequest,genderrebody,aboutreq,removeImg);//,devicename,AndroidVersion
+                    Call<ResultModel_Update_User_data> updateUserdata = whoCallerApi.UptadeUserProfile(ApiAccessToken.getAPIaccessToken(UserProfileActivity.this), fnameRequest, emailRequest, fileToUpload,tagida, companyRequest, titleRequest, addressreq, websiterequest,genderrebody,aboutreq,removeImg);//,devicename,AndroidVersion
 
                     updateUserdata.enqueue(new Callback<ResultModel_Update_User_data>() {
                         @Override
@@ -933,18 +993,26 @@ public class UserProfileActivity extends AppCompatActivity {
                                         }
                                         if (user.getAbout() != null) {
                                             editor.putString("User_ShortNote", user.getAbout());
+                                        }else {
+                                            editor.putString("User_ShortNote", "Add a short text about yourself");
                                         }
                                         if (user.getAddress() != null) {
                                             editor.putString("User_address", user.getAddress());
+                                        }else {
+                                            editor.putString("User_address","Add address");
                                         }
                                         if (user.getGender() != null) {
                                             editor.putString("User_gender", user.getGender());
                                         }
                                         if (user.getTag_id() != null) {
                                             editor.putString("User_TagID", user.getTag_id());
+                                        }else {
+                                            editor.putString("User_TagID","Add tag");
                                         }
                                         if (user.getWebsite() != null) {
                                             editor.putString("User_Website", user.getWebsite());
+                                        }else {
+                                            editor.putString("User_Website", "add website");
                                         }
                                         if (user.getCompany() != null) {
                                             editor.putString("CompanyProfile", user.getCompany());
@@ -1009,11 +1077,11 @@ public class UserProfileActivity extends AppCompatActivity {
 
 
     void requestUpdateWithoutProfilePic(){
-
+        RequestBody tagida=null;
         RequestBody companyRequest=RequestBody.create(MediaType.parse("text/plain"), "");
         RequestBody titleRequest=RequestBody.create(MediaType.parse("text/plain"), "");;
         if(companytextview.getVisibility() == View.VISIBLE){
-            companyRequest = RequestBody.create(MediaType.parse("text/plain"), companytextview.getText().toString());
+            companyRequest = RequestBody.create(MediaType.parse("text/plain"), companytextview.getText().toString().trim());
         }
 
         if(titletextview.getVisibility() == View.VISIBLE){
@@ -1022,9 +1090,9 @@ public class UserProfileActivity extends AppCompatActivity {
 
 
         //Convert text to RequestBody
-        RequestBody emailRequest = RequestBody.create(MediaType.parse("text/plain"), email.getText().toString());
-        RequestBody fnameRequest = RequestBody.create(MediaType.parse("text/plain"), usernameprofile.getText().toString());
-        RequestBody addressreq = RequestBody.create(MediaType.parse("text/plain"), address.getText().toString());
+        RequestBody emailRequest = RequestBody.create(MediaType.parse("text/plain"), email.getText().toString().trim());
+        RequestBody fnameRequest = RequestBody.create(MediaType.parse("text/plain"), usernameprofile.getText().toString().trim());
+        RequestBody addressreq = RequestBody.create(MediaType.parse("text/plain"), address.getText().toString().trim());
 
         if(gender.getText().toString().equals("Male")){
             genderinreq="male";
@@ -1033,10 +1101,16 @@ public class UserProfileActivity extends AppCompatActivity {
         }if(gender.getText().toString().equals("Prefer not to say")){
             genderinreq="other";
         }
-        RequestBody websiterequest = RequestBody.create(MediaType.parse("text/plain"), website.getText().toString());
+        RequestBody websiterequest = RequestBody.create(MediaType.parse("text/plain"), website.getText().toString().trim());
         RequestBody genderrebody = RequestBody.create(MediaType.parse("text/plain"), genderinreq);
-        RequestBody aboutreq = RequestBody.create(MediaType.parse("text/plain"), shortnote.getText().toString());
+        RequestBody aboutreq = RequestBody.create(MediaType.parse("text/plain"), shortnote.getText().toString().trim());
 
+        if(!tagshape.getText().toString().equals("Add Tag")){
+            if(tagid!=0){
+                tagida = RequestBody.create(MediaType.parse("text/plain"), String.valueOf(tagid));
+                Log.w("aaaaa", String.valueOf(tagid));
+            }
+        }
 
         //Check wifi or data available
         if (CheckNetworkConnection.hasInternetConnection(UserProfileActivity.this)) {
@@ -1054,7 +1128,7 @@ public class UserProfileActivity extends AppCompatActivity {
 
                     Retrofit retrofit = retrofitHead.headOfGetorPostReturnRes();
                     WhoCallerApi whoCallerApi = retrofit.create(WhoCallerApi.class);
-                    Call<ResultModel_Update_User_data> updateUserdata = whoCallerApi.UptadeUserProfileWithoutImage(ApiAccessToken.getAPIaccessToken(UserProfileActivity.this), fnameRequest, emailRequest,null, companyRequest, titleRequest, addressreq, websiterequest,genderrebody,aboutreq);//,devicename,AndroidVersion
+                    Call<ResultModel_Update_User_data> updateUserdata = whoCallerApi.UptadeUserProfileWithoutImage(ApiAccessToken.getAPIaccessToken(UserProfileActivity.this), fnameRequest, emailRequest,tagida, companyRequest, titleRequest, addressreq, websiterequest,genderrebody,aboutreq);//,devicename,AndroidVersion
 
                     updateUserdata.enqueue(new Callback<ResultModel_Update_User_data>() {
                         @Override
@@ -1107,18 +1181,26 @@ public class UserProfileActivity extends AppCompatActivity {
                                         }
                                         if (user.getAbout() != null) {
                                             editor.putString("User_ShortNote", user.getAbout());
+                                        }else {
+                                            editor.putString("User_ShortNote", "Add a short text about yourself");
                                         }
                                         if (user.getAddress() != null) {
                                             editor.putString("User_address", user.getAddress());
+                                        }else {
+                                            editor.putString("User_address","Add address");
                                         }
                                         if (user.getGender() != null) {
                                             editor.putString("User_gender", user.getGender());
                                         }
                                         if (user.getTag_id() != null) {
                                             editor.putString("User_TagID", user.getTag_id());
+                                        }else {
+                                            editor.putString("User_TagID","Add tag");
                                         }
                                         if (user.getWebsite() != null) {
                                             editor.putString("User_Website", user.getWebsite());
+                                        }else {
+                                            editor.putString("User_Website", "add website");
                                         }
                                         if (user.getCompany() != null) {
                                             editor.putString("CompanyProfile", user.getCompany());
@@ -1131,7 +1213,7 @@ public class UserProfileActivity extends AppCompatActivity {
                                             editor.putString("TitleProfile", "Notext");
                                         }
                                         if(user.getImg()!=null){
-                                            editor.putString("User_img_profile","http://whocaller.net/uploads/"+ user.getImg());
+                                            editor.putString("User_img_profile","http://whocaller.net/whocallerAdmin/uploads/"+ user.getImg());
                                         }else {
                                             //user not upload img
                                             editor.putString("User_img_profile","NoImageHere");
@@ -1323,6 +1405,43 @@ public class UserProfileActivity extends AppCompatActivity {
             e.printStackTrace();
         }
     }
+
+    private void showDialogremoveTag(){
+        try {
+            AlertDialog.Builder pictureDialog = new AlertDialog.Builder(this);
+            pictureDialog.setTitle("Select Action");
+            String[] pictureDialogItems = {
+                    "Change Tag",
+                    "Remove Tag"};
+            PackageManager pm = getPackageManager();
+
+            pictureDialog.setItems(pictureDialogItems,
+                    new DialogInterface.OnClickListener() {
+                        @Override
+                        public void onClick(DialogInterface dialog, int which) {
+                            switch (which) {
+                                case 0:
+                                    ShowTagsDialog();
+                                    break;
+                                case 1:
+                                    removeTag();
+                                    break;
+
+                            }
+                        }
+                    });
+            pictureDialog.show();
+
+        }catch (Exception e) {
+            e.printStackTrace();
+        }
+    }
+
+    private void removeTag() {
+        tagshape.setText("Add Tag");
+        tagid=0;
+    }
+
 
     private void removeProfilePic() {
         ImageChangedaa=true;
