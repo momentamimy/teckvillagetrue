@@ -47,13 +47,14 @@ public class AddContactsToChatGroupAdapter extends RecyclerView.Adapter<AddConta
     int groupId;
     String name;
     Dialog dialog;
-    public AddContactsToChatGroupAdapter(Context context, List<RoomModel> mDataArray,int[] groupUsers,int groupId,String name,Dialog dialog) {
+    public AddContactsToChatGroupAdapter(Context context, List<RoomModel> mDataArray,int groupId,String name,Dialog dialog,ProgressDialog mProgressDialog) {
         this.mDataArray=mDataArray;
         this.context=context;
-        this.groupUsers=groupUsers;
+        this.groupUsers=Chat_MessagesChat.groupUsers;
         this.groupId=groupId;
         this.name=name;
         this.dialog=dialog;
+        this.mProgressDialog=mProgressDialog;
         get_user_contacts=new Get_User_Contacts(context);
     }
 
@@ -68,6 +69,7 @@ public class AddContactsToChatGroupAdapter extends RecyclerView.Adapter<AddConta
                     return new ViewHolder(v2);
     }
 
+    ProgressDialog mProgressDialog;
     @Override
     public void onBindViewHolder(final ViewHolder holder, final int position) {
             if (holder.contactName2 != null) {
@@ -79,6 +81,8 @@ public class AddContactsToChatGroupAdapter extends RecyclerView.Adapter<AddConta
                         holder.contactCircleImageView2.setImageResource(R.drawable.ic_correct);
                     }
                 }
+
+
                 holder.itemView.setOnClickListener(new View.OnClickListener() {
                     @Override
                     public void onClick(View v) {
@@ -98,6 +102,10 @@ public class AddContactsToChatGroupAdapter extends RecyclerView.Adapter<AddConta
                                 newGroupUsers[groupUsers.length]=data.getId();
                                 Call<GroupChatResultModel> updateGroupChat = whoCallerApi.updateGroupChat(groupId,ApiAccessToken.getAPIaccessToken(context),new BodyUpdateGroup(name,newGroupUsers));
 
+                                mProgressDialog.setIndeterminate(true);
+                                mProgressDialog.setMessage("Loading...");
+                                mProgressDialog.setCancelable(false);
+                                mProgressDialog.show();
                                 updateGroupChat.enqueue(new Callback<GroupChatResultModel>() {
                                     @Override
                                     public void onResponse(Call<GroupChatResultModel> call, Response<GroupChatResultModel> response) {
@@ -105,12 +113,17 @@ public class AddContactsToChatGroupAdapter extends RecyclerView.Adapter<AddConta
                                         {
                                             Log.d("adadfqkopmv","success");
                                             dialog.dismiss();
-                                            groupUsers=newGroupUsers;
+                                            if (mProgressDialog.isShowing())
+                                                mProgressDialog.dismiss();
+                                            Chat_MessagesChat.groupUsers=newGroupUsers;
+                                            Chat_MessagesChat.ChatStatusChanged=true;
                                         }
                                         else
                                         {
                                             Log.d("adadfqkopmv","not success");
                                             dialog.dismiss();
+                                            if (mProgressDialog.isShowing())
+                                                mProgressDialog.dismiss();
                                         }
                                     }
 
@@ -118,6 +131,8 @@ public class AddContactsToChatGroupAdapter extends RecyclerView.Adapter<AddConta
                                     public void onFailure(Call<GroupChatResultModel> call, Throwable t) {
                                         Log.d("adadfqkopmv","failed");
                                         dialog.dismiss();
+                                        if (mProgressDialog.isShowing())
+                                            mProgressDialog.dismiss();
                                     }
                                 });
                             }

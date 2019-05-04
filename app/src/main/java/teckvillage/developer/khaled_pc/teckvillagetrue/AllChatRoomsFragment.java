@@ -33,6 +33,8 @@ import teckvillage.developer.khaled_pc.teckvillagetrue.View.CheckNetworkConnecti
 import teckvillage.developer.khaled_pc.teckvillagetrue.View.ConnectionDetector;
 
 
+
+
 /**
  * A simple {@link Fragment} subclass.
  */
@@ -115,6 +117,7 @@ public class AllChatRoomsFragment extends Fragment {
                             allChatAdapter=new AllChatRoomsAdapters(getContext(),allChatContact);
                             allChatRoomsRecyclerView.setLayoutManager(new LinearLayoutManager(getContext()));
                             allChatRoomsRecyclerView.setAdapter(allChatAdapter);
+                            ChatStatusChangedallchat=false;
                         }
                         else
                         {
@@ -142,6 +145,15 @@ public class AllChatRoomsFragment extends Fragment {
             noResult.setVisibility(View.VISIBLE);
             if (mProgressDialog.isShowing())
                 mProgressDialog.dismiss();
+        }
+    }
+    public static boolean ChatStatusChangedallchat=false;
+    @Override
+    public void onResume() {
+        super.onResume();
+        if (ChatStatusChangedallchat)
+        {
+            getAllChatRooms();
         }
     }
 }

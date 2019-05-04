@@ -4,14 +4,26 @@
     xmlns:tools="http://schemas.android.com/tools"
     android:layout_width="match_parent"
     android:layout_height="match_parent"
+    android:layoutDirection="ltr"
     tools:context="teckvillage.developer.khaled_pc.teckvillagetrue.setting">
 
-
-
-    <Switch
+    <TextView
+        android:visibility="gone"
+        android:id="@+id/changLang"
         android:layout_marginTop="30dp"
         android:layout_marginStart="10dp"
         android:layout_marginLeft="10dp"
+        android:layout_width="match_parent"
+        android:layout_height="wrap_content"
+        android:textColor="@color/colorPrimary"
+        android:textSize="18sp"
+        android:text="\u25CF  change Language:   en"/>
+
+    <Switch
+        android:layout_marginTop="15dp"
+        android:layout_marginStart="10dp"
+        android:layout_marginLeft="10dp"
+        android:layout_below="@+id/changLang"
         android:id="@+id/switch_outgoing"
         android:layout_width="wrap_content"
         android:layout_height="wrap_content"

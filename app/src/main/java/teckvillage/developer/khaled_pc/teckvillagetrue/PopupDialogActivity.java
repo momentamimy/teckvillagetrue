@@ -345,8 +345,7 @@ public class PopupDialogActivity extends Activity {
 
 
 
-        Picasso.with(getApplicationContext()).load("http://whocaller.net/uploads/"+userData.getUser_img())
-                .into(CallerImage, new com.squareup.picasso.Callback() {
+        Picasso.with(getApplicationContext()).load("http://whocaller.net/whocallerAdmin/uploads/"+userData.getUser_img()).fit().centerInside().into(CallerImage, new com.squareup.picasso.Callback() {
                     @Override
                     public void onSuccess() {
                         CallerImageProgress.setVisibility(View.GONE);
@@ -385,7 +384,7 @@ public class PopupDialogActivity extends Activity {
 
             }
         };
-        Picasso.with(getApplicationContext()).load("http://whocaller.net/uploads/"+userData.getUser_img()).into(target);
+        Picasso.with(getApplicationContext()).load("http://whocaller.net/whocallerAdmin/uploads/"+userData.getUser_img()).into(target);
     }
 
     public List<String> RetreiveAllNumberInBlockList(Context context) {

@@ -168,4 +168,23 @@ public class LogInfo {
     }
 
 
+    boolean isUserFeched=false;
+
+    public boolean isUserFeched() {
+        return isUserFeched;
+    }
+
+    public void setUserFeched(boolean userFeched) {
+        isUserFeched = userFeched;
+    }
+
+    boolean needToFech=false;
+
+    public boolean isNeedToFech() {
+        return needToFech;
+    }
+
+    public void setNeedToFech(boolean needToFech) {
+        this.needToFech = needToFech;
+    }
 }

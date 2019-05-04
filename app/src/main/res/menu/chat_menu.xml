@@ -3,7 +3,7 @@
 
     <item
         android:id="@+id/add_contact_to_chat"
-        android:title="add contact to chat"
+        android:title="Add contact to chat"
           />
 
 

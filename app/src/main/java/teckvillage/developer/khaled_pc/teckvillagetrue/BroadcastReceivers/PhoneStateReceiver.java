@@ -827,7 +827,7 @@ public class PhoneStateReceiver extends BroadcastReceiver {
         {
             CallerCountry.setVisibility(View.GONE);
         }
-        Picasso.with(getApplicationContext()).load("http://whocaller.net/uploads/"+userData.getUser_img())
+        Picasso.with(getApplicationContext()).load("http://whocaller.net/whocallerAdmin/uploads/"+userData.getUser_img()).fit().centerInside()
                 .into(CallerImage, new com.squareup.picasso.Callback() {
                     @Override
                     public void onSuccess() {
@@ -867,6 +867,6 @@ public class PhoneStateReceiver extends BroadcastReceiver {
 
             }
         };
-        Picasso.with(getApplicationContext()).load("http://whocaller.net/uploads/"+userData.getUser_img()).into(target);
+        Picasso.with(getApplicationContext()).load("http://whocaller.net/whocallerAdmin/uploads/"+userData.getUser_img()).into(target);
     }
 }

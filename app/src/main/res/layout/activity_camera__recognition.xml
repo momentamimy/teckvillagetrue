@@ -6,6 +6,7 @@
     android:layout_height="match_parent"
     android:orientation="vertical"
     android:weightSum="5"
+    android:layoutDirection="ltr"
     android:background="@android:color/white"
     tools:context="teckvillage.developer.khaled_pc.teckvillagetrue.Camera_Recognition_package.Camera_Recognition">
 

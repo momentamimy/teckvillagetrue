@@ -1,6 +1,5 @@
 <?xml version="1.0" encoding="utf-8"?>
 
-
     <android.support.v7.widget.CardView
         xmlns:android="http://schemas.android.com/apk/res/android"
         xmlns:app="http://schemas.android.com/apk/res-auto"
@@ -8,10 +7,10 @@
         android:layout_centerInParent="true"
         android:layout_width="match_parent"
         android:layout_height="wrap_content"
-    android:layoutDirection="ltr"
         app:cardCornerRadius="10dp"
         app:cardElevation="5dp"
         android:layout_margin="20dp"
+    android:layoutDirection="ltr"
     >
         <RelativeLayout
             android:layout_width="match_parent"
@@ -19,46 +18,37 @@
             android:orientation="vertical">
             <TextView
                 android:background="@color/colorPrimary"
-                android:id="@+id/Gender_title"
+                android:id="@+id/Lang_title"
                 android:layout_width="match_parent"
                 android:layout_height="wrap_content"
                 android:textColor="@android:color/white"
                 android:textSize="20dp"
                 android:textStyle="bold"
                 android:padding="15dp"
-                android:text="Gender"/>
+                android:text="Language"/>
             <TextView
                 android:layout_marginTop="10dp"
                 android:padding="20dp"
                 android:background="?android:attr/selectableItemBackground"
-                android:layout_below="@+id/Gender_title"
-                android:id="@+id/Prefer_not_to_say"
+                android:layout_below="@+id/Lang_title"
+                android:id="@+id/English"
                 android:layout_width="match_parent"
                 android:layout_height="wrap_content"
                 android:textColor="@color/Tomyacolor"
                 android:textSize="18dp"
-                android:text="Prefer not to say"/>
+                android:text="English"/>
             <TextView
                 android:layout_marginTop="10dp"
                 android:padding="20dp"
                 android:background="?android:attr/selectableItemBackground"
-                android:layout_below="@+id/Prefer_not_to_say"
-                android:id="@+id/Male"
+                android:layout_below="@+id/English"
+                android:id="@+id/Arabic"
                 android:layout_width="match_parent"
                 android:layout_height="wrap_content"
                 android:textColor="@color/Tomyacolor"
                 android:textSize="18dp"
-                android:text="Male"/>
-            <TextView
-                android:layout_marginTop="10dp"
-                android:padding="20dp"
-                android:background="?android:attr/selectableItemBackground"
-                android:layout_below="@+id/Male"
-                android:id="@+id/Female"
-                android:layout_width="match_parent"
-                android:layout_height="wrap_content"
-                android:textColor="@color/Tomyacolor"
-                android:textSize="18dp"
-                android:text="Female"/>
+                android:text="العربية"
+                android:gravity="left"
+                />
         </RelativeLayout>
     </android.support.v7.widget.CardView>

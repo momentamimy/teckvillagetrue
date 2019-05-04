@@ -1,17 +1,32 @@
 package teckvillage.developer.khaled_pc.teckvillagetrue;
 
+import android.app.Dialog;
+import android.content.Intent;
 import android.content.SharedPreferences;
+import android.content.res.Resources;
+import android.graphics.Color;
+import android.graphics.drawable.ColorDrawable;
+import android.os.Build;
 import android.support.v7.app.AppCompatActivity;
 import android.os.Bundle;
 import android.support.v7.widget.Toolbar;
+import android.util.DisplayMetrics;
 import android.view.MenuItem;
+import android.view.View;
+import android.view.Window;
 import android.widget.CompoundButton;
 import android.widget.RadioGroup;
 import android.widget.Switch;
+import android.widget.TextView;
 import android.widget.Toast;
+
+import androidx.annotation.RequiresApi;
+
+import java.util.Locale;
 
 public class setting extends AppCompatActivity {
 
+    TextView changeLang;
 
     Switch switchOutgoing;
     Switch switchIncoming;
@@ -32,6 +47,14 @@ public class setting extends AppCompatActivity {
         getSupportActionBar().setDisplayHomeAsUpEnabled(true);   //back button on App Bar
 
         intiateSwitchRadioGroup();
+
+        changeLang.setOnClickListener(new View.OnClickListener() {
+            @Override
+            public void onClick(View v) {
+                MyCustomLanguageDialog();
+            }
+        });
+
         switchOutgoing.setOnCheckedChangeListener(new CompoundButton.OnCheckedChangeListener() {
             @Override
             public void onCheckedChanged(CompoundButton buttonView, boolean isChecked) {
@@ -83,6 +106,8 @@ public class setting extends AppCompatActivity {
         boolean swithcOutgoingValue=preferences.getBoolean("SwitchOutgoing",true);
         boolean swithcincomgoingValue=preferences.getBoolean("switchIncoming",true);
         String dialogPositionValue=preferences.getString("DialogPosition","Center");
+
+        changeLang=findViewById(R.id.changLang);
 
         radioGroup=findViewById(R.id.radioGroup1);
 
@@ -136,4 +161,69 @@ public class setting extends AppCompatActivity {
     }
 
 
+
+    Dialog MyDialogLanguage;
+
+    public void MyCustomLanguageDialog() {
+        MyDialogLanguage = new Dialog(setting.this);
+        MyDialogLanguage.requestWindowFeature(Window.FEATURE_NO_TITLE);
+        MyDialogLanguage.setContentView(R.layout.language_dialog);
+        Window window = MyDialogLanguage.getWindow();
+        window.setLayout(Toolbar.LayoutParams.WRAP_CONTENT, Toolbar.LayoutParams.WRAP_CONTENT);
+        MyDialogLanguage.getWindow().setBackgroundDrawable(new ColorDrawable(Color.TRANSPARENT));
+
+        TextView english,arabic;
+        english=MyDialogLanguage.findViewById(R.id.English);
+        arabic=MyDialogLanguage.findViewById(R.id.Arabic);
+
+        english.setOnClickListener(new View.OnClickListener() {
+            @Override
+            public void onClick(View v) {
+                SharedPreferences sharedPreferences =getSharedPreferences("LANGUAGE",MODE_PRIVATE);
+                SharedPreferences.Editor editor=sharedPreferences.edit();
+                editor.putString("lang","en");
+                editor.commit();
+                if (Build.VERSION.SDK_INT >= Build.VERSION_CODES.JELLY_BEAN_MR1) {
+                    setLocale("en");
+                }
+            }
+        });
+
+        arabic.setOnClickListener(new View.OnClickListener() {
+            @Override
+            public void onClick(View v) {
+                SharedPreferences sharedPreferences =getSharedPreferences("LANGUAGE",MODE_PRIVATE);
+                SharedPreferences.Editor editor=sharedPreferences.edit();
+                editor.putString("lang","ar");
+                editor.commit();
+                if (Build.VERSION.SDK_INT >= Build.VERSION_CODES.JELLY_BEAN_MR1) {
+                    setLocale("ar");
+                }
+            }
+        });
+
+        MyDialogLanguage.show();
+    }
+
+    @RequiresApi(api = Build.VERSION_CODES.JELLY_BEAN_MR1)
+    public void setLocale(String lang) {
+        Resources res = getResources();
+// Change locale settings in the app.
+        DisplayMetrics dm = res.getDisplayMetrics();
+        android.content.res.Configuration conf = res.getConfiguration();
+        conf.setLocale(new Locale(lang.toLowerCase())); // API 17+ only.
+// Use conf.locale = new Locale(...) if targeting lower versions
+        res.updateConfiguration(conf, dm);
+
+        restartActivity();
+    }
+
+    private void restartActivity() {
+        Intent intent=new Intent(getApplicationContext(),MainActivity.class);
+        intent.addFlags(Intent.FLAG_ACTIVITY_CLEAR_TOP | Intent.FLAG_ACTIVITY_CLEAR_TASK | Intent.FLAG_ACTIVITY_NEW_TASK);
+        startActivity(intent);
+
+        Intent intent1 = getIntent();
+        startActivity(intent1);
+    }
 }

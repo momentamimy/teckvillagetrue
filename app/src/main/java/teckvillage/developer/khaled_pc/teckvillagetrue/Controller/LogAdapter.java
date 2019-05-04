@@ -7,6 +7,9 @@ import android.content.Context;
 import android.content.DialogInterface;
 import android.content.Intent;
 import android.content.pm.PackageManager;
+import android.graphics.Bitmap;
+import android.graphics.drawable.BitmapDrawable;
+import android.graphics.drawable.Drawable;
 import android.net.Uri;
 import android.os.Build;
 import android.provider.CallLog;
@@ -22,40 +25,97 @@ import android.view.ViewGroup;
 import android.widget.Toast;
 
 import com.squareup.picasso.Picasso;
+import com.squareup.picasso.Target;
 
 import java.util.ArrayList;
+import java.util.Collections;
 import java.util.List;
 
+import retrofit2.Call;
+import retrofit2.Callback;
+import retrofit2.Response;
+import retrofit2.Retrofit;
 import teckvillage.developer.khaled_pc.teckvillagetrue.Main_Fagment;
 import teckvillage.developer.khaled_pc.teckvillagetrue.Make_Phone_Call;
+import teckvillage.developer.khaled_pc.teckvillagetrue.Model.retrofit.ApiAccessToken;
+import teckvillage.developer.khaled_pc.teckvillagetrue.Model.retrofit.JSON_Mapping.BodyNumberModel;
+import teckvillage.developer.khaled_pc.teckvillagetrue.Model.retrofit.JSON_Mapping.BodyNumbersListModel;
+import teckvillage.developer.khaled_pc.teckvillagetrue.Model.retrofit.JSON_Mapping.FetchedUserData;
+import teckvillage.developer.khaled_pc.teckvillagetrue.Model.retrofit.WhoCallerApi;
+import teckvillage.developer.khaled_pc.teckvillagetrue.Model.retrofit.retrofitHead;
 import teckvillage.developer.khaled_pc.teckvillagetrue.OpenDialPad;
+import teckvillage.developer.khaled_pc.teckvillagetrue.PopupDialogActivity;
 import teckvillage.developer.khaled_pc.teckvillagetrue.R;
 import teckvillage.developer.khaled_pc.teckvillagetrue.SMS_MessagesChat;
+import teckvillage.developer.khaled_pc.teckvillagetrue.View.CheckNetworkConnection;
+import teckvillage.developer.khaled_pc.teckvillagetrue.View.ConnectionDetector;
 import teckvillage.developer.khaled_pc.teckvillagetrue.View.LogHolder;
 import teckvillage.developer.khaled_pc.teckvillagetrue.View.Signup;
 import teckvillage.developer.khaled_pc.teckvillagetrue.View.User_Contact_Profile_From_log_list;
 import teckvillage.developer.khaled_pc.teckvillagetrue.Model.LogInfo;
 
+import static com.facebook.FacebookSdk.getApplicationContext;
+
 public class LogAdapter extends RecyclerView.Adapter<LogHolder> {
     private static final int TYPE_DATE = 1;
     private static final int TYPE_ITEM = 2;
     private static final int MY_WRITE_LOG_REQUEST_CODE =221 ;
+    private static final int TYPE_ITEM_Feched = 3;
+    private static final int TYPE_ITEM_NotFeched = 4;
     private List<LogInfo> itemList;
     private Context context;
     int numofcallvar;
 
     private OpenDialPad openDialPad;
 
+    String[] Numbers;
 
     public LogAdapter(Context context, List<LogInfo> itemList,OpenDialPad openDialPad) {
         this.context = context;
         this.itemList = itemList;
         this.openDialPad = openDialPad;
+
+        Numbers=new String[itemList.size()];
+        Log.d("dadqfqfcsdv", ""+itemList.size());
+        for (int i=0;i<itemList.size();i++)
+        {
+            if (!TextUtils.isEmpty(itemList.get(i).logName))
+            {
+                if (itemList.get(i).logName.equals(itemList.get(i).getNumber()))
+                {
+                    Numbers[i]=itemList.get(i).getNumber();
+                    itemList.get(i).setNeedToFech(true);
+                }
+            }
+        }
+        if (Numbers.length!=0)
+        {
+            getUserDataApi(context,Numbers);
+        }
+
     }
 
     public LogAdapter(Context context, List<LogInfo> itemList) {
         this.context = context;
         this.itemList = itemList;
+
+
+        Numbers=new String[itemList.size()];
+        for (int i=0;i<itemList.size();i++)
+        {
+            if (!TextUtils.isEmpty(itemList.get(i).logName))
+            {
+                if (itemList.get(i).getNumber().equals(itemList.get(i).logName))
+                {
+                    Numbers[i]=itemList.get(i).getNumber();
+                    itemList.get(i).setNeedToFech(true);
+                }
+            }
+        }
+        if (Numbers.length!=0)
+        {
+            getUserDataApi(context,Numbers);
+        }
     }
 
     @Override
@@ -67,11 +127,23 @@ public class LogAdapter extends RecyclerView.Adapter<LogHolder> {
                 LogHolder rbv = new LogHolder(layoutView);
                 return rbv;
             case TYPE_ITEM:
+                View layoutView1 = LayoutInflater.from(parent.getContext()).inflate(R.layout.row_of_logs_recycleview, null);
+                RecyclerView.LayoutParams lp1 = new RecyclerView.LayoutParams(ViewGroup.LayoutParams.MATCH_PARENT, ViewGroup.LayoutParams.WRAP_CONTENT);
+                layoutView1.setLayoutParams(lp1);
+                LogHolder rbv1 = new LogHolder(layoutView1);
+                return rbv1;
+            case TYPE_ITEM_Feched:
                 View layoutView2 = LayoutInflater.from(parent.getContext()).inflate(R.layout.row_of_logs_recycleview, null);
                 RecyclerView.LayoutParams lp = new RecyclerView.LayoutParams(ViewGroup.LayoutParams.MATCH_PARENT, ViewGroup.LayoutParams.WRAP_CONTENT);
                 layoutView2.setLayoutParams(lp);
                 LogHolder rbv2 = new LogHolder(layoutView2);
                 return rbv2;
+            case TYPE_ITEM_NotFeched:
+                View layoutView4 = LayoutInflater.from(parent.getContext()).inflate(R.layout.row_of_logs_recycleview, null);
+                RecyclerView.LayoutParams lp4= new RecyclerView.LayoutParams(ViewGroup.LayoutParams.MATCH_PARENT, ViewGroup.LayoutParams.WRAP_CONTENT);
+                layoutView4.setLayoutParams(lp4);
+                LogHolder rbv4 = new LogHolder(layoutView4);
+                return rbv4;
             default:
                 View layoutView3 = LayoutInflater.from(parent.getContext()).inflate(R.layout.row_of_logs_recycleview, null);
                 RecyclerView.LayoutParams lp2 = new RecyclerView.LayoutParams(ViewGroup.LayoutParams.MATCH_PARENT, ViewGroup.LayoutParams.WRAP_CONTENT);
@@ -87,7 +159,18 @@ public class LogAdapter extends RecyclerView.Adapter<LogHolder> {
         if (itemList.get(position).getType() == TYPE_DATE) {
             viewType = TYPE_DATE;
         } else if (itemList.get(position).getType() == TYPE_ITEM) {
-            viewType = TYPE_ITEM;
+            if (itemList.get(position).isNeedToFech())
+            {
+                if (itemList.get(position).isUserFeched()){
+                    viewType = TYPE_ITEM_Feched;
+                }else{
+                    viewType = TYPE_ITEM_NotFeched;
+                }
+            }
+            else
+            {
+                viewType =TYPE_ITEM;
+            }
         }
 
         return viewType;
@@ -106,10 +189,10 @@ public class LogAdapter extends RecyclerView.Adapter<LogHolder> {
                 public boolean onLongClick(View v) {
 
                     //check if number  unknown
-                    if(itemList.get(position).getNumber().equals("")){
-                        OptionDialogWhenLongPressForUnknownNumber( itemList.get(position).getLogName(), position);
-                    }else {
-                        OptionDialogWhenLongPress(itemList.get(position).getLogName(),position);
+                    if (itemList.get(position).getNumber().equals("")) {
+                        OptionDialogWhenLongPressForUnknownNumber(itemList.get(position).getLogName(), position);
+                    } else {
+                        OptionDialogWhenLongPress(itemList.get(position).getLogName(), position);
                     }
 
                     return false;
@@ -122,23 +205,23 @@ public class LogAdapter extends RecyclerView.Adapter<LogHolder> {
                 public boolean onLongClick(View v) {
 
                     //check if number unknown
-                    if(itemList.get(position).getNumber().equals("")){
-                        OptionDialogWhenLongPressForUnknownNumber( itemList.get(position).getLogName(), position);
-                    }else {
-                        OptionDialogWhenLongPress(itemList.get(position).getLogName(),position);
+                    if (itemList.get(position).getNumber().equals("")) {
+                        OptionDialogWhenLongPressForUnknownNumber(itemList.get(position).getLogName(), position);
+                    } else {
+                        OptionDialogWhenLongPress(itemList.get(position).getLogName(), position);
                     }
 
                     return false;
                 }
             });
 
-            numofcallvar=itemList.get(position).getNumberofcall();
+            numofcallvar = itemList.get(position).getNumberofcall();
 
-            if(itemList.get(position).getNumberofcall()==1){
+            if (itemList.get(position).getNumberofcall() == 1) {
                 holder.numbersofcallinminte.setVisibility(View.GONE);
-            }else {
+            } else {
                 holder.numbersofcallinminte.setVisibility(View.VISIBLE);
-                holder.numbersofcallinminte.setText("("+itemList.get(position).getNumberofcall()+")");
+                holder.numbersofcallinminte.setText("(" + itemList.get(position).getNumberofcall() + ")");
             }
 
 
@@ -148,11 +231,9 @@ public class LogAdapter extends RecyclerView.Adapter<LogHolder> {
 
 
                     if (ContextCompat.checkSelfPermission(context, Manifest.permission.CALL_PHONE) != PackageManager.PERMISSION_GRANTED) {
-                        ActivityCompat.requestPermissions((Activity) context, new String[]{Manifest.permission.CALL_PHONE},12);
-                    }
-                    else
-                    {
-                        Make_Phone_Call.makephonecall(context,itemList.get(position).getNumber());
+                        ActivityCompat.requestPermissions((Activity) context, new String[]{Manifest.permission.CALL_PHONE}, 12);
+                    } else {
+                        Make_Phone_Call.makephonecall(context, itemList.get(position).getNumber());
                     }
 
                 }
@@ -162,14 +243,14 @@ public class LogAdapter extends RecyclerView.Adapter<LogHolder> {
             holder.chaticon.setOnClickListener(new View.OnClickListener() {
                 @Override
                 public void onClick(View v) {
-                   // Toast.makeText(context, "You Click me", Toast.LENGTH_LONG).show();
-                    Intent intent = new Intent(context,SMS_MessagesChat.class);
-                    intent.putExtra("LogSMSName",itemList.get(position).logName);
-                    String num=itemList.get(position).getNumber();
-                    if(num != null&& !num.isEmpty()){
-                        intent.putExtra("LogSMSAddress",num);
+                    // Toast.makeText(context, "You Click me", Toast.LENGTH_LONG).show();
+                    Intent intent = new Intent(context, SMS_MessagesChat.class);
+                    intent.putExtra("LogSMSName", itemList.get(position).logName);
+                    String num = itemList.get(position).getNumber();
+                    if (num != null && !num.isEmpty()) {
+                        intent.putExtra("LogSMSAddress", num);
                         context.startActivity(intent);
-                    }else {
+                    } else {
                         Toast.makeText(context, "Can't send message to this number", Toast.LENGTH_LONG).show();
                     }
 
@@ -179,36 +260,19 @@ public class LogAdapter extends RecyclerView.Adapter<LogHolder> {
             holder.infoicon.setOnClickListener(new View.OnClickListener() {
                 @Override
                 public void onClick(View v) {
-                   // Toast.makeText(context, "You Click me", Toast.LENGTH_LONG).show();
-                    Intent intent = new Intent(context,User_Contact_Profile_From_log_list.class);
-                    String num=itemList.get(position).getNumber();
-                    if(num != null&& !num.isEmpty()){
-                        intent.putExtra("ContactNUm",num);
+                    // Toast.makeText(context, "You Click me", Toast.LENGTH_LONG).show();
+                    Intent intent = new Intent(context, User_Contact_Profile_From_log_list.class);
+                    String num = itemList.get(position).getNumber();
+                    if (num != null && !num.isEmpty()) {
+                        intent.putExtra("ContactNUm", num);
                         context.startActivity(intent);
-                    }else {
+                    } else {
                         Toast.makeText(context, "Can't open profile to this number", Toast.LENGTH_LONG).show();
                     }
                 }
             });
 
-            if (itemList.get(position).imageUrl != null) {
-                Picasso.with(context)
-                        .load(itemList.get(position).imageUrl)
-                        .into(holder.logCircleImageView, new com.squareup.picasso.Callback() {
-                            @Override
-                            public void onSuccess() {
-                                holder.progressBar.setVisibility(View.GONE);
-                                holder.progressCircleImageView.setVisibility(View.GONE);
-                            }
 
-                            @Override
-                            public void onError() {
-                                holder.logCircleImageView.setImageDrawable(context.getResources().getDrawable(R.drawable.ic_nurse));
-                                holder.progressBar.setVisibility(View.GONE);
-                                holder.progressCircleImageView.setVisibility(View.GONE);
-                            }
-                        });
-            }
             holder.logName.setText(itemList.get(position).logName);
             if (!TextUtils.isEmpty(itemList.get(position).logIcon)) {
                 switch (itemList.get(position).logIcon) {
@@ -238,8 +302,12 @@ public class LogAdapter extends RecyclerView.Adapter<LogHolder> {
 
             holder.logDate.setText(itemList.get(position).hour);
             holder.callType.setText(itemList.get(position).getNumberType());
+            LogInfo data =itemList.get(position);
+
+            updatePhoto(data,holder);
 
         }
+
 
         if (holder.datesection != null) {
             holder.datesection.setText(itemList.get(position).getDateString());
@@ -329,4 +397,93 @@ public class LogAdapter extends RecyclerView.Adapter<LogHolder> {
     }
 
 
+    List<FetchedUserData> fetchedUserDataList=new ArrayList<>();
+    public void getUserDataApi(final Context context, String[] numbers) {
+
+                BodyNumbersListModel bodyNumbersListModel = new BodyNumbersListModel(numbers);
+                Retrofit retrofit = retrofitHead.retrofitRequestCash(context);
+                WhoCallerApi whoCallerApi = retrofit.create(WhoCallerApi.class);
+                Call<List<FetchedUserData>> usersDataCall = whoCallerApi.fetchUsersData(ApiAccessToken.getAPIaccessToken(context), bodyNumbersListModel);
+
+                usersDataCall.enqueue(new Callback<List<FetchedUserData>>() {
+                    @Override
+                    public void onResponse(Call<List<FetchedUserData>> call, Response<List<FetchedUserData>> response) {
+                        if (response.raw().cacheResponse() != null) {
+                            Log.e("MyNetwork", "response came from cache");
+                        }
+
+                        if (response.raw().networkResponse() != null) {
+                            Log.e("MyNetwork", "response came from server");
+                        }
+
+                        if (response.isSuccessful())
+                        {
+                            for (int i=0;i<response.body().size();i++)
+                            Log.d("userNamePaleeez", response.body().get(i).getName()+"  "+response.body().get(i).getPhone());
+                            List<FetchedUserData> resp =response.body();
+                            fetchedUserDataList=resp;
+
+                            //Collections.reverse(fetchedUserDataList);
+                            if (fetchedUserDataList.size()!=0) {
+                                for (int i=0;i<itemList.size();i++) {
+                                    if (itemList.get(i).isNeedToFech()) {
+                                        for (int j=0;j<fetchedUserDataList.size();j++) {
+                                            if (itemList.get(i).getNumber().equals(fetchedUserDataList.get(j).getFull_phone())
+                                            || itemList.get(i).getNumber().equals(fetchedUserDataList.get(j).getPhone())) {
+
+                                                if (!TextUtils.isEmpty(fetchedUserDataList.get(j).getName()))
+                                                {
+                                                    itemList.get(i).setLogName(fetchedUserDataList.get(j).getName());
+                                                }
+                                                if (!TextUtils.isEmpty(fetchedUserDataList.get(j).getUser_img()))
+                                                {
+                                                    itemList.get(i).setImageUrl(fetchedUserDataList.get(j).getUser_img());
+                                                    itemList.get(i).setUserFeched(true);
+                                                }
+                                            }
+                                        }
+                                    }
+                                }
+                            }
+                            notifyItemRangeChanged(0,itemList.size()-1);
+                        }
+                        else
+                        {
+                            Log.d("onFailure", "other error");
+                        }
+                    }
+
+                    @Override
+                    public void onFailure(Call<List<FetchedUserData>> call, Throwable t) {
+                        Log.d("onFailure", t.getMessage());
+                    }
+                });
+
+
+    }
+
+    public void updatePhoto(LogInfo data, final LogHolder holder)
+    {
+        if (!TextUtils.isEmpty(data.imageUrl))
+        {
+            if (!data.imageUrl.equals(""))
+            {
+                if (holder.getItemViewType()==TYPE_ITEM_Feched)
+                {
+                    Picasso.with(context).load("http://whocaller.net/whocallerAdmin/uploads/"+data.imageUrl)
+                            .fit().centerInside()
+                            .into(holder.logCircleImageView, new com.squareup.picasso.Callback() {
+                                @Override
+                                public void onSuccess() {
+
+                                }
+                                @Override
+                                public void onError() {
+                                    holder.logCircleImageView.setImageResource(R.drawable.ic_nurse);
+                                }
+                            });
+                }
+            }
+        }
+    }
 }

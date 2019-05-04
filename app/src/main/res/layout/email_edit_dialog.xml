@@ -2,6 +2,7 @@
 
 
     <android.support.v7.widget.CardView
+    android:layoutDirection="ltr"
         xmlns:android="http://schemas.android.com/apk/res/android"
         xmlns:app="http://schemas.android.com/apk/res-auto"
         app:cardBackgroundColor="@android:color/white"

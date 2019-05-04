@@ -12,6 +12,7 @@ import android.support.annotation.NonNull;
 import android.support.annotation.RequiresApi;
 import android.support.v7.app.AppCompatActivity;
 import android.os.Bundle;
+import android.system.Os;
 import android.util.Log;
 import android.view.View;
 import android.widget.TextView;
@@ -63,38 +64,52 @@ public class SplashScreen extends AppCompatActivity implements EasyPermissions.P
                         editor.putBoolean("UserLogin", IsLogin);
                         editor.putString("User_API_token", userAPItoken);
                         editor.commit();*/
+        if (android.os.Build.VERSION.SDK_INT < Build.VERSION_CODES.M){
 
-        if (EasyPermissions.hasPermissions(getApplicationContext(),perms))
-        {
-            //Toast.makeText(getApplicationContext(),"Granted",Toast.LENGTH_LONG).show();
             if(IsLogin){
                 Intent intent=new Intent(this,MainActivity.class);
                 startActivity(intent);
                 finish();
-            }else {
-                String manufacturer = android.os.Build.MANUFACTURER;
-                if ("xiaomi".equalsIgnoreCase(manufacturer)|| "oppo".equalsIgnoreCase(manufacturer)||
-                        "vivo".equalsIgnoreCase(manufacturer)||
-                        "Letv".equalsIgnoreCase(manufacturer)||
-                        "Honor".equalsIgnoreCase(manufacturer))
-                {
-                    Intent intent=new Intent(this, AutoStartHintActivity.class);//LoginActivity
+            } else {
+                Intent intent=new Intent(this,LoginActivity.class);
+                startActivity(intent);
+                finish();
+            }
+
+        } else{
+            if (EasyPermissions.hasPermissions(getApplicationContext(),perms))
+            {
+                //Toast.makeText(getApplicationContext(),"Granted",Toast.LENGTH_LONG).show();
+                if(IsLogin){
+                    Intent intent=new Intent(this,MainActivity.class);
                     startActivity(intent);
                     finish();
-                }
-                else
-                {
-                    Intent intent=new Intent(this,LoginActivity.class);//LoginActivity
+                }else {
+                    String manufacturer = android.os.Build.MANUFACTURER;
+                    if ("xiaomi".equalsIgnoreCase(manufacturer)|| "oppo".equalsIgnoreCase(manufacturer)||
+                            "vivo".equalsIgnoreCase(manufacturer)||
+                            "Letv".equalsIgnoreCase(manufacturer)||
+                            "Honor".equalsIgnoreCase(manufacturer))
+                    {
+                        Intent intent=new Intent(this, AutoStartHintActivity.class);//LoginActivity
+                        startActivity(intent);
+                        finish();
+                    }
+                    else
+                    {
+                        Intent intent=new Intent(this,LoginActivity.class);//LoginActivity
                 /* Intent intent=new Intent(this,Signup.class);//LoginActivity
                 intent.putExtra("countrycode","+20");//remove
                 intent.putExtra("phonenumber","01021155607");//remove
                 intent.putExtra("contryname","Egypt");//remove*/
-                    startActivity(intent);
-                    finish();
+                        startActivity(intent);
+                        finish();
+                    }
                 }
-            }
 
+            }
         }
+
 
         proceed=findViewById(R.id.proceed);
         proceed.setOnClickListener(new View.OnClickListener() {
@@ -134,6 +149,13 @@ public class SplashScreen extends AppCompatActivity implements EasyPermissions.P
                 //Manifest.permission.CAMERA,
                 Manifest.permission.PROCESS_OUTGOING_CALLS
         };
+
+        if (android.os.Build.VERSION.SDK_INT < Build.VERSION_CODES.M){
+
+        } else{
+
+        }
+
         if (EasyPermissions.hasPermissions(getApplicationContext(),perms))
         {
             //Toast.makeText(getApplicationContext(),"Granted",Toast.LENGTH_LONG).show();

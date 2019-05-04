@@ -86,6 +86,16 @@ import teckvillage.developer.khaled_pc.teckvillagetrue.Model.GridListDataModel;
 import teckvillage.developer.khaled_pc.teckvillagetrue.Model.GroupListByDate;
 import teckvillage.developer.khaled_pc.teckvillagetrue.Model.LogInfo;
 
+import java.util.Locale;
+import android.os.Bundle;
+import android.app.Activity;
+import android.content.Intent;
+import android.content.res.Configuration;
+import android.content.res.Resources;
+import android.util.DisplayMetrics;
+
+import androidx.annotation.RequiresApi;
+
 import static android.app.Activity.RESULT_CANCELED;
 import static android.app.Activity.RESULT_OK;
 
@@ -169,6 +179,8 @@ public class Main_Fagment extends Fragment implements OnBackPressedListener , Lo
     public View onCreateView(LayoutInflater inflater, ViewGroup container, Bundle savedInstanceState) {
         // Inflate the layout for this fragment
         View view = inflater.inflate(R.layout.fragment_main__fagment, container, false);
+
+
 
         shouldExecuteOnResume = false;
 
@@ -300,7 +312,7 @@ public class Main_Fagment extends Fragment implements OnBackPressedListener , Lo
                                             // for ActivityCompat#requestPermissions for more details.
                                             return;
                                         }
-                                        getActivity().getContentResolver().delete(android.provider.CallLog.Calls.CONTENT_URI, null, null);
+                                        getActivity().getContentResolver().delete(CallLog.Calls.CONTENT_URI, null, null);
 
                                     }
                                 });
@@ -1583,4 +1595,6 @@ public class Main_Fagment extends Fragment implements OnBackPressedListener , Lo
     public void myAction(String value) {
         openDialPadWithNumber(value);
     }
+
+
 }

@@ -18,6 +18,7 @@ import retrofit2.http.Part;
 import retrofit2.http.Path;
 import retrofit2.http.Query;
 import teckvillage.developer.khaled_pc.teckvillagetrue.Model.retrofit.JSON_Mapping.BodyNumberModel;
+import teckvillage.developer.khaled_pc.teckvillagetrue.Model.retrofit.JSON_Mapping.BodyNumbersListModel;
 import teckvillage.developer.khaled_pc.teckvillagetrue.Model.retrofit.JSON_Mapping.BodyUpdateGroup;
 import teckvillage.developer.khaled_pc.teckvillagetrue.Model.retrofit.JSON_Mapping.DataReceivedChatUsers;
 import teckvillage.developer.khaled_pc.teckvillagetrue.Model.retrofit.JSON_Mapping.FetchedUserData;
@@ -198,6 +199,11 @@ public interface WhoCallerApi {
     Call<FetchedUserData> fetchUserData(
             @Query("api_token") String ApiAccessToken,
             @Body BodyNumberModel bodyNumberModel);
+
+    @POST("fetchPhonesContact?")
+    Call<List<FetchedUserData>> fetchUsersData(
+            @Query("api_token") String ApiAccessToken,
+            @Body BodyNumbersListModel bodyNumbersListModel);
 
 
     @GET("notifications?")

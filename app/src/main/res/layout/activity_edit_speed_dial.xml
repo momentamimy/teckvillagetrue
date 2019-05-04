@@ -6,7 +6,8 @@
     android:layout_width="match_parent"
     android:layout_height="match_parent"
     tools:context=".EditSpeedDialActivity"
-    android:background="@android:color/white">
+    android:background="@android:color/white"
+    android:layoutDirection="ltr">
     <android.support.design.widget.AppBarLayout
         android:background="#fff"
         android:id="@+id/Speed_dial_CardView"

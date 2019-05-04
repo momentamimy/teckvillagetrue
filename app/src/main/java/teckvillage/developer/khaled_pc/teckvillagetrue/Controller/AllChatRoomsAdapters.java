@@ -61,7 +61,7 @@ public class AllChatRoomsAdapters extends RecyclerView.Adapter<AllChatRoomsAdapt
             if (holder.getItemViewType()==0)
             {
 
-                Picasso.with(context).load("http://whocaller.net/uploads/"+data.getImg())
+                Picasso.with(context).load("http://whocaller.net/whocallerAdmin/uploads/"+data.getImg())
                         .fit().centerInside()
                         .into(holder.contactCircleImageView2, new com.squareup.picasso.Callback() {
                             @Override

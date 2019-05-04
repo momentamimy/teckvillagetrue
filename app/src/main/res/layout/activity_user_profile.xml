@@ -12,7 +12,8 @@
     android:orientation="vertical"
     android:id="@+id/lolo"
     android:layout_above="@+id/savechangebtn"
-    tools:context=".UserProfileActivity">
+    tools:context=".UserProfileActivity"
+    android:layoutDirection="ltr">
 
 <RelativeLayout
     android:layout_width="match_parent"

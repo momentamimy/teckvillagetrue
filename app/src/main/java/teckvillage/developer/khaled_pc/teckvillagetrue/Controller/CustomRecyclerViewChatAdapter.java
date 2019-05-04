@@ -91,7 +91,7 @@ public class CustomRecyclerViewChatAdapter extends RecyclerView.Adapter<CustomRe
 
         if (holder.getItemViewType()==0)
         {
-            Picasso.with(mContext).load("http://whocaller.net/uploads/"+dataModel.getImg())
+            Picasso.with(mContext).load("http://whocaller.net/whocallerAdmin/uploads/"+dataModel.getImg())
                     .fit().centerInside()
                     .into(holder.contactPhoto, new com.squareup.picasso.Callback() {
                         @Override
@@ -107,7 +107,7 @@ public class CustomRecyclerViewChatAdapter extends RecyclerView.Adapter<CustomRe
         }
         else if (holder.getItemViewType()==1)
         {
-            Picasso.with(mContext).load("http://whocaller.net/uploads/"+dataModel.getImg())
+            Picasso.with(mContext).load("http://whocaller.net/whocallerAdmin/uploads/"+dataModel.getImg())
                     .fit().centerInside()
                     .into(holder.contactPhoto, new com.squareup.picasso.Callback() {
                         @Override

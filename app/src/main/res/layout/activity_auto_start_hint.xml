@@ -6,7 +6,8 @@
     android:layout_width="match_parent"
     android:layout_height="match_parent"
     tools:context=".AutoStartHintActivity"
-    android:background="@color/cardview_shadow_end_color">
+    android:background="@color/cardview_shadow_end_color"
+    android:layoutDirection="ltr">
     <ImageView
         android:padding="20dp"
         android:id="@+id/image"

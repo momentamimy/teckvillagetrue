@@ -5,6 +5,7 @@
     android:layout_width="match_parent"
     android:layout_height="match_parent"
     android:background="@drawable/paper_bgd_3"
+    android:layoutDirection="ltr"
     tools:context="teckvillage.developer.khaled_pc.teckvillagetrue.Notifications">
 
     <TextView

@@ -49,6 +49,9 @@ import teckvillage.developer.khaled_pc.teckvillagetrue.Model.retrofit.JSON_Mappi
 import teckvillage.developer.khaled_pc.teckvillagetrue.Model.retrofit.WhoCallerApi;
 import teckvillage.developer.khaled_pc.teckvillagetrue.Model.retrofit.retrofitHead;
 
+import static teckvillage.developer.khaled_pc.teckvillagetrue.AllChatRoomsFragment.ChatStatusChangedallchat;
+import static teckvillage.developer.khaled_pc.teckvillagetrue.Chat_MessagesChat.ChatStatusChanged;
+
 public class SendToChatActivity extends AppCompatActivity {
 
     ImageView back;
@@ -365,7 +368,11 @@ public class SendToChatActivity extends AppCompatActivity {
                         intent.putExtra("UserAddress", "GroupChat");
                         intent.putExtra("UserID", groupChatModel.getId());
                         intent.putExtra("ChatID", chatRoomId);
+                        intent.putExtra("UserIDsList",usersId);
                         startActivity(intent);
+                        finish();
+                        ChatStatusChanged=true;
+                        ChatStatusChangedallchat=true;
                     }
 
                     @Override

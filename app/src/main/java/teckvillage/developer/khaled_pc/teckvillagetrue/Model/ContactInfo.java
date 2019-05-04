@@ -14,4 +14,57 @@ public class ContactInfo {
         this.phoneNum=phoneNum;
 
     }
+
+    public String getImageUrl() {
+        return imageUrl;
+    }
+
+    public void setImageUrl(String imageUrl) {
+        this.imageUrl = imageUrl;
+    }
+
+    public String getContacName() {
+        return contacName;
+    }
+
+    public void setContacName(String contacName) {
+        this.contacName = contacName;
+    }
+
+    public String getNumberType() {
+        return numberType;
+    }
+
+    public void setNumberType(String numberType) {
+        this.numberType = numberType;
+    }
+
+    public String getPhoneNum() {
+        return phoneNum;
+    }
+
+    public void setPhoneNum(String phoneNum) {
+        this.phoneNum = phoneNum;
+    }
+
+
+    boolean isUserFeched=false;
+
+    public boolean isUserFeched() {
+        return isUserFeched;
+    }
+
+    public void setUserFeched(boolean userFeched) {
+        isUserFeched = userFeched;
+    }
+
+    boolean needToFech=false;
+
+    public boolean isNeedToFech() {
+        return needToFech;
+    }
+
+    public void setNeedToFech(boolean needToFech) {
+        this.needToFech = needToFech;
+    }
 }

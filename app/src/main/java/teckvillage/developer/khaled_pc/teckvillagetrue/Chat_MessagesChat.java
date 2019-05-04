@@ -100,6 +100,8 @@ public class Chat_MessagesChat extends AppCompatActivity {
     ProgressDialog mProgressDialog;
 
     public static boolean ChatStatusChanged=false;
+
+    public static int[] groupUsers;
     @Override
     public void onStart() {
         super.onStart();
@@ -152,15 +154,14 @@ public class Chat_MessagesChat extends AppCompatActivity {
         {
             isGroup=true;
             callIcon.setVisibility(View.GONE);
-            settingIcon.setVisibility(View.GONE);
             userImg.setImageResource(R.drawable.ic_groupchat);
-            //groupUsers = getIntent().getIntArrayExtra("UserIDsList");
+            groupUsers = getIntent().getIntArrayExtra("UserIDsList");
 
         }
         else
         {
             settingIcon.setVisibility(View.GONE);
-            Picasso.with(getApplicationContext()).load("http://whocaller.net/uploads/"+Image)
+            Picasso.with(getApplicationContext()).load("http://whocaller.net/whocallerAdmin/uploads/"+Image)
                     .into(userImg, new com.squareup.picasso.Callback() {
                         @Override
                         public void onSuccess() {
@@ -296,7 +297,11 @@ public class Chat_MessagesChat extends AppCompatActivity {
                         switch (item.getItemId()) {
                             case R.id.add_contact_to_chat:
                                 // item one clicked
-                                //openContactsDialog();
+                                mProgressDialog.setIndeterminate(true);
+                                mProgressDialog.setMessage("Loading...");
+                                mProgressDialog.setCancelable(false);
+                                mProgressDialog.show();
+                                openContactsDialog();
                                 return true;
                         }
                         return false;
@@ -597,7 +602,7 @@ public class Chat_MessagesChat extends AppCompatActivity {
         return cal;
     }
 
-    /*Dialog AddUserDialog;
+    Dialog AddUserDialog;
     RecyclerView mRecyclerViewContacts;
     public AddContactsToChatGroupAdapter addContactsAdapters;
     List<RoomModel>userContactsData;
@@ -639,9 +644,10 @@ public class Chat_MessagesChat extends AppCompatActivity {
                                 if (roomModel.getType().equals("user")) { userContactsData.add(roomModel); }
                             }
 
-                            addContactsAdapters=new AddContactsToChatGroupAdapter(getApplicationContext(),userContactsData,groupUsers,receiverID,name,AddUserDialog);
+                            addContactsAdapters=new AddContactsToChatGroupAdapter(getApplicationContext(),userContactsData,receiverID,name,AddUserDialog,mProgressDialog);
                             mRecyclerViewContacts.setLayoutManager(new LinearLayoutManager(getApplicationContext()));
                             mRecyclerViewContacts.setAdapter(addContactsAdapters);
+                            AddUserDialog.show();
                         }
                         else
                         {
@@ -660,7 +666,12 @@ public class Chat_MessagesChat extends AppCompatActivity {
                 });
             }
         }
-        AddUserDialog.show();
-    }*/
+
+    }
+
+    @Override
+    protected void onResume() {
+        super.onResume();
+    }
 }
 

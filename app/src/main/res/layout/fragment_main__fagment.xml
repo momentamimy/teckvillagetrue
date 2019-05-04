@@ -64,11 +64,12 @@
 
 
                         <TextView
+                            android:layoutDirection="locale"
                             android:textColor="@android:color/white"
                             android:textSize="17dp"
                             android:layout_width="wrap_content"
                             android:layout_height="wrap_content"
-                            android:text="Who Caller? Search"
+                            android:text="@string/who_caller_search"
                             android:layout_centerInParent="true"
                              />
 

@@ -59,7 +59,7 @@ public class SendToChatContactsAdapters extends RecyclerView.Adapter<SendToChatC
         else {
             if (holder.contactName2 != null) {
                 final RoomModel data = mDataArray.get(position);
-                Picasso.with(context).load("http://whocaller.net/uploads/"+data.getImg())
+                Picasso.with(context).load("http://whocaller.net/whocallerAdmin/uploads/"+data.getImg())
                         .fit().centerInside()
                         .into(holder.contactCircleImageView2, new com.squareup.picasso.Callback() {
                             @Override
