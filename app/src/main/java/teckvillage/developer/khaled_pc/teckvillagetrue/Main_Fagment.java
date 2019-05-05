@@ -205,8 +205,8 @@ public class Main_Fagment extends Fragment implements OnBackPressedListener , Lo
             }
         });
 
-        TextView textView = view.findViewById(R.id.dialpad_bottom_rl);
-        textView.setOnClickListener(new View.OnClickListener() {
+        RelativeLayout relativeLayout = view.findViewById(R.id.dialpad_bottom_rl);
+        relativeLayout.setOnClickListener(new View.OnClickListener() {
             @Override
             public void onClick(View v) {
 
@@ -776,6 +776,12 @@ public class Main_Fagment extends Fragment implements OnBackPressedListener , Lo
     }
 
     public void callAnimDefault() {
+        if (android.os.Build.VERSION.SDK_INT >= Build.VERSION_CODES.LOLLIPOP_MR1){
+            // Do something for lollipop and above versions
+        } else{
+            // do something for phones running an SDK before lollipop
+            fab.setImageResource(R.drawable.ic_telephone);
+        }
 
         DisplayMetrics metrics = getResources().getDisplayMetrics();
         ObjectAnimator translationY = ObjectAnimator.ofFloat(padLayout, "y", metrics.widthPixels * 2); // metrics.heightPixels or root.getHeight()
@@ -861,29 +867,55 @@ public class Main_Fagment extends Fragment implements OnBackPressedListener , Lo
         ObjectAnimator anim = ObjectAnimator.ofFloat(fab, "rotation", 720);
         anim.setDuration(duration);
         anim.start();
+        if (android.os.Build.VERSION.SDK_INT >= android.os.Build.VERSION_CODES.LOLLIPOP){
+            // Do something for lollipop and above versions
+            rocketAnimation = (AnimationDrawable) fab.getDrawable();
+            rocketAnimation.start();
 
-        rocketAnimation = (AnimationDrawable) fab.getDrawable();
-        rocketAnimation.start();
-
-        Thread timer = new Thread() {
-            public void run() {
-                try {
-                    synchronized (this) {
-                        wait(duration + 100);
-                        getActivity().runOnUiThread(new Runnable() {
-                            @Override
-                            public void run() {
-                                fab.setImageResource(R.drawable.animation_list);
-                                SortSearchCallList(phone_num_edt.getText().toString());
-                            }
-                        });
+            Thread timer = new Thread() {
+                public void run() {
+                    try {
+                        synchronized (this) {
+                            wait(duration + 100);
+                            getActivity().runOnUiThread(new Runnable() {
+                                @Override
+                                public void run() {
+                                    fab.setImageResource(R.drawable.animation_list);
+                                    SortSearchCallList(phone_num_edt.getText().toString());
+                                }
+                            });
+                        }
+                    } catch (InterruptedException e) {
+                        e.printStackTrace();
                     }
-                } catch (InterruptedException e) {
-                    e.printStackTrace();
                 }
-            }
-        };
-        timer.start();
+            };
+            timer.start();
+        } else{
+            // do something for phones running an SDK before lollipop
+            fab.setImageResource(R.drawable.ic_phone_white_24dp);
+            Thread timer = new Thread() {
+                public void run() {
+                    try {
+                        synchronized (this) {
+                            wait(duration + 100);
+                            getActivity().runOnUiThread(new Runnable() {
+                                @Override
+                                public void run() {
+                                    SortSearchCallList(phone_num_edt.getText().toString());
+                                }
+                            });
+                        }
+                    } catch (InterruptedException e) {
+                        e.printStackTrace();
+                    }
+                }
+            };
+            timer.start();
+        }
+
+
+
     }
 
     public void deleteAnim(final int duration) {
@@ -896,27 +928,35 @@ public class Main_Fagment extends Fragment implements OnBackPressedListener , Lo
         anim.setDuration(duration);
         anim.start();
 
-        rocketAnimation = (AnimationDrawable) fab.getDrawable();
-        rocketAnimation.start();
+        if (android.os.Build.VERSION.SDK_INT >= android.os.Build.VERSION_CODES.LOLLIPOP){
+            // Do something for lollipop and above versions
+            rocketAnimation = (AnimationDrawable) fab.getDrawable();
+            rocketAnimation.start();
 
-        Thread timer = new Thread() {
-            public void run() {
-                try {
-                    synchronized (this) {
-                        wait(duration);
-                        getActivity().runOnUiThread(new Runnable() {
-                            @Override
-                            public void run() {
-                                fab.setImageResource(R.drawable.animation_list2);
-                            }
-                        });
+            Thread timer = new Thread() {
+                public void run() {
+                    try {
+                        synchronized (this) {
+                            wait(duration);
+                            getActivity().runOnUiThread(new Runnable() {
+                                @Override
+                                public void run() {
+                                    fab.setImageResource(R.drawable.animation_list2);
+                                }
+                            });
+                        }
+                    } catch (InterruptedException e) {
+                        e.printStackTrace();
                     }
-                } catch (InterruptedException e) {
-                    e.printStackTrace();
                 }
-            }
-        };
-        timer.start();
+            };
+            timer.start();
+        } else{
+            // do something for phones running an SDK before lollipop
+            fab.setImageResource(R.drawable.ic_telephone);
+        }
+
+
     }
 
 
@@ -940,27 +980,35 @@ public class Main_Fagment extends Fragment implements OnBackPressedListener , Lo
         set.playTogether(translationY, translationX, anim);
         set.start();
 
-        rocketAnimation = (AnimationDrawable) fab.getDrawable();
-        rocketAnimation.start();
+        if (android.os.Build.VERSION.SDK_INT >= android.os.Build.VERSION_CODES.LOLLIPOP){
+            // Do something for lollipop and above versions
+            rocketAnimation = (AnimationDrawable) fab.getDrawable();
+            rocketAnimation.start();
 
-        Thread timer = new Thread() {
-            public void run() {
-                try {
-                    synchronized (this) {
-                        wait(duration);
-                        getActivity().runOnUiThread(new Runnable() {
-                            @Override
-                            public void run() {
-                                fab.setImageResource(R.drawable.animation_list);
-                            }
-                        });
+            Thread timer = new Thread() {
+                public void run() {
+                    try {
+                        synchronized (this) {
+                            wait(duration);
+                            getActivity().runOnUiThread(new Runnable() {
+                                @Override
+                                public void run() {
+                                    fab.setImageResource(R.drawable.animation_list);
+                                }
+                            });
+                        }
+                    } catch (InterruptedException e) {
+                        e.printStackTrace();
                     }
-                } catch (InterruptedException e) {
-                    e.printStackTrace();
                 }
-            }
-        };
-        timer.start();
+            };
+            timer.start();
+        } else{
+            // do something for phones running an SDK before lollipop
+            fab.setImageResource(R.drawable.ic_phone_white_24dp);
+        }
+
+
     }
 
     public void scrollCloseAnim(final int duration) {
@@ -982,27 +1030,34 @@ public class Main_Fagment extends Fragment implements OnBackPressedListener , Lo
         set.playTogether(translationY, translationX, anim);
         set.start();
 
-        rocketAnimation = (AnimationDrawable) fab.getDrawable();
-        rocketAnimation.start();
+        if (android.os.Build.VERSION.SDK_INT >= android.os.Build.VERSION_CODES.LOLLIPOP){
+            // Do something for lollipop and above versions
+            rocketAnimation = (AnimationDrawable) fab.getDrawable();
+            rocketAnimation.start();
 
-        Thread timer = new Thread() {
-            public void run() {
-                try {
-                    synchronized (this) {
-                        wait(duration);
-                        getActivity().runOnUiThread(new Runnable() {
-                            @Override
-                            public void run() {
-                                fab.setImageResource(R.drawable.animation_list2);
-                            }
-                        });
+            Thread timer = new Thread() {
+                public void run() {
+                    try {
+                        synchronized (this) {
+                            wait(duration);
+                            getActivity().runOnUiThread(new Runnable() {
+                                @Override
+                                public void run() {
+                                    fab.setImageResource(R.drawable.animation_list2);
+                                }
+                            });
+                        }
+                    } catch (InterruptedException e) {
+                        e.printStackTrace();
                     }
-                } catch (InterruptedException e) {
-                    e.printStackTrace();
                 }
-            }
-        };
-        timer.start();
+            };
+            timer.start();
+        } else{
+            // do something for phones running an SDK before lollipop
+            fab.setImageResource(R.drawable.ic_telephone);
+        }
+
     }
 
     public void close_search_anim_button(final int duration) {

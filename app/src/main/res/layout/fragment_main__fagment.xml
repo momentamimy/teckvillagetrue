@@ -334,14 +334,30 @@
 
             </GridView>
 
-            <TextView
+            <RelativeLayout
                 android:id="@+id/dialpad_bottom_rl"
                 android:layout_alignParentBottom="true"
                 android:background="#fff"
                 android:layout_width="match_parent"
-                android:layout_height="wrap_content"
-                android:padding="10dp"
-                android:textSize="45dp"/>
+                android:layout_height="wrap_content">
+
+                <android.support.design.widget.FloatingActionButton
+                    android:id="@+id/fab4"
+                    android:layout_margin="10sp"
+                    android:layout_width="60dp"
+                    android:layout_height="60dp"
+                    app:elevation="6dp"
+                    android:src="@drawable/animation_list2"
+                    app:rippleColor="#36000000"
+                    app:backgroundTintMode="src_over"
+                    app:backgroundTint="@color/colorPrimary"
+                    app:pressedTranslationZ="12dp"
+                    app:fabSize="normal"
+                    android:layout_centerInParent="true"
+                    android:visibility="invisible"
+                    />
+
+            </RelativeLayout>
 
         </RelativeLayout>
         <android.support.design.widget.FloatingActionButton

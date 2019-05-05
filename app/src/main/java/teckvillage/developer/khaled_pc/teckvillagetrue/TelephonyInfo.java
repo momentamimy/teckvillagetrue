@@ -8,6 +8,7 @@ import android.Manifest;
 import android.content.Context;
 import android.content.pm.PackageManager;
 import android.os.Build;
+import android.support.v4.app.ActivityCompat;
 import android.support.v4.content.ContextCompat;
 import android.telephony.SubscriptionInfo;
 import android.telephony.SubscriptionManager;
@@ -60,50 +61,54 @@ public final class TelephonyInfo {
     private TelephonyInfo() {
     }
 
-    public static TelephonyInfo getInstance(Context context){
+    public static TelephonyInfo getInstance(Context context) {
 
-        if(telephonyInfo == null) {
+        if (telephonyInfo == null) {
 
             telephonyInfo = new TelephonyInfo();
 
             TelephonyManager telephonyManager = ((TelephonyManager) context.getSystemService(Context.TELEPHONY_SERVICE));
 
-            telephonyInfo.imeiSIM1 = telephonyManager.getDeviceId();;
-            telephonyInfo.imeiSIM2 = null;
-
-            try {
-                telephonyInfo.imeiSIM1 = getDeviceIdBySlot(context, "getDeviceIdGemini", 0);
-                telephonyInfo.imeiSIM2 = getDeviceIdBySlot(context, "getDeviceIdGemini", 1);
-            } catch (GeminiMethodNotFoundException e) {
-                e.printStackTrace();
+            if (ActivityCompat.checkSelfPermission(context, Manifest.permission.READ_PHONE_STATE) == PackageManager.PERMISSION_GRANTED) {
+                telephonyInfo.imeiSIM1 = telephonyManager.getDeviceId();;
+                telephonyInfo.imeiSIM2 = null;
 
                 try {
-                    telephonyInfo.imeiSIM1 = getDeviceIdBySlot(context, "getDeviceId", 0);
-                    telephonyInfo.imeiSIM2 = getDeviceIdBySlot(context, "getDeviceId", 1);
-                } catch (GeminiMethodNotFoundException e1) {
-                    //Call here for next manufacturer's predicted method name if you wish
-                    e1.printStackTrace();
+                    telephonyInfo.imeiSIM1 = getDeviceIdBySlot(context, "getDeviceIdGemini", 0);
+                    telephonyInfo.imeiSIM2 = getDeviceIdBySlot(context, "getDeviceIdGemini", 1);
+                } catch (GeminiMethodNotFoundException e) {
+                    e.printStackTrace();
+
+                    try {
+                        telephonyInfo.imeiSIM1 = getDeviceIdBySlot(context, "getDeviceId", 0);
+                        telephonyInfo.imeiSIM2 = getDeviceIdBySlot(context, "getDeviceId", 1);
+                    } catch (GeminiMethodNotFoundException e1) {
+                        //Call here for next manufacturer's predicted method name if you wish
+                        e1.printStackTrace();
+                    }
+                }
+
+                telephonyInfo.isSIM1Ready = telephonyManager.getSimState() == TelephonyManager.SIM_STATE_READY;
+                telephonyInfo.isSIM2Ready = false;
+
+                try {
+                    telephonyInfo.isSIM1Ready = getSIMStateBySlot(context, "getSimStateGemini", 0);
+                    telephonyInfo.isSIM2Ready = getSIMStateBySlot(context, "getSimStateGemini", 1);
+                } catch (GeminiMethodNotFoundException e) {
+
+                    e.printStackTrace();
+
+                    try {
+                        telephonyInfo.isSIM1Ready = getSIMStateBySlot(context, "getSimState", 0);
+                        telephonyInfo.isSIM2Ready = getSIMStateBySlot(context, "getSimState", 1);
+                    } catch (GeminiMethodNotFoundException e1) {
+                        //Call here for next manufacturer's predicted method name if you wish
+                        e1.printStackTrace();
+                    }
                 }
             }
 
-            telephonyInfo.isSIM1Ready = telephonyManager.getSimState() == TelephonyManager.SIM_STATE_READY;
-            telephonyInfo.isSIM2Ready = false;
 
-            try {
-                telephonyInfo.isSIM1Ready = getSIMStateBySlot(context, "getSimStateGemini", 0);
-                telephonyInfo.isSIM2Ready = getSIMStateBySlot(context, "getSimStateGemini", 1);
-            } catch (GeminiMethodNotFoundException e) {
-
-                e.printStackTrace();
-
-                try {
-                    telephonyInfo.isSIM1Ready = getSIMStateBySlot(context, "getSimState", 0);
-                    telephonyInfo.isSIM2Ready = getSIMStateBySlot(context, "getSimState", 1);
-                } catch (GeminiMethodNotFoundException e1) {
-                    //Call here for next manufacturer's predicted method name if you wish
-                    e1.printStackTrace();
-                }
-            }
         }
 
         return telephonyInfo;
