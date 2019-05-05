@@ -306,10 +306,10 @@ public class Signup extends AppCompatActivity {
                                                     //Toast.makeText(getApplicationContext(), response.body().toString(), Toast.LENGTH_SHORT).show();
                                                     DataReceived user = response.body().getUser();
 
-                                                    Log.w("success", user.getEmail());
+                                                   /* Log.w("success", user.getEmail());
                                                     Log.w("success", user.getName());
                                                     Log.w("success", user.getPhone());
-                                                    Log.w("success", user.getApi_token());
+                                                    Log.w("success", user.getApi_token());*/
 
                                                     //if respone retreive img name it mean user upload img
                                                     /*if (user.getImg() != null) {
@@ -582,28 +582,65 @@ public class Signup extends AppCompatActivity {
                         try {
                             Log.i("Response",response.toString());
 
-                            String firstName = response.getJSONObject().getString("first_name");
-                            String lastName = response.getJSONObject().getString("last_name");
+                            String firstName = "";
+                            if(response.getJSONObject().getString("first_name")!=null) {
+                                firstName = response.getJSONObject().getString("first_name");
+                            }
+
+                            String lastName = "";
+                            if(response.getJSONObject().getString("last_name")!=null){
+                                lastName = response.getJSONObject().getString("last_name");
+                            }
+
                             String email="";
                             if (response.getJSONObject().has("email")) {
                                 email =response.getJSONObject().getString("email");
                             }
 
-                            Profile profile = Profile.getCurrentProfile();
-                            String id   = profile.getId();
-                            String link = profile.getLinkUri().toString();
+                            String idfacebook="";
+                            if(response.getJSONObject().has("id")){
+                                idfacebook=response.getJSONObject().getString("id");
+                                Log.w("idfacebook",idfacebook);
 
-                            if (Profile.getCurrentProfile()!=null)
-                            {
-                                // imageView.setImageURI(p);
-                                Log.i("Login", "ProfilePic" + Profile.getCurrentProfile().getProfilePictureUri(200, 200));
-                                Uri l = Profile.getCurrentProfile().getProfilePictureUri(200, 200);
-                                add_personal_photo.setImageURI(l);
+                                //Set Photo if ID Found
+                                URL imageURL = new URL("https://graph.facebook.com/" + idfacebook + "/picture?type=large");
+                                Picasso.with(Signup.this).load(imageURL.toString()).into(add_personal_photo);
+                                add_personal_photo.setPadding(20,20,20,20);
                             }
 
-                            URL imageURL = new URL("https://graph.facebook.com/" + id + "/picture?type=large");
-                            Picasso.with(Signup.this).load(imageURL.toString()).into(add_personal_photo);
-                            add_personal_photo.setPadding(20,20,20,20);
+                            String linkpars="";
+                            if (response.getJSONObject().has("link")) {
+                                linkpars =response.getJSONObject().getString("link");
+                                Log.w("linkfaceee",linkpars);
+                            }
+
+
+                            Profile profile = null;
+                            String id   = null;
+                            String link = null;
+                            if(Profile.getCurrentProfile()!=null){
+                                profile = Profile.getCurrentProfile();
+
+                                if( profile.getId()!=null){
+                                    id= profile.getId();
+                                }
+
+                                if(profile.getLinkUri().toString()!=null){
+                                    link = profile.getLinkUri().toString();
+                                }
+
+                            }
+
+
+                            /*if (Profile.getCurrentProfile()!=null)
+                            {
+                                Log.w("aspic","aapic");
+                                // imageView.setImageURI(p);
+                                Log.w("Login", "ProfilePic" + Profile.getCurrentProfile().getProfilePictureUri(200, 200));
+                                Uri l = Profile.getCurrentProfile().getProfilePictureUri(200, 200);
+                                add_personal_photo.setImageURI(l);
+                            }*/
+
 
                             //Put Data in EditText
                             FirstName.setText(firstName);
@@ -618,12 +655,13 @@ public class Signup extends AppCompatActivity {
                             }
 
                             //Log.i("Link",link);
-                            Log.i("Login" + "ID",  id);
+                            // Log.i("Login" + "ID",  id);
                             Log.i("Login" + "Email",  email);
                             Log.i("Login"+ "FirstName", firstName);
                             Log.i("Login" + "LastName", lastName);
 
-
+                            //Logout after get Result
+                            LoginManager.getInstance().logOut();
 
                         } catch (JSONException e) {
                             e.printStackTrace();
@@ -633,7 +671,7 @@ public class Signup extends AppCompatActivity {
                     }
                 });
         Bundle parameters = new Bundle();
-        parameters.putString("fields", "id,email,first_name,last_name,gender,birthday,picture.type(large),link");
+        parameters.putString("fields", "id,email,first_name,last_name,link,gender,birthday,picture.type(large)");
         request.setParameters(parameters);
         request.executeAsync();
     }
@@ -900,12 +938,12 @@ public class Signup extends AppCompatActivity {
         switch (requestCode) {
             case MY_CAMERA_REQUEST_CODE : {
                 // If request is cancelled, the result arrays are empty.
-                if (grantResults.length > 0
-                        && grantResults[0] == PackageManager.PERMISSION_GRANTED) {
+                if (grantResults.length > 0 && grantResults[0] == PackageManager.PERMISSION_GRANTED) {
 
                     // permission was granted, yay! Do the
                     // contacts-related task you need to do.
 
+                    showPictureDialog();
 
                 } else {
 

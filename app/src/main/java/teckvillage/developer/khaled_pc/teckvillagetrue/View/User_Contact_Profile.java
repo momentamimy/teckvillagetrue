@@ -481,9 +481,7 @@ public class User_Contact_Profile extends AppCompatActivity {
                         if(fetchedUserData.getName()!=null){
                             Log.w("sues",fetchedUserData.getName());
                         }
-                        if(fetchedUserData.getVcard_email()!=null){
-                            Log.w("sues",fetchedUserData.getVcard_email());
-                        }
+
 
                         if(fetchedUserData.getUser_tag_id()!=null){
                             Log.w("sues",fetchedUserData.getUser_tag_id());

@@ -775,7 +775,7 @@ public class PhoneStateReceiver extends BroadcastReceiver {
                         public void onResponse(Call<FetchedUserData> call, Response<FetchedUserData> response) {
                             if (response.isSuccessful())
                             {
-                                Log.d("userNamePaleeez", response.body().getName());
+                                //Log.d("userNamePaleeez", response.body().getName());
                                 FetchedUserData resp =response.body();
                                 updateCard(resp);
 
