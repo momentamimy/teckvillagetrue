@@ -867,7 +867,7 @@ public class Main_Fagment extends Fragment implements OnBackPressedListener , Lo
         ObjectAnimator anim = ObjectAnimator.ofFloat(fab, "rotation", 720);
         anim.setDuration(duration);
         anim.start();
-        if (android.os.Build.VERSION.SDK_INT >= android.os.Build.VERSION_CODES.LOLLIPOP){
+        if (android.os.Build.VERSION.SDK_INT >= Build.VERSION_CODES.LOLLIPOP_MR1){
             // Do something for lollipop and above versions
             rocketAnimation = (AnimationDrawable) fab.getDrawable();
             rocketAnimation.start();
@@ -928,7 +928,7 @@ public class Main_Fagment extends Fragment implements OnBackPressedListener , Lo
         anim.setDuration(duration);
         anim.start();
 
-        if (android.os.Build.VERSION.SDK_INT >= android.os.Build.VERSION_CODES.LOLLIPOP){
+        if (android.os.Build.VERSION.SDK_INT >= Build.VERSION_CODES.LOLLIPOP_MR1){
             // Do something for lollipop and above versions
             rocketAnimation = (AnimationDrawable) fab.getDrawable();
             rocketAnimation.start();
@@ -980,7 +980,7 @@ public class Main_Fagment extends Fragment implements OnBackPressedListener , Lo
         set.playTogether(translationY, translationX, anim);
         set.start();
 
-        if (android.os.Build.VERSION.SDK_INT >= android.os.Build.VERSION_CODES.LOLLIPOP){
+        if (android.os.Build.VERSION.SDK_INT >= Build.VERSION_CODES.LOLLIPOP_MR1){
             // Do something for lollipop and above versions
             rocketAnimation = (AnimationDrawable) fab.getDrawable();
             rocketAnimation.start();
@@ -1030,7 +1030,7 @@ public class Main_Fagment extends Fragment implements OnBackPressedListener , Lo
         set.playTogether(translationY, translationX, anim);
         set.start();
 
-        if (android.os.Build.VERSION.SDK_INT >= android.os.Build.VERSION_CODES.LOLLIPOP){
+        if (android.os.Build.VERSION.SDK_INT >= Build.VERSION_CODES.LOLLIPOP_MR1){
             // Do something for lollipop and above versions
             rocketAnimation = (AnimationDrawable) fab.getDrawable();
             rocketAnimation.start();

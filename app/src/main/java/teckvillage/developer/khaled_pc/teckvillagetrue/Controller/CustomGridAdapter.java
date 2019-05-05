@@ -5,6 +5,7 @@ import android.view.LayoutInflater;
 import android.view.View;
 import android.view.ViewGroup;
 import android.widget.BaseAdapter;
+import android.widget.ImageView;
 import android.widget.TextView;
 
 import java.util.List;
@@ -50,9 +51,22 @@ public class CustomGridAdapter extends BaseAdapter {
 
         TextView num=gridview.findViewById(R.id.grid_num_textView);
         TextView letter=gridview.findViewById(R.id.grid_letter_textView);
+        ImageView icon=gridview.findViewById(R.id.grid_letter_ImageView);
 
         num.setText(itemList.get(position).num);
-        letter.setText(itemList.get(position).letter);
+        if (position==0)
+        {
+            icon.setVisibility(View.VISIBLE);
+            letter.setText("");
+            letter.setVisibility(View.GONE);
+        }
+        else
+        {
+            letter.setText(itemList.get(position).letter);
+            icon.setVisibility(View.GONE);
+            letter.setVisibility(View.VISIBLE);
+        }
+
 
         return gridview;
     }

@@ -1,10 +1,11 @@
 <RelativeLayout xmlns:android="http://schemas.android.com/apk/res/android"
     android:layout_width="match_parent"
-    android:layout_height="match_parent" >
+    android:layout_height="match_parent"
+    android:background="?android:attr/selectableItemBackground">
 
     <RelativeLayout
-        android:background="@drawable/ic_filter_state"
-        android:layout_width="80dp"
+
+        android:layout_width="wrap_content"
         android:layout_height="wrap_content"
         android:layout_centerInParent="true"
         android:paddingVertical="12dp">
@@ -27,9 +28,22 @@
             android:layout_height="wrap_content"
             android:layout_toRightOf="@+id/grid_num_textView"
             android:layout_alignBottom="@+id/grid_num_textView"
-            android:text="abc"
+            android:text="abcd"
+            android:textColor="#838383"
             android:textAppearance="?android:attr/textAppearanceSmall"
             android:layout_marginLeft="2dp" />
+
+        <ImageView
+            android:layout_marginStart="2dp"
+            android:id="@+id/grid_letter_ImageView"
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:layout_toRightOf="@+id/grid_num_textView"
+            android:layout_alignBottom="@+id/grid_num_textView"
+            android:textColor="#838383"
+            android:textAppearance="?android:attr/textAppearanceSmall"
+            android:layout_marginLeft="2dp"
+            android:src="@drawable/ic_voicemail_grid"/>
 
     </RelativeLayout>
 
