@@ -168,6 +168,8 @@ public class Main_Fagment extends Fragment implements OnBackPressedListener , Lo
     TextView noLogcalltext;
     public static OpenDialPad openDialPad;
     private MyInterface listener ;
+    boolean isSinglePhoneNumOnly;
+    ImageView emptyrecycle;
 
     public Main_Fagment() {
         // Required empty public constructor
@@ -188,6 +190,7 @@ public class Main_Fagment extends Fragment implements OnBackPressedListener , Lo
         secimagwaiting=view.findViewById(R.id.waitingimg_topten2);
         textwaiting=view.findViewById(R.id.textwaiting);
         noLogcalltext=view.findViewById(R.id.nologcalltext);
+        emptyrecycle=view.findViewById(R.id.nologcallimage);
 
         getLoaderManager().initLoader(1, null, this);
 
@@ -314,6 +317,9 @@ public class Main_Fagment extends Fragment implements OnBackPressedListener , Lo
                                         }
                                         getActivity().getContentResolver().delete(CallLog.Calls.CONTENT_URI, null, null);
 
+                                        //-------------------------------------------------------------restart app-----------------------------------------------------------------------------------------------
+                                        getActivity().finish();
+                                        startActivity(getActivity().getBaseContext().getPackageManager() .getLaunchIntentForPackage( getActivity().getBaseContext().getPackageName()).addFlags(Intent.FLAG_ACTIVITY_CLEAR_TOP).addFlags(Intent.FLAG_ACTIVITY_NEW_TASK));
                                     }
                                 });
                                 builder.setNegativeButton("CANCEL", new DialogInterface.OnClickListener() {
@@ -1075,7 +1081,7 @@ public class Main_Fagment extends Fragment implements OnBackPressedListener , Lo
     public void onResume() {
         super.onResume();
         if (shouldExecuteOnResume) {
-            Log.d("mesheyyyy", "onresume");
+
 
 //            loglist103.clear();
             //Uri CONTACT_URI =CallLog.Calls.CONTENT_URI;
@@ -1284,6 +1290,12 @@ public class Main_Fagment extends Fragment implements OnBackPressedListener , Lo
         {
             Log.e("GOPAL", "Empty Cursor");
             callLogInfos=loglist103;
+
+            //set  new list
+            adapter1 = new LogAdapter(getActivity(), loglist103);
+            logs.setAdapter(adapter1);
+            adapter1.notifyDataSetChanged();
+            toggleEmptyLogRecycle(loglist103);
         }
         else {
             do {
@@ -1443,56 +1455,97 @@ public class Main_Fagment extends Fragment implements OnBackPressedListener , Lo
                       \_____|
                                      Mo Salah Mo Salah
                     */
+            Log.d("sizebefore", String.valueOf(logInfos.size()));
+           //If List Size One Item
+           if(logInfos.size()==1){
+               //Add first Item
+               loglist_ID.add(logInfos.get(0).getCall_id());//list of call log ID
+               loglist103.add(new LogInfo(null, logInfos.get(0).logName, logInfos.get(0).logIcon, logInfos.get(0).logDate, logInfos.get(0).getNumberType(), logInfos.get(0).hour, logInfos.get(0).getNumber(), numbersofcall, new ArrayList(loglist_ID)));
 
-            for (int i = 0; i < logInfos.size() - 1; i++) {
+           }else {
+               //More Than one item in list
+               for (int i = 0; i < logInfos.size() - 1; i++) {
 
-                String numString1 = logInfos.get(i).getNumber();
-                String num = logInfos.get(i + 1).getNumber();
+                   String numString1 = logInfos.get(i).getNumber();
+                   String num = logInfos.get(i + 1).getNumber();
 
-                //remove Country Code from first num
-                if (numString1.startsWith("+2")) {
-                    numString1 = numString1.substring(2);
+                   //remove Country Code from first num
+                   if (numString1.startsWith("+2")) {
+                       numString1 = numString1.substring(2);
 
-                } else if (numString1.startsWith("+")) {
+                   } else if (numString1.startsWith("+")) {
 
-                    try {
-                        // phone must begin with '+'
-                        Phonenumber.PhoneNumber numberProto = phoneUtil.parse(numString1, "");
-                        numString1 = String.valueOf(numberProto.getNationalNumber());
+                       try {
+                           // phone must begin with '+'
+                           Phonenumber.PhoneNumber numberProto = phoneUtil.parse(numString1, "");
+                           numString1 = String.valueOf(numberProto.getNationalNumber());
 
-                    } catch (NumberParseException e) {
-                        System.err.println("NumberParseException was thrown: " + e.toString());
-                    }
-                }
+                       } catch (NumberParseException e) {
+                           System.err.println("NumberParseException was thrown: " + e.toString());
+                       }
+                   }
 
-                //remove Country Code from second num
-                if (num.startsWith("+2")) {
-                    num = num.substring(2);
+                   //remove Country Code from second num
+                   if (num.startsWith("+2")) {
+                       num = num.substring(2);
 
-                } else if (num.startsWith("+")) {
+                   } else if (num.startsWith("+")) {
 
-                    try {
-                        // phone must begin with '+'
-                        Phonenumber.PhoneNumber numberProto = phoneUtil.parse(num, "");
-                        num = String.valueOf(numberProto.getNationalNumber());
+                       try {
+                           // phone must begin with '+'
+                           Phonenumber.PhoneNumber numberProto = phoneUtil.parse(num, "");
+                           num = String.valueOf(numberProto.getNationalNumber());
 
-                    } catch (NumberParseException e) {
-                        System.err.println("NumberParseException was thrown: " + e.toString());
-                    }
-                }
+                       } catch (NumberParseException e) {
+                           System.err.println("NumberParseException was thrown: " + e.toString());
+                       }
+                   }
 
-                if (numString1.equals(num) && logInfos.get(i).logIcon.equals(logInfos.get(i + 1).logIcon) && groupListByDate.getFormattedDate(logInfos.get(i).logDate.getTime()).equals(groupListByDate.getFormattedDate(logInfos.get(i + 1).logDate.getTime()))) {
-                    numbersofcall++;
-                    loglist_ID.add(logInfos.get(i).getCall_id());//list of call log ID
-                } else {
-                    loglist_ID.add(logInfos.get(i).getCall_id());//list of call log ID
-                    loglist103.add(new LogInfo(null, logInfos.get(i).logName, logInfos.get(i).logIcon, logInfos.get(i).logDate, logInfos.get(i).getNumberType(), logInfos.get(i).hour, logInfos.get(i).getNumber(), numbersofcall, new ArrayList(loglist_ID)));
-                    numbersofcall = 1;
-                    loglist_ID.clear();
-                }
-            }
+                   if (numString1.equals(num) && logInfos.get(i).logIcon.equals(logInfos.get(i + 1).logIcon) && groupListByDate.getFormattedDate(logInfos.get(i).logDate.getTime()).equals(groupListByDate.getFormattedDate(logInfos.get(i + 1).logDate.getTime()))) {
+                       numbersofcall++;
+                       loglist_ID.add(logInfos.get(i).getCall_id());//list of call log ID
+                       isSinglePhoneNumOnly = false;
+                   } else {
+                       isSinglePhoneNumOnly = true;
+                       loglist_ID.add(logInfos.get(i).getCall_id());//list of call log ID
+                       loglist103.add(new LogInfo(null, logInfos.get(i).logName, logInfos.get(i).logIcon, logInfos.get(i).logDate, logInfos.get(i).getNumberType(), logInfos.get(i).hour, logInfos.get(i).getNumber(), numbersofcall, new ArrayList(loglist_ID)));
+                       numbersofcall = 1;
+                       loglist_ID.clear();
+                   }
+
+                   //For Last item in list
+                   if (i == logInfos.size() - 2) {
+
+                       Log.w("forloop", "howmach");
+
+                       if (numString1.equals(num) && logInfos.get(i).logIcon.equals(logInfos.get(i + 1).logIcon) && groupListByDate.getFormattedDate(logInfos.get(i).logDate.getTime()).equals(groupListByDate.getFormattedDate(logInfos.get(i + 1).logDate.getTime()))) {
+
+                           //Check If There Single Phone Number In Call Log database
+                           if (!isSinglePhoneNumOnly) {
+                               loglist_ID.add(logInfos.get(i+1).getCall_id());//list of call log ID
+                               loglist103.add(new LogInfo(null, logInfos.get(i).logName, logInfos.get(i).logIcon, logInfos.get(i).logDate, logInfos.get(i).getNumberType(), logInfos.get(i).hour, logInfos.get(i).getNumber(), numbersofcall, new ArrayList(loglist_ID)));
+                               numbersofcall = 1;
+                               loglist_ID.clear();
+                           }
+
+                       } else {
+                           loglist_ID.add(logInfos.get(logInfos.size() - 1).getCall_id());//list of call log ID
+                           loglist103.add(new LogInfo(null, logInfos.get(logInfos.size() - 1).logName, logInfos.get(logInfos.size() - 1).logIcon, logInfos.get(logInfos.size() - 1).logDate, logInfos.get(logInfos.size() - 1).getNumberType(), logInfos.get(logInfos.size() - 1).hour, logInfos.get(logInfos.size() - 1).getNumber(), numbersofcall, new ArrayList(loglist_ID)));
+                       }
+
+                   }
+
+               }
+           }
+            //For Last item in list
+
+             /*
+            //Check If There Single Phone Number In Call Log database
+            if(!isSinglePhoneNumOnly){
+                loglist103.add(new LogInfo(null, logInfos.get(0).logName, logInfos.get(0).logIcon, logInfos.get(0).logDate, logInfos.get(0).getNumberType(), logInfos.get(0).hour, logInfos.get(0).getNumber(), numbersofcall, new ArrayList(loglist_ID)));
+            }*/
+
             callLogInfos = loglist103;
-
             Log.d("size", String.valueOf(loglist103.size()));
             adapter1 = new LogAdapter(getActivity(), groupListByDate.groupListByDate(loglist103),this);
             logs.setAdapter(adapter1);
@@ -1548,8 +1601,10 @@ public class Main_Fagment extends Fragment implements OnBackPressedListener , Lo
 
        if(result.size()>0){
            noLogcalltext.setVisibility(View.GONE);
+           emptyrecycle.setVisibility(View.GONE);
        }else {
            noLogcalltext.setVisibility(View.VISIBLE);
+           emptyrecycle.setVisibility(View.VISIBLE);
        }
 
     }

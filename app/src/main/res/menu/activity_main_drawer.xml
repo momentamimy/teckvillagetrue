@@ -14,6 +14,7 @@
         <item
             android:id="@+id/nav_camera_recognition"
             android:icon="@drawable/ic_photo_camera_with_a_magnifier_tool"
+            android:visible="false"
             android:title="Camera" />
         <item
             android:id="@+id/nav_FAQ"

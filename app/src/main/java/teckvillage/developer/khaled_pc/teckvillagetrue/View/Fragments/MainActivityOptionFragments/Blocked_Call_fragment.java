@@ -59,6 +59,7 @@ public class Blocked_Call_fragment extends Fragment {
         Activitytitle.setText("Blocked");
 
         emptyrecycle=view.findViewById(R.id.textifempty);
+        emptyrecycle.setText("No blocked calls");
 
         //get_outgoing_list=new Get_list_from_logCall_depend_selection(getActivity());
         get_calls_log=new Get_Calls_Log(getActivity());

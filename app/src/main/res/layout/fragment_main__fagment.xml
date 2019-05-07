@@ -166,15 +166,28 @@
         android:layout_height="match_parent"
         />
 
+
+        <ImageView
+            android:id="@+id/nologcallimage"
+            android:layout_width="@dimen/NoLogCallImage"
+            android:layout_height="@dimen/NoLogCallImage"
+            android:layout_above="@+id/nologcalltext"
+            android:src="@drawable/ic_telephone_receiver_with_circular_arrows"
+            android:layout_centerHorizontal="true"
+            android:layout_marginBottom="15dp"
+            android:visibility="gone"
+            />
+
+
         <TextView
             android:id="@+id/nologcalltext"
             android:layout_width="wrap_content"
             android:layout_height="wrap_content"
             android:layout_centerInParent="true"
-            android:textColor="#919ca1"
+            android:textColor="#52585b"
+            android:text="No calls yet"
+            android:textSize="17sp"
             android:visibility="gone"
-            android:text="No Log Call"
-            android:textSize="22sp"
             />
 
     </RelativeLayout>
@@ -329,7 +342,6 @@
                 android:layout_above="@+id/dialpad_bottom_rl"
                 android:numColumns="3"
                 android:listSelector="#00000000"
-
                 >
 
             </GridView>

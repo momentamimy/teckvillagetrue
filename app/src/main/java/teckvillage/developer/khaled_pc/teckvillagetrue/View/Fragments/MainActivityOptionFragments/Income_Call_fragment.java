@@ -54,6 +54,7 @@ public class Income_Call_fragment extends Fragment {
         Activitytitle.setText("Income");
 
         emptyrecycle=view.findViewById(R.id.textifempty);
+        emptyrecycle.setText("No income calls");
 
         get_outgoing_list=new Get_list_from_logCall_depend_selection(getActivity());
         get_calls_log=new Get_Calls_Log(getActivity());

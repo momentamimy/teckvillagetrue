@@ -52,7 +52,7 @@ public class getSharedPreferenceValue {
 
     public static String getUserTagId(Context context){
         SharedPreferences sharedPref = context.getSharedPreferences("WhoCaller?", MODE_PRIVATE);
-        return sharedPref.getString("User_TagID","Add tag");
+        return sharedPref.getString("User_TagID","Add Tag");
     }
 
     public static String getUserShortNote(Context context){

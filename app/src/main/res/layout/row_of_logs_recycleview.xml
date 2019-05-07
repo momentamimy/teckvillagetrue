@@ -9,15 +9,15 @@
 
     <ProgressBar
         android:id="@+id/progress"
-        android:layout_width="65dp"
-        android:layout_height="65dp"
+        android:layout_width="@dimen/progressbarLogRecycleviewItem"
+        android:layout_height="@dimen/progressbarLogRecycleviewItem"
         android:visibility="gone"
         android:theme="@style/AppTheme.grayAccent"
         />
     <de.hdodenhof.circleimageview.CircleImageView
         android:id="@+id/progress_contact_img"
-        android:layout_width="45dp"
-        android:layout_height="45dp"
+        android:layout_width="@dimen/imageviewLogRecycleviewItem"
+        android:layout_height="@dimen/imageviewLogRecycleviewItem"
         android:layout_margin="10dp"
         android:src="@drawable/ic_nurse"
         android:visibility="gone"
@@ -25,8 +25,8 @@
 
     <de.hdodenhof.circleimageview.CircleImageView
         android:id="@+id/contact_img_log_recycle"
-        android:layout_width="45dp"
-        android:layout_height="45dp"
+        android:layout_width="@dimen/imageviewLogRecycleviewItem"
+        android:layout_height="@dimen/imageviewLogRecycleviewItem"
         android:layout_marginStart="20dp"
         android:layout_marginEnd="10dp"
         android:layout_marginVertical="15dp"
@@ -59,13 +59,13 @@
 
     <ImageView
         android:id="@+id/type_of_call"
-        android:layout_width="10dp"
-        android:layout_height="10dp"
-        android:layout_marginTop="5.5dp"
+        android:layout_width="@dimen/iconLogRecycleviewItem"
+        android:layout_height="@dimen/iconLogRecycleviewItem"
+        android:layout_marginTop="@dimen/topiconLogRecycleviewItem"
         android:layout_below="@+id/name_of_log"
         android:layout_marginStart="8dp"
         android:layout_marginLeft="8dp"
-        android:src="@drawable/ic_blocked"
+        android:src="@drawable/ic_arrow_right_up"
         android:contentDescription="arrow" />
 
     <TextView

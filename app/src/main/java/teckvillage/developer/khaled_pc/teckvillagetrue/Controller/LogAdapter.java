@@ -382,7 +382,16 @@ public class LogAdapter extends RecyclerView.Adapter<LogHolder> {
             int hasPerm = pm.checkPermission(Manifest.permission.WRITE_CALL_LOG, context.getPackageName());
             if (hasPerm == PackageManager.PERMISSION_GRANTED) {
                 for (int i = 0; i < arrayList.size(); i++) {
-                    context.getContentResolver().delete(Uri.withAppendedPath(CallLog.Calls.CONTENT_URI, String.valueOf(arrayList.get(i))), "", null);
+                    //context.getContentResolver().delete(Uri.withAppendedPath(CallLog.Calls.CONTENT_URI, String.valueOf(arrayList.get(i))), "", null);
+                    int res = context.getContentResolver().delete(android.provider.CallLog.Calls.CONTENT_URI,"_ID = "+ String.valueOf(arrayList.get(i)),null);
+                    if (res == 1) {
+                        // Log delete
+                        Log.w("LogDeleted","LogDeleted");
+
+                    } else {
+                        // Log not Delete
+                        Log.w("NotDeleted","NotDeleted");
+                    }
                 }
                 notifyDataSetChanged();
             }else {
@@ -396,6 +405,11 @@ public class LogAdapter extends RecyclerView.Adapter<LogHolder> {
 
     }
 
+    public void removeAt(int position) {
+        itemList.remove(position);
+        notifyItemRemoved(position);
+        notifyItemRangeChanged(position, itemList.size());
+    }
 
     List<FetchedUserData> fetchedUserDataList=new ArrayList<>();
     public void getUserDataApi(final Context context, String[] numbers) {
@@ -455,7 +469,7 @@ public class LogAdapter extends RecyclerView.Adapter<LogHolder> {
 
                     @Override
                     public void onFailure(Call<List<FetchedUserData>> call, Throwable t) {
-                        Log.d("onFailure", t.getMessage());
+                       // Log.d("onFailure", t.getMessage());
                     }
                 });
 

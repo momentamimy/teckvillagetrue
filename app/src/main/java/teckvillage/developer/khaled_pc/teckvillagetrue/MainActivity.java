@@ -482,6 +482,7 @@ public class MainActivity extends AppCompatActivity implements NavigationView.On
         } else if (id == R.id.nav_setting) {
 
             startActivity(new Intent(this,setting.class));
+
         }else if (id == R.id.nav_edit_profile) {
 
             startActivity(new Intent(getApplicationContext(),UserProfileActivity.class));

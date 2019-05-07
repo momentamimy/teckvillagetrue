@@ -205,7 +205,7 @@ public class UserProfileActivity extends AppCompatActivity  implements OnclickRe
         //Set intial Tag
         db=new Database_Helper(UserProfileActivity.this);
         String validId=getSharedPreferenceValue.getUserTagId(this);
-        if(!validId.equals("Add tag")){
+        if(!validId.equals("Add Tag")){
             Tags tags= db.getTagtByID(Long.parseLong(getSharedPreferenceValue.getUserTagId(this)));
             tagshape.setText(tags.getTagname());
         }else {
@@ -241,7 +241,6 @@ public class UserProfileActivity extends AppCompatActivity  implements OnclickRe
 
         //retrieve image
          USer_Image= getSharedPreferenceValue.getUserImage(this);
-         Log.w("asd",USer_Image);
         //Check if User Not have Image
         if(USer_Image.equals("NoImageHere")){
             userPhoto.setImageDrawable(getResources().getDrawable(R.drawable.ic_nurse));
@@ -325,7 +324,7 @@ public class UserProfileActivity extends AppCompatActivity  implements OnclickRe
             email.setText(UserEmail);
         }
 
-        //CONTACT
+        //CONTACT Logout
         Phone_Edit_Layout.setOnClickListener(new View.OnClickListener() {
             @Override
             public void onClick(View v) {
@@ -404,28 +403,6 @@ public class UserProfileActivity extends AppCompatActivity  implements OnclickRe
         recyclerView.setItemAnimator(new DefaultItemAnimator());
         TagsAdapter adapter = new TagsAdapter(UserProfileActivity.this, tags);
         recyclerView.setAdapter(adapter);
-
-
-        /*DialogTagEdit.dismiss();
-        tagshape.setText(tag.text);
-        tagid=tag.id;*/
-
-
-
-       /* //String[] colors = this.getResources().getStringArray(R.array.colors);
-        for (int i = 0; i < tags.size(); i++) {
-            Tag tag = new Tag(tags.get(i).getTagname());
-            tag.id=tags.get(i).getId() ;
-            Log.w("tagsid", String.valueOf(tags.get(i).getId()));
-            tag.tagTextColor = Color.parseColor("#FFFFFF");
-            tag.layoutColor = Color.parseColor("#0089c0");
-            tag.radius = 20f;
-            tag.tagTextSize = 14f;
-            tag.layoutBorderSize = 1f;
-            tag.isDeletable = true;
-            tagdialog.addTag(tag);
-        }
-         */
 
 
         DialogTagEdit.show();
@@ -534,8 +511,6 @@ public class UserProfileActivity extends AppCompatActivity  implements OnclickRe
 
     Dialog MyDialoguserEdit=null;
     public void MyCustomHomeUserNameDialog() {
-
-
 
         MyDialoguserEdit = new Dialog(this);
         MyDialoguserEdit.requestWindowFeature(Window.FEATURE_NO_TITLE);
@@ -1007,7 +982,7 @@ public class UserProfileActivity extends AppCompatActivity  implements OnclickRe
                                         if (user.getTag_id() != null) {
                                             editor.putString("User_TagID", user.getTag_id());
                                         }else {
-                                            editor.putString("User_TagID","Add tag");
+                                            editor.putString("User_TagID","Add Tag");
                                         }
                                         if (user.getWebsite() != null) {
                                             editor.putString("User_Website", user.getWebsite());
@@ -1195,7 +1170,7 @@ public class UserProfileActivity extends AppCompatActivity  implements OnclickRe
                                         if (user.getTag_id() != null) {
                                             editor.putString("User_TagID", user.getTag_id());
                                         }else {
-                                            editor.putString("User_TagID","Add tag");
+                                            editor.putString("User_TagID","Add Tag");
                                         }
                                         if (user.getWebsite() != null) {
                                             editor.putString("User_Website", user.getWebsite());
@@ -1301,6 +1276,9 @@ public class UserProfileActivity extends AppCompatActivity  implements OnclickRe
             @Override
             public void onShow(DialogInterface arg0) {
                 dialog.getButton(AlertDialog.BUTTON_POSITIVE).setTextColor(Color.parseColor("#ba160c"));
+                if (Build.VERSION.SDK_INT >= Build.VERSION_CODES.JELLY_BEAN_MR1) {
+                    dialog.getWindow().getDecorView().setLayoutDirection(View.LAYOUT_DIRECTION_LTR); // set title and message direction to RTL
+                }
             }
         });
 

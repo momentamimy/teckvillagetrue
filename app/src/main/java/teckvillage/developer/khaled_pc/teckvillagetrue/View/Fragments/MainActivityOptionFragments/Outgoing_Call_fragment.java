@@ -55,6 +55,7 @@ public class Outgoing_Call_fragment extends Fragment {
         Activitytitle.setText("Outgoing");
 
         emptyrecycle=view.findViewById(R.id.textifempty);
+        emptyrecycle.setText("No outgoing calls");
 
         get_outgoing_list=new Get_list_from_logCall_depend_selection(getActivity());
         get_calls_log=new Get_Calls_Log(getActivity());

@@ -17,7 +17,7 @@
     <RelativeLayout
         android:id="@+id/wave_head"
         android:layout_width="match_parent"
-        android:layout_height="245dp"
+        android:layout_height="@dimen/bannerUserContactUI"
         android:scaleType="centerCrop"
         android:background="#fdfdfd"/>
 
@@ -97,7 +97,7 @@
         android:layout_height="wrap_content"
         android:layout_below="@+id/name"
         android:layout_centerHorizontal="true"
-        android:layout_marginTop="8dp"
+        android:layout_marginTop="10dp"
         android:background="@drawable/border"
         android:gravity="center"
         android:paddingLeft="20dp"
@@ -150,8 +150,8 @@
             <View
                 android:layout_width="1dp"
                 android:layout_height="match_parent"
-                android:layout_marginBottom="8dp"
-                android:layout_marginTop="8dp"
+                android:layout_marginBottom="7dp"
+                android:layout_marginTop="7dp"
                 android:background="#0089c0" />
 
             <LinearLayout
@@ -182,8 +182,8 @@
             <View
                 android:layout_width="1dp"
                 android:layout_height="match_parent"
-                android:layout_marginBottom="8dp"
-                android:layout_marginTop="8dp"
+                android:layout_marginBottom="7dp"
+                android:layout_marginTop="7dp"
                 android:background="#0089c0" />
 
             <LinearLayout

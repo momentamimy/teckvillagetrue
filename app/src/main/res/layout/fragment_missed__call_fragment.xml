@@ -72,7 +72,6 @@
             android:layout_height="wrap_content"
             android:layout_gravity="center"
             android:textSize="17sp"
-            android:text="No blocked calls"
             android:textColor="@android:color/black"
             />
 

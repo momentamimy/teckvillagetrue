@@ -6,5 +6,11 @@
     <dimen name="textSizeBig">50dp</dimen>
     <dimen name="logoDimenWidth">200dp</dimen>
     <dimen name="logoDimenHeight">250dp</dimen>
-
+    <dimen name="imageviewLogRecycleviewItem">65dp</dimen>
+    <dimen name="progressbarLogRecycleviewItem">85dp</dimen>
+    <dimen name="bannerUserContactUI">275dp</dimen>
+    <dimen name="NoLogCallImage">130dp</dimen>
+    <dimen name="textTopTenLogRecycleviewItem">130dp</dimen>
+    <dimen name="iconLogRecycleviewItem">12dp</dimen>
+    <dimen name="topiconLogRecycleviewItem">9dp</dimen>
 </resources>

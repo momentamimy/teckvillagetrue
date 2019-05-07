@@ -49,7 +49,7 @@ public class Get_Calls_Log {
     Context context;
     Permission permission;
     ArrayList<LogInfo> loglist;
-    public String contactsName = "";
+    public String contactsName = null;
     public  int TypeOfNumph;
 
     ListView list_view2;
@@ -480,11 +480,6 @@ public class Get_Calls_Log {
 
                     contactExists(phonenumbers.get(i));
 
-                    //if Number Not in Contacts
-                    if (contactsName == null) {
-                        contactsName = phonenumbers.get(i);
-                    }
-
 
                     switch (TypeOfNumph) {
                         case ContactsContract.CommonDataKinds.Phone.TYPE_MOBILE:
@@ -519,6 +514,10 @@ public class Get_Calls_Log {
                             break;
                     }
 
+                    if (contactsName == null) {
+                        contactsName = phonenumbers.get(i);
+                        typephone = "Other";
+                    }
 
                     contactInfos.add(new ContactInfo(null, contactsName, typephone, phonenumbers.get(i)));
                     contactsName = null;

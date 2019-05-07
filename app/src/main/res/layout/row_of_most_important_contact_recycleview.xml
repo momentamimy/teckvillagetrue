@@ -10,8 +10,8 @@
 
     <ProgressBar
         android:id="@+id/progress"
-        android:layout_width="4dp"
-        android:layout_height="45dp"
+        android:layout_width="@dimen/imageviewLogRecycleviewItem"
+        android:layout_height="@dimen/imageviewLogRecycleviewItem"
         android:layout_centerHorizontal="true"
         android:visibility="gone"
         android:theme="@style/AppTheme.grayAccent"
@@ -19,8 +19,8 @@
     <de.hdodenhof.circleimageview.CircleImageView
         android:layout_marginTop="15dp"
         android:id="@+id/progress_contact_img"
-        android:layout_width="45dp"
-        android:layout_height="45dp"
+        android:layout_width="@dimen/imageviewLogRecycleviewItem"
+        android:layout_height="@dimen/imageviewLogRecycleviewItem"
         android:src="@drawable/ic_nurse"
         android:layout_centerHorizontal="true"
         android:visibility="gone"
@@ -30,8 +30,8 @@
     <de.hdodenhof.circleimageview.CircleImageView
         android:layout_marginTop="15dp"
         android:id="@+id/contact_img"
-        android:layout_width="45dp"
-        android:layout_height="45dp"
+        android:layout_width="@dimen/imageviewLogRecycleviewItem"
+        android:layout_height="@dimen/imageviewLogRecycleviewItem"
         android:src="@drawable/ic_nurse"
         android:layout_centerHorizontal="true"
         />
@@ -40,7 +40,7 @@
         android:id="@+id/contact_name"
         android:layout_below="@id/contact_img"
         android:layout_marginTop="5dp"
-        android:layout_width="85dp"
+        android:layout_width="@dimen/textTopTenLogRecycleviewItem"
         android:layout_height="wrap_content"
         android:singleLine="true"
         android:maxLines="1"
