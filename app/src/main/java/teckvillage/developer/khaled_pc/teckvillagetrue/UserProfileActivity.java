@@ -69,10 +69,6 @@ import java.util.List;
 import java.util.Random;
 
 import de.hdodenhof.circleimageview.CircleImageView;
-import me.kaede.tagview.OnTagClickListener;
-import me.kaede.tagview.OnTagDeleteListener;
-import me.kaede.tagview.Tag;
-import me.kaede.tagview.TagView;
 import okhttp3.MediaType;
 import okhttp3.MultipartBody;
 import okhttp3.RequestBody;
@@ -118,7 +114,7 @@ public class UserProfileActivity extends AppCompatActivity  implements OnclickRe
     String USer_Image,UserName,UserEmail,title,company;
     ImageView editbtnimgandusername;
     Button save;
-    TagView tagaaa;
+
     String UserProfImgInString;
     String genderinreq=null;
     ProgressBar progressBar;
@@ -148,7 +144,6 @@ public class UserProfileActivity extends AppCompatActivity  implements OnclickRe
         TagEdit_Layout=findViewById(R.id.tag_Edit_Layout);
         gender=findViewById(R.id.gender_label);
         save=findViewById(R.id.savechangebtn);
-        tagaaa=findViewById(R.id.tagviewprofile);
         shortnote=findViewById(R.id.info);
         website=findViewById(R.id.Websie);
         address=findViewById(R.id.home_address);
@@ -884,6 +879,10 @@ public class UserProfileActivity extends AppCompatActivity  implements OnclickRe
             if(tagid!=0){
                  tagida = RequestBody.create(MediaType.parse("text/plain"), String.valueOf(tagid));
             }
+        }else if(tagshape.getText().toString().equals("Add Tag")){
+            if(tagid==0){
+                tagida = RequestBody.create(MediaType.parse("text/plain"), String.valueOf(tagid));
+            }
         }
 
 
@@ -1083,7 +1082,10 @@ public class UserProfileActivity extends AppCompatActivity  implements OnclickRe
         if(!tagshape.getText().toString().equals("Add Tag")){
             if(tagid!=0){
                 tagida = RequestBody.create(MediaType.parse("text/plain"), String.valueOf(tagid));
-                Log.w("aaaaa", String.valueOf(tagid));
+            }
+        }else if(tagshape.getText().toString().equals("Add Tag")){
+            if(tagid==0){
+                tagida = RequestBody.create(MediaType.parse("text/plain"), String.valueOf(tagid));
             }
         }
 

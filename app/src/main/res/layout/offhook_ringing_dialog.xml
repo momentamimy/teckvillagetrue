@@ -3,14 +3,14 @@
     android:layout_width="wrap_content"
     android:layout_height="wrap_content"
     android:layoutDirection="ltr"
-    xmlns:app="http://schemas.android.com/apk/res-auto"
-    >
+    xmlns:app="http://schemas.android.com/apk/res-auto">
 
     <android.support.v7.widget.CardView
         android:id="@+id/Caller_CardView"
         android:layout_width="wrap_content"
-        android:layout_height="150dp"
+        android:layout_height="wrap_content"
         app:cardElevation="10dp">
+
         <RelativeLayout
             android:id="@+id/CardLayOut"
             android:layout_width="wrap_content"
@@ -23,27 +23,27 @@
                 android:background="@color/colorPrimary">
 
                 <ProgressBar
-                    android:layout_margin="5dp"
+                    android:layout_margin="10dp"
                     android:id="@+id/progress"
-                    android:layout_width="80dp"
-                    android:layout_height="80dp"
+                    android:layout_width="@dimen/CallDialogProgresscircle"
+                    android:layout_height="@dimen/CallDialogProgresscircle"
                     android:visibility="gone"
                     android:theme="@style/AppTheme.grayAccent"
                     />
                 <de.hdodenhof.circleimageview.CircleImageView
-                    android:layout_margin="15dp"
+                    android:layout_margin="20dp"
                     android:id="@+id/progress_contact_img"
-                    android:layout_width="60dp"
-                    android:layout_height="60dp"
+                    android:layout_width="@dimen/CallDialogImage"
+                    android:layout_height="@dimen/CallDialogImage"
                     android:src="@drawable/ic_nurse"
                     android:visibility="gone"
                     />
 
                 <de.hdodenhof.circleimageview.CircleImageView
-                    android:layout_margin="15dp"
+                    android:layout_margin="20dp"
                     android:id="@+id/Caller_Image"
-                    android:layout_width="60dp"
-                    android:layout_height="60dp"
+                    android:layout_width="@dimen/CallDialogImage"
+                    android:layout_height="@dimen/CallDialogImage"
                     android:src="@drawable/ic_nurse"/>
 
                 <LinearLayout
@@ -58,7 +58,7 @@
                         android:layout_width="wrap_content"
                         android:layout_height="wrap_content"
                         android:text="Name"
-                        android:textSize="18dp"
+                        android:textSize="18sp"
                         android:textColor="@android:color/white"
                         />
                     <TextView
@@ -67,20 +67,23 @@
                         android:layout_width="wrap_content"
                         android:layout_height="wrap_content"
                         android:text=""
-                        android:textSize="16dp"
+                        android:textSize="16sp"
                         android:textColor="@android:color/white"
                         />
                 </LinearLayout>
 
 
                 <ImageView
-                    android:layout_margin="20dp"
+                    android:layout_marginTop="20dp"
+                    android:layout_marginEnd="10dp"
+                    android:layout_marginRight="10dp"
                     android:id="@+id/Close_Dialog"
                     android:layout_width="25dp"
                     android:layout_height="25dp"
                     android:src="@drawable/ic_close_white_24dp"
                     android:layout_alignParentEnd="true"
-                    android:layout_alignParentRight="true" />
+                    android:layout_alignParentRight="true"
+                     />
             </RelativeLayout>
 
         <RelativeLayout
@@ -91,15 +94,17 @@
             android:background="@android:color/white"
             >
             <TextView
-                android:paddingHorizontal="10dp"
-                android:paddingVertical="5dp"
+                android:layout_marginTop="5dp"
+                android:layout_marginStart="15dp"
+                android:layout_marginLeft="15dp"
                 android:id="@+id/Caller_Number"
                 android:layout_width="match_parent"
                 android:layout_height="wrap_content"
                 android:text="01021155607"
                 android:textColor="@android:color/black"
-                android:textSize="13dp"
-                />
+                android:textSize="13sp"
+                 />
+
             <TextView
                 android:paddingHorizontal="10dp"
                 android:paddingVertical="5dp"
@@ -108,7 +113,7 @@
                 android:layout_width="match_parent"
                 android:layout_height="wrap_content"
                 android:text="Mobile-We"
-                android:textSize="10dp"
+                android:textSize="10sp"
                 android:textColor="@color/Tomyacolor"
                 android:visibility="gone"
                 />
@@ -118,9 +123,10 @@
                 android:src="@drawable/who_caller_text_logo"
                 android:layout_alignParentEnd="true"
                 android:layout_alignParentRight="true"
-                android:layout_alignParentBottom="true"
-                android:layout_marginHorizontal="10dp"
-                android:layout_marginBottom="5dp"/>
+                android:layout_below="@+id/Caller_Number"
+                android:layout_marginEnd="15dp"
+                android:layout_marginRight="15dp"
+                android:layout_marginBottom="2dp"/>
         </RelativeLayout>
 
         </RelativeLayout>

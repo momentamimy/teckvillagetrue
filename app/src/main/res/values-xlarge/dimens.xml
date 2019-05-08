@@ -13,4 +13,8 @@
     <dimen name="textTopTenLogRecycleviewItem">150dp</dimen>
     <dimen name="iconLogRecycleviewItem">15dp</dimen>
     <dimen name="topiconLogRecycleviewItem">9dp</dimen>
+    <dimen name="CallDialogImage">90dp</dimen>
+    <dimen name="CallDialogProgresscircle">110dp</dimen>
+    <dimen name="MarginDialog">30dp</dimen>
+    <dimen name="MarginDialogprogress">20dp</dimen>
 </resources>

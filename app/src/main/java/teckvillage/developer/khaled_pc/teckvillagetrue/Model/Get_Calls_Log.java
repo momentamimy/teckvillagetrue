@@ -278,13 +278,13 @@ public class Get_Calls_Log {
 
         String[] projection = new String[]{ContactsContract.PhoneLookup.DISPLAY_NAME};
 
-        String contactName = "";
+        String contactName = null;
         try {
 
 
             Cursor cursor = context.getContentResolver().query(uri, projection, null, null, null);
 
-            if (cursor != null) {
+            if (cursor != null&&cursor.getCount()>0) {
                 if (cursor.moveToFirst()) {
                     contactName = cursor.getString(0);
                 }
@@ -294,6 +294,7 @@ public class Get_Calls_Log {
 
         } catch (Exception E) {
             Log.w("Error", E.getMessage());
+            return contactName;
         }
         return contactName;
 

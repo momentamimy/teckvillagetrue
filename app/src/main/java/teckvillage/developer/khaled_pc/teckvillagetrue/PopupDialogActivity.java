@@ -67,7 +67,7 @@ public class PopupDialogActivity extends Activity {
     TextView CallerNumberType;
 
     RelativeLayout IconCall, IconMessage, IconSave, IconBlock;
-    Button viewProfile;
+    TextView viewProfile;
 
     ImageView CallerImageProgress;
     ProgressBar CallerProgress;
@@ -117,6 +117,14 @@ public class PopupDialogActivity extends Activity {
         IconSave = WhoCallerDialog.findViewById(R.id.Save_Icon_Layout);
         IconBlock = WhoCallerDialog.findViewById(R.id.Block_Icon_Layout);
         viewProfile=WhoCallerDialog.findViewById(R.id.ViewProfile);
+
+        //
+        ImageView saveiconimg=WhoCallerDialog.findViewById(R.id.Save_Icon);
+        if (Build.VERSION.SDK_INT >= Build.VERSION_CODES.LOLLIPOP) {
+            saveiconimg.setImageDrawable(getResources().getDrawable(R.drawable.primary_add_user_contacts, getTheme()));
+        } else {
+            saveiconimg.setImageDrawable(getResources().getDrawable(R.drawable.ic_add_user_to_social_networkprimary));
+        }
 
         get_calls_log=new Get_Calls_Log(getApplicationContext());
         if (get_calls_log.contactExists(number))
@@ -350,6 +358,7 @@ public class PopupDialogActivity extends Activity {
                     public void onSuccess() {
                         CallerImageProgress.setVisibility(View.GONE);
                         CallerProgress.setVisibility(View.GONE);
+
                     }
 
                     @Override

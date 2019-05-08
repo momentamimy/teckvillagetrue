@@ -99,6 +99,7 @@ public class PhoneStateReceiver extends BroadcastReceiver {
     Get_Calls_Log get_calls_log;
     Database_Helper db;
     List<String> BlockNumbers;
+    boolean IsContactImage=false;
     private static final Uri URI_CONTENT_CALLS = Uri.parse("content://call_log/calls");
     // For the sake of performance we don't use comprehensive phone number pattern.
     // We just want to detect whether a phone number is digital but not symbolic.
@@ -117,7 +118,7 @@ public class PhoneStateReceiver extends BroadcastReceiver {
     @Override
     public void onReceive(Context context, Intent intent) {
 
-        if (Build.VERSION.SDK_INT <= Build.VERSION_CODES.KITKAT) {
+        /*if (Build.VERSION.SDK_INT <= Build.VERSION_CODES.KITKAT) {
             String str = intent.getAction();
             if ("android.intent.action.PHONE_STATE".equals(str))
                 inComing(context, intent);
@@ -125,7 +126,7 @@ public class PhoneStateReceiver extends BroadcastReceiver {
             if ("android.intent.action.NEW_OUTGOING_CALL".equals(str))
                 trueCallerOutgoing(context, intent);
 
-        } else {
+        } else {*/
             //We listen to two intents.  The new outgoing call only tells us of an outgoing call.  We use it to get the number.
             if (intent.getAction().equalsIgnoreCase("android.intent.action.NEW_OUTGOING_CALL")) {
                 savedNumber = intent.getExtras().getString("android.intent.extra.PHONE_NUMBER");
@@ -145,7 +146,7 @@ public class PhoneStateReceiver extends BroadcastReceiver {
 
                 onCallStateChanged(context, state, number);
             }
-        }
+        //}
 
 
         //********************************************************************************************************************************************
@@ -190,6 +191,9 @@ public class PhoneStateReceiver extends BroadcastReceiver {
 
 
     public void DisplayDialogOverApps(Context context, String Number) {
+
+        try {
+
 
         wm = (WindowManager) context.getSystemService(Context.WINDOW_SERVICE);
         int LAYOUT_FLAG;
@@ -261,7 +265,7 @@ public class PhoneStateReceiver extends BroadcastReceiver {
             CallerImage.setImageBitmap(contactPhoto);
             Bitmap resultBmp = blurBuilder.blur(context, contactPhoto);
             CallerProfileLayout.setBackgroundDrawable(new BitmapDrawable(resultBmp));
-
+            IsContactImage=true;
         }
 
         CloseDialog.setOnClickListener(new View.OnClickListener() {
@@ -273,7 +277,7 @@ public class PhoneStateReceiver extends BroadcastReceiver {
         });
 
         String dialogPosition = preferences.getString("DialogPosition", "Center");
-        params1.height = dpToPx(150, context);
+        params1.height = dpToPx(300, context);
         params1.width = metrics.widthPixels - 40;
         params1.x = 0;
         params1.format = PixelFormat.TRANSLUCENT;
@@ -289,6 +293,11 @@ public class PhoneStateReceiver extends BroadcastReceiver {
         viewIsAdded = true;
 
         getUserDataApi(context,Number);
+
+        }catch (Exception e){
+            e.printStackTrace();
+            viewIsAdded = false;
+        }
     }
 
     public int dpToPx(float dp, Context context) {
@@ -385,7 +394,8 @@ public class PhoneStateReceiver extends BroadcastReceiver {
 
 
             } catch (Exception e) {
-                Toast.makeText(context, e.toString(), Toast.LENGTH_LONG).show();
+                //Toast.makeText(context, e.toString(), Toast.LENGTH_LONG).show();
+                Log.w("blockMessage",e.toString());
                 return false;
 
             }
@@ -537,9 +547,11 @@ public class PhoneStateReceiver extends BroadcastReceiver {
         if (!get_calls_log.contactExists(number) && swithcincomgoing) {
             try {
 
-
+                if(wm!=null&& viewIsAdded) {
                     wm.removeViewImmediate(view1);//error
                     viewIsAdded = false;
+                }
+
             } catch (Exception e) {
                 e.printStackTrace();
             }
@@ -559,8 +571,11 @@ public class PhoneStateReceiver extends BroadcastReceiver {
         get_calls_log = new Get_Calls_Log(ctx);
         if (!get_calls_log.contactExists(number) && swithcOutgoing) {
             try {
-                wm.removeViewImmediate(view1);//error
+
+                if(wm!=null&& viewIsAdded) {
+                    wm.removeViewImmediate(view1);//error
                     viewIsAdded = false;
+                }
 
             } catch (Exception e) {
                 e.printStackTrace();
@@ -577,8 +592,11 @@ public class PhoneStateReceiver extends BroadcastReceiver {
     protected void onMissedCall(Context ctx, String number, Date start) {
         if (!blockList(ctx, number)) {
             try {
-                wm.removeViewImmediate(view1);//error
-                viewIsAdded = false;
+
+                if(wm!=null&& viewIsAdded){
+                    wm.removeViewImmediate(view1);//error
+                    viewIsAdded = false;
+                }
 
             } catch (Exception e) {
                 e.printStackTrace();
@@ -635,13 +653,20 @@ public class PhoneStateReceiver extends BroadcastReceiver {
 
     public void BloackNotification(String number, Context context) {
         String message = "";
-        String ContactName = get_calls_log.getContactName(number);
-        if (TextUtils.isEmpty(ContactName)) {
-            message = "(" + number + ")";
-        } else {
-            message = "(" + number + ")" + ContactName;
-        }
 
+        String ContactName=null;
+        /*ContactName = get_calls_log.getContactName(number);
+        if(ContactName!=null){
+            if (TextUtils.isEmpty(ContactName)) {
+                message = "(" + number + ")";
+            } else {
+                message = "(" + number + ")" + ContactName;
+            }
+        }else {
+            message = "(" + number + ")";
+        }*/
+
+        message = "(" + number + ")";
         Intent intent;
         PendingIntent pendingIntent = null;
         NotificationCompat.Builder builder;
@@ -828,46 +853,46 @@ public class PhoneStateReceiver extends BroadcastReceiver {
         {
             CallerCountry.setVisibility(View.GONE);
         }
-        Picasso.with(getApplicationContext()).load("http://whocaller.net/whocallerAdmin/uploads/"+userData.getUser_img()).fit().centerInside()
-                .into(CallerImage, new com.squareup.picasso.Callback() {
-                    @Override
-                    public void onSuccess() {
-                        CallerImageProgress.setVisibility(View.GONE);
-                        CallerProgress.setVisibility(View.GONE);
-                    }
 
-                    @Override
-                    public void onError() {
-                        if (userData.isIs_spam())
-                        {
-                            CallerImage.setImageResource(R.drawable.ic_nurse_red);
-                        }
-                        else
-                        {
-                            CallerImage.setImageResource(R.drawable.ic_nurse);
-                        }
-                        CallerImageProgress.setVisibility(View.GONE);
-                        CallerProgress.setVisibility(View.GONE);
-                    }
-                });
-        Target target = new Target() {
-            @Override
-            public void onBitmapLoaded(Bitmap bitmap, Picasso.LoadedFrom from) {
-                // Bitmap is loaded, use image here
-                PopupDialogActivity.BlurBuilder blurBuilder=new PopupDialogActivity.BlurBuilder();
-                Bitmap resultBmp = blurBuilder.blur(getApplicationContext(), bitmap);
-                CallerProfileLayout.setBackgroundDrawable(new BitmapDrawable(resultBmp));
+
+        if(userData.getUser_img()!=null){
+
+            if(!IsContactImage){
+
+                Picasso.with(getApplicationContext()).load("http://whocaller.net/whocallerAdmin/uploads/"+userData.getUser_img()).fit().centerInside()
+                        .into(CallerImage, new com.squareup.picasso.Callback() {
+                            @Override
+                            public void onSuccess() {
+                                CallerImageProgress.setVisibility(View.GONE);
+                                CallerProgress.setVisibility(View.GONE);
+
+                                //set background of Card
+                                BlurBuilder blurBuilder=new BlurBuilder();
+                                Bitmap bitmap =((BitmapDrawable)CallerImage.getDrawable()).getBitmap();
+                                Bitmap resultBmp = blurBuilder.blur(getApplicationContext(),bitmap );//BitmapFactory.decodeResource(getResources(), R.drawable.tamimy)
+                                CallerProfileLayout.setBackgroundDrawable(new BitmapDrawable(resultBmp));
+                            }
+
+                            @Override
+                            public void onError() {
+                                if (userData.isIs_spam())
+                                {
+                                    CallerImage.setImageResource(R.drawable.ic_nurse_red);
+                                }
+                                else
+                                {
+                                    CallerImage.setImageResource(R.drawable.ic_nurse);
+                                }
+                                CallerImageProgress.setVisibility(View.GONE);
+                                CallerProgress.setVisibility(View.GONE);
+                            }
+                        });
+
+
+
             }
 
-            @Override
-            public void onBitmapFailed(Drawable errorDrawable) {
+        }
 
-            }
-            @Override
-            public void onPrepareLoad(Drawable placeHolderDrawable) {
-
-            }
-        };
-        Picasso.with(getApplicationContext()).load("http://whocaller.net/whocallerAdmin/uploads/"+userData.getUser_img()).into(target);
     }
 }
