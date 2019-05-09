@@ -270,6 +270,7 @@ public class Get_User_Contacts {
             if (cur.getInt(cur.getColumnIndex(ContactsContract.Contacts.HAS_PHONE_NUMBER)) > 0 ) {
 
                 long id = cur.getLong(0);
+                Log.d( "getContactListContacts", String.valueOf(id));
                 String name = cur.getString(1);
                 if(!name.equals("")){
                     contactInfos.add(new UserContactData("", name, "PortSaid,Egypt", id));

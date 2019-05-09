@@ -39,6 +39,8 @@ import teckvillage.developer.khaled_pc.teckvillagetrue.Model.retrofit.retrofitHe
 import teckvillage.developer.khaled_pc.teckvillagetrue.R;
 import teckvillage.developer.khaled_pc.teckvillagetrue.Model.MessageInfo;
 import teckvillage.developer.khaled_pc.teckvillagetrue.SearchActivity;
+import teckvillage.developer.khaled_pc.teckvillagetrue.Services.UploadBlockListService;
+import teckvillage.developer.khaled_pc.teckvillagetrue.Services.UploadnewContactAdded;
 
 import static teckvillage.developer.khaled_pc.teckvillagetrue.Chat_MessagesChat.ChatStatusChanged;
 
@@ -67,6 +69,8 @@ public class ChatFragment extends Fragment {
     public void onViewCreated(@NonNull View view, @Nullable Bundle savedInstanceState) {
         super.onViewCreated(view, savedInstanceState);
 
+        //service
+        UploadNewContact();
 
         tabs=view.findViewById(R.id.tabs);
         viewPager=view.findViewById(R.id.appViewPager);
@@ -106,5 +110,11 @@ public class ChatFragment extends Fragment {
     }
 
 
+
+    void UploadNewContact(){
+        Intent mIntent = new Intent(getActivity(), UploadnewContactAdded.class);
+        UploadnewContactAdded.enqueueWork(getActivity(), mIntent);
+
+    }
 
 }

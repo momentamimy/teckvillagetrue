@@ -4,6 +4,7 @@ import android.app.Dialog;
 import android.app.ProgressDialog;
 import android.content.Context;
 import android.content.Intent;
+import android.content.SharedPreferences;
 import android.graphics.Color;
 import android.graphics.drawable.ColorDrawable;
 import android.support.design.widget.FloatingActionButton;
@@ -34,6 +35,9 @@ import retrofit2.Retrofit;
 import teckvillage.developer.khaled_pc.teckvillagetrue.Chat_MessagesChat;
 import teckvillage.developer.khaled_pc.teckvillagetrue.Controller.AddingSendToChatContactsAdapters;
 import teckvillage.developer.khaled_pc.teckvillagetrue.Controller.SendToChatContactsAdapters;
+import teckvillage.developer.khaled_pc.teckvillagetrue.Model.Get_Calls_Log;
+import teckvillage.developer.khaled_pc.teckvillagetrue.Model.PhoneContactNumbersModel;
+import teckvillage.developer.khaled_pc.teckvillagetrue.Model.SharedPref_Arraylist_Save_Get;
 import teckvillage.developer.khaled_pc.teckvillagetrue.Model.retrofit.JSON_Mapping.BodyNumberModel;
 import teckvillage.developer.khaled_pc.teckvillagetrue.Model.retrofit.JSON_Mapping.DataReceivedChatUsers;
 import teckvillage.developer.khaled_pc.teckvillagetrue.Model.retrofit.JSON_Mapping.FetchedUserData;
@@ -56,7 +60,6 @@ public class SendToChatActivity extends AppCompatActivity {
 
     ImageView back;
     EditText sendToEditText;
-    Get_User_Contacts get_user_contacts;
     RecyclerView mRecyclerView;
     public List<RoomModel> userContactsData;
     public SendToChatContactsAdapters sendToContactsAdapters;
@@ -94,7 +97,7 @@ public class SendToChatActivity extends AppCompatActivity {
                 finish();
             }
         });
-        get_user_contacts=new Get_User_Contacts(this);
+
 
         lLayout = new LinearLayoutManager(this, LinearLayoutManager.HORIZONTAL, false);
         mRecyclerViewMutilpleContacts.setLayoutManager(lLayout);
@@ -115,7 +118,6 @@ public class SendToChatActivity extends AppCompatActivity {
                 textHint.setVisibility(View.VISIBLE);
             }
         });
-
         fab.setOnClickListener(new View.OnClickListener() {
             @Override
             public void onClick(View v) {
@@ -443,4 +445,6 @@ public class SendToChatActivity extends AppCompatActivity {
             }
         }
     }
+
+
 }

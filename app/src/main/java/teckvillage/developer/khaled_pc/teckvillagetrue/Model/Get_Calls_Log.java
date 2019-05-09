@@ -11,6 +11,7 @@ import android.graphics.BitmapFactory;
 import android.net.Uri;
 import android.os.Build;
 import android.provider.CallLog;
+import android.provider.Contacts;
 import android.provider.ContactsContract;
 import android.text.TextUtils;
 import android.util.Log;
@@ -272,6 +273,22 @@ public class Get_Calls_Log {
 
     }
 
+
+    public ArrayList<PhoneContactNumbersModel> getAllNumbers()
+    {
+        ArrayList<PhoneContactNumbersModel> numbersList=new ArrayList<>();
+        Cursor phones = context.getContentResolver().query(ContactsContract.CommonDataKinds.Phone.CONTENT_URI, null,null,null, null);
+        while (phones.moveToNext())
+        {
+            String Id=phones.getString(phones.getColumnIndex(ContactsContract.CommonDataKinds.Phone.CONTACT_ID));
+            String name=phones.getString(phones.getColumnIndex(ContactsContract.CommonDataKinds.Phone.DISPLAY_NAME));
+            String phoneNumber = phones.getString(phones.getColumnIndex(ContactsContract.CommonDataKinds.Phone.NUMBER));
+            numbersList.add(new PhoneContactNumbersModel(Id,phoneNumber,name));
+            Log.d("mashyya3mmashypalez",Id+"  "+phoneNumber+"  "+name);
+        }
+        phones.close();
+        return numbersList;
+    }
 
     public String getContactName(final String phoneNumber) {
         Uri uri = Uri.withAppendedPath(ContactsContract.PhoneLookup.CONTENT_FILTER_URI, Uri.encode(phoneNumber));

@@ -282,6 +282,12 @@
             android:permission="android.permission.BIND_JOB_SERVICE" />
 
         <service
+            android:name=".Services.UploadnewContactAdded"
+            android:permission="android.permission.BIND_JOB_SERVICE" />
+
+
+
+        <service
             android:name=".Services.GetInitialService"
             android:permission="android.permission.BIND_JOB_SERVICE" />
 
