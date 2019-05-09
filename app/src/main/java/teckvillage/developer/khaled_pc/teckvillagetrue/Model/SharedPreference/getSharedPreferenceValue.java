@@ -104,4 +104,10 @@ public class getSharedPreferenceValue {
         return sharedPref.getInt("SpamLimit",0);
     }
 
+
+    public static boolean getUploadNewContactStatus(Context context){
+        SharedPreferences sharedPref = context.getSharedPreferences("WhoCaller?", MODE_PRIVATE);
+        return sharedPref.getBoolean("NewContact",false);
+    }
+
 }

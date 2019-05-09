@@ -87,6 +87,13 @@ public interface WhoCallerApi {
             @Body datamodel contacts
     );
 
+    @POST("addOrEditContact")
+    Call<ResultModelUploadVCF> UploadNewContacts(
+            @Header("Accept") String Accept,
+            @Query("api_token") String ApiAccessToken,
+            @Body datamodel contact
+    );
+
     @POST("updateUserBlock")
     Call<ResultModelUploadVCF> UploadBlockListRequest(
             @Header("Accept") String Accept,
