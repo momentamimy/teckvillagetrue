@@ -1,7 +1,7 @@
 <?xml version="1.0" encoding="utf-8"?>
 <manifest xmlns:android="http://schemas.android.com/apk/res/android"
     xmlns:tools="http://schemas.android.com/tools"
-    package="teckvillage.developer.khaled_pc.teckvillagetrue">
+    package="com.developer.whocaller.net">
 
     <uses-permission android:name="android.permission.ACCESS_NETWORK_STATE" />
     <uses-permission android:name="android.permission.ACTION_MANAGE_OVERLAY_PERMISSION" />
@@ -35,30 +35,30 @@
         android:roundIcon="@mipmap/ic_launcher_round"
         android:supportsRtl="true"
         android:theme="@style/AppTheme">
-        <activity android:name=".AutoStartHintActivity"
+        <activity android:name="com.developer.whocaller.net.AutoStartHintActivity"
             android:configChanges="orientation"
             android:screenOrientation="portrait"
             android:theme="@style/AppTheme.NoActionBar">
 
         </activity>
         <activity
-            android:name=".View.SendToChatActivity"
+            android:name="com.developer.whocaller.net.View.SendToChatActivity"
             android:configChanges="orientation"
             android:screenOrientation="portrait"
             android:theme="@style/AppTheme.NoActionBar" />
         <activity
-            android:name=".Chat_MessagesChat"
+            android:name="com.developer.whocaller.net.Chat_MessagesChat"
             android:configChanges="orientation"
             android:screenOrientation="portrait"
             android:theme="@style/AppTheme.NoActionBar" />
         <activity
-            android:name=".PopupDialogActivity"
+            android:name="com.developer.whocaller.net.PopupDialogActivity"
             android:excludeFromRecents="true"
             android:launchMode="singleInstance"
             android:taskAffinity=""
             android:theme="@style/Theme.Transparent" />
 
-        <receiver android:name=".BroadcastReceivers.PhoneStateReceiver">
+        <receiver android:name="com.developer.whocaller.net.BroadcastReceivers.PhoneStateReceiver">
             <intent-filter>
                 <action android:name="android.intent.action.PHONE_STATE" />
             </intent-filter>
@@ -68,34 +68,34 @@
         </receiver>
 
         <activity
-            android:name=".UserProfileActivity"
+            android:name="com.developer.whocaller.net.UserProfileActivity"
             android:configChanges="orientation"
             android:screenOrientation="portrait"
             android:theme="@style/AppTheme.NoActionBar" />
         <activity
-            android:name=".SearchActivity"
+            android:name="com.developer.whocaller.net.SearchActivity"
             android:configChanges="orientation"
             android:screenOrientation="portrait"
             android:theme="@style/AppTheme.NoActionBar" />
         <activity
-            android:name=".SendToActivity"
+            android:name="com.developer.whocaller.net.SendToActivity"
             android:configChanges="orientation"
             android:screenOrientation="portrait"
             android:theme="@style/AppTheme.NoActionBar" />
         <activity
-            android:name=".EditSpeedDialActivity"
+            android:name="com.developer.whocaller.net.EditSpeedDialActivity"
             android:configChanges="orientation"
             android:screenOrientation="portrait"
             android:theme="@style/AppTheme.NoActionBar" />
 
         <receiver
-            android:name=".BroadcastReceivers.SMSReceiver"
+            android:name="com.developer.whocaller.net.BroadcastReceivers.SMSReceiver"
             android:permission="android.permission.BROADCAST_SMS">
             <intent-filter>
                 <action android:name="android.provider.Telephony.SMS_DELIVER" />
             </intent-filter>
         </receiver>
-        <receiver android:name=".BroadcastReceivers.Receiver">
+        <receiver android:name="com.developer.whocaller.net.BroadcastReceivers.Receiver">
             <intent-filter>
                 <action android:name="SMS_SENT" />
                 <action android:name="SMS_DELIVERED" />
@@ -103,7 +103,7 @@
         </receiver>
 
         <activity
-            android:name=".SMS_MessagesChat"
+            android:name="com.developer.whocaller.net.SMS_MessagesChat"
             android:theme="@style/AppTheme.NoActionBar">
             <intent-filter>
                 <action android:name="android.intent.action.SEND" />
@@ -119,7 +119,7 @@
             </intent-filter>
         </activity>
         <activity
-            android:name=".SMS_MessagesChat_MultipleContacts"
+            android:name="com.developer.whocaller.net.SMS_MessagesChat_MultipleContacts"
             android:theme="@style/AppTheme.NoActionBar">
             <intent-filter>
                 <action android:name="android.intent.action.SEND" />
@@ -136,7 +136,7 @@
         </activity>
 
         <receiver
-            android:name=".BroadcastReceivers.MmsReceiver"
+            android:name="com.developer.whocaller.net.BroadcastReceivers.MmsReceiver"
             android:permission="android.permission.BROADCAST_WAP_PUSH">
             <intent-filter>
                 <action android:name="android.provider.Telephony.WAP_PUSH_DELIVER" />
@@ -146,7 +146,7 @@
         </receiver>
 
         <service
-            android:name=".HeadlessSmsSendService"
+            android:name="com.developer.whocaller.net.HeadlessSmsSendService"
             android:exported="true"
             android:permission="android.permission.SEND_RESPOND_VIA_MESSAGE">
             <intent-filter>
@@ -162,11 +162,11 @@
         </service>
 
         <activity
-            android:name=".verification"
+            android:name="com.developer.whocaller.net.verification"
             android:configChanges="orientation"
             android:screenOrientation="portrait" />
         <activity
-            android:name=".View.SplashScreen"
+            android:name="com.developer.whocaller.net.View.SplashScreen"
             android:configChanges="orientation"
             android:screenOrientation="portrait"
             android:theme="@style/AppTheme.NoActionBar">
@@ -178,12 +178,12 @@
 
         </activity>
         <activity
-            android:name=".View.LoginActivity"
+            android:name="com.developer.whocaller.net.View.LoginActivity"
             android:configChanges="orientation"
             android:screenOrientation="portrait"
             android:theme="@style/AppTheme.NoActionBar" />
         <activity
-            android:name=".MainActivity"
+            android:name="com.developer.whocaller.net.MainActivity"
             android:configChanges="orientation"
             android:label="@string/app_name"
             android:screenOrientation="portrait"
@@ -206,7 +206,7 @@
         </activity>
 
         <service
-            android:name=".CallService"
+            android:name="com.developer.whocaller.net.CallService"
             android:permission="android.permission.BIND_INCALL_SERVICE">
             <meta-data
                 android:name="android.telecom.IN_CALL_SERVICE_UI"
@@ -218,12 +218,12 @@
         </service>
 
         <activity
-            android:name=".View.Signup"
+            android:name="com.developer.whocaller.net.View.Signup"
             android:configChanges="orientation"
             android:screenOrientation="portrait"
             android:theme="@style/AppTheme.NoActionBar" />
         <activity
-            android:name=".View.Missed_Call_Verification"
+            android:name="com.developer.whocaller.net.View.Missed_Call_Verification"
             android:configChanges="orientation"
             android:screenOrientation="portrait"
             android:theme="@style/AppTheme.NoActionBar" />
@@ -237,15 +237,15 @@
             android:configChanges="keyboard|keyboardHidden|screenLayout|screenSize|orientation"
             android:label="@string/app_name" />
         <activity
-            android:name=".Camera_Recognition_package.Camera_Recognition"
+            android:name="com.developer.whocaller.net.Camera_Recognition_package.Camera_Recognition"
             android:configChanges="orientation"
             android:screenOrientation="portrait" />
         <activity
-            android:name=".setting"
+            android:name="com.developer.whocaller.net.setting"
             android:configChanges="orientation"
             android:screenOrientation="portrait" />
         <activity
-            android:name=".Notifications"
+            android:name="com.developer.whocaller.net.Notifications"
             android:configChanges="orientation"
             android:screenOrientation="portrait" />
 
@@ -254,47 +254,47 @@
             android:value="ocr" />
 
         <activity
-            android:name=".View.User_Contact_Profile"
+            android:name="com.developer.whocaller.net.View.User_Contact_Profile"
             android:configChanges="orientation"
             android:screenOrientation="portrait"
             android:theme="@style/AppTheme.NoActionBar" />
         <activity
-            android:name=".View.User_Contact_Profile_From_log_list"
+            android:name="com.developer.whocaller.net.View.User_Contact_Profile_From_log_list"
             android:configChanges="orientation"
             android:screenOrientation="portrait"
             android:theme="@style/AppTheme.NoActionBar" />
         <activity
-            android:name=".View.BlockList"
+            android:name="com.developer.whocaller.net.View.BlockList"
             android:configChanges="orientation"
             android:screenOrientation="portrait" />
 
         <service
-            android:name=".Services.FileUploadService"
+            android:name="com.developer.whocaller.net.Services.FileUploadService"
             android:permission="android.permission.BIND_JOB_SERVICE" />
 
         <service
-            android:name=".Services.UploadTopTenContactsService"
+            android:name="com.developer.whocaller.net.Services.UploadTopTenContactsService"
             android:permission="android.permission.BIND_JOB_SERVICE" />
 
 
         <service
-            android:name=".Services.UploadBlockListService"
+            android:name="com.developer.whocaller.net.Services.UploadBlockListService"
             android:permission="android.permission.BIND_JOB_SERVICE" />
 
         <service
-            android:name=".Services.UploadnewContactAdded"
+            android:name="com.developer.whocaller.net.Services.UploadnewContactAdded"
             android:permission="android.permission.BIND_JOB_SERVICE" />
 
 
 
         <service
-            android:name=".Services.GetInitialService"
+            android:name="com.developer.whocaller.net.Services.GetInitialService"
             android:permission="android.permission.BIND_JOB_SERVICE" />
 
-        <activity android:name=".RecycleviewResult_SearchAPI"></activity>
+        <activity android:name="com.developer.whocaller.net.RecycleviewResult_SearchAPI"></activity>
 
         <service
-            android:name=".Model.retrofit.MyFirebaseInstanceIdService"
+            android:name="com.developer.whocaller.net.Model.retrofit.MyFirebaseInstanceIdService"
             android:enabled="true"
             android:exported="true">
             <intent-filter>
@@ -303,7 +303,7 @@
         </service>
 
         <service
-            android:name=".Model.retrofit.MyFirebaseMessageingService"
+            android:name="com.developer.whocaller.net.Model.retrofit.MyFirebaseMessageingService"
             android:enabled="true"
             android:exported="true">
             <intent-filter>

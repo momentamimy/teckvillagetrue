@@ -5,7 +5,7 @@
     xmlns:tools="http://schemas.android.com/tools"
     android:layout_width="match_parent"
     android:layout_height="match_parent"
-    tools:context=".AutoStartHintActivity"
+    tools:context="teckvillage.developer.whocaller.teckvillagetrue.com.developer.whocaller.teckvillagetrue.AutoStartHintActivity"
     android:background="@color/cardview_shadow_end_color"
     android:layoutDirection="ltr">
     <ImageView

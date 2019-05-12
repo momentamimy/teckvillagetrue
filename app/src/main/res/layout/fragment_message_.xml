@@ -4,7 +4,7 @@
     android:layout_width="match_parent"
     android:layout_height="match_parent"
     xmlns:app="http://schemas.android.com/apk/res-auto"
-    tools:context=".Message_Fragment"
+    tools:context="teckvillage.developer.whocaller.teckvillagetrue.com.developer.whocaller.teckvillagetrue.Message_Fragment"
     android:layoutDirection="ltr">
 
 

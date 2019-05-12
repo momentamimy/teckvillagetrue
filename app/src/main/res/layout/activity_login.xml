@@ -4,7 +4,7 @@
     xmlns:tools="http://schemas.android.com/tools"
     android:layout_width="match_parent"
     android:layout_height="match_parent"
-    tools:context=".View.LoginActivity"
+    tools:context="teckvillage.developer.whocaller.teckvillagetrue.com.developer.whocaller.teckvillagetrue.View.LoginActivity"
     android:layoutDirection="ltr"
     android:background="#0089c0">
 

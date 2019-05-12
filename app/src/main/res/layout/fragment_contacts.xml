@@ -5,7 +5,7 @@
     android:layout_height="match_parent"
     android:layoutDirection="ltr"
     xmlns:app="http://schemas.android.com/apk/res-auto"
-    tools:context="teckvillage.developer.khaled_pc.teckvillagetrue.Contacts">
+    tools:context="teckvillage.developer.khaled_pc.teckvillagetrue.teckvillage.developer.whocaller.teckvillagetrue.Contacts">
 
   <RelativeLayout
       android:layout_width="match_parent"

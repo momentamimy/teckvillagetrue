@@ -4,7 +4,7 @@
     android:layout_height="match_parent"
     android:layoutDirection="ltr"
     xmlns:app="http://schemas.android.com/apk/res-auto"
-    tools:context="teckvillage.developer.khaled_pc.teckvillagetrue.Main_Fagment">
+    tools:context="teckvillage.developer.khaled_pc.teckvillagetrue.teckvillage.developer.whocaller.teckvillagetrue.Main_Fagment">
 
 
 
@@ -289,7 +289,7 @@
                     android:layout_marginStart="2dp"
                     android:layout_marginLeft="2dp" />
 
-                <teckvillage.developer.khaled_pc.teckvillagetrue.View.KeyboardlessEditText
+                <com.developer.whocaller.net.View.KeyboardlessEditText
                     android:textColor="#0089c0"
                     android:id="@+id/dial_pad_num_editText"
                     android:singleLine="true"
@@ -310,7 +310,7 @@
                     android:cursorVisible="false"
                     >
                     <requestFocus />
-                </teckvillage.developer.khaled_pc.teckvillagetrue.View.KeyboardlessEditText>
+                </com.developer.whocaller.net.View.KeyboardlessEditText>
 
                 <ImageView
                     android:padding="10dp"

@@ -5,7 +5,7 @@
     xmlns:tools="http://schemas.android.com/tools"
     android:layout_width="match_parent"
     android:layout_height="match_parent"
-    tools:context=".View.SplashScreen"
+    tools:context="teckvillage.developer.whocaller.teckvillagetrue.com.developer.whocaller.teckvillagetrue.View.SplashScreen"
     android:layoutDirection="ltr"
     android:background="#0089c0">
 

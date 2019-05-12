@@ -8,27 +8,31 @@
   "client": [
     {
       "client_info": {
-        "mobilesdk_app_id": "1:517737139497:android:5ed1459a6a42235c",
+        "mobilesdk_app_id": "1:517737139497:android:ff235c266694990e",
         "android_client_info": {
-          "package_name": "teckvillage.developer.khaled_pc.teckvillagetrue"
+          "package_name": "com.developer.whocaller.net"
         }
       },
       "oauth_client": [
         {
-          "client_id": "517737139497-dhvl3jkhgl6d02b5ekg2scg13mari8bc.apps.googleusercontent.com",
+          "client_id": "517737139497-l0sr2t0e93ti00ru9aekp62irssrr80n.apps.googleusercontent.com",
           "client_type": 1,
           "android_info": {
-            "package_name": "teckvillage.developer.khaled_pc.teckvillagetrue",
+            "package_name": "com.developer.whocaller.net",
+            "certificate_hash": "e221e2487d85f93094b03febafaeaf56df3fa857"
+          }
+        },
+        {
+          "client_id": "517737139497-dkck8hhdklmc8pq5o18muqg6kg2945eb.apps.googleusercontent.com",
+          "client_type": 1,
+          "android_info": {
+            "package_name": "com.developer.whocaller.net",
             "certificate_hash": "4b67c8790b91d26a7a68d2a9c8f72ec6b18f34df"
           }
         },
         {
-          "client_id": "517737139497-ucqt4uki5h4fej7hk48q9krc8dn3uaho.apps.googleusercontent.com",
-          "client_type": 1,
-          "android_info": {
-            "package_name": "teckvillage.developer.khaled_pc.teckvillagetrue",
-            "certificate_hash": "e221e2487d85f93094b03febafaeaf56df3fa857"
-          }
+          "client_id": "517737139497-a9ikidtjcihhht8po3hoehm2qo2c2983.apps.googleusercontent.com",
+          "client_type": 3
         }
       ],
       "api_key": [
@@ -44,10 +48,62 @@
               "client_type": 3
             },
             {
-              "client_id": "517737139497-6ha9h13qabvmdelul39mkaoacjt3l8c7.apps.googleusercontent.com",
+              "client_id": "517737139497-mku01iha8ltnj5c2qmhfibsnsgn53o19.apps.googleusercontent.com",
               "client_type": 2,
               "ios_info": {
-                "bundle_id": "com.techvallige.whoCaller"
+                "bundle_id": "WhoCaller.WhoCaller"
+              }
+            }
+          ]
+        }
+      }
+    },
+    {
+      "client_info": {
+        "mobilesdk_app_id": "1:517737139497:android:5ed1459a6a42235c",
+        "android_client_info": {
+          "package_name": "teckvillage.developer.khaled_pc.teckvillagetrue"
+        }
+      },
+      "oauth_client": [
+        {
+          "client_id": "517737139497-ucqt4uki5h4fej7hk48q9krc8dn3uaho.apps.googleusercontent.com",
+          "client_type": 1,
+          "android_info": {
+            "package_name": "teckvillage.developer.khaled_pc.teckvillagetrue",
+            "certificate_hash": "e221e2487d85f93094b03febafaeaf56df3fa857"
+          }
+        },
+        {
+          "client_id": "517737139497-dhvl3jkhgl6d02b5ekg2scg13mari8bc.apps.googleusercontent.com",
+          "client_type": 1,
+          "android_info": {
+            "package_name": "teckvillage.developer.khaled_pc.teckvillagetrue",
+            "certificate_hash": "4b67c8790b91d26a7a68d2a9c8f72ec6b18f34df"
+          }
+        },
+        {
+          "client_id": "517737139497-a9ikidtjcihhht8po3hoehm2qo2c2983.apps.googleusercontent.com",
+          "client_type": 3
+        }
+      ],
+      "api_key": [
+        {
+          "current_key": "AIzaSyDyXQrDJoiiIRNIm5Z0Ud7qj8sVMkQWhO0"
+        }
+      ],
+      "services": {
+        "appinvite_service": {
+          "other_platform_oauth_client": [
+            {
+              "client_id": "517737139497-a9ikidtjcihhht8po3hoehm2qo2c2983.apps.googleusercontent.com",
+              "client_type": 3
+            },
+            {
+              "client_id": "517737139497-mku01iha8ltnj5c2qmhfibsnsgn53o19.apps.googleusercontent.com",
+              "client_type": 2,
+              "ios_info": {
+                "bundle_id": "WhoCaller.WhoCaller"
               }
             }
           ]
