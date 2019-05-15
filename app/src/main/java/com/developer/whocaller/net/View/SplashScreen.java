@@ -262,6 +262,5 @@ public class SplashScreen extends AppCompatActivity implements EasyPermissions.P
     public void startActivityForResult(Intent intent, int requestCode) {
         super.startActivityForResult(intent, requestCode);
 
-
     }
 }
