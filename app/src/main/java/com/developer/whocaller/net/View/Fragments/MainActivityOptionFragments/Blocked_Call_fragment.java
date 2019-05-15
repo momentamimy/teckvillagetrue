@@ -20,7 +20,7 @@ import java.util.Collections;
 import java.util.List;
 
 import com.developer.whocaller.net.Controller.LogAdapter;
-import teckvillage.developer.khaled_pc.teckvillagetrue.R;
+import com.developer.whocaller.net.R;
 import com.developer.whocaller.net.Model.Get_Calls_Log;
 import com.developer.whocaller.net.Model.GroupListByDate;
 import com.developer.whocaller.net.Model.LogInfo;

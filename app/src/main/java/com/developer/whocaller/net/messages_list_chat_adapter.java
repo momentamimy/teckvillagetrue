@@ -23,7 +23,7 @@ import java.util.TimeZone;
 
 import com.developer.whocaller.net.Model.retrofit.JSON_Mapping.DataReceived;
 import com.developer.whocaller.net.Model.retrofit.JSON_Mapping.MessageChatModel;
-import teckvillage.developer.khaled_pc.teckvillagetrue.R;
+import com.developer.whocaller.net.R;
 
 /**
  * Created by gaber on 12/08/2018.

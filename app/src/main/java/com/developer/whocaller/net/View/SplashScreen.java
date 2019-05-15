@@ -11,6 +11,7 @@ import android.support.annotation.NonNull;
 import android.support.annotation.RequiresApi;
 import android.support.v7.app.AppCompatActivity;
 import android.os.Bundle;
+import android.telecom.TelecomManager;
 import android.util.Log;
 import android.view.View;
 import android.widget.TextView;
@@ -22,7 +23,8 @@ import pub.devrel.easypermissions.AppSettingsDialog;
 import pub.devrel.easypermissions.EasyPermissions;
 import com.developer.whocaller.net.AutoStartHintActivity;
 import com.developer.whocaller.net.MainActivity;
-import teckvillage.developer.khaled_pc.teckvillagetrue.R;
+import com.developer.whocaller.net.R;
+
 
 public class SplashScreen extends AppCompatActivity implements EasyPermissions.PermissionCallbacks  {
 
@@ -52,6 +54,7 @@ public class SplashScreen extends AppCompatActivity implements EasyPermissions.P
 
         sharedPreferences = getSharedPreferences("WhoCaller?", Context.MODE_PRIVATE);
         IsLogin = sharedPreferences.getBoolean("UserLogin", false);
+
 
 
         /*
@@ -116,7 +119,13 @@ public class SplashScreen extends AppCompatActivity implements EasyPermissions.P
                 //checkDrawOverlayPermission();
                 if (Build.VERSION.SDK_INT >= Build.VERSION_CODES.M) {
                     Log.v("App", "Build Version Greater than or equal to M: " + Build.VERSION_CODES.M);
-                    checkDrawOverlayPermission();
+                    Intent intent1 = new Intent(TelecomManager.ACTION_CHANGE_DEFAULT_DIALER)
+                            .putExtra(TelecomManager.EXTRA_CHANGE_DEFAULT_DIALER_PACKAGE_NAME, getPackageName());
+                    if (intent1.resolveActivity(getPackageManager()) != null) {
+                        startActivityForResult(intent1,30);
+                        Log.w("apimashy", "Intent available to handle action");
+                        checkDrawOverlayPermission();
+                    }
                 } else {
                     Log.v("App", "OS Version Less than M");
                     //No need for Permission as less then M OS.
@@ -147,11 +156,8 @@ public class SplashScreen extends AppCompatActivity implements EasyPermissions.P
                 Manifest.permission.PROCESS_OUTGOING_CALLS
         };
 
-        if (android.os.Build.VERSION.SDK_INT < Build.VERSION_CODES.M){
 
-        } else{
 
-        }
 
         if (EasyPermissions.hasPermissions(getApplicationContext(),perms))
         {
@@ -193,7 +199,7 @@ public class SplashScreen extends AppCompatActivity implements EasyPermissions.P
     @Override
     public void onRequestPermissionsResult(int requestCode, String[] permissions, int[] grantResults) {
         super.onRequestPermissionsResult(requestCode, permissions, grantResults);
-
+        Log.d("daldjaljdajdwqjpf", String.valueOf(requestCode));
         // Forward results to EasyPermissions
         EasyPermissions.onRequestPermissionsResult(requestCode, permissions, grantResults, this);
 
@@ -250,5 +256,12 @@ public class SplashScreen extends AppCompatActivity implements EasyPermissions.P
             Log.v("App", "We already have permission for it.");
             callPermissions();
         }
+    }
+
+    @Override
+    public void startActivityForResult(Intent intent, int requestCode) {
+        super.startActivityForResult(intent, requestCode);
+
+
     }
 }

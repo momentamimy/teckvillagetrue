@@ -17,7 +17,7 @@ import android.widget.TextView;
 import java.util.List;
 
 import com.developer.whocaller.net.Model.Get_Calls_Log;
-import teckvillage.developer.khaled_pc.teckvillagetrue.R;
+import com.developer.whocaller.net.R;
 
 /**
  * Created by khaled-pc on 4/12/2019.

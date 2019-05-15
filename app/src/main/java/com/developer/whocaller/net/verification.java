@@ -19,7 +19,7 @@ import com.sinch.verification.SinchVerification;
 import com.sinch.verification.Verification;
 import com.sinch.verification.VerificationListener;
 
-import teckvillage.developer.khaled_pc.teckvillagetrue.R;
+import com.developer.whocaller.net.R;
 
 public class verification extends AppCompatActivity {
 

@@ -18,7 +18,7 @@ import android.widget.RelativeLayout;
 import com.developer.whocaller.net.Services.UploadnewContactAdded;
 import com.developer.whocaller.net.Controller.CustomChatViewAdapter;
 import com.developer.whocaller.net.MainActivity;
-import teckvillage.developer.khaled_pc.teckvillagetrue.R;
+import com.developer.whocaller.net.R;
 import com.developer.whocaller.net.SearchActivity;
 
 /**

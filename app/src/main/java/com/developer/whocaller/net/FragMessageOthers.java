@@ -22,7 +22,7 @@ import com.developer.whocaller.net.Model.MessageInfo;
 
 import java.util.ArrayList;
 
-import teckvillage.developer.khaled_pc.teckvillagetrue.R;
+import com.developer.whocaller.net.R;
 
 
 public class FragMessageOthers extends Fragment implements LoaderManager.LoaderCallbacks<Cursor> {

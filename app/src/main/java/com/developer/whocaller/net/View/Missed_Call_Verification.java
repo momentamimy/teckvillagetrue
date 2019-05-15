@@ -9,6 +9,7 @@ import android.util.Log;
 import android.view.View;
 import android.widget.Toast;
 
+import com.developer.whocaller.net.R;
 import com.sinch.verification.CodeInterceptionException;
 import com.sinch.verification.Config;
 import com.sinch.verification.InitiationResult;
@@ -18,10 +19,10 @@ import com.sinch.verification.SinchVerification;
 import com.sinch.verification.Verification;
 import com.sinch.verification.VerificationListener;
 
-import teckvillage.developer.khaled_pc.teckvillagetrue.R;
+
 
 public class Missed_Call_Verification extends AppCompatActivity {
-    private final String APPLICATION_KEY = "273d034e-e60a-4a6b-8a0d-88be29333bca";
+    private final String APPLICATION_KEY = "033abb17-bec3-4157-9bf4-407bedcebf90";
     SharedPreferences sharedPreferences;
     String coincode;
     String number;

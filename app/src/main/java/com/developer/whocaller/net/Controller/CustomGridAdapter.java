@@ -12,7 +12,7 @@ import com.developer.whocaller.net.Model.GridListDataModel;
 
 import java.util.List;
 
-import teckvillage.developer.khaled_pc.teckvillagetrue.R;
+import com.developer.whocaller.net.R;
 
 public class CustomGridAdapter extends BaseAdapter {
 

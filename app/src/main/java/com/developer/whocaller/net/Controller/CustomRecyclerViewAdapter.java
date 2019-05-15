@@ -17,7 +17,7 @@ import com.developer.whocaller.net.SMS_MessagesChat;
 import java.util.ArrayList;
 import java.util.Calendar;
 
-import teckvillage.developer.khaled_pc.teckvillagetrue.R;
+import com.developer.whocaller.net.R;
 
 public class CustomRecyclerViewAdapter extends RecyclerView.Adapter<CustomRecyclerViewAdapter.ViewHolder>{
 
