@@ -4,7 +4,7 @@
     xmlns:tools="http://schemas.android.com/tools"
     android:layout_width="match_parent"
     android:layout_height="match_parent"
-    tools:context="teckvillage.developer.khaled_pc.teckvillagetrue.teckvillage.developer.whocaller.teckvillagetrue.RecycleviewResult_SearchAPI"
+    tools:context="com.developer.whocaller.net.RecycleviewResult_SearchAPI"
     android:layoutDirection="ltr">
 
 

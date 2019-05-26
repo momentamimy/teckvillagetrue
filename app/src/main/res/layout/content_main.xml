@@ -6,7 +6,7 @@
     android:layout_height="match_parent"
     android:layoutDirection="ltr"
     app:layout_behavior="@string/appbar_scrolling_view_behavior"
-    tools:context="teckvillage.developer.khaled_pc.teckvillagetrue.teckvillage.developer.whocaller.teckvillagetrue.MainActivity"
+    tools:context="com.developer.whocaller.net.MainActivity"
     tools:showIn="@layout/app_bar_main">
 
     <FrameLayout

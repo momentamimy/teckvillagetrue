@@ -12,7 +12,7 @@
     android:orientation="vertical"
     android:id="@+id/lolo"
     android:layout_above="@+id/savechangebtn"
-    tools:context="teckvillage.developer.whocaller.teckvillagetrue.com.developer.whocaller.teckvillagetrue.UserProfileActivity"
+    tools:context="com.developer.whocaller.net.UserProfileActivity"
     android:layoutDirection="ltr">
 
 <RelativeLayout

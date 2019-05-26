@@ -4,7 +4,7 @@
     android:layout_width="match_parent"
     android:layout_height="match_parent"
     android:layoutDirection="ltr"
-    tools:context="teckvillage.developer.whocaller.teckvillagetrue.com.developer.whocaller.teckvillagetrue.View.Fragments.Search_API_Fragments.FragmentSearchByName">
+    tools:context="com.developer.whocaller.net.View.Fragments.Search_API_Fragments.FragmentSearchByName">
 
 
     <RelativeLayout

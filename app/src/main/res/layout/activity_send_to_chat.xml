@@ -5,7 +5,7 @@
     xmlns:tools="http://schemas.android.com/tools"
     android:layout_width="match_parent"
     android:layout_height="match_parent"
-    tools:context="teckvillage.developer.whocaller.teckvillagetrue.com.developer.whocaller.teckvillagetrue.View.SendToChatActivity"
+    tools:context="com.developer.whocaller.net.View.SendToChatActivity"
     android:layoutDirection="ltr">
 
     <LinearLayout

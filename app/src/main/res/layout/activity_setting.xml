@@ -5,7 +5,7 @@
     android:layout_width="match_parent"
     android:layout_height="match_parent"
     android:layoutDirection="ltr"
-    tools:context="teckvillage.developer.khaled_pc.teckvillagetrue.teckvillage.developer.whocaller.teckvillagetrue.setting">
+    tools:context="com.developer.whocaller.net.setting">
 
     <TextView
         android:visibility="gone"

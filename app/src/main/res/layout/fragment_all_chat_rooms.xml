@@ -3,7 +3,7 @@
     xmlns:tools="http://schemas.android.com/tools"
     android:layout_width="match_parent"
     android:layout_height="match_parent"
-    tools:context="teckvillage.developer.whocaller.teckvillagetrue.com.developer.whocaller.teckvillagetrue.AllChatRoomsFragment"
+    tools:context="com.developer.whocaller.net.AllChatRoomsFragment"
     android:layoutDirection="ltr">
 
     <RelativeLayout
