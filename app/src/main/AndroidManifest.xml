@@ -39,8 +39,8 @@
             android:configChanges="orientation"
             android:screenOrientation="portrait"
             android:theme="@style/AppTheme.NoActionBar">
-
         </activity>
+
         <activity
             android:name="com.developer.whocaller.net.View.SendToChatActivity"
             android:configChanges="orientation"

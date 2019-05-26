@@ -7,7 +7,7 @@
     android:layout_height="match_parent"
     tools:context="com.developer.whocaller.net.AutoStartHintActivity"
     android:background="@color/cardview_shadow_end_color"
-    android:layoutDirection="ltr">
+    >
     <ImageView
         android:padding="20dp"
         android:id="@+id/image"
@@ -19,8 +19,7 @@
     android:layout_below="@+id/image"
     android:layout_width="wrap_content"
     android:layout_height="wrap_content"
-    android:text="\nif you want toshow dialog of\nCaller ID\nyou should enableAuto Start of\nWho Caller?
-"
+    android:text="@string/nif_you_want_toshow_dialog_of_ncaller_id_nyou_should_enableauto_start_of_nwho_caller"
     android:gravity="center"
     android:padding="10dp"
     android:textSize="18dp"
@@ -31,7 +30,7 @@
         android:layout_width="wrap_content"
         android:layout_height="wrap_content"
         android:layout_centerHorizontal="true"
-        android:text="May Be Later"
+        android:text="@string/may_be_later"
         android:textSize="18dp"
         android:textColor="@color/Tomyacolor"
         android:padding="10dp"
@@ -43,7 +42,7 @@ android:layout_above="@+id/Go_to_enable_it"
         android:layout_width="match_parent"
         android:layout_height="wrap_content"
         android:gravity="center"
-        android:text="Go To Enable It"
+        android:text="@string/go_to_enable_it"
         android:textSize="25dp"
         android:textColor="#ffffff"
         android:paddingBottom="4dp"

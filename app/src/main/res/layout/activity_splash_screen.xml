@@ -6,7 +6,6 @@
     android:layout_width="match_parent"
     android:layout_height="match_parent"
     tools:context="com.developer.whocaller.net.View.SplashScreen"
-    android:layoutDirection="ltr"
     android:background="#0089c0">
 
     <ImageView
@@ -18,14 +17,15 @@
         app:layout_constraintEnd_toEndOf="parent"
         app:layout_constraintStart_toStartOf="parent"
         app:layout_constraintTop_toTopOf="parent"
-        app:layout_constraintVertical_bias="0.1" />
+        app:layout_constraintVertical_bias="0.1"
+        app:layout_constraintVertical_chainStyle="spread_inside" />
 
     <TextView
         android:id="@+id/welcome"
         android:layout_width="wrap_content"
         android:layout_height="wrap_content"
         android:layout_below="@+id/logo"
-        android:text="Welcome To"
+        android:text="@string/welcome_to"
         android:textColor="#ffffff"
         android:textSize="@dimen/textSizeLittleBig"
         app:layout_constraintBottom_toBottomOf="parent"
@@ -52,7 +52,7 @@
         android:id="@+id/NoMoreUnknown"
         android:layout_width="wrap_content"
         android:layout_height="wrap_content"
-        android:text="No more unknown numbers"
+        android:text="@string/no_more_unknown_numbers"
         android:textSize="@dimen/textSize"
         android:textColor="#ffffff"
         app:layout_constraintBottom_toBottomOf="parent"
@@ -65,66 +65,79 @@
         android:id="@+id/ByProceed"
         android:layout_width="wrap_content"
         android:layout_height="wrap_content"
-        android:text="By proceed. I accept the Who Caller?"
+        android:text="@string/by_proceed_i_accept_the_who_caller"
         android:textSize="@dimen/textSizeSmall"
         android:textColor="#ffffff"
         app:layout_constraintBottom_toTopOf="@+id/proceed"
         app:layout_constraintEnd_toEndOf="parent"
         app:layout_constraintStart_toStartOf="parent"
         app:layout_constraintTop_toBottomOf="@+id/NoMoreUnknown"
-        app:layout_constraintVertical_bias="0.05"/>
-
-    <TextView
-        android:id="@+id/termsOfService"
-        android:layout_width="wrap_content"
-        android:layout_height="26dp"
-        android:autoLink="web"
-        android:linksClickable="true"
-        android:text="@string/Terms_of_Service"
-        android:textColor="#ffffff"
-        android:textColorLink="#ffffff"
-        android:textSize="@dimen/textSizeSmall"
-        app:layout_constraintBottom_toTopOf="@+id/proceed"
-        app:layout_constraintEnd_toStartOf="@+id/privacy"
-        app:layout_constraintHorizontal_bias="0.795"
-        app:layout_constraintStart_toStartOf="parent"
-        app:layout_constraintTop_toBottomOf="@+id/ByProceed"
-        app:layout_constraintVertical_bias="0.1" />
+        app:layout_constraintVertical_bias="0.25"/>
 
 
-    <TextView
-        android:id="@+id/privacy"
-        android:layout_width="wrap_content"
-        android:layout_height="26dp"
-        android:layout_marginEnd="35dp"
-        android:autoLink="web"
-        android:linksClickable="true"
-        android:text="@string/Privacy_Policy"
-        android:textColor="#ffffff"
-        android:textColorLink="#ffffff"
-        android:textSize="@dimen/textSizeSmall"
+    <RelativeLayout
+        android:id="@+id/ahmed"
+        android:layout_width="match_parent"
+        android:layout_height="wrap_content"
         app:layout_constraintBottom_toTopOf="@+id/proceed"
         app:layout_constraintEnd_toEndOf="parent"
+        app:layout_constraintStart_toStartOf="parent"
         app:layout_constraintTop_toBottomOf="@+id/ByProceed"
-        app:layout_constraintVertical_bias="0.1"
-        android:layout_marginRight="35dp" />
+        app:layout_constraintVertical_bias="0.1">
+
+
+        <RelativeLayout
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:layout_centerHorizontal="true">
+
+            <TextView
+                android:id="@+id/termsOfService"
+                android:layout_width="wrap_content"
+                android:layout_height="26dp"
+                android:autoLink="web"
+                android:linksClickable="true"
+                android:text="@string/Terms_of_Service"
+                android:textColor="#ffffff"
+                android:textColorLink="#ffffff"
+                android:textSize="@dimen/textSizeSmall" />
+
+
+            <TextView
+                android:id="@+id/privacy"
+                android:layout_width="wrap_content"
+                android:layout_height="26dp"
+                android:layout_marginLeft="5dp"
+                android:layout_marginStart="5dp"
+                android:layout_toEndOf="@+id/termsOfService"
+                android:layout_toRightOf="@+id/termsOfService"
+                android:autoLink="web"
+                android:linksClickable="true"
+                android:text="@string/Privacy_Policy"
+                android:textColor="#ffffff"
+                android:textColorLink="#ffffff"
+                android:textSize="@dimen/textSizeSmall" />
+        </RelativeLayout>
+
+    </RelativeLayout>
 
     <TextView
-        android:background="#b4040a"
         android:id="@+id/proceed"
         android:layout_width="match_parent"
         android:layout_height="wrap_content"
+        android:layout_alignParentBottom="true"
+        android:layout_marginTop="8dp"
+        android:background="#b4040a"
         android:gravity="center"
-        android:text="Proceed"
-        android:textSize="@dimen/textSizeLittleBig"
-        android:textColor="#ffffff"
         android:paddingBottom="4dp"
         android:paddingTop="3dp"
-        android:layout_alignParentBottom="true"
+        android:text="@string/proceed"
+        android:textColor="#ffffff"
+        android:textSize="@dimen/textSizeLittleBig"
         app:layout_constraintBottom_toBottomOf="parent"
         app:layout_constraintEnd_toEndOf="parent"
         app:layout_constraintStart_toStartOf="parent"
-        app:layout_constraintTop_toTopOf="@+id/termsOfService"
-        app:layout_constraintVertical_bias="1.0"
-        />
+        app:layout_constraintTop_toTopOf="parent"
+        app:layout_constraintVertical_bias="1.0" />
+
 </android.support.constraint.ConstraintLayout>

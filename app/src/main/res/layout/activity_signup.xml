@@ -6,7 +6,6 @@
     android:layout_height="match_parent"
     android:background="@android:color/white"
     android:id="@+id/layoutsignuo"
-    android:layoutDirection="ltr"
     tools:context="com.developer.whocaller.net.View.Signup">
 
 
@@ -39,7 +38,7 @@
             android:layout_below="@+id/add_personal_image"
             android:layout_width="280dp"
             android:layout_height="wrap_content"
-            android:hint="First name"
+            android:hint="@string/first_name"
             android:layout_centerHorizontal="true"
            >
             <EditText
@@ -65,7 +64,7 @@
             android:layout_centerHorizontal="true"
             android:layout_height="wrap_content"
             android:layout_marginTop="3dp"
-            android:hint="Last name"
+            android:hint="@string/last_name"
            >
 
             <EditText
@@ -90,7 +89,7 @@
             android:layout_height="wrap_content"
             android:layout_marginTop="3dp"
             android:layout_centerHorizontal="true"
-            android:hint="Email">
+            android:hint="@string/email">
 
             <EditText
                 android:id="@+id/Email"
@@ -109,7 +108,7 @@
             android:id="@+id/btn_continue"
             android:layout_width="300dp"
             android:layout_height="35dp"
-            android:text="CONTINUE"
+            android:text="@string/continueee"
             android:gravity="center"
             android:textSize="16sp"
             android:paddingTop="2dp"

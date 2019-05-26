@@ -24,4 +24,23 @@
     <string name="StringLangSetting">● change Language: english</string>
     <string name="outgoing_window">● Show Outgoing call window       4</string>
     <string name="incoming_window">● Show Incoming call window       </string>
+    <string name="welcome_to">Welcome To</string>
+    <string name="no_more_unknown_numbers">No more unknown numbers</string>
+    <string name="by_proceed_i_accept_the_who_caller">By proceed. I accept the Who Caller?</string>
+    <string name="proceed">Proceed</string>
+
+    <string name="nif_you_want_toshow_dialog_of_ncaller_id_nyou_should_enableauto_start_of_nwho_caller">If you want to show dialog of \n Caller ID you should enable Auto Start of Who Caller?</string>
+    <string name="may_be_later">May Be Later</string>
+    <string name="go_to_enable_it">Go To Enable It</string>
+    <string name="select_your_country_and">Select your country and</string>
+    <string name="enter_your_phone_number">enter your phone number</string>
+    <string name="select_country">Select Country</string>
+    <string name="phone_number">Phone Number</string>
+    <string name="continueee">Continue</string>
+    <string name="calling_you_for_number_confirmation">Calling you for number Confirmation</string>
+    <string name="first_name">First name</string>
+    <string name="last_name">Last name</string>
+    <string name="email">Email</string>
+
 </resources>
+

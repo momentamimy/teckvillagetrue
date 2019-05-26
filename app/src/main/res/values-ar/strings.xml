@@ -20,7 +20,32 @@
     <string name="who_caller_search">ماشى</string>
     <string name="notifications">Notifications</string>
 
+    <string name="Terms_of_Service"><u>شروط الخدمة</u>و</string>
+    <string name="Privacy_Policy"><u>سياسة الخصوصية</u></string>
+
     <string name="StringLangSetting">●   تغير اللغة:  عربية</string>
     <string name="outgoing_window">● Show Outgoing call window       </string>
     <string name="incoming_window">● Show Incoming call window       </string>
+    <string name="welcome_to">مرحبا بك</string>
+    <string name="no_more_unknown_numbers">لا مزيد من الأرقام غير المعروفة</string>
+    <string name="by_proceed_i_accept_the_who_caller">ضغطك علي "إبدأ" يعني قبول</string>
+    <string name="proceed">إبدأ</string>
+
+    <string name="nif_you_want_toshow_dialog_of_ncaller_id_nyou_should_enableauto_start_of_nwho_caller">إذا كنت ترغب في إظهار مربع حوار معرف المتصل ، فيجب قبول إذن  "تشغيل تلقائي"</string>
+    <string name="may_be_later">ربما في وقت لاحق</string>
+    <string name="go_to_enable_it">اذهب لتفعيلها</string>
+    <string name="select_your_country_and">اختر بلدك</string>
+    <string name="enter_your_phone_number">و أدخل رقم هاتفك</string>
+
+    <string name="select_country">حدد الدولة</string>
+    <string name="phone_number">رقم الهاتف</string>
+    <string name="continueee">التالي</string>
+
+    <string name="calling_you_for_number_confirmation">سوف يتم الاتصال بك لتأكيد الرقم</string>
+
+
+    <string name="first_name">الاسم الاول</string>
+    <string name="last_name">اسم العائلة</string>
+    <string name="email">البريد الإلكتروني</string>
+
 </resources>

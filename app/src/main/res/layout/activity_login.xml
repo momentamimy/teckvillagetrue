@@ -5,7 +5,6 @@
     android:layout_width="match_parent"
     android:layout_height="match_parent"
     tools:context="com.developer.whocaller.net.View.LoginActivity"
-    android:layoutDirection="ltr"
     android:background="#0089c0">
 
     <ImageView
@@ -37,7 +36,7 @@
         android:id="@+id/Select"
         android:layout_width="wrap_content"
         android:layout_height="wrap_content"
-        android:text="Select your country and"
+        android:text="@string/select_your_country_and"
         android:textColor="#ffffff"
         android:textSize="@dimen/textSize"
         android:layout_marginTop="20dp"
@@ -52,7 +51,7 @@
         android:id="@+id/Enter"
         android:layout_width="wrap_content"
         android:layout_height="wrap_content"
-        android:text="enter your phone number"
+        android:text="@string/enter_your_phone_number"
         android:textColor="#ffffff"
         android:textSize="@dimen/textSize"
         app:layout_constraintBottom_toTopOf="@+id/layoutCountry"
@@ -91,7 +90,7 @@
         <TextView
         android:id="@+id/CodeCountry"
         android:textColor="#fff"
-        android:text="Select Country"
+        android:text="@string/select_country"
         android:textSize="18dp"
         android:layout_width="match_parent"
         android:layout_height="wrap_content"
@@ -143,7 +142,7 @@
             android:layout_width="match_parent"
             android:layout_height="wrap_content"
             app:errorTextAppearance="@style/WelcomeErrorAppearance"
-            android:hint="Phone Number"
+            android:hint="@string/phone_number"
             android:layout_toRightOf="@+id/mobic"
             android:layout_toEndOf="@+id/mobic"
             android:layout_toStartOf="@+id/rest"
@@ -171,7 +170,7 @@
         android:layout_width="match_parent"
         android:layout_height="wrap_content"
         android:gravity="center"
-        android:text="Continue"
+        android:text="@string/continueee"
         android:textSize="25sp"
         android:textColor="#ffffff"
         android:paddingTop="4.2dp"

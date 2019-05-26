@@ -37,7 +37,7 @@
         android:textSize="24sp"
         android:layout_centerHorizontal="true"
         android:textColor="@android:color/white"
-        android:text="Calling you for number Confirmation"
+        android:text="@string/calling_you_for_number_confirmation"
         android:gravity="center"
         android:lineSpacingExtra="5dp"
         />
