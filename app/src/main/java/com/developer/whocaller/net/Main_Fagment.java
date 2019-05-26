@@ -203,7 +203,7 @@ public class Main_Fagment extends Fragment implements OnBackPressedListener , Lo
         relativeLayout.setOnClickListener(new View.OnClickListener() {
             @Override
             public void onClick(View v) {
-                updateViews("en");
+                //updateViews("en");
             }
         });
 
