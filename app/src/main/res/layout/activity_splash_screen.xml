@@ -18,7 +18,7 @@
         app:layout_constraintEnd_toEndOf="parent"
         app:layout_constraintStart_toStartOf="parent"
         app:layout_constraintTop_toTopOf="parent"
-        app:layout_constraintVertical_bias="0.2" />
+        app:layout_constraintVertical_bias="0.1" />
 
     <TextView
         android:id="@+id/welcome"
@@ -32,7 +32,7 @@
         app:layout_constraintEnd_toEndOf="parent"
         app:layout_constraintStart_toStartOf="parent"
         app:layout_constraintTop_toBottomOf="@+id/logo"
-        app:layout_constraintVertical_bias="0.05" />
+        app:layout_constraintVertical_bias="0.04" />
 
     <TextView
         android:id="@+id/WhoCaller"
@@ -46,7 +46,7 @@
         app:layout_constraintEnd_toEndOf="parent"
         app:layout_constraintStart_toStartOf="parent"
         app:layout_constraintTop_toBottomOf="@+id/welcome"
-        app:layout_constraintVertical_bias="0.15" />
+        app:layout_constraintVertical_bias="0.13" />
 
     <TextView
         android:id="@+id/NoMoreUnknown"
@@ -72,35 +72,21 @@
         app:layout_constraintEnd_toEndOf="parent"
         app:layout_constraintStart_toStartOf="parent"
         app:layout_constraintTop_toBottomOf="@+id/NoMoreUnknown"
-        app:layout_constraintVertical_bias="0.45"/>
+        app:layout_constraintVertical_bias="0.05"/>
 
     <TextView
         android:id="@+id/termsOfService"
         android:layout_width="wrap_content"
         android:layout_height="26dp"
-        android:textColor="#ffffff"
-        android:textSize="@dimen/textSizeSmall"
         android:autoLink="web"
-        android:textColorLink="#ffffff"
         android:linksClickable="true"
         android:text="@string/Terms_of_Service"
-        android:layout_marginStart="20dp"
-        app:layout_constraintBottom_toTopOf="@+id/proceed"
-        app:layout_constraintEnd_toStartOf="@+id/and"
-        app:layout_constraintStart_toStartOf="parent"
-        app:layout_constraintTop_toBottomOf="@+id/ByProceed"
-        app:layout_constraintVertical_bias="0.1"
-        android:layout_marginLeft="20dp" />
-
-    <TextView
-        android:id="@+id/and"
-        android:layout_width="wrap_content"
-        android:layout_height="20dp"
-        android:text="and"
         android:textColor="#ffffff"
+        android:textColorLink="#ffffff"
         android:textSize="@dimen/textSizeSmall"
         app:layout_constraintBottom_toTopOf="@+id/proceed"
-        app:layout_constraintEnd_toEndOf="parent"
+        app:layout_constraintEnd_toStartOf="@+id/privacy"
+        app:layout_constraintHorizontal_bias="0.795"
         app:layout_constraintStart_toStartOf="parent"
         app:layout_constraintTop_toBottomOf="@+id/ByProceed"
         app:layout_constraintVertical_bias="0.1" />
@@ -110,19 +96,18 @@
         android:id="@+id/privacy"
         android:layout_width="wrap_content"
         android:layout_height="26dp"
+        android:layout_marginEnd="35dp"
+        android:autoLink="web"
+        android:linksClickable="true"
         android:text="@string/Privacy_Policy"
         android:textColor="#ffffff"
         android:textColorLink="#ffffff"
-        android:layout_marginEnd="28dp"
         android:textSize="@dimen/textSizeSmall"
-        android:autoLink="web"
-        android:linksClickable="true"
         app:layout_constraintBottom_toTopOf="@+id/proceed"
         app:layout_constraintEnd_toEndOf="parent"
-        app:layout_constraintStart_toEndOf="@+id/and"
         app:layout_constraintTop_toBottomOf="@+id/ByProceed"
         app:layout_constraintVertical_bias="0.1"
-        android:layout_marginRight="28dp" />
+        android:layout_marginRight="35dp" />
 
     <TextView
         android:background="#b4040a"
