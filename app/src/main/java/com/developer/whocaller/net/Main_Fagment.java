@@ -373,12 +373,14 @@ public class Main_Fagment extends Fragment implements OnBackPressedListener , Lo
                             MyCustomDualSimDialog(phone_num_edt.getText().toString(),telephonyInfo);
                         } else {
                             Intent intent = new Intent(Intent.ACTION_CALL);
-                            intent.setData(Uri.parse("tel:" + phone_num_edt.getText().toString()));
+                            String string=phone_num_edt.getText().toString();
+                            intent.setData(Uri.parse("tel:" + getStringHashTag(string)));
                             startActivity(intent);
                         }
                     } else {
                         Intent intent = new Intent(Intent.ACTION_CALL);
-                        intent.setData(Uri.parse("tel:" + phone_num_edt.getText().toString()));
+                        String string=phone_num_edt.getText().toString();
+                        intent.setData(Uri.parse("tel:" + getStringHashTag(string)));
                         startActivity(intent);
                     }
                 }
@@ -485,12 +487,12 @@ public class Main_Fagment extends Fragment implements OnBackPressedListener , Lo
                                 MyCustomDualSimDialog(choosenNum,telephonyInfo);
                             } else {
                                 Intent intent = new Intent(Intent.ACTION_CALL);
-                                intent.setData(Uri.parse("tel:" + choosenNum));
+                                intent.setData(Uri.parse("tel:" + getStringHashTag(choosenNum)));
                                 startActivity(intent);
                             }
                         } else {
                             Intent intent = new Intent(Intent.ACTION_CALL);
-                            intent.setData(Uri.parse("tel:" + choosenNum));
+                            intent.setData(Uri.parse("tel:" + getStringHashTag(choosenNum)));
                             startActivity(intent);
                         }
                     }
@@ -1639,7 +1641,7 @@ public class Main_Fagment extends Fragment implements OnBackPressedListener , Lo
                 Intent intent = new Intent(Intent.ACTION_CALL);
                 intent.putExtra("com.android.phone.extra.slot", 0); //For sim 1
                 //intent.putExtra("simSlot", 0); //For sim 1
-                intent.setData(Uri.parse("tel:" + Number));
+                intent.setData(Uri.parse("tel:" + getStringHashTag(Number)));
                 startActivity(intent);
                 MyDialogDualSim.dismiss();
             }
@@ -1651,7 +1653,7 @@ public class Main_Fagment extends Fragment implements OnBackPressedListener , Lo
                 Intent intent = new Intent(Intent.ACTION_CALL);
                 intent.putExtra("simSlot", 1); //For sim 2
                 //intent.putExtra("com.android.phone.extra.slot", 1); //For sim 2
-                intent.setData(Uri.parse("tel:" + Number));
+                intent.setData(Uri.parse("tel:" + getStringHashTag(Number)));
                 startActivity(intent);
                 MyDialogDualSim.dismiss();
             }
@@ -1694,5 +1696,11 @@ public class Main_Fagment extends Fragment implements OnBackPressedListener , Lo
         openDialPadWithNumber(value);
     }
 
-
+    public String getStringHashTag(String str)
+    {
+        if (str != null && str.length() > 0 && str.charAt(str.length() - 1) == '#') {
+            str = str.substring(0, str.length() - 1)+Uri.encode("#");
+        }
+        return str;
+    }
 }
