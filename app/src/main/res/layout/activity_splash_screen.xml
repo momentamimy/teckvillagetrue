@@ -5,7 +5,7 @@
     xmlns:tools="http://schemas.android.com/tools"
     android:layout_width="match_parent"
     android:layout_height="match_parent"
-    tools:context="teckvillage.developer.whocaller.teckvillagetrue.com.developer.whocaller.teckvillagetrue.View.SplashScreen"
+    tools:context="com.developer.whocaller.net.View.SplashScreen"
     android:layoutDirection="ltr"
     android:background="#0089c0">
 
@@ -77,16 +77,52 @@
     <TextView
         android:id="@+id/termsOfService"
         android:layout_width="wrap_content"
-        android:layout_height="wrap_content"
-        android:text="Terms of Service and Privacy Policy"
-        android:textSize="@dimen/textSizeSmall"
+        android:layout_height="26dp"
         android:textColor="#ffffff"
+        android:textSize="@dimen/textSizeSmall"
+        android:autoLink="web"
+        android:textColorLink="#ffffff"
+        android:linksClickable="true"
+        android:text="@string/Terms_of_Service"
+        android:layout_marginStart="20dp"
+        app:layout_constraintBottom_toTopOf="@+id/proceed"
+        app:layout_constraintEnd_toStartOf="@+id/and"
+        app:layout_constraintStart_toStartOf="parent"
+        app:layout_constraintTop_toBottomOf="@+id/ByProceed"
+        app:layout_constraintVertical_bias="0.1"
+        android:layout_marginLeft="20dp" />
+
+    <TextView
+        android:id="@+id/and"
+        android:layout_width="wrap_content"
+        android:layout_height="20dp"
+        android:text="and"
+        android:textColor="#ffffff"
+        android:textSize="@dimen/textSizeSmall"
         app:layout_constraintBottom_toTopOf="@+id/proceed"
         app:layout_constraintEnd_toEndOf="parent"
         app:layout_constraintStart_toStartOf="parent"
         app:layout_constraintTop_toBottomOf="@+id/ByProceed"
+        app:layout_constraintVertical_bias="0.1" />
+
+
+    <TextView
+        android:id="@+id/privacy"
+        android:layout_width="wrap_content"
+        android:layout_height="26dp"
+        android:text="@string/Privacy_Policy"
+        android:textColor="#ffffff"
+        android:textColorLink="#ffffff"
+        android:layout_marginEnd="28dp"
+        android:textSize="@dimen/textSizeSmall"
+        android:autoLink="web"
+        android:linksClickable="true"
+        app:layout_constraintBottom_toTopOf="@+id/proceed"
+        app:layout_constraintEnd_toEndOf="parent"
+        app:layout_constraintStart_toEndOf="@+id/and"
+        app:layout_constraintTop_toBottomOf="@+id/ByProceed"
         app:layout_constraintVertical_bias="0.1"
-        />
+        android:layout_marginRight="28dp" />
 
     <TextView
         android:background="#b4040a"

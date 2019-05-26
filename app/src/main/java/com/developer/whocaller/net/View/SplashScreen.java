@@ -12,6 +12,9 @@ import android.support.annotation.RequiresApi;
 import android.support.v7.app.AppCompatActivity;
 import android.os.Bundle;
 import android.telecom.TelecomManager;
+import android.text.SpannableStringBuilder;
+import android.text.Spanned;
+import android.text.method.LinkMovementMethod;
 import android.util.Log;
 import android.view.View;
 import android.widget.TextView;
@@ -56,6 +59,28 @@ public class SplashScreen extends AppCompatActivity implements EasyPermissions.P
         IsLogin = sharedPreferences.getBoolean("UserLogin", false);
 
 
+        TextView t2 = (TextView) findViewById(R.id.privacy);
+        t2.setMovementMethod(LinkMovementMethod.getInstance());
+        t2.setOnClickListener(new View.OnClickListener() {
+            public void onClick(View arg0) {
+
+                Intent intent = new Intent(Intent.ACTION_VIEW);
+                intent.setData(Uri.parse("https://whocaller.net/privacy-policy/"));
+                startActivity(intent);
+            }
+
+        });
+        TextView t3 = (TextView) findViewById(R.id.termsOfService);
+        t3.setMovementMethod(LinkMovementMethod.getInstance());
+        t3.setOnClickListener(new View.OnClickListener() {
+            public void onClick(View arg0) {
+
+                Intent intent = new Intent(Intent.ACTION_VIEW);
+                intent.setData(Uri.parse("https://whocaller.net/terms-of-service/"));
+                startActivity(intent);
+            }
+
+        });
 
         /*
          //when Login Success

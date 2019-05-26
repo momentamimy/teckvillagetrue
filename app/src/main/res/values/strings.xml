@@ -19,4 +19,6 @@
 
     <string name="who_caller_search">Who Caller? Search</string>
     <string name="notifications">Notifications</string>
+    <string name="Terms_of_Service"><u>Terms of Service</u></string>
+    <string name="Privacy_Policy"><u>Privacy Policy</u></string>
 </resources>
