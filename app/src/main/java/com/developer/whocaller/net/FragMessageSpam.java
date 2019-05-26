@@ -21,7 +21,7 @@ import java.util.ArrayList;
 import com.developer.whocaller.net.Controller.CustomRecyclerViewAdapter;
 import com.developer.whocaller.net.Model.Get_User_Contacts;
 import com.developer.whocaller.net.Model.MessageInfo;
-import com.developer.whocaller.net.R;
+
 
 
 public class FragMessageSpam extends Fragment implements LoaderManager.LoaderCallbacks<Cursor>  {

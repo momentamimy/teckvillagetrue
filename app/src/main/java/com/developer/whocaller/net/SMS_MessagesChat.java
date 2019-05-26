@@ -49,7 +49,7 @@ import java.util.List;
 import de.hdodenhof.circleimageview.CircleImageView;
 
 import com.developer.whocaller.net.Controller.messages_list_adapter;
-import com.developer.whocaller.net.R;
+
 
 import static com.developer.whocaller.net.Message_Fragment.SMSCHANGE;
 

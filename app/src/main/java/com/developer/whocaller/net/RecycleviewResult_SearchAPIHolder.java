@@ -7,7 +7,7 @@ import android.widget.RelativeLayout;
 import android.widget.TextView;
 
 import de.hdodenhof.circleimageview.CircleImageView;
-import com.developer.whocaller.net.R;
+
 
 /**
  * Created by khaled-pc on 4/13/2019.

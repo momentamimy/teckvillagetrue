@@ -71,7 +71,7 @@ import retrofit2.Retrofit;
 import com.developer.whocaller.net.Controller.TagsAdapter;
 import com.developer.whocaller.net.Model.database.Database_Helper;
 import com.developer.whocaller.net.Model.database.tables.Tags;
-import com.developer.whocaller.net.R;
+
 import com.developer.whocaller.net.View.CheckNetworkConnection;
 import com.developer.whocaller.net.View.ConnectionDetector;
 import com.developer.whocaller.net.View.Signup;

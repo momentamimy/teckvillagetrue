@@ -9,6 +9,7 @@ import android.view.ViewGroup;
 import android.widget.ImageView;
 import android.widget.TextView;
 
+import com.developer.whocaller.net.R;
 import com.squareup.picasso.Picasso;
 
 import java.util.List;
@@ -16,7 +17,7 @@ import java.util.List;
 import de.hdodenhof.circleimageview.CircleImageView;
 import com.developer.whocaller.net.Chat_MessagesChat;
 import com.developer.whocaller.net.Model.retrofit.JSON_Mapping.RoomModel;
-import com.developer.whocaller.net.R;
+
 import com.developer.whocaller.net.Model.Get_User_Contacts;
 
 import static com.developer.whocaller.net.View.SendToChatActivity.MultipleRecivers;

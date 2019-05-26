@@ -12,12 +12,13 @@ import android.widget.ImageView;
 import android.widget.TextView;
 
 import com.developer.whocaller.net.Model.MessageInfo;
+import com.developer.whocaller.net.R;
 import com.developer.whocaller.net.SMS_MessagesChat;
 
 import java.util.ArrayList;
 import java.util.Calendar;
 
-import com.developer.whocaller.net.R;
+
 
 public class CustomRecyclerViewAdapter extends RecyclerView.Adapter<CustomRecyclerViewAdapter.ViewHolder>{
 

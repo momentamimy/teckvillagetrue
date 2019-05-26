@@ -15,8 +15,9 @@ import android.widget.TextView;
 import java.util.ArrayList;
 import java.util.Calendar;
 
-import com.developer.whocaller.net.R;
+
 import com.developer.whocaller.net.Model.MessageInfo;
+import com.developer.whocaller.net.R;
 
 public class CustomListViewChatAdapter extends ArrayAdapter<MessageInfo> {
 

@@ -4,8 +4,10 @@ import android.support.v7.widget.RecyclerView;
 import android.view.View;
 import android.widget.TextView;
 
-import de.hdodenhof.circleimageview.CircleImageView;
 import com.developer.whocaller.net.R;
+
+import de.hdodenhof.circleimageview.CircleImageView;
+
 
 public class SearchLogHolder extends RecyclerView.ViewHolder {
 

@@ -15,10 +15,11 @@ import android.view.ViewGroup;
 import android.widget.ImageView;
 import android.widget.RelativeLayout;
 
+import com.developer.whocaller.net.R;
 import com.developer.whocaller.net.Services.UploadnewContactAdded;
 import com.developer.whocaller.net.Controller.CustomChatViewAdapter;
 import com.developer.whocaller.net.MainActivity;
-import com.developer.whocaller.net.R;
+
 import com.developer.whocaller.net.SearchActivity;
 
 /**

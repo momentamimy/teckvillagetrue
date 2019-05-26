@@ -8,11 +8,11 @@ import android.view.ViewGroup;
 import android.widget.TextView;
 
 import com.developer.whocaller.net.Model.database.tables.Tags;
+import com.developer.whocaller.net.R;
 import com.developer.whocaller.net.UserProfileActivity;
 
 import java.util.List;
 
-import com.developer.whocaller.net.R;
 
 
 /**

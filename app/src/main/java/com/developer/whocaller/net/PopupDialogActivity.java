@@ -51,7 +51,7 @@ import retrofit2.Retrofit;
 import com.developer.whocaller.net.Model.Get_Calls_Log;
 import com.developer.whocaller.net.Model.retrofit.WhoCallerApi;
 import com.developer.whocaller.net.Model.retrofit.retrofitHead;
-import com.developer.whocaller.net.R;
+
 
 public class PopupDialogActivity extends Activity {
 

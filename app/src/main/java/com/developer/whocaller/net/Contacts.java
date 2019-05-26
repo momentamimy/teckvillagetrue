@@ -26,7 +26,7 @@ import java.util.ArrayList;
 import java.util.List;
 
 import in.myinnos.alphabetsindexfastscrollrecycler.IndexFastScrollRecyclerView;
-import com.developer.whocaller.net.R;
+
 
 
 /**

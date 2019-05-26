@@ -19,7 +19,7 @@ import com.developer.whocaller.net.View.SearchLogHolder;
 
 import java.util.List;
 
-import com.developer.whocaller.net.R;
+
 
 import com.developer.whocaller.net.Model.LogInfo;
 

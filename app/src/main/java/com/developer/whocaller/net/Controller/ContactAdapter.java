@@ -19,6 +19,7 @@ import com.developer.whocaller.net.Model.retrofit.JSON_Mapping.BodyNumbersListMo
 import com.developer.whocaller.net.Model.retrofit.JSON_Mapping.FetchedUserData;
 import com.developer.whocaller.net.Model.retrofit.WhoCallerApi;
 import com.developer.whocaller.net.Model.retrofit.retrofitHead;
+import com.developer.whocaller.net.R;
 import com.developer.whocaller.net.View.ContactHolder;
 import com.squareup.picasso.Picasso;
 
@@ -29,7 +30,7 @@ import retrofit2.Call;
 import retrofit2.Callback;
 import retrofit2.Response;
 import retrofit2.Retrofit;
-import com.developer.whocaller.net.R;
+
 
 public class ContactAdapter extends RecyclerView.Adapter<ContactHolder> {
 

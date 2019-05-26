@@ -9,10 +9,11 @@ import android.widget.ImageView;
 import android.widget.TextView;
 
 import com.developer.whocaller.net.Model.GridListDataModel;
+import com.developer.whocaller.net.R;
 
 import java.util.List;
 
-import com.developer.whocaller.net.R;
+
 
 public class CustomGridAdapter extends BaseAdapter {
 

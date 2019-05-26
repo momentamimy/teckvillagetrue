@@ -12,6 +12,7 @@ import android.widget.ImageView;
 import android.widget.TextView;
 
 import com.developer.whocaller.net.Model.retrofit.JSON_Mapping.LastMessageModel;
+import com.developer.whocaller.net.R;
 import com.squareup.picasso.Picasso;
 
 import java.text.ParseException;
@@ -23,7 +24,7 @@ import java.util.TimeZone;
 
 import com.developer.whocaller.net.Chat_MessagesChat;
 
-import com.developer.whocaller.net.R;
+
 
 import static com.developer.whocaller.net.Chat_MessagesChat.ChatStatusChanged;
 

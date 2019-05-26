@@ -15,6 +15,7 @@ import android.widget.TextView;
 import android.widget.Toast;
 
 
+import com.developer.whocaller.net.R;
 import com.google.android.gms.vision.CameraSource;
 import com.google.android.gms.vision.Detector;
 import com.google.android.gms.vision.text.Text;
@@ -24,7 +25,7 @@ import com.google.android.gms.vision.text.TextRecognizer;
 import java.io.IOException;
 import java.util.ArrayList;
 
-import com.developer.whocaller.net.R;
+
 
 
 public class Camera_Recognition extends AppCompatActivity  {

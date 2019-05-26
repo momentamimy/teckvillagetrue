@@ -35,6 +35,7 @@ import android.widget.Toast;
 
 import com.developer.whocaller.net.Model.database.tables.Tags;
 import com.developer.whocaller.net.Model.retrofit.ApiAccessToken;
+import com.developer.whocaller.net.R;
 import com.developer.whocaller.net.SMS_MessagesChat;
 import com.squareup.picasso.Picasso;
 
@@ -52,7 +53,7 @@ import com.developer.whocaller.net.Model.retrofit.JSON_Mapping.BodyNumberModel;
 import com.developer.whocaller.net.Model.retrofit.JSON_Mapping.FetchedUserData;
 import com.developer.whocaller.net.Model.retrofit.WhoCallerApi;
 import com.developer.whocaller.net.Model.retrofit.retrofitHead;
-import com.developer.whocaller.net.R;
+
 
 import com.developer.whocaller.net.Model.Get_Calls_Log;
 import com.developer.whocaller.net.Model.database.Database_Helper;

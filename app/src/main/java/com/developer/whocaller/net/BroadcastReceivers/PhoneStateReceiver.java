@@ -40,6 +40,7 @@ import android.widget.RelativeLayout;
 import android.widget.TextView;
 
 
+import com.developer.whocaller.net.R;
 import com.developer.whocaller.net.View.ConnectionDetector;
 import com.squareup.picasso.Picasso;
 
@@ -61,7 +62,7 @@ import com.developer.whocaller.net.Model.retrofit.WhoCallerApi;
 import com.developer.whocaller.net.Model.retrofit.retrofitHead;
 import com.developer.whocaller.net.Permission;
 import com.developer.whocaller.net.PopupDialogActivity;
-import com.developer.whocaller.net.R;
+
 import com.developer.whocaller.net.Model.Get_Calls_Log;
 import com.developer.whocaller.net.Model.database.Database_Helper;
 import com.developer.whocaller.net.View.CheckNetworkConnection;

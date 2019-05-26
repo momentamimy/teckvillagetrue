@@ -26,7 +26,6 @@ import android.widget.TextView;
 import java.util.ArrayList;
 import java.util.List;
 
-import com.developer.whocaller.net.R;
 
 public class EditSpeedDialActivity extends AppCompatActivity {
 

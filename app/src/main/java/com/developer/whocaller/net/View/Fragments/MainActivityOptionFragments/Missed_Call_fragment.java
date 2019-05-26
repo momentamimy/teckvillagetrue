@@ -16,10 +16,11 @@ import java.util.ArrayList;
 import java.util.Collections;
 
 import com.developer.whocaller.net.Controller.LogAdapter;
-import com.developer.whocaller.net.R;
+
 import com.developer.whocaller.net.Model.Get_Calls_Log;
 import com.developer.whocaller.net.Model.GroupListByDate;
 import com.developer.whocaller.net.Model.LogInfo;
+import com.developer.whocaller.net.R;
 
 /**
  * A simple {@link Fragment} subclass.

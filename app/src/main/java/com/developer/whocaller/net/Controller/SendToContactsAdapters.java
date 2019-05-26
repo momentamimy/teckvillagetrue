@@ -10,12 +10,12 @@ import android.widget.ImageView;
 import android.widget.TextView;
 
 import com.developer.whocaller.net.Model.UserContactData;
+import com.developer.whocaller.net.R;
 import com.developer.whocaller.net.SMS_MessagesChat;
 
 import java.util.List;
 
 import de.hdodenhof.circleimageview.CircleImageView;
-import com.developer.whocaller.net.R;
 
 import com.developer.whocaller.net.Model.Get_User_Contacts;
 

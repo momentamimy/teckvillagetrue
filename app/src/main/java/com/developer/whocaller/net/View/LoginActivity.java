@@ -25,6 +25,7 @@ import java.util.Comparator;
 import java.util.List;
 
 
+
 public class LoginActivity extends AppCompatActivity implements TextWatcher {
 
     CountryPicker countryPicker;
@@ -92,6 +93,7 @@ public class LoginActivity extends AppCompatActivity implements TextWatcher {
                                 String code_country=country.getName()+" ("+country.getDialCode()+")";
                                 codeCountry.setText(code_country);
                                 codeCountry.setCompoundDrawablesWithIntrinsicBounds(0, 0, R.drawable.ic_tick, 0);
+
                             }
                         }).build();
 

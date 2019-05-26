@@ -22,6 +22,7 @@ import android.widget.Toast;
 import com.developer.whocaller.net.Make_Phone_Call;
 import com.developer.whocaller.net.Model.retrofit.ApiAccessToken;
 import com.developer.whocaller.net.OpenDialPad;
+import com.developer.whocaller.net.R;
 import com.developer.whocaller.net.SMS_MessagesChat;
 import com.developer.whocaller.net.View.User_Contact_Profile_From_log_list;
 import com.squareup.picasso.Picasso;
@@ -39,7 +40,7 @@ import com.developer.whocaller.net.Model.retrofit.JSON_Mapping.FetchedUserData;
 import com.developer.whocaller.net.Model.retrofit.WhoCallerApi;
 import com.developer.whocaller.net.Model.retrofit.retrofitHead;
 
-import com.developer.whocaller.net.R;
+
 
 import com.developer.whocaller.net.View.LogHolder;
 import com.developer.whocaller.net.Model.LogInfo;

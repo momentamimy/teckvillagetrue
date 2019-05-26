@@ -8,8 +8,10 @@ import android.widget.ProgressBar;
 import android.widget.RelativeLayout;
 import android.widget.TextView;
 
-import de.hdodenhof.circleimageview.CircleImageView;
 import com.developer.whocaller.net.R;
+
+import de.hdodenhof.circleimageview.CircleImageView;
+
 
 public class LogHolder extends RecyclerView.ViewHolder {
 

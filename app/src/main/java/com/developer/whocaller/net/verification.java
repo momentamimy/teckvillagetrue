@@ -19,7 +19,6 @@ import com.sinch.verification.SinchVerification;
 import com.sinch.verification.Verification;
 import com.sinch.verification.VerificationListener;
 
-import com.developer.whocaller.net.R;
 
 public class verification extends AppCompatActivity {
 

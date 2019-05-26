@@ -40,6 +40,7 @@ import android.widget.Toast;
 
 import com.developer.whocaller.net.BroadcastReceivers.Receiver;
 import com.developer.whocaller.net.Message_Fragment;
+import com.developer.whocaller.net.R;
 import com.developer.whocaller.net.TelephonyInfo;
 import com.developer.whocaller.net.sms_messages_model;
 
@@ -51,7 +52,7 @@ import java.util.Comparator;
 import java.util.Date;
 import java.util.List;
 
-import com.developer.whocaller.net.R;
+
 
 import static android.content.Context.ALARM_SERVICE;
 import static android.content.Context.MODE_PRIVATE;

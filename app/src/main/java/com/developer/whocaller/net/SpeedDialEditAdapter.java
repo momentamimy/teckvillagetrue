@@ -12,7 +12,7 @@ import android.widget.TextView;
 
 import java.util.List;
 
-import com.developer.whocaller.net.R;
+
 
 public class SpeedDialEditAdapter extends ArrayAdapter<EditSpeedModel> {
 

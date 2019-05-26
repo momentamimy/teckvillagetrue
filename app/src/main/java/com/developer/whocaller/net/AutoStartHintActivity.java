@@ -14,7 +14,7 @@ import com.developer.whocaller.net.View.LoginActivity;
 
 import java.util.List;
 
-import com.developer.whocaller.net.R;
+
 
 public class AutoStartHintActivity extends AppCompatActivity {
 

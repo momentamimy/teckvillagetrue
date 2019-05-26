@@ -37,6 +37,7 @@ import com.developer.whocaller.net.Model.database.Database_Helper;
 import com.developer.whocaller.net.Model.database.tables.Tags;
 import com.developer.whocaller.net.Model.retrofit.ApiAccessToken;
 import com.developer.whocaller.net.Model.retrofit.JSON_Mapping.BodyNumberModel;
+import com.developer.whocaller.net.R;
 import com.developer.whocaller.net.SMS_MessagesChat;
 import com.squareup.picasso.Picasso;
 
@@ -53,7 +54,7 @@ import retrofit2.Retrofit;
 import com.developer.whocaller.net.Model.retrofit.JSON_Mapping.FetchedUserData;
 import com.developer.whocaller.net.Model.retrofit.WhoCallerApi;
 import com.developer.whocaller.net.Model.retrofit.retrofitHead;
-import com.developer.whocaller.net.R;
+
 
 public class User_Contact_Profile extends AppCompatActivity {
 

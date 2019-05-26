@@ -9,10 +9,11 @@ import android.widget.ImageView;
 import android.widget.TextView;
 
 import com.developer.whocaller.net.Model.retrofit.JSON_Mapping.NotificattionDataReceived;
+import com.developer.whocaller.net.R;
 
 import java.util.List;
 
-import com.developer.whocaller.net.R;
+
 
 public class CustomNotificationRecyclerViewAdapter extends RecyclerView.Adapter<CustomNotificationRecyclerViewAdapter.ViewHolder>{
 

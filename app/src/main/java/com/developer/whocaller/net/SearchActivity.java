@@ -9,7 +9,7 @@ import android.widget.ImageView;
 
 import com.developer.whocaller.net.Controller.CustomSearchViewAdapter;
 
-import com.developer.whocaller.net.R;
+
 
 public class SearchActivity extends AppCompatActivity {
 

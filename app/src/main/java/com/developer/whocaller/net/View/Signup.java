@@ -37,6 +37,7 @@ import com.developer.whocaller.net.Model.retrofit.ApiAccessToken;
 import com.developer.whocaller.net.Model.retrofit.JSON_Mapping.DataReceived;
 import com.developer.whocaller.net.Model.retrofit.JSON_Mapping.TokenBodyModel;
 import com.developer.whocaller.net.Model.retrofit.JSON_Mapping.TokenDataReceived;
+import com.developer.whocaller.net.R;
 import com.facebook.CallbackManager;
 import com.facebook.FacebookCallback;
 import com.facebook.FacebookException;
@@ -78,7 +79,7 @@ import retrofit2.Callback;
 import retrofit2.Response;
 import retrofit2.Retrofit;
 import com.developer.whocaller.net.MainActivity;
-import com.developer.whocaller.net.R;
+
 
 import com.developer.whocaller.net.Model.retrofit.JSON_Mapping.ResultModel;
 import com.developer.whocaller.net.Model.retrofit.WhoCallerApi;

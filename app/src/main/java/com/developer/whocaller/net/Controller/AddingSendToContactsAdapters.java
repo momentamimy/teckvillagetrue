@@ -9,11 +9,12 @@ import android.widget.ImageView;
 import android.widget.TextView;
 
 import com.developer.whocaller.net.Model.UserContactData;
+import com.developer.whocaller.net.R;
 
 import java.util.List;
 
 import de.hdodenhof.circleimageview.CircleImageView;
-import com.developer.whocaller.net.R;
+
 
 import static com.developer.whocaller.net.SendToActivity.showTextHint;
 

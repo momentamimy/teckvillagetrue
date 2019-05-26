@@ -26,7 +26,6 @@ import com.developer.whocaller.net.Model.retrofit.ApiAccessToken;
 import com.developer.whocaller.net.Model.retrofit.JSON_Mapping.Item_Search;
 import com.developer.whocaller.net.Model.retrofit.WhoCallerApi;
 import com.developer.whocaller.net.Model.retrofit.retrofitHead;
-import com.developer.whocaller.net.R;
 import com.developer.whocaller.net.View.CheckNetworkConnection;
 
 public class RecycleviewResult_SearchAPI extends AppCompatActivity {

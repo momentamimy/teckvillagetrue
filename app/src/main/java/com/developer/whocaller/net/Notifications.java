@@ -25,7 +25,7 @@ import com.developer.whocaller.net.Model.MessageInfo;
 import com.developer.whocaller.net.Model.retrofit.ApiAccessToken;
 import com.developer.whocaller.net.Model.retrofit.WhoCallerApi;
 import com.developer.whocaller.net.Model.retrofit.retrofitHead;
-import com.developer.whocaller.net.R;
+
 import com.developer.whocaller.net.View.CheckNetworkConnection;
 import com.developer.whocaller.net.View.ConnectionDetector;
 

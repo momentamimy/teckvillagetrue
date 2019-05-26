@@ -12,11 +12,12 @@ import android.widget.TextView;
 import com.developer.whocaller.net.Controller.Block_Adapter;
 import com.developer.whocaller.net.Model.database.Database_Helper;
 import com.developer.whocaller.net.Model.database.tables.block;
+import com.developer.whocaller.net.R;
 
 import java.util.ArrayList;
 import java.util.List;
 
-import com.developer.whocaller.net.R;
+
 
 public class BlockList extends AppCompatActivity {
 
