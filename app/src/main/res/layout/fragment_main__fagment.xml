@@ -64,6 +64,7 @@
 
 
                         <TextView
+                            android:id="@+id/WhoCaller_search"
                             android:layoutDirection="locale"
                             android:textColor="@android:color/white"
                             android:textSize="17dp"

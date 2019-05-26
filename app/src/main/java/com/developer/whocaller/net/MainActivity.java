@@ -46,6 +46,7 @@ import android.widget.TextView;
 import android.widget.Toast;
 
 import com.developer.whocaller.net.Camera_Recognition_package.Camera_Recognition;
+import com.developer.whocaller.net.Controller.LocaleHelper;
 import com.developer.whocaller.net.Services.FileUploadService;
 import com.developer.whocaller.net.Services.GetInitialService;
 import com.developer.whocaller.net.Services.UploadBlockListService;
@@ -1143,6 +1144,10 @@ public class MainActivity extends AppCompatActivity implements NavigationView.On
         }
 
 
+    }
+    @Override
+    protected void attachBaseContext(Context base) {
+        super.attachBaseContext(LocaleHelper.onAttach(base));
     }
 
 }

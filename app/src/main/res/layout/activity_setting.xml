@@ -8,7 +8,6 @@
     tools:context="com.developer.whocaller.net.setting">
 
     <TextView
-        android:visibility="gone"
         android:id="@+id/changLang"
         android:layout_marginTop="30dp"
         android:layout_marginStart="10dp"
@@ -17,7 +16,7 @@
         android:layout_height="wrap_content"
         android:textColor="@color/colorPrimary"
         android:textSize="18sp"
-        android:text="\u25CF  change Language:   en"/>
+        android:text="@string/StringLangSetting"/>
 
     <Switch
         android:layout_marginTop="15dp"
@@ -29,7 +28,7 @@
         android:layout_height="wrap_content"
         android:textColor="@color/colorPrimary"
         android:textSize="18sp"
-        android:text="\u25CF  Show Outgoing call window       " />
+        android:text="@string/outgoing_window" />
 
     <Switch
         android:id="@+id/switch_income"
@@ -41,7 +40,7 @@
         android:layout_below="@+id/switch_outgoing"
         android:textColor="@color/colorPrimary"
         android:textSize="18sp"
-        android:text="\u25CF  Show Incoming call window       "
+        android:text="@string/incoming_window"
          />
 
     <TextView

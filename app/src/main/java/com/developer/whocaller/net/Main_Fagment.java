@@ -12,6 +12,7 @@ import android.content.Intent;
 import android.content.SharedPreferences;
 import android.content.pm.PackageManager;
 import android.content.res.ColorStateList;
+import android.content.res.Resources;
 import android.database.Cursor;
 import android.graphics.Color;
 import android.graphics.drawable.AnimationDrawable;
@@ -59,6 +60,7 @@ import android.widget.ImageView;
 import android.widget.RelativeLayout;
 import android.widget.TextView;
 
+import com.developer.whocaller.net.Controller.LocaleHelper;
 import com.google.i18n.phonenumbers.NumberParseException;
 import com.google.i18n.phonenumbers.PhoneNumberUtil;
 import com.google.i18n.phonenumbers.Phonenumber;
@@ -179,6 +181,7 @@ public class Main_Fagment extends Fragment implements OnBackPressedListener , Lo
         textwaiting=view.findViewById(R.id.textwaiting);
         noLogcalltext=view.findViewById(R.id.nologcalltext);
         emptyrecycle=view.findViewById(R.id.nologcallimage);
+        whoCaller_search=view.findViewById(R.id.WhoCaller_search);
 
         getLoaderManager().initLoader(1, null, this);
 
@@ -200,7 +203,7 @@ public class Main_Fagment extends Fragment implements OnBackPressedListener , Lo
         relativeLayout.setOnClickListener(new View.OnClickListener() {
             @Override
             public void onClick(View v) {
-
+                updateViews("en");
             }
         });
 
@@ -1702,5 +1705,18 @@ public class Main_Fagment extends Fragment implements OnBackPressedListener , Lo
             str = str.substring(0, str.length() - 1)+Uri.encode("#");
         }
         return str;
+    }
+
+
+
+
+
+    TextView whoCaller_search;
+    private void updateViews(String languageCode) {
+        Context context = LocaleHelper.setLocale(getContext(), languageCode);
+        Resources resources = context.getResources();
+        //whoCaller_search.setText(resources.getString(R.string.who_caller_search));
+        startActivity(new Intent(getContext(),MainActivity.class));
+        getActivity().finish();
     }
 }

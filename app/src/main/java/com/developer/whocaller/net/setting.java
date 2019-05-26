@@ -1,6 +1,7 @@
 package com.developer.whocaller.net;
 
 import android.app.Dialog;
+import android.content.Context;
 import android.content.Intent;
 import android.content.SharedPreferences;
 import android.content.res.Resources;
@@ -22,6 +23,8 @@ import android.widget.Toast;
 
 import androidx.annotation.RequiresApi;
 
+
+import com.developer.whocaller.net.Controller.LocaleHelper;
 
 import java.util.Locale;
 
@@ -48,6 +51,7 @@ public class setting extends AppCompatActivity {
         getSupportActionBar().setDisplayHomeAsUpEnabled(true);   //back button on App Bar
 
         intiateSwitchRadioGroup();
+
 
         changeLang.setOnClickListener(new View.OnClickListener() {
             @Override
@@ -184,9 +188,10 @@ public class setting extends AppCompatActivity {
                 SharedPreferences.Editor editor=sharedPreferences.edit();
                 editor.putString("lang","en");
                 editor.commit();
-                if (Build.VERSION.SDK_INT >= Build.VERSION_CODES.JELLY_BEAN_MR1) {
-                    setLocale("en");
-                }
+                updateViews("en");
+                changeLang.setText("\u25CF  change Language:   en");
+
+                MyDialogLanguage.dismiss();
             }
         });
 
@@ -197,28 +202,19 @@ public class setting extends AppCompatActivity {
                 SharedPreferences.Editor editor=sharedPreferences.edit();
                 editor.putString("lang","ar");
                 editor.commit();
+                updateViews("ar");
+                changeLang.setText(" \u25CF  تغير اللغة:  عربية");
                 if (Build.VERSION.SDK_INT >= Build.VERSION_CODES.JELLY_BEAN_MR1) {
-                    setLocale("ar");
+                    //setLocale("ar");
                 }
+                MyDialogLanguage.dismiss();
             }
         });
 
         MyDialogLanguage.show();
     }
 
-    @RequiresApi(api = Build.VERSION_CODES.JELLY_BEAN_MR1)
-    public void setLocale(String lang) {
-        Resources res = getResources();
-// Change locale settings in the app.
-        DisplayMetrics dm = res.getDisplayMetrics();
-        android.content.res.Configuration conf = res.getConfiguration();
-        conf.setLocale(new Locale(lang.toLowerCase())); // API 17+ only.
-// Use conf.locale = new Locale(...) if targeting lower versions
-        res.updateConfiguration(conf, dm);
-
-        restartActivity();
-    }
-
+    /*
     private void restartActivity() {
         Intent intent=new Intent(getApplicationContext(),MainActivity.class);
         intent.addFlags(Intent.FLAG_ACTIVITY_CLEAR_TOP | Intent.FLAG_ACTIVITY_CLEAR_TASK | Intent.FLAG_ACTIVITY_NEW_TASK);
@@ -226,5 +222,16 @@ public class setting extends AppCompatActivity {
 
         Intent intent1 = getIntent();
         startActivity(intent1);
+    }*/
+    @Override
+    protected void attachBaseContext(Context base) {
+        super.attachBaseContext(LocaleHelper.onAttach(base));
+    }
+    private void updateViews(String languageCode) {
+        Context context = LocaleHelper.setLocale(this, languageCode);
+        Resources resources = context.getResources();
+
+        changeLang.setText(resources.getString(R.string.StringLangSetting));
+
     }
 }

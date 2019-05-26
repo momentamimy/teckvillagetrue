@@ -17,11 +17,10 @@
 
 
 
-    <string name="who_caller_search">Who Caller? Search</string>
+    <string name="who_caller_search">ماشى</string>
     <string name="notifications">Notifications</string>
-    <string name="Terms_of_Service"><u>Terms of Service</u> and</string>
-    <string name="Privacy_Policy"><u>Privacy Policy</u></string>
-    <string name="StringLangSetting">● change Language: english</string>
-    <string name="outgoing_window">● Show Outgoing call window       4</string>
+
+    <string name="StringLangSetting">●   تغير اللغة:  عربية</string>
+    <string name="outgoing_window">● Show Outgoing call window       </string>
     <string name="incoming_window">● Show Incoming call window       </string>
 </resources>
