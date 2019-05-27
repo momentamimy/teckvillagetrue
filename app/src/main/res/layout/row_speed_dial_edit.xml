@@ -23,7 +23,7 @@
             android:layout_width="wrap_content"
             android:layout_height="wrap_content"
             android:layout_centerVertical="true"
-            android:text="add contact or number"
+            android:text="@string/add_contact_or_number"
             android:layout_toRightOf="@+id/Dial_Number" />
     <ImageView
         android:layout_centerVertical="true"

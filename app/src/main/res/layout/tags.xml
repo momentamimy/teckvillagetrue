@@ -28,7 +28,7 @@
                 android:textStyle="bold"
                 android:gravity="center"
                 android:padding="15dp"
-                android:text="Choose Tag"/>
+                android:text="@string/choose_tag"/>
 
             <RelativeLayout
                 android:layout_below="@id/Websie_title"

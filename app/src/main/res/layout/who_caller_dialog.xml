@@ -132,7 +132,7 @@
                         android:layout_width="wrap_content"
                         android:layout_height="wrap_content"
                         android:background="@drawable/glory_button"
-                        android:text="view"
+                        android:text="@string/view"
                         android:textSize="15sp"
                         android:paddingStart="8dp"
                         android:paddingEnd="8dp"
@@ -175,7 +175,7 @@
                         android:layout_width="wrap_content"
                         android:layout_height="wrap_content"
                         android:textColor="@color/colorPrimary"
-                        android:text="Call"
+                        android:text="@string/call_dialog"
                         />
                 </RelativeLayout>
 
@@ -201,7 +201,7 @@
                         android:layout_width="wrap_content"
                         android:layout_height="wrap_content"
                         android:textColor="@color/colorPrimary"
-                        android:text="Message"
+                        android:text="@string/messagedialog"
                         />
                 </RelativeLayout>
 
@@ -227,7 +227,7 @@
                         android:layout_width="wrap_content"
                         android:layout_height="wrap_content"
                         android:textColor="@color/colorPrimary"
-                        android:text="Save"
+                        android:text="@string/savedilaog"
                         />
                 </RelativeLayout>
 
@@ -253,7 +253,7 @@
                         android:layout_width="wrap_content"
                         android:layout_height="wrap_content"
                         android:textColor="@color/colorPrimary"
-                        android:text="Block"
+                        android:text="@string/blockdialog"
                         />
                 </RelativeLayout>
 

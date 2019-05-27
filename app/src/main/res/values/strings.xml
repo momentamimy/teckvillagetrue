@@ -103,6 +103,26 @@
     <string name="message_profile">MESSAGE</string>
     <string name="view_call_histroy">View call histroy</string>
 
+    <string name="call_dialog">Call</string>
+    <string name="messagedialog">Message</string>
+    <string name="savedilaog">Save</string>
+    <string name="blockdialog">Block</string>
+    <string name="view">view</string>
+
+    <string name="website">Website</string>
+    <string name="ok">OK</string>
+    <string name="cancel">CANCEL</string>
+
+    <string name="company">Company</string>
+    <string name="title">Title</string>
+
+    <string name="choose_tag">Choose Tag</string>
+
+    <string name="about_me">About me</string>
+    <string name="_160_characters_remaining">160 characters remaining</string>
+
+    <string name="add_contact_or_number">add contact or number</string>
+
 
 </resources>
 

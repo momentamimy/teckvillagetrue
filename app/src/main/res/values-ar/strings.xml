@@ -114,4 +114,25 @@
     <string name="message_profile">رسالة</string>
     <string name="view_call_histroy">عرض سجل المكالمات</string>
 
+
+    <string name="call_dialog">اتصال</string>
+    <string name="messagedialog">رسالة</string>
+    <string name="savedilaog">حفظ</string>
+    <string name="blockdialog">حظر</string>
+    <string name="view">عرض</string>
+
+    <string name="website">موقع الإنترنت</string>
+    <string name="ok">موافق</string>
+    <string name="cancel">أغلاق</string>
+
+    <string name="company">أسم الشركة</string>
+    <string name="title">المهنة</string>
+
+    <string name="choose_tag">أختار واحدة</string>
+
+    <string name="about_me">معلومات عني</string>
+    <string name="_160_characters_remaining">عدد الرموز المتبقية ١٦٠</string>
+
+    <string name="add_contact_or_number">إضافة جهة اتصال أو رقم</string>
+
 </resources>

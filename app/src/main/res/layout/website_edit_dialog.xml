@@ -6,7 +6,7 @@
         android:layout_centerInParent="true"
         android:layout_width="match_parent"
         android:layout_height="wrap_content"
-    android:layoutDirection="ltr"
+        android:layoutDirection="ltr"
         android:layout_margin="20dp"
         app:cardCornerRadius="10dp"
         app:cardElevation="5dp">
@@ -23,7 +23,7 @@
                 android:textSize="20dp"
                 android:textStyle="bold"
                 android:padding="15dp"
-                android:text="Website"/>
+                android:text="@string/website"/>
 
             <LinearLayout
                 android:orientation="vertical"
@@ -50,7 +50,7 @@
                         android:textSize="16sp"
                         android:maxLines="1"
                         android:singleLine="true"
-                        android:hint="Website" />
+                        android:hint="@string/website" />
                 </android.support.design.widget.TextInputLayout>
 
 
@@ -65,7 +65,7 @@
                         android:background="?android:attr/selectableItemBackground"
                         android:id="@+id/btn_submit"
                         android:layout_width="wrap_content"
-                        android:text="OK"
+                        android:text="@string/ok"
                         android:gravity="center"
                         android:layout_marginTop="15dp"
                         android:layout_marginStart="30dp"
@@ -83,7 +83,7 @@
                         android:id="@+id/btn_close"
                         android:layout_width="wrap_content"
                         android:layout_height="30dp"
-                        android:text="CANCEL"
+                        android:text="@string/cancel"
                         android:textSize="16sp"
                         android:gravity="center"
                         android:textColor="@color/colorPrimary"

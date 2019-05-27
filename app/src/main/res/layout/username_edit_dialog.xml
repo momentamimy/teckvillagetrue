@@ -6,7 +6,7 @@
         android:layout_centerInParent="true"
         android:layout_width="match_parent"
         android:layout_height="wrap_content"
-    android:layoutDirection="ltr"
+        android:layoutDirection="ltr"
         android:layout_margin="20dp"
         app:cardCornerRadius="10dp"
         app:cardElevation="5dp">
@@ -27,7 +27,7 @@
                 android:textSize="20dp"
                 android:textStyle="bold"
                 android:padding="15dp"
-                android:text="Edit"/>
+                android:text="@string/edit"/>
 
             <LinearLayout
                 android:orientation="vertical"
@@ -54,7 +54,7 @@
                         android:textSize="16sp"
                         android:maxLines="1"
                         android:singleLine="true"
-                        android:hint="First name" />
+                        android:hint="@string/first_name" />
                 </android.support.design.widget.TextInputLayout>
 
 
@@ -83,7 +83,7 @@
                             android:textSize="16sp"
                             android:maxLines="1"
                             android:singleLine="true"
-                            android:hint="Last name" />
+                            android:hint="@string/last_name" />
                     </android.support.design.widget.TextInputLayout>
 
                 </LinearLayout>
@@ -107,7 +107,7 @@
                         android:layout_width="match_parent"
                         android:layout_height="wrap_content"
                         android:drawablePadding="10dp"
-                        android:hint="Company"
+                        android:hint="@string/company"
                         android:maxLines="1"
                         android:singleLine="true"
                         android:textColor="@color/colorPrimary"
@@ -129,7 +129,7 @@
                         android:layout_width="match_parent"
                         android:layout_height="wrap_content"
                         android:drawablePadding="10dp"
-                        android:hint="Title"
+                        android:hint="@string/title"
                         android:maxLines="1"
                         android:singleLine="true"
                         android:textColor="@color/colorPrimary"
@@ -151,7 +151,7 @@
                         android:background="?android:attr/selectableItemBackground"
                         android:id="@+id/btn_submit"
                         android:layout_width="wrap_content"
-                        android:text="OK"
+                        android:text="@string/ok"
                         android:gravity="center"
                         android:layout_marginTop="15dp"
                         android:layout_marginStart="25dp"
@@ -169,7 +169,7 @@
                         android:id="@+id/btn_close"
                         android:layout_width="wrap_content"
                         android:layout_height="30dp"
-                        android:text="CANCEL"
+                        android:text="@string/cancel"
                         android:gravity="center"
                         android:textSize="16sp"
                         android:textColor="@color/colorPrimary"

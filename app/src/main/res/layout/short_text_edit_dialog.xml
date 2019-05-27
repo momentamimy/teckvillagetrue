@@ -23,7 +23,7 @@
                 android:textSize="20dp"
                 android:textStyle="bold"
                 android:padding="15dp"
-                android:text="About me"/>
+                android:text="@string/about_me"/>
 
             <RelativeLayout
                 android:layout_below="@id/short_text_title"
@@ -48,7 +48,7 @@
                         android:layout_height="wrap_content"
                         android:textSize="16sp"
                         android:maxLength="160"
-                        android:hint="About me" />
+                        android:hint="@string/about_me" />
                 </android.support.design.widget.TextInputLayout>
 
                 <TextView
@@ -58,7 +58,7 @@
                     android:layout_height="wrap_content"
                     android:textSize="12dp"
                     android:textColor="#C92C2C2C"
-                    android:text="160 characters remaining"
+                    android:text="@string/_160_characters_remaining"
                     android:layout_below="@+id/input_layout_short_text"
                     android:layout_alignLeft="@+id/input_layout_short_text" />
 
@@ -74,7 +74,7 @@
                         android:background="?android:attr/selectableItemBackground"
                         android:id="@+id/btn_submit"
                         android:layout_width="wrap_content"
-                        android:text="OK"
+                        android:text="@string/ok"
                         android:gravity="center"
                         android:layout_marginTop="15dp"
                         android:layout_marginStart="30dp"
@@ -92,7 +92,7 @@
                         android:id="@+id/btn_close"
                         android:layout_width="wrap_content"
                         android:layout_height="30dp"
-                        android:text="CANCEL"
+                        android:text="@string/cancel"
                         android:gravity="center"
                         android:textSize="16sp"
                         android:textColor="@color/colorPrimary"
