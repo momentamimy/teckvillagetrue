@@ -12,7 +12,7 @@
         android:id="@+id/NoResult"
         android:layout_width="wrap_content"
         android:layout_height="wrap_content"
-        android:text="No Result Check Internet Connection"
+        android:text="@string/no_result_check_internet_connection"
         android:layout_centerInParent="true"
         android:textSize="15dp"
         android:visibility="gone"/>

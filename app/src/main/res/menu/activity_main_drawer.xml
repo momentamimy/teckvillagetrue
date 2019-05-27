@@ -10,34 +10,34 @@
         <item
             android:id="@+id/nav_edit_profile"
             android:icon="@drawable/ic_edit_user"
-            android:title="Profile" />
+            android:title="@string/profile" />
         <item
             android:id="@+id/nav_camera_recognition"
             android:icon="@drawable/ic_photo_camera_with_a_magnifier_tool"
             android:visible="false"
-            android:title="Camera" />
+            android:title="@string/camera" />
         <item
             android:id="@+id/nav_FAQ"
             android:icon="@drawable/ic_question_mark"
-            android:title="FAQ" />
+            android:title="@string/faq" />
         <item
             android:id="@+id/nav_sendfeedback"
             android:icon="@drawable/ic_send_feedback"
-            android:title="Send feedback" />
+            android:title="@string/send_feedback" />
 
         <item
             android:id="@+id/nav_share"
             android:icon="@drawable/ic_share"
-            android:title="Share" />
+            android:title="@string/share" />
 
         <item
             android:id="@+id/nav_blocklist"
             android:icon="@drawable/ic_block_black_24dp"
-            android:title="Block list" />
+            android:title="@string/block_list" />
 
         <item
             android:id="@+id/nav_setting"
             android:icon="@drawable/ic_settings_black_24dp"
-            android:title="Settings" />
+            android:title="@string/settings" />
 
 </menu>

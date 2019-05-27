@@ -3,24 +3,24 @@
 <item
     android:id="@+id/nav_message"
     android:icon="@drawable/chat"
-    android:title="Message"
+    android:title="@string/message"
     />
 
     <item
         android:id="@+id/nav_phone"
         android:icon="@drawable/ic_phone_black_24dp"
-        android:title="Phone"
+        android:title="@string/phone"
         />
 
     <item
         android:id="@+id/nav_contacts"
         android:icon="@drawable/nurse"
-        android:title="Contacts"
+        android:title="@string/contacts"
         />
 
     <item
         android:id="@+id/nav_chat"
         android:icon="@drawable/ic_chat_sms_on_whocaller"
-        android:title="Chat"
+        android:title="@string/chat"
         />
 </menu>

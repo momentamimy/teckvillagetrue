@@ -18,7 +18,7 @@
         android:id="@+id/emtyrecycleblocklist"
         android:layout_width="wrap_content"
         android:layout_height="wrap_content"
-        android:text="No Blocked numbers"
+        android:text="@string/no_blocked_numbers"
         android:layout_centerInParent="true"
         android:textSize="17sp"
         android:textColor="@android:color/black"

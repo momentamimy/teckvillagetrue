@@ -3,7 +3,7 @@
 
     <item
         android:id="@+id/readall"
-        android:title="Mark all as read"
+        android:title="@string/mark_all_as_read"
           />
 
 

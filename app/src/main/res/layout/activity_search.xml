@@ -29,7 +29,7 @@
             <TextView
                 android:layout_width="match_parent"
                 android:layout_height="wrap_content"
-                android:text="Search"
+                android:text="@string/search"
                 android:textColor="@android:color/white"
                 android:textSize="20dp"
                 android:layout_toEndOf="@+id/back_Search"
@@ -59,13 +59,13 @@
                 android:id="@+id/tabItem"
                 android:layout_width="wrap_content"
                 android:layout_height="wrap_content"
-                android:text="SEARCH BY NUMBER"
+                android:text="@string/search_by_number"
                 />
             <android.support.design.widget.TabItem
                 android:id="@+id/tabItem2"
                 android:layout_width="wrap_content"
                 android:layout_height="wrap_content"
-                android:text="SEARCH BY NAME"
+                android:text="@string/search_by_name"
                 />
         </android.support.design.widget.TabLayout>
     </android.support.design.widget.AppBarLayout>

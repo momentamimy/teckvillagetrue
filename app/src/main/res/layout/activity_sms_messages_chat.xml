@@ -154,7 +154,7 @@
                 android:layout_toEndOf="@+id/block_icon"
                 android:layout_width="match_parent"
                 android:layout_height="wrap_content"
-                android:text="Block &amp; report spam "
+                android:text="@string/block_amp_report_spam"
                 android:textColor="#5F7D8C"
                 android:textSize="20dp"
                 android:layout_toRightOf="@+id/block_icon"
@@ -167,7 +167,7 @@
         android:layout_alignParentBottom="true"
         android:layout_width="match_parent"
         android:layout_height="wrap_content"
-        android:text="Replay not supported "
+        android:text="@string/replay_not_supported"
         android:textColor="#919191"
         android:textSize="15dp"
         android:gravity="center"
@@ -200,7 +200,7 @@
         android:layout_height="wrap_content"
         android:padding="10dp">
         <EditText
-            android:hint="SMS"
+            android:hint="@string/sms"
             android:background="#00000000"
             android:id="@+id/Message_Send"
             android:layout_width="match_parent"

@@ -33,7 +33,7 @@
                 <TextView
                     android:layout_width="match_parent"
                     android:layout_height="wrap_content"
-                    android:text="Speed dial"
+                    android:text="@string/speed_dial"
                     android:textColor="#000"
                     android:textSize="20dp"
                     android:layout_toEndOf="@+id/back_Speed_dial"
@@ -67,7 +67,7 @@
             android:layout_width="wrap_content"
             android:layout_height="wrap_content"
             android:layout_centerVertical="true"
-            android:text="Voicemail"
+            android:text="@string/voicemail"
             android:layout_toRightOf="@+id/Dial_Number" />
 
     </RelativeLayout>

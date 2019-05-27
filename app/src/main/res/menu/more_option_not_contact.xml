@@ -3,26 +3,26 @@
 
     <item
         android:id="@+id/sharecontact"
-        android:title="Share"
+        android:title="@string/sharecontact"
         />
 
 
     <item
         android:id="@+id/savecontact"
-        android:title="Save"
+        android:title="@string/save"
         />
 
 
 
     <item
         android:id="@+id/searchonweb"
-        android:title="Search the Web"
+        android:title="@string/search_the_web"
         />
 
 
     <item
         android:id="@+id/copynumber"
-        android:title="Copy Number"
+        android:title="@string/copy_number"
         />
 
 

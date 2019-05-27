@@ -35,7 +35,7 @@
         android:layout_weight="1"
         android:gravity="center"
         android:textStyle="bold"
-        android:text="No Text Deduced"
+        android:text="@string/no_text_deduced"
         android:textColor="@android:color/black"
         android:textSize="20sp" />
 

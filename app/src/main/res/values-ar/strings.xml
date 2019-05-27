@@ -18,7 +18,7 @@
 
 
     <string name="who_caller_search">ماشى</string>
-    <string name="notifications">Notifications</string>
+
 
     <string name="Terms_of_Service"><u>شروط الخدمة</u>و</string>
     <string name="Privacy_Policy"><u>سياسة الخصوصية</u></string>
@@ -47,5 +47,65 @@
     <string name="first_name">الاسم الاول</string>
     <string name="last_name">اسم العائلة</string>
     <string name="email">البريد الإلكتروني</string>
+
+    <string name="your_most_called_contacts_will_appear_here_for_easy_access">ستظهر جهات الاتصال الأكثر اتصالًا هنا لسهولة الوصول إليها</string>
+    <string name="no_calls_yet">لا توجد مكالمات حتى الآن</string>
+
+    <string name="profile">الملف الشخصي</string>
+    <string name="camera">التقط رقم هاتف</string>
+    <string name="notifications">إشعارات</string>
+    <string name="faq">الأسئلة المتكررة</string>
+    <string name="send_feedback">ارسالنا ملاحظاتك</string>
+    <string name="share">شارك التطبيق</string>
+    <string name="block_list">قائمة المحظورين</string>
+    <string name="settings">الإعدادات</string>
+
+    <string name="phone">مكالمات</string>
+    <string name="contacts">جهات الاتصال</string>
+    <string name="chat">الدردشة</string>
+    <string name="message">الرسائل</string>
+
+    <string name="add_contact_to_chat">إضافة جهة اتصال للدردشة</string>
+
+    <string name="mark_all_as_read">وضع علامة\"الجميع مقروء\"</string>
+
+    <string name="sharecontact">مشاركة</string>
+    <string name="save">حفظ</string>
+    <string name="search_the_web">البحث علي الانترنت</string>
+    <string name="copy_number">نسخ الرقم</string>
+    <string name="edit">تحرير</string>
+    <string name="copy_name">نسخ الإسم</string>
+    <string name="copy_contact">نسخ جهة الإتصال</string>
+    <string name="remove_contact">إزالة جهة الإتصال</string>
+
+    <string name="block_and_report_spam">حظر و تبليغ عن تطفل</string>
+    <string name="delete_conversation">حذف المحادثة</string>
+
+    <string name="no_blocked_numbers">لا يوجد مكالمات محظورة</string>
+
+    <string name="no_text_deduced">لا يوجد نص مستخلص</string>
+
+    <string name="speed_dial">اتصال سريع</string>
+    <string name="voicemail">البريد الصوتي</string>
+
+    <string name="no_result_check_internet_connection">لا توجد نتيجة تحقق من اتصال الإنترنت</string>
+
+    <string name="search_by_number">البحث بالرقم</string>
+    <string name="search_by_name">البحث بالإسم</string>
+    <string name="search">بحث</string>
+
+    <string name="to">الي</string>
+
+    <string name="click_on_your_contacts_to_send_nsame_message_to_multiple_contacts">انقر على جهات الاتصال الخاصة بك لإرسال نفس الرسالة إلى جهات اتصال متعددة</string>
+
+    <string name="replay_not_supported">هذا المرسل لا يتيح الرد</string>
+    <string name="sms">رسالة نصية قصيرة</string>
+
+    <string name="block_amp_report_spam">حظر و تبليغ عن تطفل</string>
+
+    <string name="call">مكالمة</string>
+    <string name="block">حظر</string>
+    <string name="message_profile">رسالة</string>
+    <string name="view_call_histroy">عرض سجل المكالمات</string>
 
 </resources>
