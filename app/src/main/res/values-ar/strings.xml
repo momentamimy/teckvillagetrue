@@ -139,4 +139,25 @@
 
     <string name="add_contact_or_number">إضافة جهة اتصال أو رقم</string>
 
+    <string name="send_message">إرسال رسالة</string>
+    <string name="scan_again">التقط مرة أخري</string>
+    <string name="charging_card">التقط رقم كارت شحن</string>
+
+    <string name="message_was_not_sent">لم يتم إرسال الرسالة</string>
+    <string name="resend">إعادة إرسال</string>
+    <string name="delete">حذف</string>
+
+    <string name="language">اللغة</string>
+
+    <string name="address">عنوان</string>
+
+
+    <string name="country">بلد</string>
+    <string name="city">مدينة</string>
+    <string name="zib_code">الرمز البريدي</string>
+    <string name="street">شارع</string>
+
+    <string name="gender">جنس</string>
+
+
 </resources>

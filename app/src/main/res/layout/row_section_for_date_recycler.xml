@@ -6,7 +6,7 @@
         android:id="@+id/datesection"
         android:layout_width="wrap_content"
         android:layout_height="wrap_content"
-        android:text="Yesterday"
+        android:text="@string/yasterday"
         android:textStyle="bold"
         android:textSize="15sp"
         android:layout_marginTop="10dp"

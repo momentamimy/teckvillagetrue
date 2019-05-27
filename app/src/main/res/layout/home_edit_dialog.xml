@@ -27,7 +27,7 @@
                 android:textSize="20dp"
                 android:textStyle="bold"
                 android:padding="15dp"
-                android:text="Address"/>
+                android:text="@string/address"/>
 
             <LinearLayout
                 android:orientation="vertical"
@@ -54,7 +54,7 @@
                         android:textSize="16sp"
                         android:maxLines="1"
                         android:singleLine="true"
-                        android:hint="Street" />
+                        android:hint="@string/street" />
                 </android.support.design.widget.TextInputLayout>
 
 
@@ -76,7 +76,7 @@
                         android:layout_width="match_parent"
                         android:layout_height="wrap_content"
                         android:drawablePadding="10dp"
-                        android:hint="Zib Code"
+                        android:hint="@string/zib_code"
                         android:maxLength="10"
                         android:maxLines="1"
                         android:singleLine="true"
@@ -98,7 +98,7 @@
                         android:layout_width="match_parent"
                         android:layout_height="wrap_content"
                         android:drawablePadding="10dp"
-                        android:hint="City"
+                        android:hint="@string/city"
                         android:maxLines="1"
                         android:singleLine="true"
                         android:textColor="@color/colorPrimary"
@@ -131,7 +131,7 @@
                         android:textSize="16sp"
                         android:maxLines="1"
                         android:singleLine="true"
-                        android:hint="Country" />
+                        android:hint="@string/country" />
                 </android.support.design.widget.TextInputLayout>
 
             </LinearLayout>
@@ -147,7 +147,7 @@
                         android:background="?android:attr/selectableItemBackground"
                         android:id="@+id/btn_submit"
                         android:layout_width="wrap_content"
-                        android:text="OK"
+                        android:text="@string/ok"
                         android:gravity="center"
                         android:layout_marginTop="15dp"
                         android:layout_marginStart="35dp"
@@ -165,7 +165,7 @@
                         android:id="@+id/btn_close"
                         android:layout_width="wrap_content"
                         android:layout_height="30dp"
-                        android:text="CANCEL"
+                        android:text="@string/cancel"
                         android:textSize="16sp"
                         android:gravity="center"
                         android:textColor="@color/colorPrimary"

@@ -104,7 +104,7 @@
     <string name="view_call_histroy">View call histroy</string>
     <string name="others">others</string>
     <string name="spam">spam</string>
-    <string name="yasterday">yasterday</string>
+    <string name="yasterday">Yesterday</string>
     <string name="Today">Today</string>
 
     <string name="call_dialog">Call</string>
@@ -126,6 +126,23 @@
     <string name="_160_characters_remaining">160 characters remaining</string>
 
     <string name="add_contact_or_number">add contact or number</string>
+
+    <string name="send_message">Send Message</string>
+    <string name="scan_again">Scan Again</string>
+    <string name="charging_card">Charging Card</string>
+
+    <string name="message_was_not_sent">Message Was Not Sent</string>
+    <string name="resend">Resend</string>
+    <string name="delete">Delete</string>
+
+    <string name="language">Language</string>
+    <string name="address">Address</string>
+    <string name="country">Country</string>
+    <string name="city">City</string>
+    <string name="zib_code">Zib Code</string>
+    <string name="street">Street</string>
+
+    <string name="gender">Gender</string>
 
 
 </resources>
