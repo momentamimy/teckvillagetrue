@@ -161,6 +161,9 @@ public class Main_Fagment extends Fragment implements OnBackPressedListener , Lo
     boolean isSinglePhoneNumOnly;
     ImageView emptyrecycle;
 
+    TextView whoCaller_search;
+    TextView callText;
+
     public Main_Fagment() {
         // Required empty public constructor
     }
@@ -182,6 +185,7 @@ public class Main_Fagment extends Fragment implements OnBackPressedListener , Lo
         noLogcalltext=view.findViewById(R.id.nologcalltext);
         emptyrecycle=view.findViewById(R.id.nologcallimage);
         whoCaller_search=view.findViewById(R.id.WhoCaller_search);
+        callText=view.findViewById(R.id.call_text);
 
         getLoaderManager().initLoader(1, null, this);
 
@@ -695,6 +699,8 @@ public class Main_Fagment extends Fragment implements OnBackPressedListener , Lo
                 }
             }
         });
+
+
         return view;
     }
 
@@ -1707,16 +1713,4 @@ public class Main_Fagment extends Fragment implements OnBackPressedListener , Lo
         return str;
     }
 
-
-
-
-
-    TextView whoCaller_search;
-    private void updateViews(String languageCode) {
-        Context context = LocaleHelper.setLocale(getContext(), languageCode);
-        Resources resources = context.getResources();
-        //whoCaller_search.setText(resources.getString(R.string.who_caller_search));
-        startActivity(new Intent(getContext(),MainActivity.class));
-        getActivity().finish();
-    }
 }

@@ -3,6 +3,7 @@ package com.developer.whocaller.net;
 import android.Manifest;
 import android.app.Dialog;
 import android.app.ProgressDialog;
+import android.content.Context;
 import android.content.Intent;
 import android.content.pm.PackageManager;
 import android.graphics.Color;
@@ -29,6 +30,7 @@ import android.widget.TextView;
 import android.widget.Toast;
 
 import com.developer.whocaller.net.Controller.AddContactsToChatGroupAdapter;
+import com.developer.whocaller.net.Controller.LocaleHelper;
 import com.developer.whocaller.net.Model.retrofit.ApiAccessToken;
 import com.developer.whocaller.net.Model.retrofit.JSON_Mapping.DataReceived;
 import com.developer.whocaller.net.Model.retrofit.JSON_Mapping.ListMessagesChatModel;
@@ -672,6 +674,10 @@ public class Chat_MessagesChat extends AppCompatActivity {
     @Override
     protected void onResume() {
         super.onResume();
+    }
+    @Override
+    protected void attachBaseContext(Context base) {
+        super.attachBaseContext(LocaleHelper.onAttach(base));
     }
 }
 

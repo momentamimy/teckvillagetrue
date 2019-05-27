@@ -16,6 +16,7 @@ import android.view.MenuItem;
 import android.view.View;
 import android.view.Window;
 import android.widget.CompoundButton;
+import android.widget.RadioButton;
 import android.widget.RadioGroup;
 import android.widget.Switch;
 import android.widget.TextView;
@@ -27,6 +28,7 @@ import androidx.annotation.RequiresApi;
 import com.developer.whocaller.net.Controller.LocaleHelper;
 
 import java.util.Locale;
+import java.util.concurrent.TimeUnit;
 
 public class setting extends AppCompatActivity {
 
@@ -37,7 +39,10 @@ public class setting extends AppCompatActivity {
 
     SharedPreferences preferences;
 
+    TextView callWindowLocation;
     RadioGroup radioGroup;
+
+    RadioButton radioButton,radioButton2,radioButton3;
 
     @Override
     protected void onCreate(Bundle savedInstanceState) {
@@ -114,7 +119,13 @@ public class setting extends AppCompatActivity {
 
         changeLang=findViewById(R.id.changLang);
 
+
+        callWindowLocation=findViewById(R.id.call_window_location);
+
         radioGroup=findViewById(R.id.radioGroup1);
+        radioButton=findViewById(R.id.radioButton);
+        radioButton2=findViewById(R.id.radioButton2);
+        radioButton3=findViewById(R.id.radioButton3);
 
         switchOutgoing=findViewById(R.id.switch_outgoing);
         switchIncoming=findViewById(R.id.switch_income);
@@ -214,15 +225,12 @@ public class setting extends AppCompatActivity {
         MyDialogLanguage.show();
     }
 
-    /*
-    private void restartActivity() {
-        Intent intent=new Intent(getApplicationContext(),MainActivity.class);
-        intent.addFlags(Intent.FLAG_ACTIVITY_CLEAR_TOP | Intent.FLAG_ACTIVITY_CLEAR_TASK | Intent.FLAG_ACTIVITY_NEW_TASK);
-        startActivity(intent);
 
+    private void restartActivity() {
+        finish();
         Intent intent1 = getIntent();
         startActivity(intent1);
-    }*/
+    }
     @Override
     protected void attachBaseContext(Context base) {
         super.attachBaseContext(LocaleHelper.onAttach(base));
@@ -231,7 +239,7 @@ public class setting extends AppCompatActivity {
         Context context = LocaleHelper.setLocale(this, languageCode);
         Resources resources = context.getResources();
 
-        changeLang.setText(resources.getString(R.string.StringLangSetting));
+        restartActivity();
 
     }
 }

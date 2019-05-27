@@ -25,6 +25,7 @@ import android.widget.TextView;
 import android.widget.Toast;
 
 import com.developer.whocaller.net.Controller.AddingSendToChatContactsAdapters;
+import com.developer.whocaller.net.Controller.LocaleHelper;
 import com.developer.whocaller.net.Controller.SendToChatContactsAdapters;
 import com.developer.whocaller.net.Model.retrofit.ApiAccessToken;
 import com.developer.whocaller.net.Model.retrofit.JSON_Mapping.BodyNumberModel;
@@ -442,5 +443,8 @@ public class SendToChatActivity extends AppCompatActivity {
         }
     }
 
-
+    @Override
+    protected void attachBaseContext(Context base) {
+        super.attachBaseContext(LocaleHelper.onAttach(base));
+    }
 }

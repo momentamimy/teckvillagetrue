@@ -1,6 +1,8 @@
 package com.developer.whocaller.net;
 
 import android.app.ProgressDialog;
+import android.content.Context;
+import android.content.res.Resources;
 import android.support.v7.app.AppCompatActivity;
 import android.os.Bundle;
 import android.support.v7.widget.LinearLayoutManager;
@@ -11,6 +13,7 @@ import android.view.View;
 import android.widget.ImageView;
 import android.widget.TextView;
 
+import com.developer.whocaller.net.Controller.LocaleHelper;
 import com.developer.whocaller.net.Model.retrofit.JSON_Mapping.NotificattionDataReceived;
 
 import java.util.ArrayList;
@@ -40,7 +43,11 @@ public class Notifications extends AppCompatActivity {
     @Override
     protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
+        Context context=LocaleHelper.setLocale(getApplicationContext(),LocaleHelper.getLanguage(getApplicationContext()));
+        Resources resources = context.getResources();
+        setTitle(resources.getString(R.string.call));
         setContentView(R.layout.activity_notifications);
+
 
         messageInfos=new ArrayList<>();
 
@@ -133,14 +140,18 @@ public class Notifications extends AppCompatActivity {
                     }
                 });
             } else {
-                noResult.setText("No Result Check Internet Connection");
+                noResult.setText(getResources().getString(R.string.no_result_check_internet_connection));
                 noResult.setVisibility(View.VISIBLE);
                 refreshButton.setVisibility(View.VISIBLE);
             }
         } else {
-            noResult.setText("No Result Check Internet Connection");
+            noResult.setText(getResources().getString(R.string.no_result_check_internet_connection));
             noResult.setVisibility(View.VISIBLE);
             refreshButton.setVisibility(View.VISIBLE);
         }
+    }
+    @Override
+    protected void attachBaseContext(Context base) {
+        super.attachBaseContext(LocaleHelper.onAttach(base));
     }
 }

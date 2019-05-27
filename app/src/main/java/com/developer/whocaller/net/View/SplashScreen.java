@@ -25,6 +25,7 @@ import pub.devrel.easypermissions.AfterPermissionGranted;
 import pub.devrel.easypermissions.AppSettingsDialog;
 import pub.devrel.easypermissions.EasyPermissions;
 import com.developer.whocaller.net.AutoStartHintActivity;
+import com.developer.whocaller.net.Controller.LocaleHelper;
 import com.developer.whocaller.net.MainActivity;
 import com.developer.whocaller.net.R;
 
@@ -287,5 +288,9 @@ public class SplashScreen extends AppCompatActivity implements EasyPermissions.P
     public void startActivityForResult(Intent intent, int requestCode) {
         super.startActivityForResult(intent, requestCode);
 
+    }
+    @Override
+    protected void attachBaseContext(Context base) {
+        super.attachBaseContext(LocaleHelper.onAttach(base));
     }
 }

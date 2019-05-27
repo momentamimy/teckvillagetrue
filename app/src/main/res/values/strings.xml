@@ -22,8 +22,15 @@
     <string name="Terms_of_Service"><u>Terms of Service</u> and</string>
     <string name="Privacy_Policy"><u>Privacy Policy</u></string>
     <string name="StringLangSetting">● change Language: english</string>
-    <string name="outgoing_window">● Show Outgoing call window       4</string>
+    <string name="outgoing_window">● Show Outgoing call window       </string>
     <string name="incoming_window">● Show Incoming call window       </string>
+    <string name="call_window_location">Call window location</string>
+    <string name="top">Top</string>
+    <string name="center">Center</string>
+    <string name="bottom">Bottom</string>
+    <string name="no_calls_yet">No calls yet</string>
+    <string name="your_most_called_contacts_will_appear_here_for_easy_access">Your most called contacts will appear here for easy access</string>
+    <string name="call">Call</string>
     <string name="welcome_to">Welcome To</string>
     <string name="no_more_unknown_numbers">No more unknown numbers</string>
     <string name="by_proceed_i_accept_the_who_caller">By proceed. I accept the Who Caller?</string>
@@ -41,6 +48,8 @@
     <string name="first_name">First name</string>
     <string name="last_name">Last name</string>
     <string name="email">Email</string>
+    <string name="Notification">Notification</string>
+    <string name="no_result_check_internet_connection">No Result Check Internet Connection</string>
 
     <string name="your_most_called_contacts_will_appear_here_for_easy_access">Your most called contacts will appear here for easy access</string>
     <string name="no_calls_yet">No calls yet</string>
