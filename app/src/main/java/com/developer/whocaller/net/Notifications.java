@@ -43,9 +43,6 @@ public class Notifications extends AppCompatActivity {
     @Override
     protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
-        Context context=LocaleHelper.setLocale(getApplicationContext(),LocaleHelper.getLanguage(getApplicationContext()));
-        Resources resources = context.getResources();
-        setTitle(resources.getString(R.string.call));
         setContentView(R.layout.activity_notifications);
 
 
