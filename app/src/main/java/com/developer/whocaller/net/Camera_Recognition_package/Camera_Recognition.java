@@ -1,6 +1,7 @@
 package com.developer.whocaller.net.Camera_Recognition_package;
 
 import android.app.Activity;
+import android.content.Context;
 import android.content.Intent;
 import android.content.IntentFilter;
 import android.content.pm.PackageManager;
@@ -15,6 +16,7 @@ import android.widget.TextView;
 import android.widget.Toast;
 
 
+import com.developer.whocaller.net.Controller.LocaleHelper;
 import com.developer.whocaller.net.R;
 import com.google.android.gms.vision.CameraSource;
 import com.google.android.gms.vision.Detector;
@@ -211,7 +213,10 @@ public class Camera_Recognition extends AppCompatActivity  {
 
     }
 
-
+    @Override
+    protected void attachBaseContext(Context base) {
+        super.attachBaseContext(LocaleHelper.onAttach(base));
+    }
 
 
 }

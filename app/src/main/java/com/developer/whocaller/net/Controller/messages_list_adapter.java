@@ -155,10 +155,10 @@ public class messages_list_adapter extends RecyclerView.Adapter<messages_list_ad
             Calendar calendar2 = Calendar.getInstance();
             if (calendar1.get(Calendar.DAY_OF_YEAR) == calendar2.get(Calendar.DAY_OF_YEAR) &&
                     calendar1.get(Calendar.YEAR) == calendar2.get(Calendar.YEAR)) {
-                holder.day_date.setText("Today");
+                holder.day_date.setText(context.getResources().getString(R.string.Today));
             } else if (calendar1.get(Calendar.DAY_OF_YEAR) == calendar2.get(Calendar.DAY_OF_YEAR) - 1 &&
                     calendar1.get(Calendar.YEAR) == calendar2.get(Calendar.YEAR)) {
-                holder.day_date.setText("Yesterday");
+                holder.day_date.setText(context.getResources().getString(R.string.yasterday));
             } else if (calendar1.get(Calendar.DAY_OF_YEAR) > calendar2.get(Calendar.DAY_OF_YEAR) - 5 &&
                     calendar1.get(Calendar.YEAR) == calendar2.get(Calendar.YEAR)) {
                 holder.day_date.setText(String.format("%1$tA", calendar1));

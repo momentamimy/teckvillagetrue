@@ -102,6 +102,10 @@
     <string name="block">BLOCK</string>
     <string name="message_profile">MESSAGE</string>
     <string name="view_call_histroy">View call histroy</string>
+    <string name="others">others</string>
+    <string name="spam">spam</string>
+    <string name="yasterday">yasterday</string>
+    <string name="Today">Today</string>
 
     <string name="call_dialog">Call</string>
     <string name="messagedialog">Message</string>

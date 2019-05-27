@@ -39,6 +39,7 @@ import java.util.List;
 
 import de.hdodenhof.circleimageview.CircleImageView;
 import com.developer.whocaller.net.BroadcastReceivers.Receiver;
+import com.developer.whocaller.net.Controller.LocaleHelper;
 import com.developer.whocaller.net.Controller.messages_list_adapter;
 
 
@@ -517,6 +518,11 @@ public class SMS_MessagesChat_MultipleContacts extends AppCompatActivity {
         Calendar calendar=Calendar.getInstance();
         calendar.add(Calendar.MINUTE,1);
         alarmManager.set(AlarmManager.RTC_WAKEUP,calendar.getTimeInMillis(),amPI);
+    }
+
+    @Override
+    protected void attachBaseContext(Context base) {
+        super.attachBaseContext(LocaleHelper.onAttach(base));
     }
 }
 

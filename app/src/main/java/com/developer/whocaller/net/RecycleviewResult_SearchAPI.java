@@ -1,6 +1,7 @@
 package com.developer.whocaller.net;
 
 import android.app.ProgressDialog;
+import android.content.Context;
 import android.os.Handler;
 import android.support.v7.app.AppCompatActivity;
 import android.os.Bundle;
@@ -12,6 +13,7 @@ import android.view.MenuItem;
 import android.view.View;
 import android.widget.TextView;
 
+import com.developer.whocaller.net.Controller.LocaleHelper;
 import com.developer.whocaller.net.View.ConnectionDetector;
 import com.sdsmdg.tastytoast.TastyToast;
 
@@ -691,4 +693,9 @@ public class RecycleviewResult_SearchAPI extends AppCompatActivity {
 
     }
 
+
+    @Override
+    protected void attachBaseContext(Context base) {
+        super.attachBaseContext(LocaleHelper.onAttach(base));
+    }
 }

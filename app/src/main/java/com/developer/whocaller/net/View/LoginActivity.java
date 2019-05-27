@@ -13,6 +13,7 @@ import android.widget.EditText;
 import android.widget.TextView;
 import android.widget.Toast;
 
+import com.developer.whocaller.net.Controller.LocaleHelper;
 import com.developer.whocaller.net.R;
 import com.mukesh.countrypicker.Country;
 import com.mukesh.countrypicker.CountryPicker;
@@ -188,5 +189,8 @@ public class LoginActivity extends AppCompatActivity implements TextWatcher {
     }
 
 
-
+    @Override
+    protected void attachBaseContext(Context base) {
+        super.attachBaseContext(LocaleHelper.onAttach(base));
+    }
 }

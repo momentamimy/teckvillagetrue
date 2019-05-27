@@ -115,19 +115,19 @@
                     android:id="@+id/tabItem"
                     android:layout_width="wrap_content"
                     android:layout_height="wrap_content"
-                    android:text="contacts"
+                    android:text="@string/contacts"
                     />
                 <android.support.design.widget.TabItem
                     android:id="@+id/tabItem2"
                     android:layout_width="wrap_content"
                     android:layout_height="wrap_content"
-                    android:text="others"
+                    android:text="@string/others"
                     />
                 <android.support.design.widget.TabItem
                     android:id="@+id/tabItem3"
                     android:layout_width="wrap_content"
                     android:layout_height="wrap_content"
-                    android:text="spam"
+                    android:text="@string/spam"
                     />
             </android.support.design.widget.TabLayout>
         </android.support.design.widget.AppBarLayout>

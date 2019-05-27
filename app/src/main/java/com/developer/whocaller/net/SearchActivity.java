@@ -1,5 +1,6 @@
 package com.developer.whocaller.net;
 
+import android.content.Context;
 import android.support.design.widget.TabLayout;
 import android.support.v4.view.ViewPager;
 import android.support.v7.app.AppCompatActivity;
@@ -8,7 +9,7 @@ import android.view.View;
 import android.widget.ImageView;
 
 import com.developer.whocaller.net.Controller.CustomSearchViewAdapter;
-
+import com.developer.whocaller.net.Controller.LocaleHelper;
 
 
 public class SearchActivity extends AppCompatActivity {
@@ -37,5 +38,10 @@ public class SearchActivity extends AppCompatActivity {
         pager.setAdapter(adapter);
         pager.addOnPageChangeListener(new TabLayout.TabLayoutOnPageChangeListener(tabs));
         tabs.addOnTabSelectedListener(new TabLayout.ViewPagerOnTabSelectedListener(pager));
+    }
+
+    @Override
+    protected void attachBaseContext(Context base) {
+        super.attachBaseContext(LocaleHelper.onAttach(base));
     }
 }

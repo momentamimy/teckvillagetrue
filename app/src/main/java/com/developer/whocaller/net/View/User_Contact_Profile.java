@@ -32,6 +32,7 @@ import android.widget.RelativeLayout;
 import android.widget.TextView;
 import android.widget.Toast;
 
+import com.developer.whocaller.net.Controller.LocaleHelper;
 import com.developer.whocaller.net.Make_Phone_Call;
 import com.developer.whocaller.net.Model.database.Database_Helper;
 import com.developer.whocaller.net.Model.database.tables.Tags;
@@ -703,5 +704,10 @@ public class User_Contact_Profile extends AppCompatActivity {
 
     }
 
+
+    @Override
+    protected void attachBaseContext(Context base) {
+        super.attachBaseContext(LocaleHelper.onAttach(base));
+    }
 
 }

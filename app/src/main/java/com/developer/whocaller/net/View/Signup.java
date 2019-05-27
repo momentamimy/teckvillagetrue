@@ -33,6 +33,7 @@ import android.widget.ImageView;
 import android.widget.TextView;
 import android.widget.Toast;
 
+import com.developer.whocaller.net.Controller.LocaleHelper;
 import com.developer.whocaller.net.Model.retrofit.ApiAccessToken;
 import com.developer.whocaller.net.Model.retrofit.JSON_Mapping.DataReceived;
 import com.developer.whocaller.net.Model.retrofit.JSON_Mapping.TokenBodyModel;
@@ -955,5 +956,8 @@ public class Signup extends AppCompatActivity {
             // permissions this app might request
         }
     }
-
+    @Override
+    protected void attachBaseContext(Context base) {
+        super.attachBaseContext(LocaleHelper.onAttach(base));
+    }
 }

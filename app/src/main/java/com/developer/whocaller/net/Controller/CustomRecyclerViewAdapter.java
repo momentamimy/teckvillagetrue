@@ -70,7 +70,7 @@ public class CustomRecyclerViewAdapter extends RecyclerView.Adapter<CustomRecycl
         else if (calendar.get(Calendar.DAY_OF_YEAR) == calendar1.get(Calendar.DAY_OF_YEAR)-1 &&
                 calendar.get(Calendar.YEAR) == calendar1.get(Calendar.YEAR))
         {
-            holder.messageDate.setText("yesterday");
+            holder.messageDate.setText(mContext.getResources().getString(R.string.yasterday));
         }
         else if (calendar.get(Calendar.DAY_OF_YEAR) > calendar1.get(Calendar.DAY_OF_YEAR)-5 &&
                 calendar.get(Calendar.YEAR) == calendar1.get(Calendar.YEAR))

@@ -23,6 +23,8 @@ import android.widget.ImageView;
 import android.widget.ListView;
 import android.widget.TextView;
 
+import com.developer.whocaller.net.Controller.LocaleHelper;
+
 import java.util.ArrayList;
 import java.util.List;
 
@@ -181,5 +183,10 @@ public class EditSpeedDialActivity extends AppCompatActivity {
                 MyDialogAssignNum.dismiss();
             }
         });
+    }
+
+    @Override
+    protected void attachBaseContext(Context base) {
+        super.attachBaseContext(LocaleHelper.onAttach(base));
     }
 }

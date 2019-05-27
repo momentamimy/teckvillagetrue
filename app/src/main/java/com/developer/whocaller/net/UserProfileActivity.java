@@ -50,6 +50,7 @@ import android.widget.RelativeLayout;
 import android.widget.TextView;
 import android.widget.Toast;
 
+import com.developer.whocaller.net.Controller.LocaleHelper;
 import com.intrusoft.squint.DiagonalView;
 import com.sdsmdg.tastytoast.TastyToast;
 import com.squareup.picasso.Picasso;
@@ -1543,5 +1544,8 @@ public class UserProfileActivity extends AppCompatActivity  implements OnclickRe
         }
 
     }
-
+    @Override
+    protected void attachBaseContext(Context base) {
+        super.attachBaseContext(LocaleHelper.onAttach(base));
+    }
 }

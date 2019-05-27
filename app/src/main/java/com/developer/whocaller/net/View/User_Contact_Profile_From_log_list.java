@@ -33,6 +33,7 @@ import android.widget.RelativeLayout;
 import android.widget.TextView;
 import android.widget.Toast;
 
+import com.developer.whocaller.net.Controller.LocaleHelper;
 import com.developer.whocaller.net.Model.database.tables.Tags;
 import com.developer.whocaller.net.Model.retrofit.ApiAccessToken;
 import com.developer.whocaller.net.R;
@@ -642,5 +643,10 @@ public class User_Contact_Profile_From_log_list extends AppCompatActivity {
         intent.setData(uri);
         startActivity(intent);
 
+    }
+
+    @Override
+    protected void attachBaseContext(Context base) {
+        super.attachBaseContext(LocaleHelper.onAttach(base));
     }
 }

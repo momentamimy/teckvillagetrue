@@ -19,6 +19,7 @@ import android.widget.Toast;
 
 import com.developer.whocaller.net.Controller.AddingSendToContactsAdapters;
 import com.developer.whocaller.net.Controller.LetterComparator;
+import com.developer.whocaller.net.Controller.LocaleHelper;
 import com.developer.whocaller.net.Controller.SendToContactsAdapters;
 import com.developer.whocaller.net.Model.UserContactData;
 
@@ -223,5 +224,10 @@ public class SendToActivity extends AppCompatActivity {
         data1.setType(2);
         contactData.set(0,data1);
         return contactData;
+    }
+
+    @Override
+    protected void attachBaseContext(Context base) {
+        super.attachBaseContext(LocaleHelper.onAttach(base));
     }
 }

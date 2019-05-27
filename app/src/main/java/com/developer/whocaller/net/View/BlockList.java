@@ -1,5 +1,6 @@
 package com.developer.whocaller.net.View;
 
+import android.content.Context;
 import android.support.v7.app.AppCompatActivity;
 import android.os.Bundle;
 import android.support.v7.widget.DefaultItemAnimator;
@@ -10,6 +11,7 @@ import android.view.View;
 import android.widget.TextView;
 
 import com.developer.whocaller.net.Controller.Block_Adapter;
+import com.developer.whocaller.net.Controller.LocaleHelper;
 import com.developer.whocaller.net.Model.database.Database_Helper;
 import com.developer.whocaller.net.Model.database.tables.block;
 import com.developer.whocaller.net.R;
@@ -96,5 +98,10 @@ public class BlockList extends AppCompatActivity {
             shouldExecuteOnResume = true;
         }
 
+    }
+
+    @Override
+    protected void attachBaseContext(Context base) {
+        super.attachBaseContext(LocaleHelper.onAttach(base));
     }
 }

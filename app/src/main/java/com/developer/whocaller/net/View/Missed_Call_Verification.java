@@ -1,5 +1,6 @@
 package com.developer.whocaller.net.View;
 
+import android.content.Context;
 import android.content.Intent;
 import android.content.SharedPreferences;
 import android.support.design.widget.Snackbar;
@@ -9,6 +10,7 @@ import android.util.Log;
 import android.view.View;
 import android.widget.Toast;
 
+import com.developer.whocaller.net.Controller.LocaleHelper;
 import com.developer.whocaller.net.R;
 import com.sinch.verification.CodeInterceptionException;
 import com.sinch.verification.Config;
@@ -170,4 +172,8 @@ public class Missed_Call_Verification extends AppCompatActivity {
     };
 
 
+    @Override
+    protected void attachBaseContext(Context base) {
+        super.attachBaseContext(LocaleHelper.onAttach(base));
+    }
 }

@@ -113,7 +113,11 @@
     <string name="block">حظر</string>
     <string name="message_profile">رسالة</string>
     <string name="view_call_histroy">عرض سجل المكالمات</string>
+    <string name="others">غيرها</string>
+    <string name="spam">الرسائل المتطفلة</string>
 
+    <string name="yasterday">أمس</string>
+    <string name="Today">اليوم</string>
 
     <string name="call_dialog">اتصال</string>
     <string name="messagedialog">رسالة</string>
