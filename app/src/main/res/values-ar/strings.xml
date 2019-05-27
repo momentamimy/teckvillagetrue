@@ -18,7 +18,6 @@
 
 
     <string name="who_caller_search">WhoCaller? بحث</string>
-    <string name="notifications">Notifications</string>
 
     <string name="Terms_of_Service"><u>شروط الخدمة</u>و</string>
     <string name="Privacy_Policy"><u>سياسة الخصوصية</u></string>
@@ -33,8 +32,8 @@
 
     <string name="no_calls_yet">   لا توجد مكالمات حتى الآن   </string>
     <string name="your_most_called_contacts_will_appear_here_for_easy_access">ستظهر جهات الاتصال الأكثر اتصالًا هنا لسهولة الوصول إليها</string>
-    <string name="call">اتصال</string>
-      <string name="welcome_to">مرحبا بك</string>
+
+    <string name="welcome_to">مرحبا بك</string>
     <string name="no_more_unknown_numbers">لا مزيد من الأرقام غير المعروفة</string>
     <string name="by_proceed_i_accept_the_who_caller">ضغطك علي "إبدأ" يعني قبول</string>
     <string name="proceed">إبدأ</string>
@@ -58,8 +57,6 @@
     <string name="Notification">الاشعارات</string>
     <string name="no_result_check_internet_connection">لا توجد نتيجة تحقق من اتصال الإنترنت</string>
 
-    <string name="your_most_called_contacts_will_appear_here_for_easy_access">ستظهر جهات الاتصال الأكثر اتصالًا هنا لسهولة الوصول إليها</string>
-    <string name="no_calls_yet">لا توجد مكالمات حتى الآن</string>
 
     <string name="profile">الملف الشخصي</string>
     <string name="camera">التقط رقم هاتف</string>
@@ -98,7 +95,6 @@
     <string name="speed_dial">اتصال سريع</string>
     <string name="voicemail">البريد الصوتي</string>
 
-    <string name="no_result_check_internet_connection">لا توجد نتيجة تحقق من اتصال الإنترنت</string>
 
     <string name="search_by_number">البحث بالرقم</string>
     <string name="search_by_name">البحث بالإسم</string>

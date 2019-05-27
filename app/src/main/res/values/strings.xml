@@ -30,7 +30,6 @@
     <string name="bottom">Bottom</string>
     <string name="no_calls_yet">No calls yet</string>
     <string name="your_most_called_contacts_will_appear_here_for_easy_access">Your most called contacts will appear here for easy access</string>
-    <string name="call">Call</string>
     <string name="welcome_to">Welcome To</string>
     <string name="no_more_unknown_numbers">No more unknown numbers</string>
     <string name="by_proceed_i_accept_the_who_caller">By proceed. I accept the Who Caller?</string>
@@ -51,9 +50,7 @@
     <string name="Notification">Notification</string>
     <string name="no_result_check_internet_connection">No Result Check Internet Connection</string>
 
-    <string name="your_most_called_contacts_will_appear_here_for_easy_access">Your most called contacts will appear here for easy access</string>
-    <string name="no_calls_yet">No calls yet</string>
-    <string name="profile">Profile</string>
+     <string name="profile">Profile</string>
     <string name="camera">Camera</string>
     <string name="faq">FAQ</string>
     <string name="send_feedback">Send feedback</string>
@@ -88,7 +85,6 @@
     <string name="speed_dial">Speed dial</string>
     <string name="voicemail">Voicemail</string>
 
-    <string name="no_result_check_internet_connection">No Result Check Internet Connection</string>
 
     <string name="search_by_number">SEARCH BY NUMBER</string>
     <string name="search_by_name">SEARCH BY NAME</string>
