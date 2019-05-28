@@ -143,6 +143,10 @@
     <string name="street">Street</string>
 
     <string name="gender">Gender</string>
+    <string name="contact_profile">CONTACT</string>
+    <string name="about">ABOUT</string>
+    <string name="mobile">Mobile</string>
+    <string name="add_a_short_text_about_yourself">Add a short text about yourself</string>
 
 
 </resources>

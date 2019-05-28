@@ -149,15 +149,20 @@
 
     <string name="language">اللغة</string>
 
-    <string name="address">عنوان</string>
+    <string name="address">العنوان</string>
 
 
-    <string name="country">بلد</string>
-    <string name="city">مدينة</string>
+    <string name="country">البلد</string>
+    <string name="city">المدينة</string>
     <string name="zib_code">الرمز البريدي</string>
-    <string name="street">شارع</string>
+    <string name="street">الشارع</string>
 
-    <string name="gender">جنس</string>
+    <string name="gender">الجنس</string>
+
+    <string name="contact_profile">تواصل</string>
+    <string name="about">حول</string>
+    <string name="mobile">الموبايل</string>
+    <string name="add_a_short_text_about_yourself">أضف نصًا قصيرًا عن نفسك</string>
 
 
 </resources>
