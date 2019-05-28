@@ -193,7 +193,7 @@ public class Main_Fagment extends Fragment implements OnBackPressedListener , Lo
         logs = view.findViewById(R.id.Logs_recycleview);
 
 
-        groupListByDate = new GroupListByDate();
+        groupListByDate = new GroupListByDate(getActivity());
 
         close_search = view.findViewById(R.id.close_Search);
         close_search.setOnClickListener(new View.OnClickListener() {
@@ -1270,7 +1270,7 @@ public class Main_Fagment extends Fragment implements OnBackPressedListener , Lo
         Log.d("mesheyyyy", "onLoadFinished");
         //logInfos = new ArrayList<>();
         //ArrayList<LogInfo> loglist103 = new ArrayList<>();
-        groupListByDate = new GroupListByDate();
+        groupListByDate = new GroupListByDate(getActivity());
         PhoneNumberUtil phoneUtil = PhoneNumberUtil.getInstance();
         loglist103.clear();
         logInfos.clear();

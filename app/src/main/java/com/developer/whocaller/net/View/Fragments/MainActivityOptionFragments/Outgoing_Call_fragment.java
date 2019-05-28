@@ -62,7 +62,7 @@ public class Outgoing_Call_fragment extends Fragment {
         get_outgoing_list=new Get_list_from_logCall_depend_selection(getActivity());
         get_calls_log=new Get_Calls_Log(getActivity());
 
-        groupListByDate=new GroupListByDate();
+        groupListByDate=new GroupListByDate(getActivity());
 
         //Close Fragment
         close_search=view.findViewById(R.id.close_Search);

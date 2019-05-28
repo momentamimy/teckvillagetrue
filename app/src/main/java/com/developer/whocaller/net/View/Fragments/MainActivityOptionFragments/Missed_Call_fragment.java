@@ -56,7 +56,7 @@ public class Missed_Call_fragment extends Fragment {
         emptyrecycle.setText("No missed calls");
 
         get_calls_log=new Get_Calls_Log(getActivity());
-        groupListByDate=new GroupListByDate();
+        groupListByDate=new GroupListByDate(getActivity());
 
         //Close Fragment
         close_search=view.findViewById(R.id.close_Search);

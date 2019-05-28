@@ -1,5 +1,6 @@
 package com.developer.whocaller.net.Model;
 
+import android.content.Context;
 import android.content.res.Resources;
 import android.text.format.DateFormat;
 
@@ -14,6 +15,12 @@ import java.util.Calendar;
  */
 
 public class GroupListByDate {
+
+
+    Context context;
+    public GroupListByDate(Context context) {
+        this.context=context;
+    }
 
     /**
      * Receive sorted list and divide it into Letters and contacts
@@ -65,9 +72,9 @@ public class GroupListByDate {
 
         final String dateTimeFormatString = "EEEE, dd MMM";
         if (now.get(Calendar.DATE) == smsTime.get(Calendar.DATE)&&(smsTime.get(Calendar.YEAR) == now.get(Calendar.YEAR)&&(smsTime.get(Calendar.MONTH) == now.get(Calendar.MONTH))) ) {
-            return MainApp.getContext().getResources().getString(R.string.today_recycleview) ;
+            return context.getResources().getString(R.string.today_recycleview) ;
         } else if (now.get(Calendar.DATE) - smsTime.get(Calendar.DATE) == 1&&(smsTime.get(Calendar.YEAR) == now.get(Calendar.YEAR)&&(smsTime.get(Calendar.MONTH) == now.get(Calendar.MONTH)))){
-            return MainApp.getContext().getResources().getString(R.string.yesterday_recycleview) ;
+            return context.getResources().getString(R.string.yesterday_recycleview) ;
         } else if (now.get(Calendar.YEAR) == smsTime.get(Calendar.YEAR)) {
             return DateFormat.format(dateTimeFormatString, smsTime).toString();
         } else {
