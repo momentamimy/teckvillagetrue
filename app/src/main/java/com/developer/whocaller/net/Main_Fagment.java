@@ -293,10 +293,10 @@ public class Main_Fagment extends Fragment implements OnBackPressedListener , Lo
                             case 5:
                                 // item one clicked
                                 AlertDialog.Builder builder = new AlertDialog.Builder(getActivity());
-                                builder.setTitle("Delete all calls");
-                                builder.setMessage("Are you sure you want clear all calls");
+                                builder.setTitle(R.string.delete_dialog);
+                                builder.setMessage(R.string.dec_delete_dialog);
 
-                                builder.setPositiveButton("OK", new DialogInterface.OnClickListener() {
+                                builder.setPositiveButton(R.string.ok, new DialogInterface.OnClickListener() {
                                     @Override
                                     public void onClick(DialogInterface dialog, int which) {
 
@@ -317,7 +317,7 @@ public class Main_Fagment extends Fragment implements OnBackPressedListener , Lo
                                         startActivity(getActivity().getBaseContext().getPackageManager() .getLaunchIntentForPackage( getActivity().getBaseContext().getPackageName()).addFlags(Intent.FLAG_ACTIVITY_CLEAR_TOP).addFlags(Intent.FLAG_ACTIVITY_NEW_TASK));
                                     }
                                 });
-                                builder.setNegativeButton("CANCEL", new DialogInterface.OnClickListener() {
+                                builder.setNegativeButton(R.string.cancel, new DialogInterface.OnClickListener() {
                                     @Override
                                     public void onClick(DialogInterface dialog, int which) {
                                         dialog.dismiss();
@@ -334,11 +334,11 @@ public class Main_Fagment extends Fragment implements OnBackPressedListener , Lo
                 });
 
                 popupMenu.inflate(R.menu.main);
-                popupMenu.getMenu().add(0, 1, 1, menuIconWithText(getResources().getDrawable(R.drawable.ic_recieve_call_menu), "Income"));
-                popupMenu.getMenu().add(0, 2, 2, menuIconWithText(getResources().getDrawable(R.drawable.ic_arrow_right_menu), "Outgoing"));
-                popupMenu.getMenu().add(0, 3, 3, menuIconWithText(getResources().getDrawable(R.drawable.ic_missed_menu), "Missed"));
-                popupMenu.getMenu().add(0, 4, 4, menuIconWithText(getResources().getDrawable(R.drawable.ic_block_black_24dp), "Blocked"));
-                popupMenu.getMenu().add(5, 5, 5, menuIconWithText(getResources().getDrawable(R.drawable.ic_delete_black_24dp), "Delete all calls"));
+                popupMenu.getMenu().add(0, 1, 1, menuIconWithText(getResources().getDrawable(R.drawable.ic_recieve_call_menu), getString(R.string.income_popupmeun)));
+                popupMenu.getMenu().add(0, 2, 2, menuIconWithText(getResources().getDrawable(R.drawable.ic_arrow_right_menu), getString(R.string.outgoing_popup_menu)));
+                popupMenu.getMenu().add(0, 3, 3, menuIconWithText(getResources().getDrawable(R.drawable.ic_missed_menu), getString(R.string.missed_popup_meun)));
+                popupMenu.getMenu().add(0, 4, 4, menuIconWithText(getResources().getDrawable(R.drawable.ic_block_black_24dp), getString(R.string.blocked_popup_menu)));
+                popupMenu.getMenu().add(5, 5, 5, menuIconWithText(getResources().getDrawable(R.drawable.ic_delete_black_24dp), getString(R.string.delete_popup_menu)));
 
                 popupMenu.show();
 

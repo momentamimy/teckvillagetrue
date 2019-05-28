@@ -164,5 +164,7 @@
     <string name="mobile">الموبايل</string>
     <string name="add_a_short_text_about_yourself">أضف نصًا قصيرًا عن نفسك</string>
 
+    <string name="delete_dialog">حذف جميع المكالمات</string>
+    <string name="dec_delete_dialog">هل أنت متأكد من أنك تريد مسح جميع المكالمات</string>
 
 </resources>

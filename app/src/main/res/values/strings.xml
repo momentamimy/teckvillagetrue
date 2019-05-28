@@ -148,6 +148,14 @@
     <string name="mobile">Mobile</string>
     <string name="add_a_short_text_about_yourself">Add a short text about yourself</string>
 
+    <string name="delete_dialog">Delete all calls</string>
+    <string name="dec_delete_dialog">Are you sure you want clear all calls</string>
+    <string name="income_popupmeun">Income</string>
+    <string name="outgoing_popup_menu">Outgoing</string>
+    <string name="missed_popup_meun">Missed</string>
+    <string name="blocked_popup_menu">Blocked</string>
+    <string name="delete_popup_menu">Delete all calls</string>
+
 
 </resources>
 
