@@ -4,7 +4,7 @@
     android:layout_height="match_parent"
     android:id="@+id/missed_layout"
     xmlns:app="http://schemas.android.com/apk/res-auto"
-    android:layoutDirection="ltr"
+    android:layoutDirection="locale"
     tools:context="com.developer.whocaller.net.View.Fragments.MainActivityOptionFragments.Missed_Call_fragment">
 
     <android.support.design.widget.CoordinatorLayout

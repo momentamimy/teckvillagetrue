@@ -77,7 +77,7 @@ public class LastMessasgesFragment extends Fragment {
             @Override
             public void onClick(View v) {
                 mProgressDialog.setIndeterminate(true);
-                mProgressDialog.setMessage("Loading...");
+                mProgressDialog.setMessage(getResources().getString(R.string.loading));
                 mProgressDialog.setCancelable(false);
                 mProgressDialog.show();
                 getAllLastMessages();
@@ -86,7 +86,7 @@ public class LastMessasgesFragment extends Fragment {
         if (CheckNetworkConnection.hasInternetConnection(getContext())) {
             if (ConnectionDetector.hasInternetConnection(getContext())) {
                 mProgressDialog.setIndeterminate(true);
-                mProgressDialog.setMessage("Loading...");
+                mProgressDialog.setMessage(getResources().getString(R.string.loading));
                 mProgressDialog.setCancelable(false);
                 mProgressDialog.show();
             }

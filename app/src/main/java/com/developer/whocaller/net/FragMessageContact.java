@@ -126,7 +126,7 @@ public class FragMessageContact extends Fragment {
     public static void LoadingContactToast(Context context)
     {
         clt = new ProgressDialog(context);
-        clt.setTitle("Loading SMS");
+        clt.setTitle(context.getResources().getString(R.string.loading_SMS));
         clt.show();
     }
     public static void DismissLoadingContactToast()

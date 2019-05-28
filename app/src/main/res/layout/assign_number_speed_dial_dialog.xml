@@ -45,7 +45,7 @@
                     android:singleLine="true"
                     android:inputType="number"
                     android:textColorHint="#fff"
-                    android:hint="Assign phone number" />
+                    android:hint="@string/assign_phone_number" />
             </android.support.design.widget.TextInputLayout>
 
 
@@ -63,28 +63,32 @@
 
                 <TextView
                     android:background="?android:attr/selectableItemBackground"
-                    android:padding="5dp"
                     android:id="@+id/btn_submit"
-                    android:layout_width="70dp"
-                    android:text="ok"
-                    android:layout_margin="10dp"
+                    android:layout_width="wrap_content"
+                    android:text="@string/ok"
+                    android:gravity="center"
+                    android:layout_marginTop="15dp"
+                    android:layout_marginStart="30dp"
+                    android:layout_marginEnd="30dp"
+                    android:layout_marginLeft="30dp"
+                    android:layout_marginRight="30dp"
                     android:layout_toEndOf="@+id/btn_close"
                     android:textColor="@color/colorPrimary"
-                    android:textSize="18sp"
+                    android:textSize="16sp"
                     android:layout_height="30dp"
                     android:layout_toRightOf="@+id/btn_close" />
 
                 <TextView
                     android:background="?android:attr/selectableItemBackground"
-                    android:padding="5dp"
                     android:id="@+id/btn_close"
                     android:layout_width="wrap_content"
-                    android:layout_height="wrap_content"
-                    android:text="canel"
-                    android:textSize="18sp"
+                    android:layout_height="30dp"
+                    android:text="@string/cancel"
+                    android:textSize="16sp"
+                    android:gravity="center"
                     android:textColor="@color/colorPrimary"
-                    android:layout_marginTop="10dp"
-                    android:layout_marginHorizontal="30dp" />
+                    android:layout_marginTop="15dp"
+                    />
             </RelativeLayout>
 
         </RelativeLayout>

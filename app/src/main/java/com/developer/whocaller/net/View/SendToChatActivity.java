@@ -218,7 +218,7 @@ public class SendToChatActivity extends AppCompatActivity {
 
                 mProgressDialog = new ProgressDialog(SendToChatActivity.this);
                 mProgressDialog.setIndeterminate(true);
-                mProgressDialog.setMessage("Loading...");
+                mProgressDialog.setMessage(getResources().getString(R.string.loading));
                 mProgressDialog.setCancelable(false);
                 mProgressDialog.show();
 
@@ -350,7 +350,7 @@ public class SendToChatActivity extends AppCompatActivity {
                 Call<GroupChatResultModel> GroupChat = whoCallerApi.createGroup(ApiAccessToken.getAPIaccessToken(SendToChatActivity.this),bodyModel);
                         mProgressDialog = new ProgressDialog(SendToChatActivity.this);
                         mProgressDialog.setIndeterminate(true);
-                        mProgressDialog.setMessage("Loading...");
+                        mProgressDialog.setMessage(getResources().getString(R.string.loading));
                         mProgressDialog.setCancelable(false);
                         mProgressDialog.show();
                 GroupChat.enqueue(new Callback<GroupChatResultModel>() {

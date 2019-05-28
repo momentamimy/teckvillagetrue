@@ -1150,7 +1150,7 @@ public class Main_Fagment extends Fragment implements OnBackPressedListener , Lo
         window.setLayout(Toolbar.LayoutParams.WRAP_CONTENT, Toolbar.LayoutParams.WRAP_CONTENT);
         MyDialogAssignNum.getWindow().setBackgroundDrawable(new ColorDrawable(Color.TRANSPARENT));
         TextView speedDialTitle = MyDialogAssignNum.findViewById(R.id.speed_dial_title);
-        speedDialTitle.setText("Speed dial #" + number);
+        speedDialTitle.setText(getContext().getResources().getString(R.string.SpeedDial) + number);
         final EditText phoneNum = MyDialogAssignNum.findViewById(R.id.edit_phone_number);
         final TextInputLayout inputLayout = MyDialogAssignNum.findViewById(R.id.input_layout_phone_number);
         TextView OK, Cancel;
@@ -1189,7 +1189,7 @@ public class Main_Fagment extends Fragment implements OnBackPressedListener , Lo
         window.setLayout(Toolbar.LayoutParams.WRAP_CONTENT, Toolbar.LayoutParams.WRAP_CONTENT);
         MyDialogSpeedDial.getWindow().setBackgroundDrawable(new ColorDrawable(Color.TRANSPARENT));
         TextView speedDialTitle = MyDialogSpeedDial.findViewById(R.id.speed_dial_title);
-        speedDialTitle.setText("Speed dial #" + number);
+        speedDialTitle.setText(getContext().getResources().getString(R.string.SpeedDial) + number);
         TextView assignContact = MyDialogSpeedDial.findViewById(R.id.assign_contact);
         assignContact.setOnClickListener(new View.OnClickListener() {
             @Override
@@ -1624,11 +1624,11 @@ public class Main_Fagment extends Fragment implements OnBackPressedListener , Lo
         TextView Title=MyDialogDualSim.findViewById(R.id.Dual_Sim_Titel);
         if (!TextUtils.isEmpty(ContactName))
         {
-            Title.setText("Call "+ContactName+" from");
+            Title.setText(getContext().getResources().getString(R.string.dual_call)+" "+ContactName+" "+getContext().getResources().getString(R.string.from));
         }
         else
         {
-            Title.setText("Call "+Number+" from");
+            Title.setText(getContext().getResources().getString(R.string.dual_call)+" "+Number+" "+getContext().getResources().getString(R.string.from));
         }
 
         List<String>SIM_NAMES=telephonyInfo.getNetworkOperator(getActivity());
@@ -1649,7 +1649,7 @@ public class Main_Fagment extends Fragment implements OnBackPressedListener , Lo
             public void onClick(View v) {
                 Intent intent = new Intent(Intent.ACTION_CALL);
                 intent.putExtra("com.android.phone.extra.slot", 0); //For sim 1
-                //intent.putExtra("simSlot", 0); //For sim 1
+                intent.putExtra("simSlot", 0); //For sim 1
                 intent.setData(Uri.parse("tel:" + getStringHashTag(Number)));
                 startActivity(intent);
                 MyDialogDualSim.dismiss();
@@ -1661,7 +1661,7 @@ public class Main_Fagment extends Fragment implements OnBackPressedListener , Lo
             public void onClick(View v) {
                 Intent intent = new Intent(Intent.ACTION_CALL);
                 intent.putExtra("simSlot", 1); //For sim 2
-                //intent.putExtra("com.android.phone.extra.slot", 1); //For sim 2
+                intent.putExtra("com.android.phone.extra.slot", 1); //For sim 2
                 intent.setData(Uri.parse("tel:" + getStringHashTag(Number)));
                 startActivity(intent);
                 MyDialogDualSim.dismiss();

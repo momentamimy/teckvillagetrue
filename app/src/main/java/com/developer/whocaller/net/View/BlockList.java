@@ -36,7 +36,7 @@ public class BlockList extends AppCompatActivity {
         super.onCreate(savedInstanceState);
         setContentView(R.layout.activity_block_list);
 
-        getSupportActionBar().setTitle("My block list");
+        getSupportActionBar().setTitle(getResources().getString(R.string.block_list));
         getSupportActionBar().setDisplayShowHomeEnabled(true);   //back button on App Bar
         getSupportActionBar().setDisplayHomeAsUpEnabled(true);   //back button on App Bar
 

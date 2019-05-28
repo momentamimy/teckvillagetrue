@@ -138,6 +138,10 @@
     <string name="_160_characters_remaining">عدد الرموز المتبقية ١٦٠</string>
 
     <string name="add_contact_or_number">إضافة جهة اتصال أو رقم</string>
+    <string name="SpeedDial">اتصال سريع #</string>
+    <string name="assign_contact">تعيين جهة الاتصال</string>
+    <string name="assign_phone_number">تعيين رقم الهاتف</string>
+
 
     <string name="send_message">إرسال رسالة</string>
     <string name="scan_again">التقط مرة أخري</string>
@@ -173,6 +177,11 @@
     <string name="today_recycleview">اليوم</string>
     <string name="yesterday_recycleview">أمس</string>
 
+    <string name="income_popupmeun">مكالمة واردة</string>
+    <string name="outgoing_popup_menu">مكالمة صادرة</string>
+    <string name="missed_popup_meun">مكالمة فائتة</string>
+    <string name="blocked_popup_menu">مكالمة محظورة</string>
+    <string name="delete_popup_menu">حذف كل المكالمات</string>
     <string name="search_btn">بحث</string>
     <string name="enter_name_hint">أدخل الاسم</string>
     <string name="enter_phone_hint">أدخل رقم الهاتف</string>
@@ -188,9 +197,19 @@
     <string name="sugguestfromwhocaller">اقتراح من التطبيق ?Who caller</string>
 
     <string name="text">رقم الهاتف</string>
+    <string name="empty_income">لا يوجد مكالمات واردة</string>
+    <string name="empty_outgoing">لا يوجد مكالمات صادرة</string>
+    <string name="empty_missed">لا يوجد مكلمات فائتة</string>
+    <string name="empty_blocked">لا يوجد مكالمات محظورة</string>
+
+    <string name="search_result">ناتج البحث</string>
+    <string name="loading">تحميل...</string>
+    <string name="loading_SMS">تحميل الرسائل</string>
 
     <string name="toast_cant_send">لا يمكن إرسال رسالة إلى هذا الرقم</string>
     <string name="selectphone_dialog">اختر رقم الهاتف</string>
+    <string name="dual_call">اتصال</string>
+    <string name="from">من</string>
     <string name="unblock">رفع الحظر</string>
     <string name="yes">نعم</string>
     <string name="no">لا</string>

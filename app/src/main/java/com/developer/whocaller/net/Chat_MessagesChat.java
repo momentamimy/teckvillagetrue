@@ -300,7 +300,7 @@ public class Chat_MessagesChat extends AppCompatActivity {
                             case R.id.add_contact_to_chat:
                                 // item one clicked
                                 mProgressDialog.setIndeterminate(true);
-                                mProgressDialog.setMessage("Loading...");
+                                mProgressDialog.setMessage(getResources().getString(R.string.loading));
                                 mProgressDialog.setCancelable(false);
                                 mProgressDialog.show();
                                 openContactsDialog();
@@ -453,7 +453,7 @@ public class Chat_MessagesChat extends AppCompatActivity {
         });
 
         mProgressDialog.setIndeterminate(true);
-        mProgressDialog.setMessage("Loading...");
+        mProgressDialog.setMessage(getResources().getString(R.string.loading));
         mProgressDialog.setCancelable(false);
         mProgressDialog.show();
         getMessagesAPI();

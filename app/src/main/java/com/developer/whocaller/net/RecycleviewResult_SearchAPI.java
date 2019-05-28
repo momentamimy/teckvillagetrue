@@ -58,7 +58,7 @@ public class RecycleviewResult_SearchAPI extends AppCompatActivity {
 
         getIntentDetails();
 
-        getSupportActionBar().setTitle("Search Result");
+        getSupportActionBar().setTitle(getResources().getString(R.string.search_result));
         getSupportActionBar().setDisplayShowHomeEnabled(true);   //back button on App Bar
         getSupportActionBar().setDisplayHomeAsUpEnabled(true);   //back button on App Bar
 
@@ -68,7 +68,7 @@ public class RecycleviewResult_SearchAPI extends AppCompatActivity {
         //Start Loading
         mProgressDialog = new ProgressDialog(RecycleviewResult_SearchAPI.this);
         mProgressDialog.setIndeterminate(true);
-        mProgressDialog.setMessage("Loading...");
+        mProgressDialog.setMessage(getResources().getString(R.string.loading));
         mProgressDialog.show();
 
         //Check wifi or data available
@@ -180,7 +180,7 @@ public class RecycleviewResult_SearchAPI extends AppCompatActivity {
 
         mProgressDialog = new ProgressDialog(RecycleviewResult_SearchAPI.this);
         mProgressDialog.setIndeterminate(true);
-        mProgressDialog.setMessage("Loading...");
+        mProgressDialog.setMessage(getResources().getString(R.string.loading));
         mProgressDialog.show();
 
         Retrofit retrofit = retrofitHead.headOfGetorPostReturnRes();
@@ -234,7 +234,7 @@ public class RecycleviewResult_SearchAPI extends AppCompatActivity {
     private void loadJSONMethodPhoneNumber(int page) {
         mProgressDialog = new ProgressDialog(RecycleviewResult_SearchAPI.this);
         mProgressDialog.setIndeterminate(true);
-        mProgressDialog.setMessage("Loading...");
+        mProgressDialog.setMessage(getResources().getString(R.string.loading));
         mProgressDialog.show();
 
         Retrofit retrofit = retrofitHead.headOfGetorPostReturnRes();

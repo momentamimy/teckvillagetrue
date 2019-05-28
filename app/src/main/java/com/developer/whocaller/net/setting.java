@@ -51,7 +51,7 @@ public class setting extends AppCompatActivity {
 
         preferences=getSharedPreferences("PopUp_Dialog",MODE_PRIVATE);
 
-        getSupportActionBar().setTitle("Setting");
+        getSupportActionBar().setTitle(getResources().getString(R.string.settings));
         getSupportActionBar().setDisplayShowHomeEnabled(true);   //back button on App Bar
         getSupportActionBar().setDisplayHomeAsUpEnabled(true);   //back button on App Bar
 

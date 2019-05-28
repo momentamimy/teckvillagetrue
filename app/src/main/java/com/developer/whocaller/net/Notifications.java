@@ -57,7 +57,7 @@ public class Notifications extends AppCompatActivity {
         messageInfos.add(info1);
 */
 
-        getSupportActionBar().setTitle("Notification");
+        getSupportActionBar().setTitle(getResources().getString(R.string.notifications));
         getSupportActionBar().setDisplayShowHomeEnabled(true);   //back button on App Bar
         getSupportActionBar().setDisplayHomeAsUpEnabled(true);   //back button on App Bar
 
@@ -97,7 +97,7 @@ public class Notifications extends AppCompatActivity {
                 refreshButton.setVisibility(View.GONE);
                 final ProgressDialog mProgressDialog = new ProgressDialog(Notifications.this);
                 mProgressDialog.setIndeterminate(true);
-                mProgressDialog.setMessage("Loading...");
+                mProgressDialog.setMessage(getResources().getString(R.string.loading));
                 mProgressDialog.setCancelable(false);
                 mProgressDialog.show();
 

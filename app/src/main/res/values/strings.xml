@@ -126,6 +126,9 @@
     <string name="_160_characters_remaining">160 characters remaining</string>
 
     <string name="add_contact_or_number">add contact or number</string>
+    <string name="SpeedDial">Speed dial #</string>
+    <string name="assign_contact">ASSIGN CONTACT</string>
+    <string name="assign_phone_number">ASSIGN PHONE NUMBER</string>
 
     <string name="send_message">Send Message</string>
     <string name="scan_again">Scan Again</string>
@@ -162,9 +165,15 @@
     <string name="today_recycleview">Today</string>
     <string name="yesterday_recycleview">Yesterday</string>
 
+    <string name="empty_income">No income calls</string>
+    <string name="empty_outgoing">No outgoing calls</string>
+    <string name="empty_missed">No missed calls</string>
+    <string name="empty_blocked">No blocked calls</string>
     <string name="search_btn">search</string>
     <string name="enter_name_hint">Enter Name</string>
     <string name="enter_phone_hint">Enter Phone Number</string>
+    <string name="search_result">Search Result</string>
+    <string name="loading">Loading...</string>
 
     <string name="toast_permission">You allowed permission, please click the button again.</string>
     <string name="toast_refused">You must approve the permission</string>
@@ -177,9 +186,12 @@
     <string name="sugguestfromwhocaller">Suggestion from application Who caller?</string>
 
     <string name="text">Phone Number</string>
+    <string name="loading_SMS">Loading SMS</string>
 
     <string name="toast_cant_send">Can\'t send message to this number</string>
     <string name="selectphone_dialog">Select Phone Number</string>
+    <string name="dual_call">call</string>
+    <string name="from">from</string>
     <string name="unblock">Unblock</string>
     <string name="yes">Yes</string>
     <string name="no">No</string>

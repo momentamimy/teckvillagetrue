@@ -73,7 +73,7 @@ public class AllChatRoomsFragment extends Fragment {
             @Override
             public void onClick(View v) {
                 mProgressDialog.setIndeterminate(true);
-                mProgressDialog.setMessage("Loading...");
+                mProgressDialog.setMessage(getResources().getString(R.string.loading));
                 mProgressDialog.setCancelable(false);
                 mProgressDialog.show();
                 getAllChatRooms();
@@ -81,7 +81,7 @@ public class AllChatRoomsFragment extends Fragment {
         });
 
         mProgressDialog.setIndeterminate(true);
-        mProgressDialog.setMessage("Loading...");
+        mProgressDialog.setMessage(getResources().getString(R.string.loading));
         mProgressDialog.setCancelable(false);
         mProgressDialog.show();
         getAllChatRooms();

@@ -53,10 +53,10 @@ public class Income_Call_fragment extends Fragment {
 
          //Title
         TextView Activitytitle=view.findViewById(R.id.titleoffragment);
-        Activitytitle.setText("Income");
+        Activitytitle.setText(getResources().getString(R.string.income_popupmeun));
 
         emptyrecycle=view.findViewById(R.id.textifempty);
-        emptyrecycle.setText("No income calls");
+        emptyrecycle.setText(getResources().getString(R.string.empty_income));
 
         get_outgoing_list=new Get_list_from_logCall_depend_selection(getActivity());
         get_calls_log=new Get_Calls_Log(getActivity());
