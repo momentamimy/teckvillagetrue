@@ -44,7 +44,7 @@
             android:id="@+id/btn_searchfor"
             android:layout_width="wrap_content"
             android:layout_height="50dp"
-            android:text="search"
+            android:text="@string/search_btn"
             android:layout_alignParentEnd="true"
             android:layout_alignParentRight="true"
             android:layout_marginEnd="5dp"

@@ -75,7 +75,7 @@ public class FragmentSearchByNumber extends Fragment {
         text=view.findViewById(R.id.editsearch);
         search_btn=view.findViewById(R.id.btn_searchfor);
 
-        text.setHint("Enter Phone Number");
+        text.setHint(R.string.enter_phone_hint);
         text.setInputType(InputType.TYPE_CLASS_NUMBER ); //for decimal numbers
 
         search_btn.setOnClickListener(new View.OnClickListener() {

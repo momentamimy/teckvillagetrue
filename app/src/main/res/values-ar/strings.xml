@@ -173,6 +173,9 @@
     <string name="today_recycleview">اليوم</string>
     <string name="yesterday_recycleview">أمس</string>
 
+    <string name="search_btn">بحث</string>
+    <string name="enter_name_hint">أدخل الاسم</string>
+    <string name="enter_phone_hint">أدخل رقم الهاتف</string>
 
 
 </resources>

@@ -75,7 +75,7 @@ public class FragmentSearchByName extends Fragment {
         text=view.findViewById(R.id.editsearch);
         search_btn=view.findViewById(R.id.btn_searchfor);
 
-        text.setHint("Enter Name");
+        text.setHint(R.string.enter_name_hint);
         text.setInputType(InputType.TYPE_CLASS_TEXT );
 
         search_btn.setOnClickListener(new View.OnClickListener() {
