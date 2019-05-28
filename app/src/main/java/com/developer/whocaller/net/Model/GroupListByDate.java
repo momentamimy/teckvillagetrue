@@ -1,6 +1,9 @@
 package com.developer.whocaller.net.Model;
 
+import android.content.res.Resources;
 import android.text.format.DateFormat;
+
+import com.developer.whocaller.net.R;
 
 import java.util.ArrayList;
 import java.util.Calendar;
@@ -61,9 +64,9 @@ public class GroupListByDate {
 
         final String dateTimeFormatString = "EEEE, dd MMM";
         if (now.get(Calendar.DATE) == smsTime.get(Calendar.DATE)&&(smsTime.get(Calendar.YEAR) == now.get(Calendar.YEAR)&&(smsTime.get(Calendar.MONTH) == now.get(Calendar.MONTH))) ) {
-            return "Today " ;
+            return Resources.getSystem().getString(R.string.today_recycleview) ;
         } else if (now.get(Calendar.DATE) - smsTime.get(Calendar.DATE) == 1&&(smsTime.get(Calendar.YEAR) == now.get(Calendar.YEAR)&&(smsTime.get(Calendar.MONTH) == now.get(Calendar.MONTH)))){
-            return "Yesterday " ;
+            return Resources.getSystem().getString(R.string.yesterday_recycleview) ;
         } else if (now.get(Calendar.YEAR) == smsTime.get(Calendar.YEAR)) {
             return DateFormat.format(dateTimeFormatString, smsTime).toString();
         } else {

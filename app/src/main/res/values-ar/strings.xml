@@ -167,4 +167,12 @@
     <string name="delete_dialog">حذف جميع المكالمات</string>
     <string name="dec_delete_dialog">هل أنت متأكد من أنك تريد مسح جميع المكالمات</string>
 
+    <string name="dialog_voicemail">رقم البريد الصوتي غير محدد.</string>
+    <string name="dialogvoicemail2">انتقل إلى إعدادات الاتصال لتعيين رقم البريد الصوتي.</string>
+
+    <string name="today_recycleview">اليوم</string>
+    <string name="yesterday_recycleview">أمس</string>
+
+
+
 </resources>

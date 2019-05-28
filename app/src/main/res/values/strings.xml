@@ -156,6 +156,12 @@
     <string name="blocked_popup_menu">Blocked</string>
     <string name="delete_popup_menu">Delete all calls</string>
 
+    <string name="dialog_voicemail">Voicemail number not configured.</string>
+    <string name="dialogvoicemail2">Go to Call Settings to set the voicemail number.</string>
+
+    <string name="today_recycleview">Today</string>
+    <string name="yesterday_recycleview">Yesterday</string>
+
 
 </resources>
 

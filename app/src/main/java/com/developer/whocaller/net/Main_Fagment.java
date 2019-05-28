@@ -423,10 +423,10 @@ public class Main_Fagment extends Fragment implements OnBackPressedListener , Lo
                     if (num == null) {
 
                         AlertDialog.Builder builder = new AlertDialog.Builder(getActivity());
-                        builder.setMessage("Voicemail number not configured." +
-                                "Go to Call Settings to set the voicemail number.")
+                        builder.setMessage(getString(R.string.dialog_voicemail) +
+                                getString(R.string.dialogvoicemail2))
                                 .setCancelable(false)
-                                .setPositiveButton("OK", new DialogInterface.OnClickListener() {
+                                .setPositiveButton(R.string.ok, new DialogInterface.OnClickListener() {
                                     public void onClick(DialogInterface dialog, int id) {
                                         //do things
                                         dialog.dismiss();
