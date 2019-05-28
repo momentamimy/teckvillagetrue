@@ -202,6 +202,8 @@
     <string name="toast_cant_Send">Can\'t send message to this number</string>
     <string name="toast_cant_open_profile">Can\'t open profile to this number</string>
 
+    <string name="toast_no_phone_number">No Phone Number To This Name</string>
+
 
 </resources>
 

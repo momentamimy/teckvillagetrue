@@ -220,4 +220,6 @@
     <string name="toast_cant_Send">لا يمكن إرسال رسالة إلى هذا الرقم</string>
     <string name="toast_cant_open_profile">لا يمكن فتح الملف الشخصي لهذا الرقم</string>
 
+    <string name="toast_no_phone_number">لا يوجد رقم هاتف لهذا الاسم</string>
+
 </resources>

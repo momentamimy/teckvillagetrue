@@ -160,7 +160,7 @@ public class RecycleviewResult_SearchAPIAdapter extends  RecyclerView.Adapter<Re
                         });
 
                     }else {
-                        Toast.makeText(context,"No Phone Number To This Name",Toast.LENGTH_SHORT).show();
+                        Toast.makeText(context, R.string.toast_no_phone_number,Toast.LENGTH_SHORT).show();
                     }
 
                 }
