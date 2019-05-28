@@ -180,6 +180,9 @@
 
     <string name="toast_cant_send">Can\'t send message to this number</string>
     <string name="selectphone_dialog">Select Phone Number</string>
+    <string name="unblock">Unblock</string>
+    <string name="yes">Yes</string>
+    <string name="no">No</string>
 
 
 </resources>

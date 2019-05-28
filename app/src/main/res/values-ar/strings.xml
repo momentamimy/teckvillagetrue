@@ -191,5 +191,8 @@
 
     <string name="toast_cant_send">لا يمكن إرسال رسالة إلى هذا الرقم</string>
     <string name="selectphone_dialog">اختر رقم الهاتف</string>
+    <string name="unblock">رفع الحظر</string>
+    <string name="yes">نعم</string>
+    <string name="no">لا</string>
 
 </resources>

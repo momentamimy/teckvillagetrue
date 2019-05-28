@@ -88,8 +88,8 @@ public class Block_Adapter extends RecyclerView.Adapter<Block_List_Holder> {
     public void onDeleteClick(final Context context, String number, final int id, final int position) {
 
         final AlertDialog.Builder alert = new AlertDialog.Builder(context);
-        alert.setMessage("Unblock"+"'"+number+"' ?");
-        alert.setPositiveButton("Yes", new DialogInterface.OnClickListener() {
+        alert.setMessage(context.getString(R.string.unblock)+"'"+number+"' ?");
+        alert.setPositiveButton(R.string.yes, new DialogInterface.OnClickListener() {
 
             @Override
             public void onClick(DialogInterface dialog, int which) {
@@ -102,7 +102,7 @@ public class Block_Adapter extends RecyclerView.Adapter<Block_List_Holder> {
             }
         });
 
-        alert.setNegativeButton("No", new DialogInterface.OnClickListener() {
+        alert.setNegativeButton(R.string.no, new DialogInterface.OnClickListener() {
 
             @Override
             public void onClick(DialogInterface dialog, int which) {
