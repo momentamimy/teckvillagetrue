@@ -184,6 +184,12 @@
     <string name="yes">Yes</string>
     <string name="no">No</string>
 
+    <string name="delete_from_call_log">Delete from call log</string>
+    <string name="edit_number_dialog">Edit number before call</string>
+
+    <string name="toast_cant_Send">Can\'t send message to this number</string>
+    <string name="toast_cant_open_profile">Can\'t open profile to this number</string>
+
 
 </resources>
 

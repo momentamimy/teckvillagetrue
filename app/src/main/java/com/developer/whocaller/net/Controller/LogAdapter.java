@@ -240,7 +240,7 @@ public class LogAdapter extends RecyclerView.Adapter<LogHolder> {
                         intent.putExtra("LogSMSAddress", num);
                         context.startActivity(intent);
                     } else {
-                        Toast.makeText(context, "Can't send message to this number", Toast.LENGTH_LONG).show();
+                        Toast.makeText(context, R.string.toast_cant_Send, Toast.LENGTH_LONG).show();
                     }
 
                 }
@@ -256,7 +256,7 @@ public class LogAdapter extends RecyclerView.Adapter<LogHolder> {
                         intent.putExtra("ContactNUm", num);
                         context.startActivity(intent);
                     } else {
-                        Toast.makeText(context, "Can't open profile to this number", Toast.LENGTH_LONG).show();
+                        Toast.makeText(context, R.string.toast_cant_open_profile, Toast.LENGTH_LONG).show();
                     }
                 }
             });
@@ -315,7 +315,7 @@ public class LogAdapter extends RecyclerView.Adapter<LogHolder> {
 
 
     private void OptionDialogWhenLongPress(String title, final int position){
-        final String[] Option = {"Edit number before call", "Delete from call log"};
+        final String[] Option = {context.getString(R.string.edit_number_dialog), context.getString(R.string.delete_from_call_log)};
 
         final AlertDialog.Builder builder = new AlertDialog.Builder(context);
         builder.setTitle(title);
@@ -323,7 +323,7 @@ public class LogAdapter extends RecyclerView.Adapter<LogHolder> {
             @Override
             public void onClick(DialogInterface dialog, int which) {
                 // the user clicked on colors[which]
-                if(Option[which].equals("Edit number before call")){
+                if(Option[which].equals(context.getString(R.string.edit_number_dialog))){
                   //open Dialer padd and set number
                     String number =itemList.get(position).getNumber();
                     Log.w("nmindialerpad",number);
@@ -331,7 +331,7 @@ public class LogAdapter extends RecyclerView.Adapter<LogHolder> {
                     openDialPad.onClickEditNumber(number);
 
 
-                }else if(Option[which].equals("Delete from call log")) {
+                }else if(Option[which].equals(context.getString(R.string.delete_from_call_log))) {
                     DeleteCallLogByCall_ID(itemList.get(position).getCall_idarray());
                 }
 
@@ -342,7 +342,7 @@ public class LogAdapter extends RecyclerView.Adapter<LogHolder> {
     }
 
     private void OptionDialogWhenLongPressForUnknownNumber(String title, final int position){
-        final String[] Option = { "Delete from call log"};
+        final String[] Option = { context.getString(R.string.delete_from_call_log)};
 
         final AlertDialog.Builder builder = new AlertDialog.Builder(context);
         builder.setTitle(title);
@@ -350,7 +350,7 @@ public class LogAdapter extends RecyclerView.Adapter<LogHolder> {
             @Override
             public void onClick(DialogInterface dialog, int which) {
                 // the user clicked on Option[which]
-               if(Option[which].equals("Delete from call log")) {
+               if(Option[which].equals(context.getString(R.string.delete_from_call_log))) {
                    DeleteCallLogByCall_ID(itemList.get(position).getCall_idarray());
                 }
 

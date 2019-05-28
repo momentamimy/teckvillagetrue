@@ -195,4 +195,10 @@
     <string name="yes">نعم</string>
     <string name="no">لا</string>
 
+    <string name="delete_from_call_log">حذف من سجل المكالمات</string>
+    <string name="edit_number_dialog">تحرير الرقم قبل الاتصال</string>
+
+    <string name="toast_cant_Send">لا يمكن إرسال رسالة إلى هذا الرقم</string>
+    <string name="toast_cant_open_profile">لا يمكن فتح الملف الشخصي لهذا الرقم</string>
+
 </resources>
