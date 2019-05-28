@@ -177,5 +177,16 @@
     <string name="enter_name_hint">أدخل الاسم</string>
     <string name="enter_phone_hint">أدخل رقم الهاتف</string>
 
+    <string name="toast_permission">لقد وافقت علي الإذن ، يرجى النقر فوق الزر مرة أخرى.</string>
+    <string name="toast_refused">يجب أن توافق على الإذن</string>
+
+    <string name="dialog_select_phone">اختر رقم الهاتف</string>
+
+    <string name="choose_app">اختر التطبيق</string>
+    <string name="email_body">تقديم اقتراح أو شكوى</string>
+    <string name="body_email">اكتب نص البريد الخاص بك هنا</string>
+    <string name="sugguestfromwhocaller">اقتراح من التطبيق ?Who caller</string>
+
+    <string name="text">رقم الهاتف</string>
 
 </resources>

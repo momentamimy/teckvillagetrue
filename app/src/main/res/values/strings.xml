@@ -166,6 +166,18 @@
     <string name="enter_name_hint">Enter Name</string>
     <string name="enter_phone_hint">Enter Phone Number</string>
 
+    <string name="toast_permission">You allowed permission, please click the button again.</string>
+    <string name="toast_refused">You must approve the permission</string>
+
+    <string name="dialog_select_phone">Select Phone Number</string>
+
+    <string name="choose_app">Choose App</string>
+    <string name="email_body">submit a suggestion or complaint</string>
+    <string name="body_email">Type your mail text here</string>
+    <string name="sugguestfromwhocaller">Suggestion from application Who caller?</string>
+
+    <string name="text">Phone Number</string>
+
 
 </resources>
 

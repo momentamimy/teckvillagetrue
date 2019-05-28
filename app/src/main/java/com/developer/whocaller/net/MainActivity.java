@@ -581,12 +581,12 @@ public class MainActivity extends AppCompatActivity implements NavigationView.On
                 if (grantResults.length > 0 && grantResults[0] == PackageManager.PERMISSION_GRANTED) {
                     //granted
 
-                    Toast.makeText(getApplicationContext(), "You allowed permission, please click the button again.", Toast.LENGTH_LONG).show();
+                    Toast.makeText(getApplicationContext(), R.string.toast_permission, Toast.LENGTH_LONG).show();
 
                 }
                 else {
 
-                    Toast.makeText(getApplicationContext(), "You must approve the permission", Toast.LENGTH_SHORT).show();
+                    Toast.makeText(getApplicationContext(), R.string.toast_refused, Toast.LENGTH_SHORT).show();
                 }
                 break;
 
@@ -595,12 +595,12 @@ public class MainActivity extends AppCompatActivity implements NavigationView.On
                 if (grantResults.length > 0 && grantResults[0] == PackageManager.PERMISSION_GRANTED) {
                     //granted
 
-                    Toast.makeText(getApplicationContext(), "You allowed permission, please click the button again.", Toast.LENGTH_LONG).show();
+                    Toast.makeText(getApplicationContext(),  R.string.toast_permission, Toast.LENGTH_LONG).show();
 
                 }
                 else {
 
-                    Toast.makeText(getApplicationContext(), "You must approve the permission", Toast.LENGTH_SHORT).show();
+                    Toast.makeText(getApplicationContext(), R.string.toast_refused, Toast.LENGTH_SHORT).show();
                 }
                 break;
             case MY_CAMERA_REQUEST_CODE:
@@ -615,7 +615,7 @@ public class MainActivity extends AppCompatActivity implements NavigationView.On
                 }
                 else {
 
-                    Toast.makeText(getApplicationContext(), "You must approve the permission", Toast.LENGTH_SHORT).show();
+                    Toast.makeText(getApplicationContext(), R.string.toast_refused, Toast.LENGTH_SHORT).show();
                 }
                 break;
 
@@ -787,7 +787,7 @@ public class MainActivity extends AppCompatActivity implements NavigationView.On
         //Create sequence of items
         final CharSequence[] phonenums = phonenumbers.toArray(new String[phonenumbers.size()]);
         AlertDialog.Builder dialogBuilder = new AlertDialog.Builder(this);
-        dialogBuilder.setTitle("Select Phone Number");
+        dialogBuilder.setTitle(R.string.dialog_select_phone);
         dialogBuilder.setItems(phonenums, new DialogInterface.OnClickListener() {
             public void onClick(DialogInterface dialog, int item) {
                 //String selectedText = phonenums[item].toString();
@@ -845,7 +845,7 @@ public class MainActivity extends AppCompatActivity implements NavigationView.On
             i.putExtra(Intent.EXTRA_SUBJECT, "Who Caller?");
             String sAux ="https://play.google.com/store/apps/details?id="+ getPackageName() +"\n\n";//link el prnamg 3ala playstore
             i.putExtra(Intent.EXTRA_TEXT, sAux);
-            startActivity(Intent.createChooser(i, "Choose App"));
+            startActivity(Intent.createChooser(i, getString(R.string.choose_app)));
         } catch(Exception e) {
             e.printStackTrace();
         }
@@ -857,9 +857,9 @@ public class MainActivity extends AppCompatActivity implements NavigationView.On
             intent.setType("plain/text");
             intent.setData(Uri.parse("mailto:"));
             intent.putExtra(Intent.EXTRA_EMAIL, new String[] { Email });
-            intent.putExtra(Intent.EXTRA_SUBJECT, "Suggestion from application Who caller?");
-            intent.putExtra(Intent.EXTRA_TEXT, "Type your mail text here");
-            startActivity(Intent.createChooser(intent, "submit a suggestion or complaint"));
+            intent.putExtra(Intent.EXTRA_SUBJECT, getString(R.string.sugguestfromwhocaller));
+            intent.putExtra(Intent.EXTRA_TEXT, getString(R.string.body_email));
+            startActivity(Intent.createChooser(intent, getString(R.string.email_body)));
         } catch(Exception e) {
             e.printStackTrace();
         }
@@ -1094,7 +1094,7 @@ public class MainActivity extends AppCompatActivity implements NavigationView.On
         String PhoneNumber=getSharedPreferenceValue.getUserPhoneNumber(this);
         //Check if Phone number not found
         if(PhoneNumber.equals("NoValueStored")){
-            headnav_title_Phonenumber.setText("Phone Number");
+            headnav_title_Phonenumber.setText(R.string.text);
         }else {
             headnav_title_Phonenumber.setText(PhoneNumber);
         }
