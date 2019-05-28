@@ -203,6 +203,22 @@
     <string name="toast_cant_open_profile">Can\'t open profile to this number</string>
 
     <string name="toast_no_phone_number">No Phone Number To This Name</string>
+    <string name="Copied_to_clipboard">Copied to clipboard</string>
+
+    <string name="remove_number_toast">Number removed from your block list</string>
+    <string name="added_taost">added to your block list</string>
+
+    <string name="areyousure_dialog">Are you sure you want to block</string>
+    <string name="blockcap">BLOCK</string>
+    <string name="cancel_cap">CANCEL</string>
+
+    <string name="dialog_delete_Contact_content">Are you Sure you want to delete this contact?</string>
+
+    <string name="toast_remove">The Contact has been removed from your contacts</string>
+
+    <string name="Send_Message_dialog">Send Message -</string>
+    <string name="unblock_user_dialog">Are you sure you want to unblock this number?</string>
+    <string name="unblock_captail">UNBLOCK</string>
 
 
 </resources>

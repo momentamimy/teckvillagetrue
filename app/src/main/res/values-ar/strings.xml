@@ -222,4 +222,18 @@
 
     <string name="toast_no_phone_number">لا يوجد رقم هاتف لهذا الاسم</string>
 
+    <string name="Copied_to_clipboard">تم النسخ</string>
+
+    <string name="remove_number_toast">تمت إزالة الرقم من قائمة الحظر الخاصة بك</string>
+    <string name="added_taost">تم الإضافة إلى قائمة الحظر الخاصة بك</string>
+
+    <string name="areyousure_dialog">هل أنت متأكد أنك تريد حظر</string>
+    <string name="blockcap">حظر</string>
+    <string name="cancel_cap">إلغاء</string>
+
+    <string name="dialog_delete_Contact_content">هل أنت متأكد من أنك تريد حذف جهة الاتصال هذه؟</string>
+
+    <string name="toast_remove">تمت إزالة جهة الاتصال من جهات الاتصال الخاصة بك</string>
+
+    <string name="Send_Message_dialog">إرسال رسالة -</string>
 </resources>

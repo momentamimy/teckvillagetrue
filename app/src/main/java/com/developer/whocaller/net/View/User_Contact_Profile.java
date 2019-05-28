@@ -139,19 +139,19 @@ public class User_Contact_Profile extends AppCompatActivity {
                 popupMenu.setOnMenuItemClickListener(new PopupMenu.OnMenuItemClickListener() {
                     @Override
                     public boolean onMenuItemClick(MenuItem item) {
-                        if(item.getTitle().equals("Remove Contact")){
+                        if(item.getTitle().equals(getString(R.string.remove_contact))){
                             DeleteContact(String.valueOf(id),nameofcontact.getText().toString());
-                        }else  if(item.getTitle().equals("Share")){
+                        }else  if(item.getTitle().equals(getString(R.string.share))){
                             shareContact(String.valueOf(id),nameofcontact.getText().toString());
-                        }else  if(item.getTitle().equals("Copy Name")){
+                        }else  if(item.getTitle().equals(getString(R.string.copy_name))){
                             copyName(nameofcontact.getText().toString());
-                        } else  if(item.getTitle().equals("Search the Web")){
+                        } else  if(item.getTitle().equals(getString(R.string.search_the_web))){
                             searchOnWeb(nameofcontact.getText().toString());
-                        } else  if(item.getTitle().equals("Edit")){
+                        } else  if(item.getTitle().equals(getString(R.string.edit))){
                             EditContact(String.valueOf(id));
-                        }else  if(item.getTitle().equals("Copy Contact")){
+                        }else  if(item.getTitle().equals(getString(R.string.copy_contact))){
                             CopyContact(nameofcontact.getText().toString(),alContactsPhoneNumbers);
-                        } else  if(item.getTitle().equals("Copy Number")){
+                        } else  if(item.getTitle().equals(getString(R.string.copy_number))){
                             CopyNumber(alContactsPhoneNumbers);
                         }
 
@@ -233,7 +233,7 @@ public class User_Contact_Profile extends AppCompatActivity {
         ClipboardManager clipboard = (ClipboardManager) getSystemService(Context.CLIPBOARD_SERVICE);
         ClipData clip = ClipData.newPlainText("Copied Text", text);
         clipboard.setPrimaryClip(clip);
-        Toast.makeText(this,"Copied to clipboard",Toast.LENGTH_SHORT).show();
+        Toast.makeText(this, R.string.Copied_to_clipboard,Toast.LENGTH_SHORT).show();
     }
 
     private void CopyNumber( ArrayList<String> alContactsPhoneNumbers) {
@@ -245,7 +245,7 @@ public class User_Contact_Profile extends AppCompatActivity {
         ClipboardManager clipboard = (ClipboardManager) getSystemService(Context.CLIPBOARD_SERVICE);
         ClipData clip = ClipData.newPlainText("Copied Text", rBuilder.toString());
         clipboard.setPrimaryClip(clip);
-        Toast.makeText(this,"Copied to clipboard",Toast.LENGTH_SHORT).show();
+        Toast.makeText(this,R.string.Copied_to_clipboard,Toast.LENGTH_SHORT).show();
     }
 
     public void getContactDetails(long contactId) {
@@ -368,16 +368,16 @@ public class User_Contact_Profile extends AppCompatActivity {
     void Dialog_Ensure_Delete_From_Block(){
 
         final AlertDialog.Builder builder = new AlertDialog.Builder(User_Contact_Profile.this);
-        builder.setMessage("Are you sure you want to unblock this number?")
+        builder.setMessage(R.string.unblock_user_dialog)
                 .setCancelable(false)
-                .setPositiveButton("UNBLOCK", new DialogInterface.OnClickListener() {
+                .setPositiveButton(R.string.unblock_captail, new DialogInterface.OnClickListener() {
                     public void onClick(DialogInterface dialog, int id) {
 
                         Delete_Number_From_BlockListhere();
 
                     }
                 })
-                .setNegativeButton("CANCEL", new DialogInterface.OnClickListener() {
+                .setNegativeButton(R.string.cancel, new DialogInterface.OnClickListener() {
                     @Override
                     public void onClick(DialogInterface dialogInterface, int i) {
                         dialogInterface.cancel();
@@ -399,7 +399,7 @@ public class User_Contact_Profile extends AppCompatActivity {
             blockimagemake.setImageResource(R.drawable.ic_block_primary_24dp);
             blockred.setTextColor(Color.parseColor("#0089c0"));
             Bloceduser=false;
-            Toast.makeText(User_Contact_Profile.this, "Number removed from your block list", Toast.LENGTH_SHORT).show();
+            Toast.makeText(User_Contact_Profile.this, R.string.remove_number_toast, Toast.LENGTH_SHORT).show();
 
         }
 
@@ -419,7 +419,7 @@ public class User_Contact_Profile extends AppCompatActivity {
                 blockimagemake.setImageResource(R.drawable.ic_rejected_call);
                 blockred.setTextColor(Color.parseColor("#f53131"));
                 Bloceduser=true;
-                Toast.makeText(User_Contact_Profile.this, "added to your block list", Toast.LENGTH_SHORT).show();
+                Toast.makeText(User_Contact_Profile.this, R.string.added_taost, Toast.LENGTH_SHORT).show();
             }
 
         }
@@ -437,16 +437,16 @@ public class User_Contact_Profile extends AppCompatActivity {
     void Dialog_Block(String Contactname){
 
         final AlertDialog.Builder builder = new AlertDialog.Builder(User_Contact_Profile.this);
-        builder.setMessage("Are you sure you want to block "+Contactname+"?")
+        builder.setMessage(getString(R.string.areyousure_dialog)+Contactname+"?")
                 .setCancelable(false)
-                .setPositiveButton("BLOCK", new DialogInterface.OnClickListener() {
+                .setPositiveButton(R.string.blockcap, new DialogInterface.OnClickListener() {
                     public void onClick(DialogInterface dialog, int id) {
 
                         Insert_Number_To_Blocklist();
 
                     }
                 })
-                .setNegativeButton("CANCEL", new DialogInterface.OnClickListener() {
+                .setNegativeButton(R.string.cancel_cap, new DialogInterface.OnClickListener() {
                     @Override
                     public void onClick(DialogInterface dialogInterface, int i) {
                         dialogInterface.cancel();
@@ -592,7 +592,7 @@ public class User_Contact_Profile extends AppCompatActivity {
         //Create sequence of items
         final CharSequence[] phonenums = phonenumbers.toArray(new String[phonenumbers.size()]);
         AlertDialog.Builder dialogBuilder = new AlertDialog.Builder(this);
-        dialogBuilder.setTitle("Send Message - "+name);
+        dialogBuilder.setTitle(getString(R.string.Send_Message_dialog)+name);
         dialogBuilder.setItems(phonenums, new DialogInterface.OnClickListener() {
             public void onClick(DialogInterface dialog, int item) {
                 //String selectedText = phonenums[item].toString();
@@ -633,7 +633,7 @@ public class User_Contact_Profile extends AppCompatActivity {
             }
         };
         AlertDialog.Builder builder = new AlertDialog.Builder(this);
-        builder.setTitle("Delete "+name).setMessage("Are you Sure you want to delete this contact?").setPositiveButton("Yes", dialogClickListener).setNegativeButton("No", dialogClickListener).show();
+        builder.setTitle(R.string.delete+name).setMessage(R.string.dialog_delete_Contact_content).setPositiveButton(R.string.yes, dialogClickListener).setNegativeButton(R.string.no, dialogClickListener).show();
 
 
     }
@@ -647,7 +647,7 @@ public class User_Contact_Profile extends AppCompatActivity {
         ops.add(ContentProviderOperation.newDelete(ContactsContract.RawContacts.CONTENT_URI).withSelection(ContactsContract.RawContacts.CONTACT_ID + "=?", args) .build());
         try {
             getContentResolver().applyBatch(ContactsContract.AUTHORITY, ops);
-            Toast.makeText(this,"The Contact has been removed from your contacts",Toast.LENGTH_SHORT).show();
+            Toast.makeText(this, R.string.toast_remove,Toast.LENGTH_SHORT).show();
             finish();//finish activity
         } catch (RemoteException e) {
             e.printStackTrace();
@@ -680,7 +680,7 @@ public class User_Contact_Profile extends AppCompatActivity {
         ClipboardManager clipboard = (ClipboardManager) getSystemService(Context.CLIPBOARD_SERVICE);
         ClipData clip = ClipData.newPlainText("Copied Text", name);
         clipboard.setPrimaryClip(clip);
-        Toast.makeText(this,"Copied to clipboard",Toast.LENGTH_SHORT).show();
+        Toast.makeText(this,R.string.Copied_to_clipboard,Toast.LENGTH_SHORT).show();
     }
 
     void searchOnWeb(String name){
