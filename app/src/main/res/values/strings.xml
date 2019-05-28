@@ -178,6 +178,9 @@
 
     <string name="text">Phone Number</string>
 
+    <string name="toast_cant_send">Can\'t send message to this number</string>
+    <string name="selectphone_dialog">Select Phone Number</string>
+
 
 </resources>
 

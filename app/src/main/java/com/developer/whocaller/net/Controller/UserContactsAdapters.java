@@ -175,7 +175,7 @@ public class UserContactsAdapters extends RecyclerView.Adapter<UserContactsAdapt
                            intent.putExtra("LogSMSAddress",phones.get(0));
                            context.startActivity(intent);
                        }else {
-                           Toast.makeText(context, "Can't send message to this number", Toast.LENGTH_LONG).show();
+                           Toast.makeText(context, R.string.toast_cant_send, Toast.LENGTH_LONG).show();
                        }
                    }else if(phones.size()>1){
 
@@ -258,7 +258,7 @@ public class UserContactsAdapters extends RecyclerView.Adapter<UserContactsAdapt
         //Create sequence of items
         final CharSequence[] phonenums = phonenumbers.toArray(new String[phonenumbers.size()]);
         AlertDialog.Builder dialogBuilder = new AlertDialog.Builder(context);
-        dialogBuilder.setTitle("Select Phone Number");
+        dialogBuilder.setTitle(R.string.selectphone_dialog);
         dialogBuilder.setItems(phonenums, new DialogInterface.OnClickListener() {
             public void onClick(DialogInterface dialog, int item) {
                 //String selectedText = phonenums[item].toString();
