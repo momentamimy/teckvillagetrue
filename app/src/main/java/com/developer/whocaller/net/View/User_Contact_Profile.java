@@ -106,7 +106,7 @@ public class User_Contact_Profile extends AppCompatActivity {
         id=getIntent().getLongExtra("ContactID",0);
 
         if(id==0){
-            Toast.makeText(this, "Error Loading", Toast.LENGTH_LONG).show();
+            Toast.makeText(this, R.string.error_loading, Toast.LENGTH_LONG).show();
         }else {
 
             getContactDetails(id);
@@ -141,7 +141,7 @@ public class User_Contact_Profile extends AppCompatActivity {
                     public boolean onMenuItemClick(MenuItem item) {
                         if(item.getTitle().equals(getString(R.string.remove_contact))){
                             DeleteContact(String.valueOf(id),nameofcontact.getText().toString());
-                        }else  if(item.getTitle().equals(getString(R.string.share))){
+                        }else  if(item.getTitle().equals(getString(R.string.share_profile))){
                             shareContact(String.valueOf(id),nameofcontact.getText().toString());
                         }else  if(item.getTitle().equals(getString(R.string.copy_name))){
                             copyName(nameofcontact.getText().toString());
@@ -437,7 +437,7 @@ public class User_Contact_Profile extends AppCompatActivity {
     void Dialog_Block(String Contactname){
 
         final AlertDialog.Builder builder = new AlertDialog.Builder(User_Contact_Profile.this);
-        builder.setMessage(getString(R.string.areyousure_dialog)+Contactname+"?")
+        builder.setMessage(getString(R.string.areyousure_dialog)+" "+Contactname+getString(R.string.questionmark))
                 .setCancelable(false)
                 .setPositiveButton(R.string.blockcap, new DialogInterface.OnClickListener() {
                     public void onClick(DialogInterface dialog, int id) {
@@ -633,7 +633,7 @@ public class User_Contact_Profile extends AppCompatActivity {
             }
         };
         AlertDialog.Builder builder = new AlertDialog.Builder(this);
-        builder.setTitle(R.string.delete+name).setMessage(R.string.dialog_delete_Contact_content).setPositiveButton(R.string.yes, dialogClickListener).setNegativeButton(R.string.no, dialogClickListener).show();
+        builder.setTitle(getString(R.string.delete)+" "+name).setMessage(R.string.dialog_delete_Contact_content).setPositiveButton(R.string.yes, dialogClickListener).setNegativeButton(R.string.no, dialogClickListener).show();
 
 
     }

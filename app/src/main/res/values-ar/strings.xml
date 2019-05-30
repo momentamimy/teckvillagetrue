@@ -257,4 +257,16 @@
     <string name="Camera_Permission_Error">خطأ إذن الكاميرا</string>
     <string name="Failed">فشل!</string>
     <string name="Permission_denied">تم رفض الإذن</string>
+
+    <string name="error_loading">خطأ في تحميل</string>
+
+    <string name="number_not_found">رقم غير موجود</string>
+
+    <string name="share_profile">مشاركة</string>
+
+    <string name="business">عمل تجاري</string>
+    <string name="personal">الشخص</string>
+
+    <string name="questionmark">\؟</string>
+
 </resources>

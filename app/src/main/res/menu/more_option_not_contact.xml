@@ -3,7 +3,7 @@
 
     <item
         android:id="@+id/sharecontact"
-        android:title="@string/sharecontact"
+        android:title="@string/share_profile"
         />
 
 
