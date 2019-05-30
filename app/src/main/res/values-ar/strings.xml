@@ -219,8 +219,21 @@
 
     <string name="toast_cant_Send">لا يمكن إرسال رسالة إلى هذا الرقم</string>
     <string name="toast_cant_open_profile">لا يمكن فتح الملف الشخصي لهذا الرقم</string>
+    <string name="SIM_1">شريحة 1</string>
+    <string name="SIM_2">شريحة 2</string>
+
 
     <string name="toast_no_phone_number">لا يوجد رقم هاتف لهذا الاسم</string>
+    <string name="You_Should_Select_Your_Country">يجب عليك اختيار بلدك</string>
+    <string name="You_Should_Enter_Correct_Phone_Number">يجب عليك إدخال رقم الهاتف الصحيح</string>
+    <string name="Internet_not_access_Please_connect_to_the_internet">غير متصل بالإنترنت يرجى الاتصال بالإنترنت</string>
+    <string name="You_are_offline_Please_connect_to_the_internet">انت غير متصل. يرجى الاتصال بالإنترنت</string>
+
+    <string name="Phone_number_cannot_be_empty">Phone number cannot be empty!</string>
+    <string name="Incorrect_number_provided">Incorrect number provided</string>
+    <string name="service_error">service error</string>
+    <string name="Check_your_network_state">Check your network state</string>
+    <string name="Intercepting_the_verification_call_automatically_failed">Intercepting the verification call automatically failed</string>
 
     <string name="Copied_to_clipboard">تم النسخ</string>
 
@@ -236,4 +249,12 @@
     <string name="toast_remove">تمت إزالة جهة الاتصال من جهات الاتصال الخاصة بك</string>
 
     <string name="Send_Message_dialog">إرسال رسالة -</string>
+    <string name="unblock_user_dialog">هل تريد بالتأكيد إلغاء حظر هذا الرقم؟</string>
+    <string name="unblock_captail">رفع الحظر</string>
+
+    <string name="Error_to_Login_Facebook"> خطأ في تسجيل الدخول إلى الفيس بوك</string>
+    <string name="Failure_Please_try_again">فشل ، يرجى المحاولة مرة أخرى</string>
+    <string name="Camera_Permission_Error">خطأ إذن الكاميرا</string>
+    <string name="Failed">فشل!</string>
+    <string name="Permission_denied">تم رفض الإذن</string>
 </resources>

@@ -51,7 +51,7 @@ public class Missed_Call_Verification extends AppCompatActivity {
                         //Log.w("code",coincode);
 
                         if(numberwithcode.isEmpty()) {
-                            Toast.makeText(getApplicationContext(), "Phone number cannot be empty!",Toast.LENGTH_LONG).show();
+                            Toast.makeText(getApplicationContext(), getResources().getString(R.string.Phone_number_cannot_be_empty),Toast.LENGTH_LONG).show();
                         }
                         else {
                             startVerification(numberwithcode);
@@ -71,7 +71,7 @@ public class Missed_Call_Verification extends AppCompatActivity {
                             .setActionTextColor(getResources().getColor(android.R.color.white ))
                             .show();*/
                     View parentLayout = findViewById(android.R.id.content);
-                    Snackbar.make(parentLayout, "You're offline. Please connect to the internet", Snackbar.LENGTH_LONG)
+                    Snackbar.make(parentLayout, getResources().getString(R.string.You_are_offline_Please_connect_to_the_internet), Snackbar.LENGTH_LONG)
                             .setActionTextColor(getResources().getColor(android.R.color.white ))
                             .show();
                     //TastyToast.makeText(Missed_Call_Verification.this, "Internet not access Please connect to the internet", TastyToast.LENGTH_LONG, TastyToast.ERROR);
@@ -80,7 +80,7 @@ public class Missed_Call_Verification extends AppCompatActivity {
                 }
             } else {
                 View parentLayout = findViewById(android.R.id.content);
-                Snackbar.make(parentLayout, "You're offline. Please connect to the internet", Snackbar.LENGTH_LONG)
+                Snackbar.make(parentLayout, getResources().getString(R.string.You_are_offline_Please_connect_to_the_internet), Snackbar.LENGTH_LONG)
                         .setActionTextColor(getResources().getColor(android.R.color.white ))
                         .show();
                 //TastyToast.makeText(Missed_Call_Verification.this, "You're offline. Please connect to the internet", TastyToast.LENGTH_LONG, TastyToast.ERROR);
@@ -111,11 +111,11 @@ public class Missed_Call_Verification extends AppCompatActivity {
         @Override
         public void onInitiationFailed(Exception e) {
             if (e instanceof InvalidInputException) {
-                Toast.makeText(getApplicationContext(),"Incorrect number provided",Toast.LENGTH_LONG).show();
+                Toast.makeText(getApplicationContext(),getResources().getString(R.string.Incorrect_number_provided),Toast.LENGTH_LONG).show();
             } else if (e instanceof ServiceErrorException) {
-                Toast.makeText(getApplicationContext(),"service error",Toast.LENGTH_LONG).show();
+                Toast.makeText(getApplicationContext(),getResources().getString(R.string.service_error),Toast.LENGTH_LONG).show();
             } else {
-                Toast.makeText(getApplicationContext(),"Check your network state", Toast.LENGTH_LONG).show();
+                Toast.makeText(getApplicationContext(),getResources().getString(R.string.Check_your_network_state), Toast.LENGTH_LONG).show();
             }
         }
 
@@ -142,11 +142,11 @@ public class Missed_Call_Verification extends AppCompatActivity {
         @Override
         public void onVerificationFailed(Exception e) {
             if (e instanceof CodeInterceptionException) {
-                Toast.makeText(getApplicationContext(),"Intercepting the verification call automatically failed",Toast.LENGTH_LONG).show();
+                Toast.makeText(getApplicationContext(),getResources().getString(R.string.Intercepting_the_verification_call_automatically_failed),Toast.LENGTH_LONG).show();
             } else if (e instanceof ServiceErrorException) {
-                Toast.makeText(getApplicationContext(), "service error",Toast.LENGTH_LONG).show();
+                Toast.makeText(getApplicationContext(), getResources().getString(R.string.service_error),Toast.LENGTH_LONG).show();
             } else {
-                Toast.makeText(getApplicationContext(),"Check your network state", Toast.LENGTH_LONG).show();
+                Toast.makeText(getApplicationContext(),getResources().getString(R.string.Check_your_network_state), Toast.LENGTH_LONG).show();
             }
         }
 

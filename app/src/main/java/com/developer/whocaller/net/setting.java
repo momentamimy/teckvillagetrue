@@ -26,6 +26,7 @@ import androidx.annotation.RequiresApi;
 
 
 import com.developer.whocaller.net.Controller.LocaleHelper;
+import com.developer.whocaller.net.View.SplashScreen;
 
 import java.util.Locale;
 import java.util.concurrent.TimeUnit;
@@ -228,7 +229,7 @@ public class setting extends AppCompatActivity {
 
     private void restartActivity() {
         finish();
-        Intent intent1 = getIntent();
+        Intent intent1 =new Intent(this, SplashScreen.class);
         startActivity(intent1);
     }
     @Override

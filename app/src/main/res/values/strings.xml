@@ -201,8 +201,21 @@
 
     <string name="toast_cant_Send">Can\'t send message to this number</string>
     <string name="toast_cant_open_profile">Can\'t open profile to this number</string>
+    <string name="SIM_1">SIM 1</string>
+    <string name="SIM_2">SIM 2</string>
+
 
     <string name="toast_no_phone_number">No Phone Number To This Name</string>
+    <string name="You_Should_Select_Your_Country">You Should Select Your Country</string>
+    <string name="You_Should_Enter_Correct_Phone_Number">You Should Enter Correct Phone Number</string>
+    <string name="Internet_not_access_Please_connect_to_the_internet">Internet not access Please connect to the internet</string>
+    <string name="You_are_offline_Please_connect_to_the_internet">You are offline. Please connect to the internet</string>
+
+    <string name="Phone_number_cannot_be_empty">Phone number cannot be empty!</string>
+    <string name="Incorrect_number_provided">Incorrect number provided</string>
+    <string name="service_error">service error</string>
+    <string name="Check_your_network_state">Check your network state</string>
+    <string name="Intercepting_the_verification_call_automatically_failed">Intercepting the verification call automatically failed</string>
     <string name="Copied_to_clipboard">Copied to clipboard</string>
 
     <string name="remove_number_toast">Number removed from your block list</string>
@@ -220,6 +233,11 @@
     <string name="unblock_user_dialog">Are you sure you want to unblock this number?</string>
     <string name="unblock_captail">UNBLOCK</string>
 
+    <string name="Error_to_Login_Facebook">Error to Login Facebook</string>
+    <string name="Failure_Please_try_again">Failure,Please try again</string>
+    <string name="Camera_Permission_Error">Camera Permission Error</string>
+    <string name="Failed">Failed!</string>
+    <string name="Permission_denied">Permission denied</string>
 
 </resources>
 

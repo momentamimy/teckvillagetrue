@@ -210,7 +210,7 @@ public class Signup extends AppCompatActivity {
                 @Override
                 public void onError(FacebookException exception) {
                     // App code
-                    Toast.makeText(getApplicationContext(), "Error to Login Facebook" + exception.getMessage(), Toast.LENGTH_SHORT).show();
+                    Toast.makeText(getApplicationContext(), getResources().getString(R.string.Error_to_Login_Facebook) + exception.getMessage(), Toast.LENGTH_SHORT).show();
                 }
             });
 
@@ -366,10 +366,10 @@ public class Signup extends AppCompatActivity {
 
 
                                                 } else {
-                                                    Toast.makeText(getApplicationContext(), "Failure,Please try again", Toast.LENGTH_SHORT).show();
+                                                    Toast.makeText(getApplicationContext(), getResources().getString(R.string.Failure_Please_try_again), Toast.LENGTH_SHORT).show();
                                                 }
                                             } else {
-                                                Toast.makeText(getApplicationContext(), "Failure,Please try again", Toast.LENGTH_SHORT).show();
+                                                Toast.makeText(getApplicationContext(), getResources().getString(R.string.Failure_Please_try_again), Toast.LENGTH_SHORT).show();
                                             }
 
 
@@ -384,15 +384,15 @@ public class Signup extends AppCompatActivity {
                                             mProgressDialog.dismiss();
 
                                         Log.w("onFailure", t.toString());
-                                        Toast.makeText(getApplicationContext(), "Failure,Please try again", Toast.LENGTH_SHORT).show();
+                                        Toast.makeText(getApplicationContext(), getResources().getString(R.string.Failure_Please_try_again), Toast.LENGTH_SHORT).show();
                                     }
                                 });
 
                             } else {
-                                TastyToast.makeText(Signup.this, "Internet not access Please connect to the internet", TastyToast.LENGTH_LONG, TastyToast.ERROR);
+                                TastyToast.makeText(Signup.this, getResources().getString(R.string.Internet_not_access_Please_connect_to_the_internet), TastyToast.LENGTH_LONG, TastyToast.ERROR);
                             }
                         } else {
-                            TastyToast.makeText(Signup.this, "You're offline. Please connect to the internet", TastyToast.LENGTH_LONG, TastyToast.ERROR);
+                            TastyToast.makeText(Signup.this, getResources().getString(R.string.You_are_offline_Please_connect_to_the_internet), TastyToast.LENGTH_LONG, TastyToast.ERROR);
                         }
 
                     }
@@ -481,7 +481,7 @@ public class Signup extends AppCompatActivity {
             ActivityCompat.requestPermissions(Signup.this, new String[]{android.Manifest.permission.CAMERA}, MY_CAMERA_REQUEST_CODE);
             //Toast.makeText(this, "Camera Permission Error", Toast.LENGTH_SHORT).show();
     } catch (Exception e) {
-        Toast.makeText(this, "Camera Permission Error", Toast.LENGTH_SHORT).show();
+        Toast.makeText(this, getResources().getString(R.string.Camera_Permission_Error), Toast.LENGTH_SHORT).show();
         e.printStackTrace();
     }
     }
@@ -526,7 +526,7 @@ public class Signup extends AppCompatActivity {
                     add_personal_photo.setPadding(20,20,20,20);
                 } catch (IOException e) {
                     e.printStackTrace();
-                    Toast.makeText(Signup.this, "Failed!", Toast.LENGTH_SHORT).show();
+                    Toast.makeText(Signup.this, getResources().getString(R.string.Failed), Toast.LENGTH_SHORT).show();
                 }
             }
 
@@ -707,7 +707,7 @@ public class Signup extends AppCompatActivity {
             Email.setText(account.getEmail());
             LoginMethod="google";
         }else {
-            Toast.makeText(Signup.this, "Failed", Toast.LENGTH_SHORT).show();
+            Toast.makeText(Signup.this, getResources().getString(R.string.Failed), Toast.LENGTH_SHORT).show();
         }
 
     }
@@ -947,7 +947,7 @@ public class Signup extends AppCompatActivity {
 
                     // permission denied, boo! Disable the
                     // functionality that depends on this permission.
-                    Toast.makeText(getApplicationContext(), "Permission denied", Toast.LENGTH_SHORT).show();
+                    Toast.makeText(getApplicationContext(), getResources().getString(R.string.Permission_denied), Toast.LENGTH_SHORT).show();
                 }
                 return;
             }

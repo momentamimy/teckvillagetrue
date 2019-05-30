@@ -110,14 +110,14 @@ public class LoginActivity extends AppCompatActivity implements TextWatcher {
                    if (ConnectionDetector.hasInternetConnection(LoginActivity.this)) {
 
                         if (myCountry == null) {
-                            Toast.makeText(getApplicationContext(), "You Should Select Your Country", Toast.LENGTH_LONG).show();
+                            Toast.makeText(getApplicationContext(), getResources().getString(R.string.You_Should_Select_Your_Country), Toast.LENGTH_LONG).show();
                             return;
                         } else if (!PhoneNumberValid) {
-                            Toast.makeText(getApplicationContext(), "You Should Enter Correct Phone Number", Toast.LENGTH_LONG).show();
+                            Toast.makeText(getApplicationContext(), getResources().getString(R.string.You_Should_Enter_Correct_Phone_Number), Toast.LENGTH_LONG).show();
                             return;
                         } else if (myCountry.getName().equals("Egypt") && phoneNumber.getText().toString().trim().length() < 11 || phoneNumber.getText().toString().trim().length() > 11) {
 
-                            Toast.makeText(getApplicationContext(), "You Should Enter Correct Phone Number", Toast.LENGTH_LONG).show();
+                            Toast.makeText(getApplicationContext(), getResources().getString(R.string.You_Should_Enter_Correct_Phone_Number), Toast.LENGTH_LONG).show();
                             return;
                         }
 
@@ -135,10 +135,10 @@ public class LoginActivity extends AppCompatActivity implements TextWatcher {
                         finish();
 
           } else {
-                TastyToast.makeText(LoginActivity.this, "Internet not access Please connect to the internet", TastyToast.LENGTH_LONG, TastyToast.ERROR);
+                TastyToast.makeText(LoginActivity.this, getResources().getString(R.string.Internet_not_access_Please_connect_to_the_internet), TastyToast.LENGTH_LONG, TastyToast.ERROR);
             }
         } else {
-            TastyToast.makeText(LoginActivity.this, "You're offline. Please connect to the internet", TastyToast.LENGTH_LONG, TastyToast.ERROR);
+            TastyToast.makeText(LoginActivity.this, getResources().getString(R.string.You_are_offline_Please_connect_to_the_internet), TastyToast.LENGTH_LONG, TastyToast.ERROR);
         }
             }
         });
