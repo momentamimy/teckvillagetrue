@@ -71,7 +71,7 @@ public class Block_Adapter extends RecyclerView.Adapter<Block_List_Holder> {
                       intent.putExtra("ContactNUm",num);
                       context.startActivity(intent);
                   }else {
-                      Toast.makeText(context, "Can't open profile to this number", Toast.LENGTH_LONG).show();
+                      Toast.makeText(context, R.string.toast_cant_open_profile, Toast.LENGTH_LONG).show();
                   }
               }
           });
@@ -88,7 +88,7 @@ public class Block_Adapter extends RecyclerView.Adapter<Block_List_Holder> {
     public void onDeleteClick(final Context context, String number, final int id, final int position) {
 
         final AlertDialog.Builder alert = new AlertDialog.Builder(context);
-        alert.setMessage(context.getString(R.string.unblock)+"'"+number+"' ?");
+        alert.setMessage(context.getString(R.string.unblock)+"'"+number+"' "+context.getString(R.string.questionmark));
         alert.setPositiveButton(R.string.yes, new DialogInterface.OnClickListener() {
 
             @Override
