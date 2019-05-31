@@ -737,7 +737,7 @@ public class MainActivity extends AppCompatActivity implements NavigationView.On
         try {
 
             AlertDialog.Builder SIMDialog = new AlertDialog.Builder(this);
-            SIMDialog.setTitle("Select Your SIM");
+            SIMDialog.setTitle(R.string.select_your_sim);
             SIMDialog.setIcon(R.drawable.ic_sim);
             String[] SIMDialogItems = {
                     "Orange",

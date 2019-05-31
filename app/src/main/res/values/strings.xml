@@ -299,7 +299,7 @@
     <string name="val_num_char">Please Enter Phone Number Not Text</string>
 
     <string name="contact_Already">contact already selected</string>
-
+    <string name="select_your_sim">Select Your SIM</string>
 
 
 </resources>

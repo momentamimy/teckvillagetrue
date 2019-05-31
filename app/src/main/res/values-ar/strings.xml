@@ -321,5 +321,7 @@
 
     <string name="contact_Already">جهات الاتصال محدد بالفعل</string>
 
+    <string name="select_your_sim">اختر نوع  بطاقة الاتصال الخاصة بك</string>
+
 
 </resources>
