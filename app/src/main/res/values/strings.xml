@@ -249,6 +249,16 @@
 
     <string name="questionmark">\?</string>
 
+
+    <string name="SMS_Messages">SMS Messages</string>
+    <string name="Please_enter_message">Please enter message.</string>
+    <string name="SMS_sent">SMS sent</string>
+    <string name="Generic_failure">Generic failure</string>
+    <string name="No_service">No service</string>
+    <string name="Null_PDU">Null PDU</string>
+    <string name="Radio_off">Radio off</string>
+    <string name="SMS_delivered">SMS delivered</string>
+    <string name="SMS_not_delivered">SMS not delivered</string>
     <string name="empty">Empty Field</string>
 
     <string name="male">Male</string>
@@ -284,4 +294,3 @@
 
 
 </resources>
-

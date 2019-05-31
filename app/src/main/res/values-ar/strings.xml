@@ -269,6 +269,15 @@
 
     <string name="questionmark">\؟</string>
 
+    <string name="SMS_Messages"> رسائل </string>
+    <string name="Please_enter_message"> من فضلك أدخل الرسالة </string>
+    <string name = "SMS_sent"> تم إرسال الرسالة </string>
+    <string name = "Generic_failure"> فشل عام </string>
+    <string name = "No_service"> لا توجد خدمة </string>
+    <string name = "Null_PDU"> لا توجد وحدات </string>
+    <string name = "Radio_off"> الراديو مغلق </string>
+    <string name = "SMS_delivered"> تم تسليم الرسالة </string>
+    <string name = "SMS_not_delivered"> لم يتم تسليم الرسالة </string>
     <string name="empty">حقل فارغ</string>
 
     <string name="male">ذكر</string>

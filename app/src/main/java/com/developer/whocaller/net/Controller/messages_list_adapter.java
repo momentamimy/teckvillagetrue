@@ -325,7 +325,7 @@ public class messages_list_adapter extends RecyclerView.Adapter<messages_list_ad
                                 myIntent, 0);
                         alarmManager.cancel(amPI);
 
-                        Toast.makeText(context, "SMS sent",
+                        Toast.makeText(context, context.getResources().getString(R.string.SMS_sent),
                                 Toast.LENGTH_SHORT).show();
                         update_sms_sent(l);
 
@@ -341,7 +341,7 @@ public class messages_list_adapter extends RecyclerView.Adapter<messages_list_ad
                                 myIntent1, 0);
                         alarmManager1.cancel(amPI1);
 
-                        Toast.makeText(context, "Generic failure",
+                        Toast.makeText(context, context.getResources().getString(R.string.Generic_failure),
                                 Toast.LENGTH_SHORT).show();
                         update_sms_not_sent(l);
                         // getmessages();
@@ -355,7 +355,7 @@ public class messages_list_adapter extends RecyclerView.Adapter<messages_list_ad
                                 myIntent2, 0);
                         alarmManager2.cancel(amPI2);
 
-                        Toast.makeText(context, "No service",
+                        Toast.makeText(context, context.getResources().getString(R.string.No_service),
                                 Toast.LENGTH_SHORT).show();
                         update_sms_not_sent(l);
                         break;
@@ -368,7 +368,7 @@ public class messages_list_adapter extends RecyclerView.Adapter<messages_list_ad
                                 myIntent3, 0);
                         alarmManager3.cancel(amPI3);
 
-                        Toast.makeText(context, "Null PDU",
+                        Toast.makeText(context, context.getResources().getString(R.string.Null_PDU),
                                 Toast.LENGTH_SHORT).show();
                         update_sms_not_sent(l);
                         break;
@@ -381,7 +381,7 @@ public class messages_list_adapter extends RecyclerView.Adapter<messages_list_ad
                                 myIntent4, 0);
                         alarmManager4.cancel(amPI4);
 
-                        Toast.makeText(context, "Radio off",
+                        Toast.makeText(context, context.getResources().getString(R.string.Radio_off),
                                 Toast.LENGTH_SHORT).show();
                         update_sms_not_sent(l);
                         break;
@@ -395,11 +395,11 @@ public class messages_list_adapter extends RecyclerView.Adapter<messages_list_ad
             public void onReceive(Context arg0, Intent arg1) {
                 switch (getResultCode()) {
                     case Activity.RESULT_OK:
-                        Toast.makeText(context, "SMS delivered",
+                        Toast.makeText(context, context.getResources().getString(R.string.SMS_delivered),
                                 Toast.LENGTH_SHORT).show();
                         break;
                     case Activity.RESULT_CANCELED:
-                        Toast.makeText(context, "SMS not delivered",
+                        Toast.makeText(context, context.getResources().getString(R.string.SMS_not_delivered),
                                 Toast.LENGTH_SHORT).show();
                         break;
                 }

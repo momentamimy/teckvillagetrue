@@ -139,7 +139,7 @@ public class SMSReceiver extends BroadcastReceiver{
         if (android.os.Build.VERSION.SDK_INT >= android.os.Build.VERSION_CODES.JELLY_BEAN) {
             NotificationCompat.InboxStyle inboxStyle = new NotificationCompat.InboxStyle();
             inboxStyle.addLine(sender+" "+message);
-            inboxStyle.setSummaryText("SMS Messages");
+            inboxStyle.setSummaryText(context.getResources().getString(R.string.SMS_Messages));
             summaryBuilder.setStyle(inboxStyle);
         }
         Notification summaryNotification = summaryBuilder.build();

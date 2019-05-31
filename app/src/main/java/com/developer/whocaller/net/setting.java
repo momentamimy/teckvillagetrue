@@ -201,7 +201,6 @@ public class setting extends AppCompatActivity {
                 editor.putString("lang","en");
                 editor.commit();
                 updateViews("en");
-                changeLang.setText("\u25CF  change Language:   en");
 
                 MyDialogLanguage.dismiss();
             }
@@ -215,7 +214,6 @@ public class setting extends AppCompatActivity {
                 editor.putString("lang","ar");
                 editor.commit();
                 updateViews("ar");
-                changeLang.setText(" \u25CF  تغير اللغة:  عربية");
                 if (Build.VERSION.SDK_INT >= Build.VERSION_CODES.JELLY_BEAN_MR1) {
                     //setLocale("ar");
                 }
@@ -230,6 +228,7 @@ public class setting extends AppCompatActivity {
     private void restartActivity() {
         finish();
         Intent intent1 =new Intent(this, SplashScreen.class);
+        intent1.addFlags(Intent.FLAG_ACTIVITY_CLEAR_TOP | Intent.FLAG_ACTIVITY_CLEAR_TASK | Intent.FLAG_ACTIVITY_NEW_TASK);
         startActivity(intent1);
     }
     @Override

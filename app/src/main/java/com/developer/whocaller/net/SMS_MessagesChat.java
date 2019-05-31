@@ -251,7 +251,7 @@ public class SMS_MessagesChat extends AppCompatActivity {
 
                         } else
                             Toast.makeText(getBaseContext(),
-                                    "Please enter both phone number and message.",
+                                    getResources().getString(R.string.Please_enter_message),
                                     Toast.LENGTH_SHORT).show();
 
                     }
@@ -264,7 +264,7 @@ public class SMS_MessagesChat extends AppCompatActivity {
 
                     } else
                         Toast.makeText(getBaseContext(),
-                                "Please enter both phone number and message.",
+                                getResources().getString(R.string.Please_enter_message),
                                 Toast.LENGTH_SHORT).show();
 
                 }
@@ -592,7 +592,7 @@ public class SMS_MessagesChat extends AppCompatActivity {
                                 myIntent, 0);
                         alarmManager.cancel(amPI);
 
-                        Toast.makeText(getBaseContext(), "SMS sent",
+                        Toast.makeText(getBaseContext(), getResources().getString(R.string.SMS_sent),
                                 Toast.LENGTH_SHORT).show();
                         update_sms_sent(l);
 
@@ -608,7 +608,7 @@ public class SMS_MessagesChat extends AppCompatActivity {
                                 myIntent1, 0);
                         alarmManager1.cancel(amPI1);
 
-                        Toast.makeText(getBaseContext(), "Generic failure",
+                        Toast.makeText(getBaseContext(), getResources().getString(R.string.Generic_failure),
                                 Toast.LENGTH_SHORT).show();
                         update_sms_not_sent(l);
                         // getmessages();
@@ -622,7 +622,7 @@ public class SMS_MessagesChat extends AppCompatActivity {
                                 myIntent2, 0);
                         alarmManager2.cancel(amPI2);
 
-                        Toast.makeText(getBaseContext(), "No service",
+                        Toast.makeText(getBaseContext(), getResources().getString(R.string.No_service),
                                 Toast.LENGTH_SHORT).show();
                         update_sms_not_sent(l);
                         break;
@@ -635,7 +635,7 @@ public class SMS_MessagesChat extends AppCompatActivity {
                                 myIntent3, 0);
                         alarmManager3.cancel(amPI3);
 
-                        Toast.makeText(getBaseContext(), "Null PDU",
+                        Toast.makeText(getBaseContext(), getResources().getString(R.string.Null_PDU),
                                 Toast.LENGTH_SHORT).show();
                         update_sms_not_sent(l);
                         break;
@@ -648,7 +648,7 @@ public class SMS_MessagesChat extends AppCompatActivity {
                                 myIntent4, 0);
                         alarmManager4.cancel(amPI4);
 
-                        Toast.makeText(getBaseContext(), "Radio off",
+                        Toast.makeText(getBaseContext(), getResources().getString(R.string.Radio_off),
                                 Toast.LENGTH_SHORT).show();
                         update_sms_not_sent(l);
                         break;
@@ -662,11 +662,11 @@ public class SMS_MessagesChat extends AppCompatActivity {
             public void onReceive(Context arg0, Intent arg1) {
                 switch (getResultCode()) {
                     case Activity.RESULT_OK:
-                        Toast.makeText(getBaseContext(), "SMS delivered",
+                        Toast.makeText(getBaseContext(), getResources().getString(R.string.SMS_delivered),
                                 Toast.LENGTH_SHORT).show();
                         break;
                     case Activity.RESULT_CANCELED:
-                        Toast.makeText(getBaseContext(), "SMS not delivered",
+                        Toast.makeText(getBaseContext(), getResources().getString(R.string.SMS_not_delivered),
                                 Toast.LENGTH_SHORT).show();
                         break;
                 }
