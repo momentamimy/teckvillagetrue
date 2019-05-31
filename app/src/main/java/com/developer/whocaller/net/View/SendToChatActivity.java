@@ -267,7 +267,7 @@ public class SendToChatActivity extends AppCompatActivity {
         {
             if (addingUserContactsData.get(i).equals(data))
             {
-                Toast.makeText(context,"contact already selected",Toast.LENGTH_LONG).show();
+                Toast.makeText(context, R.string.contact_Already,Toast.LENGTH_LONG).show();
                 return;
             }
         }

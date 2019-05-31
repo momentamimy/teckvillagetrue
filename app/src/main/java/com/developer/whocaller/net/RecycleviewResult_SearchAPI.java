@@ -87,7 +87,7 @@ public class RecycleviewResult_SearchAPI extends AppCompatActivity {
                     mProgressDialog.dismiss();
 
 
-                TastyToast.makeText(RecycleviewResult_SearchAPI.this, "Internet not access Please connect to the internet", TastyToast.LENGTH_LONG, TastyToast.ERROR);
+                TastyToast.makeText(RecycleviewResult_SearchAPI.this, getString(R.string.Internet_not_access_Please_connect_to_the_internet), TastyToast.LENGTH_LONG, TastyToast.ERROR);
             }
 
         }else {
@@ -96,7 +96,7 @@ public class RecycleviewResult_SearchAPI extends AppCompatActivity {
                 mProgressDialog.dismiss();
 
 
-            TastyToast.makeText(RecycleviewResult_SearchAPI.this, "You're offline. Please connect to the internet", TastyToast.LENGTH_LONG, TastyToast.ERROR);
+            TastyToast.makeText(RecycleviewResult_SearchAPI.this, getString(R.string.You_are_offline_Please_connect_to_the_internet), TastyToast.LENGTH_LONG, TastyToast.ERROR);
         }
 
 
@@ -214,7 +214,7 @@ public class RecycleviewResult_SearchAPI extends AppCompatActivity {
 
                 }else {
                     toggleEmptyRecycle(resultList);
-                    TastyToast.makeText(RecycleviewResult_SearchAPI.this, "Failed to find Data,Please Try Again in at Other Time", TastyToast.LENGTH_LONG, TastyToast.ERROR);
+                    TastyToast.makeText(RecycleviewResult_SearchAPI.this, getString(R.string.tasryToast), TastyToast.LENGTH_LONG, TastyToast.ERROR);
                 }
             }
 
@@ -222,7 +222,7 @@ public class RecycleviewResult_SearchAPI extends AppCompatActivity {
             public void onFailure(Call<ArrayList<Item_Search>> call, Throwable t) {
                 Log.w("onFailure", t.toString());
                 toggleEmptyRecycle(resultList);
-                TastyToast.makeText(RecycleviewResult_SearchAPI.this, "Failed to find Data,Please Try Again", TastyToast.LENGTH_LONG, TastyToast.ERROR);
+                TastyToast.makeText(RecycleviewResult_SearchAPI.this, getString(R.string.toastyToastfailed), TastyToast.LENGTH_LONG, TastyToast.ERROR);
                 if (mProgressDialog.isShowing())
                     mProgressDialog.dismiss();
 
@@ -269,7 +269,7 @@ public class RecycleviewResult_SearchAPI extends AppCompatActivity {
 
                 }else {
                     toggleEmptyRecycle(resultList);
-                    TastyToast.makeText(RecycleviewResult_SearchAPI.this, "Failed to find Data,Please Try Again in at Other Time", TastyToast.LENGTH_LONG, TastyToast.ERROR);
+                    TastyToast.makeText(RecycleviewResult_SearchAPI.this, getString(R.string.tasryToast), TastyToast.LENGTH_LONG, TastyToast.ERROR);
                 }
 
             }
@@ -278,7 +278,7 @@ public class RecycleviewResult_SearchAPI extends AppCompatActivity {
             public void onFailure(Call<ArrayList<Item_Search>> call, Throwable t) {
                 Log.w("onFailure", t.toString());
                 toggleEmptyRecycle(resultList);
-                TastyToast.makeText(RecycleviewResult_SearchAPI.this, "Failed to find Data,Please Try Again", TastyToast.LENGTH_LONG, TastyToast.ERROR);
+                TastyToast.makeText(RecycleviewResult_SearchAPI.this, getString(R.string.toastyToastfailed), TastyToast.LENGTH_LONG, TastyToast.ERROR);
                 if (mProgressDialog.isShowing())
                     mProgressDialog.dismiss();
 
@@ -373,7 +373,7 @@ public class RecycleviewResult_SearchAPI extends AppCompatActivity {
 
                 }else {
                     toggleEmptyRecycle(resultList);
-                    TastyToast.makeText(RecycleviewResult_SearchAPI.this, "Failed to find Data,Please Try Again in at Other Time", TastyToast.LENGTH_LONG, TastyToast.ERROR);
+                    TastyToast.makeText(RecycleviewResult_SearchAPI.this, getString(R.string.tasryToast), TastyToast.LENGTH_LONG, TastyToast.ERROR);
                 }
 
             }
@@ -389,7 +389,7 @@ public class RecycleviewResult_SearchAPI extends AppCompatActivity {
 
                 toggleEmptyRecycle(resultList);
 
-                TastyToast.makeText(RecycleviewResult_SearchAPI.this, "Failed to find Data,Please Try Again", TastyToast.LENGTH_LONG, TastyToast.ERROR);
+                TastyToast.makeText(RecycleviewResult_SearchAPI.this,  getString(R.string.toastyToastfailed), TastyToast.LENGTH_LONG, TastyToast.ERROR);
 
             }
         });
@@ -464,7 +464,7 @@ public class RecycleviewResult_SearchAPI extends AppCompatActivity {
 
                             if (isLoading){ adapter.removeLoadingFooter(); isLoading = false; isLastPage = true; }
 
-                            TastyToast.makeText(RecycleviewResult_SearchAPI.this, "Failed to find Data,Please Try Again in at Other Time", TastyToast.LENGTH_LONG, TastyToast.ERROR);
+                            TastyToast.makeText(RecycleviewResult_SearchAPI.this, getString(R.string.tasryToast), TastyToast.LENGTH_LONG, TastyToast.ERROR);
                         }
 
                     }
@@ -478,7 +478,7 @@ public class RecycleviewResult_SearchAPI extends AppCompatActivity {
                         if (isLoading){ adapter.removeLoadingFooter(); isLoading = false; isLastPage = true; }
 
 
-                        TastyToast.makeText(RecycleviewResult_SearchAPI.this, "Failed to find Data,Please Try Again", TastyToast.LENGTH_LONG, TastyToast.ERROR);
+                        TastyToast.makeText(RecycleviewResult_SearchAPI.this, getString(R.string.toastyToastfailed), TastyToast.LENGTH_LONG, TastyToast.ERROR);
 
 
                     }
@@ -489,13 +489,13 @@ public class RecycleviewResult_SearchAPI extends AppCompatActivity {
       }else {
                 Log.w("Internet nernet","Internet not access Please connect to the internet");
                 if (isLoading){ adapter.removeLoadingFooter(); isLoading = false; isLastPage = true; }
-                TastyToast.makeText(RecycleviewResult_SearchAPI.this, "Internet not access Please connect to the internet", TastyToast.LENGTH_LONG, TastyToast.ERROR);
+                TastyToast.makeText(RecycleviewResult_SearchAPI.this, getString(R.string.Internet_not_access_Please_connect_to_the_internet), TastyToast.LENGTH_LONG, TastyToast.ERROR);
       }
 
     }else {
             Log.w("Intt","You're offline.");
             if (isLoading){ adapter.removeLoadingFooter(); isLoading = false; isLastPage = true; }
-            TastyToast.makeText(RecycleviewResult_SearchAPI.this, "You're offline. Please connect to the internet", TastyToast.LENGTH_LONG, TastyToast.ERROR);
+            TastyToast.makeText(RecycleviewResult_SearchAPI.this, getString(R.string.You_are_offline_Please_connect_to_the_internet), TastyToast.LENGTH_LONG, TastyToast.ERROR);
     }
 
 
@@ -565,7 +565,7 @@ public class RecycleviewResult_SearchAPI extends AppCompatActivity {
 
                 }else {
                     toggleEmptyRecycle(resultList);
-                    TastyToast.makeText(RecycleviewResult_SearchAPI.this, "Failed to find Data,Please Try Again in at Other Time", TastyToast.LENGTH_LONG, TastyToast.ERROR);
+                    TastyToast.makeText(RecycleviewResult_SearchAPI.this, getString(R.string.tasryToast), TastyToast.LENGTH_LONG, TastyToast.ERROR);
                 }
 
             }
@@ -581,7 +581,7 @@ public class RecycleviewResult_SearchAPI extends AppCompatActivity {
 
                 toggleEmptyRecycle(resultList);
 
-                TastyToast.makeText(RecycleviewResult_SearchAPI.this, "Failed to find Data,Please Try Again", TastyToast.LENGTH_LONG, TastyToast.ERROR);
+                TastyToast.makeText(RecycleviewResult_SearchAPI.this, getString(R.string.toastyToastfailed), TastyToast.LENGTH_LONG, TastyToast.ERROR);
 
             }
         });
@@ -656,7 +656,7 @@ public class RecycleviewResult_SearchAPI extends AppCompatActivity {
 
                             if (isLoading){ adapter.removeLoadingFooter(); isLoading = false; isLastPage = true; }
 
-                            TastyToast.makeText(RecycleviewResult_SearchAPI.this, "Failed to find Data,Please Try Again in at Other Time", TastyToast.LENGTH_LONG, TastyToast.ERROR);
+                            TastyToast.makeText(RecycleviewResult_SearchAPI.this, getString(R.string.tasryToast), TastyToast.LENGTH_LONG, TastyToast.ERROR);
                         }
 
                     }
@@ -670,7 +670,7 @@ public class RecycleviewResult_SearchAPI extends AppCompatActivity {
                         if (isLoading){ adapter.removeLoadingFooter(); isLoading = false; isLastPage = true; }
 
 
-                        TastyToast.makeText(RecycleviewResult_SearchAPI.this, "Failed to find Data,Please Try Again", TastyToast.LENGTH_LONG, TastyToast.ERROR);
+                        TastyToast.makeText(RecycleviewResult_SearchAPI.this, getString(R.string.toastyToastfailed), TastyToast.LENGTH_LONG, TastyToast.ERROR);
 
 
                     }
@@ -681,13 +681,13 @@ public class RecycleviewResult_SearchAPI extends AppCompatActivity {
             }else {
                 Log.w("Internet nernet","Internet not access Please connect to the internet");
                 if (isLoading){ adapter.removeLoadingFooter(); isLoading = false; isLastPage = true; }
-                TastyToast.makeText(RecycleviewResult_SearchAPI.this, "Internet not access Please connect to the internet", TastyToast.LENGTH_LONG, TastyToast.ERROR);
+                TastyToast.makeText(RecycleviewResult_SearchAPI.this, getString(R.string.Internet_not_access_Please_connect_to_the_internet), TastyToast.LENGTH_LONG, TastyToast.ERROR);
             }
 
         }else {
             Log.w("Intt","You're offline.");
             if (isLoading){ adapter.removeLoadingFooter(); isLoading = false; isLastPage = true; }
-            TastyToast.makeText(RecycleviewResult_SearchAPI.this, "You're offline. Please connect to the internet", TastyToast.LENGTH_LONG, TastyToast.ERROR);
+            TastyToast.makeText(RecycleviewResult_SearchAPI.this, getString(R.string.You_are_offline_Please_connect_to_the_internet), TastyToast.LENGTH_LONG, TastyToast.ERROR);
         }
 
 

@@ -311,4 +311,15 @@
     <string name="add_Webite">أضف موقع</string>
     <string name="add_address">اضف عنوان</string>
 
+    <string name="tasryToast">أخفق العثور على البيانات ، يرجى المحاولة مرة أخرى في وقت آخر</string>
+    <string name="toastyToastfailed">أخفق العثور على البيانات ، يرجى المحاولة مرة أخرى</string>
+
+    <string name="validation_Enter">من فضلك ادخل الاسم</string>
+    <string name="val_enter_num">الرجاء إدخال رقم الهاتف</string>
+    <string name="val_Enter_correct_num">يجب أن يكون رقم الهاتف أكثر من ثلاثة أرقام</string>
+    <string name="val_num_char">الرجاء إدخال رقم الهاتف وليس النص</string>
+
+    <string name="contact_Already">جهات الاتصال محدد بالفعل</string>
+
+
 </resources>

@@ -87,7 +87,7 @@ public class FragmentSearchByName extends Fragment {
                 if(searchvalue.isEmpty() || searchvalue == null ){
 
                     //TastyToast.makeText(getActivity(), "Please Enter Name", TastyToast.LENGTH_LONG, TastyToast.ERROR);
-                    Toast.makeText(getActivity(),"Please Enter Name",Toast.LENGTH_LONG).show();
+                    Toast.makeText(getActivity(), R.string.validation_Enter,Toast.LENGTH_LONG).show();
 
                 }else {
 
@@ -118,11 +118,11 @@ public class FragmentSearchByName extends Fragment {
 
 
                             }else {
-                                TastyToast.makeText(getActivity(), "Internet not access Please connect to the internet", TastyToast.LENGTH_LONG, TastyToast.ERROR);
+                                TastyToast.makeText(getActivity(), getString(R.string.Internet_not_access_Please_connect_to_the_internet), TastyToast.LENGTH_LONG, TastyToast.ERROR);
                             }
 
                         }else {
-                            TastyToast.makeText(getActivity(), "You're offline. Please connect to the internet", TastyToast.LENGTH_LONG, TastyToast.ERROR);
+                            TastyToast.makeText(getActivity(), getString(R.string.You_are_offline_Please_connect_to_the_internet), TastyToast.LENGTH_LONG, TastyToast.ERROR);
                         }
 
 

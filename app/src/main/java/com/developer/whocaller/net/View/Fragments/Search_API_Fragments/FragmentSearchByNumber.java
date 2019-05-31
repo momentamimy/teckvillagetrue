@@ -86,12 +86,12 @@ public class FragmentSearchByNumber extends Fragment {
                 if(searchvalue.isEmpty() || searchvalue == null ){
 
                     //TastyToast.makeText(getActivity(), "Please Enter Phone Number", TastyToast.LENGTH_LONG, TastyToast.ERROR);
-                    Toast.makeText(getActivity(),"Please Enter Phone Number",Toast.LENGTH_LONG).show();
+                    Toast.makeText(getActivity(), R.string.val_enter_num,Toast.LENGTH_LONG).show();
 
                 }else if(searchvalue.length()<4){
 
                     //TastyToast.makeText(getActivity(), "Phone Number should be more than three numbers", TastyToast.LENGTH_LONG, TastyToast.ERROR);
-                    Toast.makeText(getActivity(),"Phone Number should be more than three numbers",Toast.LENGTH_LONG).show();
+                    Toast.makeText(getActivity(), R.string.val_Enter_correct_num,Toast.LENGTH_LONG).show();
                 }else  {
 
                     //Check that text is numbers
@@ -120,16 +120,16 @@ public class FragmentSearchByNumber extends Fragment {
 
 
                             }else {
-                                TastyToast.makeText(getActivity(), "Internet not access Please connect to the internet", TastyToast.LENGTH_LONG, TastyToast.ERROR);
+                                TastyToast.makeText(getActivity(), getString(R.string.Internet_not_access_Please_connect_to_the_internet), TastyToast.LENGTH_LONG, TastyToast.ERROR);
                             }
 
                         }else {
-                            TastyToast.makeText(getActivity(), "You're offline. Please connect to the internet", TastyToast.LENGTH_LONG, TastyToast.ERROR);
+                            TastyToast.makeText(getActivity(), getString(R.string.You_are_offline_Please_connect_to_the_internet), TastyToast.LENGTH_LONG, TastyToast.ERROR);
                         }
 
 
                     }else {
-                        TastyToast.makeText(getActivity(), "Please Enter Phone Number Not Text", TastyToast.LENGTH_LONG, TastyToast.ERROR);
+                        TastyToast.makeText(getActivity(), getString(R.string.val_num_char), TastyToast.LENGTH_LONG, TastyToast.ERROR);
                     }
 
                 }
