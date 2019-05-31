@@ -35,7 +35,7 @@
                 android:layout_height="wrap_content"
                 android:textColor="@color/Tomyacolor"
                 android:textSize="18dp"
-                android:text="Prefer not to say"/>
+                android:text="@string/prefernotsay"/>
             <TextView
                 android:layout_marginTop="10dp"
                 android:padding="20dp"
@@ -46,7 +46,7 @@
                 android:layout_height="wrap_content"
                 android:textColor="@color/Tomyacolor"
                 android:textSize="18dp"
-                android:text="Male"/>
+                android:text="@string/male"/>
             <TextView
                 android:layout_marginTop="10dp"
                 android:padding="20dp"
@@ -57,6 +57,6 @@
                 android:layout_height="wrap_content"
                 android:textColor="@color/Tomyacolor"
                 android:textSize="18dp"
-                android:text="Female"/>
+                android:text="@string/female"/>
         </RelativeLayout>
     </android.support.v7.widget.CardView>

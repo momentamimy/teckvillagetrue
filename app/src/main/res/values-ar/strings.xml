@@ -269,4 +269,37 @@
 
     <string name="questionmark">\؟</string>
 
+    <string name="empty">حقل فارغ</string>
+
+    <string name="male">ذكر</string>
+    <string name="female">أنثي</string>
+    <string name="prefernotsay">افضل عدم التحديد</string>
+
+    <string name="select_Action">اختر</string>
+    <string name="change_profile_pic">تغيير الصورة الشخصية</string>
+    <string name="Edit_user_name">تغيير اسم المستخدم</string>
+    <string name="Remove_profile_pic">إزالة الصورة الشخصية</string>
+    <string name="camera_permission_Error">خطأ في إذن الكاميرا</string>
+
+    <string name="empty_name">أدخل الاسم</string>
+    <string name="empty_email">حقل البريد الإلكتروني فارغ</string>
+    <string name="email_not_valid">البريد الإلكتروني غير صحيح</string>
+
+
+    <string name="change_tag">تغيير الوصف</string>
+    <string name="remove_tag">إزالة الوصف</string>
+
+
+    <string name="select_photo_gallery">اختر صورة من المعرض</string>
+    <string name="select_photo_camera">التقاط الصور من الكاميرا</string>
+
+    <string name="change_number">تغيير رقم</string>
+    <string name="content_dialog_change_number">سيتم تسجيل الخروج من هذا الحساب و ستفقد الشارات والبيانات المرتبطة بهذا الرقم. انقر متابعة لتغيير رقم الهاتف هذا و تسجيل الدخول من جديد</string>
+    <string name="continue_cap">متابعة</string>
+
+
+    <string name="remaining_Chara">الأحرف المتبقية</string>
+    <string name="add_Webite">أضف موقع</string>
+    <string name="add_address">اضف عنوان</string>
+
 </resources>

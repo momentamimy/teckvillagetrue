@@ -1161,7 +1161,7 @@ public class Main_Fagment extends Fragment implements OnBackPressedListener , Lo
             public void onClick(View v) {
 
                 if (TextUtils.isEmpty(phoneNum.getText().toString().trim())) {
-                    inputLayout.setError("Empty Field");
+                    inputLayout.setError(getString(R.string.empty));
                 } else {
                     SharedPreferences.Editor editor = sharedPreferences.edit();
                     editor.putString("#" + number, phoneNum.getText().toString().trim());

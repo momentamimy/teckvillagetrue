@@ -197,26 +197,44 @@ public class UserProfileActivity extends AppCompatActivity  implements OnclickRe
 
 
         //Set inital ABout
-        shortnote.setText(getSharedPreferenceValue.getUserShortNote(this));
+        String shortnota=getSharedPreferenceValue.getUserShortNote(this);
+        if(shortnota.equals("Add a short text about yourself")){
+            shortnote.setText(getString(R.string.add_a_short_text_about_yourself));
+        }else {
+            shortnote.setText(getSharedPreferenceValue.getUserShortNote(this));
+        }
+
 
         //Set Initial Website
-        website.setText(getSharedPreferenceValue.getUserWebsite(this));
+        String websiteshaed=getSharedPreferenceValue.getUserWebsite(this);
+        if(websiteshaed.equals("add website")){
+            website.setText(getString(R.string.add_Webite));
+        }else {
+            website.setText(getSharedPreferenceValue.getUserWebsite(this));
+        }
+
 
 
         //set Initial gender
         String puttedtextgender=getSharedPreferenceValue.getUserGender(this);
         if(puttedtextgender.equals("male")){
-            gender.setText("Male");
+            gender.setText(getString(R.string.male));
         }else if(puttedtextgender.equals("female")){
-            gender.setText("Female");
+            gender.setText(getString(R.string.female));
         }else if(puttedtextgender.equals("other")){
-            gender.setText("Prefer not to say");
+            gender.setText(getString(R.string.prefernotsay));
         }else {
-            gender.setText("Prefer not to say");
+            gender.setText(getString(R.string.prefernotsay));
         }
 
         //Set Initial Address
-        address.setText(getSharedPreferenceValue.getUseraddress(this));
+        String addressshared=getSharedPreferenceValue.getUseraddress(this);
+        if(addressshared.equals("Add address")){
+            address.setText(R.string.add_address);
+        }else {
+            address.setText(getSharedPreferenceValue.getUseraddress(this));
+        }
+
 
 
         UserName=getSharedPreferenceValue.getUserName(this);
@@ -481,7 +499,7 @@ public class UserProfileActivity extends AppCompatActivity  implements OnclickRe
             @Override
             public void onClick(View v) {
                 if(Street.getText().toString().trim().isEmpty()&&ZibCode.getText().toString().trim().isEmpty()&&City.getText().toString().trim().isEmpty()){
-                    address.setText("Add address");
+                    address.setText(getString(R.string.add_address));
                 }else {
                     address.setText(Street.getText().toString().trim()+","+ZibCode.getText().toString().trim()+" "+City.getText().toString().trim());
                 }
@@ -654,7 +672,7 @@ public class UserProfileActivity extends AppCompatActivity  implements OnclickRe
         Website=MyDialogWebsiteEdit.findViewById(R.id.edit_Websie);
 
         String web=website.getText().toString().trim();
-        if(!web.equals("add website")){
+        if(!web.equals(getString(R.string.add_Webite))){
             Website.setText(web);
         }
 
@@ -673,7 +691,7 @@ public class UserProfileActivity extends AppCompatActivity  implements OnclickRe
             public void onClick(View v) {
                 String sar=Website.getText().toString().trim();
                 if(sar.isEmpty()){
-                    website.setText("add website");
+                    website.setText(R.string.add_Webite);
                 }else {
                     website.setText(sar);
                 }
@@ -701,10 +719,10 @@ public class UserProfileActivity extends AppCompatActivity  implements OnclickRe
         NumChar=MyDialogShortTextEdit.findViewById(R.id.Num_Char);
 
         String shortnoteuser=shortnote.getText().toString().trim();
-        if(!shortnoteuser.equals("Add a short text about yourself")){
+        if(!shortnoteuser.equals(getString(R.string.add_a_short_text_about_yourself))){
             ShortText.setText(shortnoteuser);
             int i=160-ShortText.getText().length();
-            NumChar.setText(i+" characters remaining");
+            NumChar.setText(i+" "+getString(R.string.remaining_Chara));
         }
 
         ShortText.addTextChangedListener(new TextWatcher() {
@@ -716,7 +734,7 @@ public class UserProfileActivity extends AppCompatActivity  implements OnclickRe
             @Override
             public void onTextChanged(CharSequence s, int start, int before, int count) {
                 int i=160-ShortText.getText().length();
-                NumChar.setText(i+" characters remaining");
+                NumChar.setText(i+" "+getString(R.string.remaining_Chara));
             }
 
             @Override
@@ -763,21 +781,21 @@ public class UserProfileActivity extends AppCompatActivity  implements OnclickRe
         Prefer_not_to_say.setOnClickListener(new View.OnClickListener() {
             @Override
             public void onClick(View v) {
-                gender.setText("Prefer not to say");
+                gender.setText(getString(R.string.prefernotsay));
                 MyDialogGender.dismiss();
             }
         });
         Male.setOnClickListener(new View.OnClickListener() {
             @Override
             public void onClick(View v) {
-                gender.setText("Male");
+                gender.setText(getString(R.string.male));
                 MyDialogGender.dismiss();
             }
         });
         Female.setOnClickListener(new View.OnClickListener() {
             @Override
             public void onClick(View v) {
-                gender.setText("Female");
+                gender.setText(getString(R.string.female));
                 MyDialogGender.dismiss();
             }
         });
@@ -874,11 +892,11 @@ public class UserProfileActivity extends AppCompatActivity  implements OnclickRe
         }
 
 
-        if(gender.getText().toString().equals("Male")){
+        if(gender.getText().toString().equals(getString(R.string.male))){
             genderinreq="male";
-        }else if(gender.getText().toString().equals("Female")){
+        }else if(gender.getText().toString().equals(getString(R.string.female))){
             genderinreq="female";
-        }if(gender.getText().toString().equals("Prefer not to say")){
+        }else if(gender.getText().toString().equals(getString(R.string.prefernotsay))){
             genderinreq="other";
         }
         RequestBody websiterequest = RequestBody.create(MediaType.parse("text/plain"), website.getText().toString().trim());
@@ -897,7 +915,7 @@ public class UserProfileActivity extends AppCompatActivity  implements OnclickRe
                     mProgressDialog = new ProgressDialog(UserProfileActivity.this);
                     mProgressDialog.setIndeterminate(true);
                     mProgressDialog.setCancelable(false);
-                    mProgressDialog.setMessage("Loading...");
+                    mProgressDialog.setMessage(getString(R.string.loading));
                     mProgressDialog.show();
 
                     Retrofit retrofit = retrofitHead.headOfGetorPostReturnRes();
@@ -1000,10 +1018,10 @@ public class UserProfileActivity extends AppCompatActivity  implements OnclickRe
 
 
                                     } else {
-                                        Toast.makeText(getApplicationContext(), "Failure,Please try again", Toast.LENGTH_SHORT).show();
+                                        Toast.makeText(getApplicationContext(), getString(R.string.Failure_Please_try_again), Toast.LENGTH_SHORT).show();
                                     }
                                 } else {
-                                    Toast.makeText(getApplicationContext(), "Failure,Please try again", Toast.LENGTH_SHORT).show();
+                                    Toast.makeText(getApplicationContext(), getString(R.string.Failure_Please_try_again), Toast.LENGTH_SHORT).show();
                                 }
 
 
@@ -1018,7 +1036,7 @@ public class UserProfileActivity extends AppCompatActivity  implements OnclickRe
                                 mProgressDialog.dismiss();
 
                             Log.w("onFailure", t.toString());
-                            Toast.makeText(getApplicationContext(), "Failure,Please try again", Toast.LENGTH_SHORT).show();
+                            Toast.makeText(getApplicationContext(), getString(R.string.Failure_Please_try_again), Toast.LENGTH_SHORT).show();
                             //View parentLayout = findViewById(R.id.layoutsignuo);
                             //Snackbar.make(parentLayout, "Failure,Please try again", Snackbar.LENGTH_LONG);
                         }
@@ -1030,10 +1048,10 @@ public class UserProfileActivity extends AppCompatActivity  implements OnclickRe
                 }
 
             } else {
-                TastyToast.makeText(UserProfileActivity.this, "Internet not access Please connect to the internet", TastyToast.LENGTH_LONG, TastyToast.ERROR);
+                TastyToast.makeText(UserProfileActivity.this, getString(R.string.Internet_not_access_Please_connect_to_the_internet), TastyToast.LENGTH_LONG, TastyToast.ERROR);
             }
         } else {
-            TastyToast.makeText(UserProfileActivity.this, "You're offline. Please connect to the internet", TastyToast.LENGTH_LONG, TastyToast.ERROR);
+            TastyToast.makeText(UserProfileActivity.this, getString(R.string.You_are_offline_Please_connect_to_the_internet), TastyToast.LENGTH_LONG, TastyToast.ERROR);
         }
     }
 
@@ -1056,11 +1074,11 @@ public class UserProfileActivity extends AppCompatActivity  implements OnclickRe
         RequestBody fnameRequest = RequestBody.create(MediaType.parse("text/plain"), usernameprofile.getText().toString().trim());
         RequestBody addressreq = RequestBody.create(MediaType.parse("text/plain"), address.getText().toString().trim());
 
-        if(gender.getText().toString().equals("Male")){
+        if(gender.getText().toString().equals(getString(R.string.male))){
             genderinreq="male";
-        }else if(gender.getText().toString().equals("Female")){
+        }else if(gender.getText().toString().equals(getString(R.string.female))){
             genderinreq="female";
-        }if(gender.getText().toString().equals("Prefer not to say")){
+        }else if(gender.getText().toString().equals(getString(R.string.prefernotsay))){
             genderinreq="other";
         }
         RequestBody websiterequest = RequestBody.create(MediaType.parse("text/plain"), website.getText().toString().trim());
@@ -1088,7 +1106,7 @@ public class UserProfileActivity extends AppCompatActivity  implements OnclickRe
                     mProgressDialog = new ProgressDialog(UserProfileActivity.this);
                     mProgressDialog.setIndeterminate(true);
                     mProgressDialog.setCancelable(false);
-                    mProgressDialog.setMessage("Loading...");
+                    mProgressDialog.setMessage(getString(R.string.loading));
                     mProgressDialog.show();
 
                     Retrofit retrofit = retrofitHead.headOfGetorPostReturnRes();
@@ -1191,10 +1209,10 @@ public class UserProfileActivity extends AppCompatActivity  implements OnclickRe
 
 
                                     } else {
-                                        Toast.makeText(getApplicationContext(), "Failure,Please try again", Toast.LENGTH_SHORT).show();
+                                        Toast.makeText(getApplicationContext(),  getString(R.string.Failure_Please_try_again), Toast.LENGTH_SHORT).show();
                                     }
                                 } else {
-                                    Toast.makeText(getApplicationContext(), "Failure,Please try again", Toast.LENGTH_SHORT).show();
+                                    Toast.makeText(getApplicationContext(),  getString(R.string.Failure_Please_try_again), Toast.LENGTH_SHORT).show();
                                 }
 
 
@@ -1209,7 +1227,7 @@ public class UserProfileActivity extends AppCompatActivity  implements OnclickRe
                                 mProgressDialog.dismiss();
 
                             Log.w("onFailure", t.toString());
-                            Toast.makeText(getApplicationContext(), "Failure,Please try again", Toast.LENGTH_SHORT).show();
+                            Toast.makeText(getApplicationContext(), getString(R.string.Failure_Please_try_again), Toast.LENGTH_SHORT).show();
                             //View parentLayout = findViewById(R.id.layoutsignuo);
                             //Snackbar.make(parentLayout, "Failure,Please try again", Snackbar.LENGTH_LONG);
                         }
@@ -1221,10 +1239,10 @@ public class UserProfileActivity extends AppCompatActivity  implements OnclickRe
                 }
 
             } else {
-                TastyToast.makeText(UserProfileActivity.this, "Internet not access Please connect to the internet", TastyToast.LENGTH_LONG, TastyToast.ERROR);
+                TastyToast.makeText(UserProfileActivity.this, getString(R.string.Internet_not_access_Please_connect_to_the_internet), TastyToast.LENGTH_LONG, TastyToast.ERROR);
             }
         } else {
-            TastyToast.makeText(UserProfileActivity.this, "You're offline. Please connect to the internet", TastyToast.LENGTH_LONG, TastyToast.ERROR);
+            TastyToast.makeText(UserProfileActivity.this, getString(R.string.You_are_offline_Please_connect_to_the_internet), TastyToast.LENGTH_LONG, TastyToast.ERROR);
         }
     }
 
@@ -1232,12 +1250,12 @@ public class UserProfileActivity extends AppCompatActivity  implements OnclickRe
 
 
         final AlertDialog dialog=   new AlertDialog.Builder(UserProfileActivity.this)
-                .setTitle("Change Number")
-                .setMessage("You will logout ,Badges and Data associated with this number will be lost. Tap Continue to change this phone number")
+                .setTitle(R.string.change_number)
+                .setMessage(R.string.content_dialog_change_number)
 
                 // Specifying a listener allows you to take an action before dismissing the dialog.
                 // The dialog is automatically dismissed when a dialog button is clicked.
-                .setPositiveButton("CONTINUE", new DialogInterface.OnClickListener() {
+                .setPositiveButton(R.string.continue_cap, new DialogInterface.OnClickListener() {
                     public void onClick(DialogInterface dialog, int which) {
                         // Continue with delete operation
                         //remove share preferences
@@ -1253,7 +1271,7 @@ public class UserProfileActivity extends AppCompatActivity  implements OnclickRe
                 })
 
                 // A null listener allows the button to dismiss the dialog and take no further action.
-                .setNegativeButton("CANCEL", new DialogInterface.OnClickListener() {
+                .setNegativeButton(R.string.cancel_cap, new DialogInterface.OnClickListener() {
                     public void onClick(DialogInterface dialog, int which) {
                         // Cancel
                         dialog.dismiss();
@@ -1323,14 +1341,14 @@ public class UserProfileActivity extends AppCompatActivity  implements OnclickRe
 
     boolean validation(String fname, String email){
         if (TextUtils.isEmpty(fname)) {
-            Toast.makeText(UserProfileActivity.this,"Name Field Empty",Toast.LENGTH_LONG).show();
+            Toast.makeText(UserProfileActivity.this, R.string.empty_name,Toast.LENGTH_LONG).show();
             return false;
         }
         if (TextUtils.isEmpty(email)) {
-            Toast.makeText(UserProfileActivity.this,"Email Field Empty",Toast.LENGTH_LONG).show();
+            Toast.makeText(UserProfileActivity.this, R.string.empty_email,Toast.LENGTH_LONG).show();
             return false;
         }else if( !Patterns.EMAIL_ADDRESS.matcher(email).matches()){
-            Toast.makeText(UserProfileActivity.this,"Email not valid",Toast.LENGTH_LONG).show();
+            Toast.makeText(UserProfileActivity.this, R.string.email_not_valid,Toast.LENGTH_LONG).show();
             return false;
         }
 
@@ -1342,11 +1360,11 @@ public class UserProfileActivity extends AppCompatActivity  implements OnclickRe
     private void showDialog(){
         try {
             AlertDialog.Builder pictureDialog = new AlertDialog.Builder(this);
-            pictureDialog.setTitle("Select Action");
+            pictureDialog.setTitle(R.string.select_Action);
             String[] pictureDialogItems = {
-                    "Change Profile Picture",
-                    "Edit User Name",
-                    "Remove Profile Picture"};
+                    getString(R.string.change_profile_pic),
+                    getString(R.string.Edit_user_name),
+                    getString(R.string.Remove_profile_pic)};
             PackageManager pm = getPackageManager();
 
             pictureDialog.setItems(pictureDialogItems,
@@ -1369,7 +1387,7 @@ public class UserProfileActivity extends AppCompatActivity  implements OnclickRe
             pictureDialog.show();
 
         }catch (Exception e) {
-            Toast.makeText(this, "Camera Permission Error", Toast.LENGTH_SHORT).show();
+            Toast.makeText(this, R.string.camera_permission_Error, Toast.LENGTH_SHORT).show();
             e.printStackTrace();
         }
     }
@@ -1377,10 +1395,10 @@ public class UserProfileActivity extends AppCompatActivity  implements OnclickRe
     private void showDialogremoveTag(){
         try {
             AlertDialog.Builder pictureDialog = new AlertDialog.Builder(this);
-            pictureDialog.setTitle("Select Action");
+            pictureDialog.setTitle(R.string.select_Action);
             String[] pictureDialogItems = {
-                    "Change Tag",
-                    "Remove Tag"};
+                    getString(R.string.change_tag),
+                    getString(R.string.remove_tag)};
             PackageManager pm = getPackageManager();
 
             pictureDialog.setItems(pictureDialogItems,
@@ -1421,10 +1439,10 @@ public class UserProfileActivity extends AppCompatActivity  implements OnclickRe
     private void showPictureDialog(){
         try {
             AlertDialog.Builder pictureDialog = new AlertDialog.Builder(this);
-            pictureDialog.setTitle("Select Action");
+            pictureDialog.setTitle(R.string.select_Action);
             String[] pictureDialogItems = {
-                    "Select Photo From Gallery",
-                    "Capture Photo From Camera" };
+                    getString(R.string.select_photo_gallery),
+                    getString(R.string.select_photo_camera) };
             PackageManager pm = getPackageManager();
             int hasPerm = pm.checkPermission(Manifest.permission.CAMERA, getPackageName());
             if (hasPerm == PackageManager.PERMISSION_GRANTED) {
@@ -1446,7 +1464,7 @@ public class UserProfileActivity extends AppCompatActivity  implements OnclickRe
             } else
                 ActivityCompat.requestPermissions(UserProfileActivity.this, new String[]{android.Manifest.permission.CAMERA}, MY_CAMERA_REQUEST_CODE);
         } catch (Exception e) {
-            Toast.makeText(this, "Camera Permission Error", Toast.LENGTH_SHORT).show();
+            Toast.makeText(this, R.string.camera_permission_Error, Toast.LENGTH_SHORT).show();
             e.printStackTrace();
         }
     }
@@ -1488,7 +1506,7 @@ public class UserProfileActivity extends AppCompatActivity  implements OnclickRe
 
                 } catch (IOException e) {
                     e.printStackTrace();
-                    Toast.makeText(UserProfileActivity.this, "Failed!", Toast.LENGTH_SHORT).show();
+                    Toast.makeText(UserProfileActivity.this, R.string.Failed, Toast.LENGTH_SHORT).show();
                 }
             }
 
@@ -1524,7 +1542,7 @@ public class UserProfileActivity extends AppCompatActivity  implements OnclickRe
 
                     // permission denied, boo! Disable the
                     // functionality that depends on this permission.
-                    Toast.makeText(getApplicationContext(), "Permission denied", Toast.LENGTH_SHORT).show();
+                    Toast.makeText(getApplicationContext(),  R.string.Permission_denied, Toast.LENGTH_SHORT).show();
                 }
                 return;
             }

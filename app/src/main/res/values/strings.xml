@@ -249,5 +249,39 @@
 
     <string name="questionmark">\?</string>
 
+    <string name="empty">Empty Field</string>
+
+    <string name="male">Male</string>
+    <string name="female">Female</string>
+    <string name="prefernotsay">Prefer not to say</string>
+
+    <string name="select_Action">Select Action</string>
+    <string name="change_profile_pic">Change Profile Picture</string>
+    <string name="Edit_user_name">Edit User Name</string>
+    <string name="Remove_profile_pic">Remove Profile Picture</string>
+    <string name="camera_permission_Error">Camera Permission Error</string>
+
+    <string name="empty_name">Name Field Empty</string>
+    <string name="empty_email">Email Field Empty</string>
+    <string name="email_not_valid">Email not valid</string>
+
+    <string name="change_tag">Change Tag</string>
+    <string name="remove_tag">Remove Tag</string>
+
+    <string name="select_photo_gallery">Select Photo From Gallery</string>
+    <string name="select_photo_camera">Capture Photo From Camera</string>
+
+    <string name="change_number">Change Number</string>
+    <string name="content_dialog_change_number">You will logout ,Badges and Data associated with this number will be lost. Tap Continue to change this phone number</string>
+
+    <string name="continue_cap">CONTINUE</string>
+
+    <string name="remaining_Chara">characters remaining</string>
+    <string name="add_Webite">add website</string>
+    <string name="add_address">Add address</string>
+
+
+
+
 </resources>
 
