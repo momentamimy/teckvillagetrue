@@ -91,4 +91,16 @@
     </RadioGroup>
 
 
+    <TextView
+        android:id="@+id/legel"
+        android:layout_width="match_parent"
+        android:layout_height="wrap_content"
+        android:textColor="@color/colorPrimary"
+        android:textSize="18sp"
+        android:gravity="center"
+        android:paddingBottom="10dp"
+        android:layout_alignParentBottom="true"
+        android:text="@string/legal_amp_privacy"/>
+
+
 </RelativeLayout>

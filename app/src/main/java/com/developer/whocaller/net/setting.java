@@ -2,16 +2,20 @@ package com.developer.whocaller.net;
 
 import android.app.Dialog;
 import android.content.Context;
+import android.content.DialogInterface;
 import android.content.Intent;
 import android.content.SharedPreferences;
 import android.content.res.Resources;
 import android.graphics.Color;
 import android.graphics.drawable.ColorDrawable;
+import android.net.Uri;
 import android.os.Build;
+import android.support.v7.app.AlertDialog;
 import android.support.v7.app.AppCompatActivity;
 import android.os.Bundle;
 import android.support.v7.widget.Toolbar;
 import android.util.DisplayMetrics;
+import android.util.Log;
 import android.view.MenuItem;
 import android.view.View;
 import android.view.Window;
@@ -33,7 +37,7 @@ import java.util.concurrent.TimeUnit;
 
 public class setting extends AppCompatActivity {
 
-    TextView changeLang;
+    TextView changeLang,privacy;
 
     Switch switchOutgoing;
     Switch switchIncoming;
@@ -58,6 +62,13 @@ public class setting extends AppCompatActivity {
 
         intiateSwitchRadioGroup();
 
+        privacy=findViewById(R.id.legel);
+        privacy.setOnClickListener(new View.OnClickListener() {
+            @Override
+            public void onClick(View v) {
+                openDialogPrivacyandTerms();
+            }
+        });
 
         changeLang.setOnClickListener(new View.OnClickListener() {
             @Override
@@ -109,6 +120,28 @@ public class setting extends AppCompatActivity {
                 }
             }
         });
+    }
+
+    private void openDialogPrivacyandTerms() {
+        final String[] Option = {getString(R.string.Terms_of_Service),getString(R.string.Privacy_Policy)};
+
+        final AlertDialog.Builder builder = new AlertDialog.Builder(setting.this);
+        builder.setTitle(getString(R.string.legal_amp_privacy));
+        builder.setItems(Option, new DialogInterface.OnClickListener() {
+            @Override
+            public void onClick(DialogInterface dialog, int which) {
+                // the user clicked on colors[which]
+                if(Option[which].equals(getString(R.string.Terms_of_Service))){
+                    //open link
+                    openTermsOfService(setting.this);
+
+                }else if(Option[which].equals(getString(R.string.Privacy_Policy))) {
+                    openPrivacyPolice(setting.this);
+                }
+
+            }
+        });
+        builder.show();
     }
 
 
@@ -241,5 +274,17 @@ public class setting extends AppCompatActivity {
 
         restartActivity();
 
+    }
+
+    static  void openPrivacyPolice(Context context){
+        Intent intent = new Intent(Intent.ACTION_VIEW);
+        intent.setData(Uri.parse("https://whocaller.net/privacy-policy/"));
+        context.startActivity(intent);
+    }
+
+    static  void openTermsOfService(Context context){
+        Intent intent = new Intent(Intent.ACTION_VIEW);
+        intent.setData(Uri.parse("https://whocaller.net/terms-of-service/"));
+        context.startActivity(intent);
     }
 }
