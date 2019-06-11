@@ -59,6 +59,7 @@ import android.widget.GridView;
 import android.widget.ImageView;
 import android.widget.RelativeLayout;
 import android.widget.TextView;
+import android.widget.Toast;
 
 import com.developer.whocaller.net.Controller.LocaleHelper;
 import com.google.i18n.phonenumbers.NumberParseException;
@@ -234,6 +235,7 @@ public class Main_Fagment extends Fragment implements OnBackPressedListener , Lo
         final ImageView threedots = view.findViewById(R.id.threedots);
         ImageView icon = view.findViewById(R.id.iconnnn);
         sharedPreferences = getActivity().getSharedPreferences("number", Context.MODE_PRIVATE);
+
 
 
         //Open Drawer from Fragment
@@ -700,6 +702,18 @@ public class Main_Fagment extends Fragment implements OnBackPressedListener , Lo
             }
         });
 
+        //start reading here
+        Intent intent = getActivity().getIntent();
+        if(intent.getData()!=null){
+            Log.d("intent_received",intent.getData().toString());
+            String phoneNumber = intent.getData().toString(); //contains tel:phone_no
+            phoneNumber = phoneNumber.substring(4);
+            Log.d("intent_received_1","Received phone number : "+phoneNumber);
+            openDialPadWithNumber(phoneNumber);
+            /// do what you like here
+        }else{
+            Log.d("intent_received_else","null intent received");
+        }
 
         return view;
     }
