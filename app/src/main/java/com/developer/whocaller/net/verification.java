@@ -22,7 +22,7 @@ import com.sinch.verification.VerificationListener;
 
 public class verification extends AppCompatActivity {
 
-    private final String APPLICATION_KEY = "d3682e4d-c840-4599-96b6-0b85321283e6";
+    private final String APPLICATION_KEY = "d85acaee-fdcf-4c9e-8f2f-a23d4e68960d";
 
     EditText numberPhone;
     Button verify;

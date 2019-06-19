@@ -15,8 +15,6 @@
     <string name="low_storage_error">Low Storage</string>
 
 
-
-
     <string name="who_caller_search">Who Caller? Search</string>
     <string name="notifications">Notifications</string>
     <string name="Terms_of_Service"><u>Terms of Service</u> and</string>
@@ -50,7 +48,7 @@
     <string name="Notification">Notification</string>
     <string name="no_result_check_internet_connection">No Result Check Internet Connection</string>
 
-     <string name="profile">Profile</string>
+    <string name="profile">Profile</string>
     <string name="camera">Camera</string>
     <string name="faq">FAQ</string>
     <string name="send_feedback">Send feedback</string>
@@ -302,6 +300,7 @@
     <string name="select_your_sim">Select Your SIM</string>
 
     <string name="legal_amp_privacy"><![CDATA[Legal & Privacy]]></string>
+    <string name="sending_code_message_for_number_confirmation">Sending code message for number confirmation</string>
 
 
 </resources>

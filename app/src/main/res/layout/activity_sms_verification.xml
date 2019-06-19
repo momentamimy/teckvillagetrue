@@ -1,0 +1,64 @@
+<?xml version="1.0" encoding="utf-8"?>
+<RelativeLayout
+    xmlns:android="http://schemas.android.com/apk/res/android"
+    xmlns:app="http://schemas.android.com/apk/res-auto"
+    xmlns:tools="http://schemas.android.com/tools"
+    android:layout_width="match_parent"
+    android:layout_height="match_parent"
+    tools:context=".SMSVerificationActivity"
+    android:background="@color/colorPrimary">
+
+    <com.poovam.pinedittextfield.SquarePinField
+        android:layout_marginLeft="30dp"
+        android:layout_marginRight="30dp"
+        android:layout_marginBottom="50dp"
+        android:layout_above="@+id/WhoCallerText"
+        android:id="@+id/Code_Text"
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content"
+        android:textColor="@android:color/white"
+        android:layout_centerHorizontal="true"
+        android:layout_marginTop="50dp"
+        android:inputType="text"
+        android:textSize="20sp"
+        app:cornerRadius="10dp"
+        app:noOfFields="6"
+        app:highlightColor="@android:color/white"
+        app:fieldColor="@android:color/white"
+        android:textSelectHandle="@drawable/text_handle"/>
+
+    <TextView
+        android:id="@+id/WhoCallerText"
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content"
+        android:textColor="@android:color/white"
+        android:textSize="40sp"
+        android:text="Who Caller?"
+        android:textStyle="bold"
+        android:layout_above="@+id/centerparent"
+        android:layout_centerHorizontal="true"
+        android:layout_marginBottom="25dp"
+        />
+
+
+    <ImageView
+        android:id="@+id/centerparent"
+        android:layout_width="180dp"
+        android:layout_height="150dp"
+        android:layout_centerInParent="true"
+        android:src="@drawable/verfication"
+        />
+
+    <TextView
+        android:layout_marginTop="40dp"
+        android:layout_below="@+id/centerparent"
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content"
+        android:textSize="24sp"
+        android:layout_centerHorizontal="true"
+        android:textColor="@android:color/white"
+        android:text="@string/sending_code_message_for_number_confirmation"
+        android:gravity="center"
+        android:lineSpacingExtra="5dp"
+        />
+</RelativeLayout>

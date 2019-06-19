@@ -15,6 +15,7 @@ import android.widget.Toast;
 
 import com.developer.whocaller.net.Controller.LocaleHelper;
 import com.developer.whocaller.net.R;
+import com.developer.whocaller.net.SMSVerificationActivity;
 import com.mukesh.countrypicker.Country;
 import com.mukesh.countrypicker.CountryPicker;
 import com.mukesh.countrypicker.OnCountryPickerListener;
@@ -126,7 +127,7 @@ public class LoginActivity extends AppCompatActivity implements TextWatcher {
                         String numberwithcode = myCountry.getDialCode() + phoneNumber.getText().toString().trim();
                         String councode = myCountry.getDialCode();
                         String contryname = myCountry.getName();
-                        Intent intent = new Intent(getApplicationContext(), Missed_Call_Verification.class);
+                        Intent intent = new Intent(getApplicationContext(), SMSVerificationActivity.class);
                         intent.putExtra("num", number);
                         intent.putExtra("numwtihcode", numberwithcode);
                         intent.putExtra("codenum", councode);
